@@ -40,11 +40,11 @@ Before running the app, make sure you have the following installed:
 1. Clone this repository to your local machine:
 
    ```bash
-   git clone https://github.com/your-username/passport-purchasing-app.git
+   git clone https://github.com/salmanbhatti52/passportistic.git
 2. Change directory to the project folder:
 
     ```bash
-    cd passport-purchasing-app
+    cd passportistic
 
 ### Running the App
 
