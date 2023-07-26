@@ -32,7 +32,7 @@ The Passport Purchasing App is a mobile application built using Flutter that all
 
 Before running the app, make sure you have the following installed:
 
-- Flutter SDK (minimum version [replace_with_minimum_flutter_version])
+- Flutter SDK (minimum version 3.9)
 - Android SDK or Xcode for iOS development
 
 ### Installation
