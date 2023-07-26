@@ -1,0 +1,20 @@
+<svg width="72" height="90" viewBox="0 0 72 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g opacity="0.56" filter="url(#filter0_f_154_7188)">
+<rect x="21" y="64" width="31" height="10" fill="#FF9446"/>
+</g>
+<circle cx="36" cy="36" r="36" fill="url(#paint0_linear_154_7188)"/>
+<path d="M40.3467 49.6666H31.6533C25.1067 49.6666 22.3067 46.8666 22.3067 40.32V40.1466C22.3067 34.2266 24.64 31.3733 29.8667 30.88C30.4 30.84 30.9067 31.24 30.96 31.7866C31.0133 32.3333 30.6133 32.8266 30.0533 32.88C25.8667 33.2666 24.3067 35.24 24.3067 40.16V40.3333C24.3067 45.76 26.2267 47.68 31.6533 47.68H40.3467C45.7733 47.68 47.6933 45.76 47.6933 40.3333V40.16C47.6933 35.2133 46.1067 33.24 41.84 32.88C41.2933 32.8266 40.88 32.3466 40.9333 31.8C40.9867 31.2533 41.4533 30.84 42.0133 30.8933C47.32 31.3466 49.6933 34.2133 49.6933 40.1733V40.3466C49.6933 46.8666 46.8933 49.6666 40.3467 49.6666Z" fill="white"/>
+<path d="M36 40.8401C35.4533 40.8401 35 40.3867 35 39.8401V22.6667C35 22.1201 35.4533 21.6667 36 21.6667C36.5467 21.6667 37 22.1201 37 22.6667V39.8401C37 40.4001 36.5467 40.8401 36 40.8401Z" fill="white"/>
+<path d="M36 42.3335C35.7467 42.3335 35.4933 42.2401 35.2933 42.0401L30.8267 37.5735C30.44 37.1868 30.44 36.5468 30.8267 36.1601C31.2133 35.7735 31.8533 35.7735 32.24 36.1601L36 39.9201L39.76 36.1601C40.1467 35.7735 40.7867 35.7735 41.1733 36.1601C41.56 36.5468 41.56 37.1868 41.1733 37.5735L36.7067 42.0401C36.5067 42.2401 36.2533 42.3335 36 42.3335Z" fill="white"/>
+<defs>
+<filter id="filter0_f_154_7188" x="5" y="48" width="63" height="42" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="8" result="effect1_foregroundBlur_154_7188"/>
+</filter>
+<linearGradient id="paint0_linear_154_7188" x1="36" y1="-5.4" x2="36" y2="72" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FF8D74"/>
+<stop offset="1" stop-color="#F75734"/>
+</linearGradient>
+</defs>
+</svg>

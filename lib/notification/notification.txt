@@ -1,0 +1,206 @@
+
+class NotificationServices {
+
+
+FirebaseMessaging messaging = FirebaseMessaging.instance;
+   
+final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+ void requestNotificationPermission()async {
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true
+     announcement: true
+    badge: true
+    carPlay:  true
+    criticalAlert: true
+     provisional: true
+     sound: true
+   );
+
+  if(settings.authorizationStatus == AuthorizationStatus.authorized){
+
+    print('user granted permission');
+
+   } else if(settings. authorizationStatus == AuthorizationStatus.provisional){
+
+    print("error granted provisional permission");
+
+   } else
+    AppSettings.openNotificationSettings():
+    print(error denied permission');       
+}
+void initlocalNotifications(BuildContext context, RemoteMassage message)async{
+  var androidInitializationSettings = const AndroidInitializationSettings(@miprap/ic_launcher'):
+  var iosInitializationSettings = const DarwinInitializationSettings():
+  var initializationSetting InitializationSettings(
+      android: androidInitializationSettings 
+      10S: iosInitializationSettings
+  ):
+  await flutterLocalNotificationsPlugin.initialize(
+      initializationSetting,
+    onDidReceiveNotificationResponse: (payload){
+      handelMessage(context, message);
+     // Navigator.pushNamed(context,'chatScreen',arguments:{'user':UserModel(), '});
+    }
+                    
+  );
+}
+void firebaseinit (BuildContext context){
+      
+  FirebaseMessaging.onmessage.listen((message) {
+  print(message.notification.title.toString()):
+  print(message.notification.body.toString());
+  // data is sending from the server, the Backend Dev will send this to the main end 
+  //there is a key value pair in this like type is chat, type is post, type is photo, and so on,
+
+
+  print(message.notification.data.toString());
+  print(message.notification.data["type"]);
+  print(message.notification.data"id");
+
+  initlocalNotifications(context, message)
+
+  showNotifications(message);
+
+}  
+
+ )};
+
+  
+ Future<void> showNotifications(RemoteMassage message) async {
+  AndroidNotificationChannel channel = AndroidNotificationChannel(
+
+    Random.secure().nextInt(1000).toString(),
+    "High Important Notification",
+    Importance : Importance.max
+  ); 
+ 
+  AndroidInitializationDetails _androidInitializationDetails = AndroidInitializationDetails(
+    //chanel ID
+    channel.id.toString(),
+    channel.name.toString(),
+    chanelDescription: "chanelDescription",
+    Importance : Importance.high,
+    priority : Priority.high,
+    ticker: "ticker",
+  );
+
+  DarwinInitializationDetails = _darwinInitializationDetails =  DarwinInitializationDetils(
+    presentAlert: true,
+    presentSound : true,
+    presentBadge: true,
+
+  );
+
+  NotificationDetails notificationDetails NotificationDetails(
+    android: androidNotificationDetails,
+    IOS: darwinNotificationDetails,
+  );
+
+  Future.delayed(Duration.zero, (){
+     _flutterLocalNotificationsPlugin.show(
+      0,
+      message.notification.title.toString(),
+      message.notification.body.toString(),
+      notificationDetails);
+  });
+
+ }
+
+Future<String> getDeviceToken()async{
+  String? taken = await messaging.getToken():
+  return token!
+}
+void isTokenRefresh() async{
+  messaging.onTokenRefresh.listen((event) {
+    event.toString();
+  });
+
+void setupInteractMessage(BuildContext context) async{
+
+  // when application is killed or terminated
+  RemoteMassage? initialMessage = await FirebaseMessaging.instance.getInitialMessage(); 
+
+  if(initialMessage!= null){
+    handelMessage(context, initialMessage);
+  }
+  else{
+
+  }
+  FirebaseMessaging.OnMessageOpenedApp.listen((event){
+    handelMessage(context, event);
+  });
+
+}
+
+  void handelMessage(BuildContext context, RemoteMassage message){
+    if(message.data["type"] ==  "Some Message" ){
+      Navigator.push(context, MaterialPageRoute(
+        builder: (context) {
+          MessageScreen();
+        }
+      ));
+    }
+    else{
+
+    }
+    
+  }
+
+}
+
+
+
+
+
+
+
+}
+ 
+ 
+NotificationServices notificationServices = NotificationServices():
+@override
+ void initState() {
+   // TODO: implement initStote
+   super. .initState():
+  notificationServices.requestNotificationPermission():
+  notificationServices.firebaseinit(context);
+  notificationDetails.setupInetractMessage(context);
+  notiticationservices.isTokenRefresh();
+  notiticationservices.getDeviceToken().then((value)
+   if(kDebugMode){
+     print('device token);
+    print (value);
+   }
+   
+     )
+ }; 
+
+menifestfile meta data tags 
+
+
+  <meta-data android:name = "com.google.firebase.messaging.default_notification_channel_id"
+  android:value="high_importance_channel"/>
+
+
+
+
+
+// write under the mainFunction
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMassage message) async {
+  await Firebase.initializeApp();
+}
+
+
+void main(){
+  //
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+}
+
+
+
+
+//homeScreenn
+
