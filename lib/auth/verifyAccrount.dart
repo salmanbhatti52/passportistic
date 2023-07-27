@@ -142,76 +142,92 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Stack(
               children: [
-                GestureDetector(
-                  onTap: () async {
-                    if (verifyOtp.text.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Please Enter the OTP!"),
-                        backgroundColor: Color(0xFF2B65EC),
-                      ));
-                    } else if (verifyOtp.value.text.length < 4) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Please Enter Complete OTP!"),
-                        backgroundColor: Color(0xFF2B65EC),
-                      ));
-                    } else if (verifyOtp.text.isNotEmpty) {
-                      setState(() {
-                        // Added this line
-                        isLoading = true;
-                      });
-                      try {
-                        if (widget.otp == verifyOtp.text) {
-                          Navigator.push(context, MaterialPageRoute(
-                            builder: (BuildContext context) {
-                              return SignupNextPage(
-                                userId: "${widget.userId}",
-                              );
-                            },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        if (verifyOtp.text.isEmpty) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("Please Enter the OTP!"),
+                            backgroundColor: Color(0xFF2B65EC),
                           ));
+                        } else if (verifyOtp.value.text.length < 4) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("Please Enter Complete OTP!"),
+                            backgroundColor: Color(0xFF2B65EC),
+                          ));
+                        } else if (verifyOtp.text.isNotEmpty) {
+                          setState(() {
+                            // Added this line
+                            isLoading = true;
+                          });
+                          try {
+                            if (widget.otp == verifyOtp.text) {
+                              Navigator.push(context, MaterialPageRoute(
+                                builder: (BuildContext context) {
+                                  return SignupNextPage(
+                                    userId: "${widget.userId}",
+                                  );
+                                },
+                              ));
+                            } else if (widget.otp != verifyOtp.text) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text("Wrong Otp"),
+                                backgroundColor: Colors.red,
+                              ));
+                            }
+                          } catch (e) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Error verifying OTP!"),
+                              backgroundColor: Colors.red,
+                            ));
+                          } finally {
+                            setState(() {
+                              // Added this line
+                              isLoading = false;
+                            });
+                          }
                         }
-                      } catch (e) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text("Error verifying OTP!"),
-                          backgroundColor: Colors.red,
-                        ));
-                      } finally {
-                        setState(() {
-                          // Added this line
-                          isLoading = false;
-                        });
-                      }
-                    }
-                  },
-                  child: Container(
-                    height: 48,
-                    width: MediaQuery.of(context).size.width * 0.94,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                      ),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Verify",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: "Satoshi",
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700),
+                      },
+                      child: Container(
+                        height: 48,
+                        width: MediaQuery.of(context).size.width * 0.94,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                          ),
+                          borderRadius: BorderRadius.circular(15),
                         ),
-                      ],
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "Verify",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: "Satoshi",
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
+                if (isLoading) // Show the circular progress indicator if isLoading is true
+                  Center(
+                    child: CircularProgressIndicator(),
+                  ),
               ],
             ),
           ),

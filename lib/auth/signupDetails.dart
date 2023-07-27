@@ -3,18 +3,18 @@ import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:scanguard/auth/signIn.dart';
 import 'package:scanguard/auth/signUpNextPage.dart';
 import 'package:scanguard/auth/signUpPage.dart';
 import 'package:http/http.dart' as http;
+import '../Home/mainScreenHome.dart';
 import '../Models/signUpDetailsModels.dart';
 // import 'package:country_picker/country_picker.dart';
 
 class SignupDetails extends StatefulWidget {
   final String? userId;
   final String? email;
-  final String? coverDesign;
-  const SignupDetails({super.key, this.userId, this.email, this.coverDesign});
+
+  const SignupDetails({super.key, this.userId, this.email});
 
   @override
   State<SignupDetails> createState() => _SignupDetailsState();
@@ -50,15 +50,17 @@ class _SignupDetailsState extends State<SignupDetails> {
       "nationality": _selectedCountry?.displayNameNoCountryCode.toString(),
       "gender": selectedOption.toString(),
       "dob": dob.text,
-      "number_of_pages": selectedPageText.toString(),
-      "currency": _selectedCurrency?.name.toString()
+      "number_of_pages": selectedPageText,
+      "currency": _selectedCurrency?.name.toString(),
+      "phone_number": phone.text.toString(),
     });
     final responseString = response.body;
     print("responseSignInApi: $responseString");
-    print("status Code SignIn: ${response.statusCode}");
-    print("in 200 signIn");
+    print("status Code Signup: ${response.statusCode}");
+
     if (response.statusCode == 200) {
       print("SuucessFull");
+      print("in 200 signup");
       signUpDetailsModel = signUpDetailsModelFromJson(responseString);
       setState(() {
         isLoading = false;
@@ -373,6 +375,7 @@ class _SignupDetailsState extends State<SignupDetails> {
             ),
             Expanded(
               child: TextFormField(
+                validator: validatePhoneNumber,
                 focusNode: _focusNode5,
                 style: const TextStyle(color: Color(0xFF000000), fontSize: 16),
                 cursorColor: const Color(0xFF000000),
@@ -407,7 +410,7 @@ class _SignupDetailsState extends State<SignupDetails> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15)),
                 ),
-                validator: validatePhoneNumber,
+                
               ),
             ),
             const SizedBox(
@@ -697,7 +700,7 @@ class _SignupDetailsState extends State<SignupDetails> {
                         _isSelected1 = true;
                         _isSelected2 = false;
                         _isSelected3 = false;
-                        selectedPageText = "Pages 24";
+                        selectedPageText = "24";
                       });
                     },
                     child: Container(
@@ -744,7 +747,7 @@ class _SignupDetailsState extends State<SignupDetails> {
                         _isSelected1 = false;
                         _isSelected2 = true;
                         _isSelected3 = false;
-                        selectedPageText = "Pages 48";
+                        selectedPageText = "48";
                       });
                     },
                     child: Container(
@@ -790,7 +793,7 @@ class _SignupDetailsState extends State<SignupDetails> {
                         _isSelected1 = false;
                         _isSelected2 = false;
                         _isSelected3 = true;
-                        selectedPageText = "Pages 96";
+                        selectedPageText = "96";
                       });
                     },
                     child: Container(
@@ -959,80 +962,106 @@ class _SignupDetailsState extends State<SignupDetails> {
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.02,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: () async {
-                print(firstname.text);
-                print(middleName.text);
-                print(lastname.text);
-                print(email.text);
-                print(phone.text);
-                print(selectedOption);
-                print(_selectedCountry?.displayNameNoCountryCode);
-                print(dob.text);
-                print(selectedPageText);
-                print(_selectedCurrency?.name);
-                print("Sign Up Button Pressed");
-                if (firstname.text.isNotEmpty &&
-                    middleName.text.isNotEmpty &&
-                    lastname.text.isNotEmpty &&
-                    dob.text.isNotEmpty &&
-                    _selectedCountry != null &&
-                    _selectedCurrency != null &&
-                    selectedOption != null) {
-                  await signUpUser();
-                  if (signUpDetailsModel.status == "success") {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (BuildContext context) {
-                        return SignInPage();
-                      },
-                    ));
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text("Something Went Wrong!"),
-                        backgroundColor: Color(0xFFF65734),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: Stack(children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () async {
+                    print(firstname.text);
+                    print(middleName.text);
+                    print(lastname.text);
+                    print(email.text);
+                    print(phone.text);
+                    print(selectedOption);
+                    print(_selectedCountry?.displayNameNoCountryCode);
+                    print(dob.text);
+                    print(selectedPageText);
+                    print(_selectedCurrency?.name);
+                    print("Sign Up Button Pressed");
+                    if (firstname.text.isNotEmpty &&
+                        middleName.text.isNotEmpty &&
+                        lastname.text.isNotEmpty &&
+                        dob.text.isNotEmpty &&
+                        _selectedCountry != null &&
+                        _selectedCurrency != null &&
+                        selectedOption != null) {
+                      setState(() {
+                        isLoading = true; // Show the progress indicator
+                      });
+                      await signUpUser();
+                      setState(() {
+                        isLoading = false; // Show the progress indicator
+                      });
+                      if (signUpDetailsModel.status == "success") {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (BuildContext context) {
+                            return MainScreen(
+                              firstname: firstname.text,
+                              userId: widget.userId,
+                              lastname: lastname.text,
+                              email: email.text,
+                              phone: phone.text,
+                            );
+                          },
+                        ));
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("Something Went Wrong!"),
+                            backgroundColor: Color(0xFFF65734),
+                          ),
+                        );
+                      }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Please Put all the Data!"),
+                          backgroundColor: Color(0xFFF65734),
+                        ),
+                      );
+                    }
+                  },
+                  child: Container(
+                    height: 48,
+                    width: MediaQuery.of(context).size.width * 0.94,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
                       ),
-                    );
-                  }
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("Please Put all the Data!"),
-                      backgroundColor: Color(0xFFF65734),
+                      borderRadius: BorderRadius.circular(15),
                     ),
-                  );
-                }
-              },
-              child: Container(
-                height: 48,
-                width: MediaQuery.of(context).size.width * 0.94,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "Sign Up",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: "Satoshi",
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      ],
+                    ),
                   ),
-                  borderRadius: BorderRadius.circular(15),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "Sign Up",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: "Satoshi",
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ],
+              ],
+            ),
+            if (isLoading) // Show the circular progress indicator if isLoading is true
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
                 ),
               ),
-            ),
-          ],
+          ]),
         ),
       ])),
     );
@@ -1046,16 +1075,16 @@ class _SignupDetailsState extends State<SignupDetails> {
   }
 
   String? validatePhoneNumber(String? value) {
-    if (value == null || value.isEmpty) {
+    if (value == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Please Enter the Number"),
+          content: Text("Please Enter Valid the Number"),
         ),
       );
     }
 
     // Customize the phone number validation logic here
-    if (value!.length != 10) {
+    if (value!.length != 11) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Please Enter a Valid Number"),

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:scanguard/auth/signUpPage.dart';
 import 'package:http/http.dart' as http;
-import 'package:scanguard/auth/signupDetails.dart';
 import '../Models/coverDesignModels.dart';
 import '../Models/selectCoverDesign.dart';
+import 'addPictureSignUp.dart';
 
 bool isLoading = false;
 
@@ -161,56 +161,78 @@ class _SignupNextPageState extends State<SignupNextPage> {
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Stack(
               children: [
-                GestureDetector(
-                  onTap: () async {
-                    if (selectedOption != null) {
-                      await selectedDesign();
-                      if (selectedCoverDesign.status == "success")
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (BuildContext context) {
-                            return SignupDetails(
-                              userId: widget.userId,
-                              email: widget.email,
-                            );
-                          },
-                        ));
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text("Please select a cover design"),
+                Center(
+                  child: GestureDetector(
+                    onTap: () async {
+                      if (selectedOption != null) {
+                        setState(() {
+                          isLoading = true; // Show the progress indicator
+                        });
+                        await selectedDesign();
+                        setState(() {
+                          isLoading = false; // Hide the progress indicator
+                        });
+                        if (selectedCoverDesign.status == "success") {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) {
+                                return AddPictureSignup(
+                                  userId: widget.userId,
+                                  email: widget.email,
+                                );
+                              },
+                            ),
+                          );
+                        }
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("Please select a cover design"),
+                          ),
+                        );
+                      }
+                    },
+                    child: Container(
+                      height: 48,
+                      width: MediaQuery.of(context).size.width * 0.94,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
                         ),
-                      );
-                    }
-                  },
-                  child: Container(
-                    height: 48,
-                    width: MediaQuery.of(context).size.width * 0.94,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
+                        borderRadius: BorderRadius.circular(15),
                       ),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Next",
-                          style: TextStyle(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Next",
+                            style: TextStyle(
                               color: Colors.white,
                               fontFamily: "Satoshi",
                               fontSize: 20,
-                              fontWeight: FontWeight.w700),
-                        ),
-                      ],
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
+                if (isLoading)
+                  // Show the circular progress indicator if isLoading is true
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:scanguard/Home/stampPage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dirayPage.dart';
 import 'homePage.dart';
