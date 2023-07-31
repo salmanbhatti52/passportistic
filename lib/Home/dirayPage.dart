@@ -14,71 +14,38 @@ class _DirayPageState extends State<DirayPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: AppDrawer(),
-      // appBar: AppBar(
-      //   elevation: 0,
-      //   leading: Builder(builder: (context) {
-      //     return GestureDetector(
-      //       onTap: () {
-      //         Scaffold.of(context).openDrawer();
-      //       },
-      //       child: Padding(
-      //         padding: const EdgeInsets.only(top: 20, left: 8),
-      //         child: SvgPicture.asset(
-      //           "assets/menu.svg",
-      //           fit: BoxFit.scaleDown,
-      //         ),
-      //       ),
-      //     );
-      //   }),
-      //   actions: [
-      //     GestureDetector(
-      //       onTap: () {
-      //         // Navigator.pushNamed(context, '/notification');
-      //       },
-      //       child: Padding(
-      //         padding: const EdgeInsets.only(top: 20, right: 8),
-      //         child: SvgPicture.asset(
-      //           "assets/notification.svg",
-      //           fit: BoxFit.scaleDown,
-      //         ),
-      //       ),
-      //     ),
-      //   ],
-      // ),
+      appBar: AppBar(
+        elevation: 0,
+        leading: Builder(builder: (context) {
+          return GestureDetector(
+            onTap: () {
+              Scaffold.of(context).openDrawer();
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SvgPicture.asset(
+                "assets/menu.svg",
+              ),
+            ),
+          );
+        }),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              // Navigator.pushNamed(context, '/notification');
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SvgPicture.asset(
+                "assets/notification.svg",
+                fit: BoxFit.scaleDown,
+              ),
+            ),
+          ),
+        ],
+      ),
       body: Column(
         children: [
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 30, left: 10),
-                child: Builder(builder: (context) {
-                  return GestureDetector(
-                    onTap: () {
-                      Scaffold.of(context).openDrawer();
-                    },
-                    child: SvgPicture.asset(
-                      "assets/menu.svg",
-                    ),
-                  );
-                }),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 30, right: 10),
-                child: GestureDetector(
-                  onTap: () {
-                    // Navigator.pushNamed(context, '/notification');
-                  },
-                  child: SvgPicture.asset(
-                    "assets/notification.svg",
-                  ),
-                ),
-              ),
-            ],
-          ),
           const SizedBox(
             height: 10,
           ),

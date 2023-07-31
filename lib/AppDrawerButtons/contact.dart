@@ -42,6 +42,9 @@ class _ContactUsState extends State<ContactUs> {
         child: Column(children: [
           Row(
             children: [
+              const SizedBox(
+                width: 10,
+              ),
               Expanded(
                 child: TextFormField(
                   controller: name,
@@ -241,28 +244,9 @@ class _ContactUsState extends State<ContactUs> {
           ),
           // Spacer(),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.248,
+            height: MediaQuery.of(context).size.height * 0.085,
           ),
-          Container(
-            //height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            decoration: ShapeDecoration(
-              gradient: LinearGradient(
-                begin: Alignment(0.20, -0.98),
-                end: Alignment(-0.2, 0.98),
-                colors: [Color(0x00C6FFE7), Color(0xFF00AEFF)],
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(1),
-              ),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                SvgPicture.asset("assets/woman.svg"),
-              ],
-            ),
-          )
+          SvgPicture.asset("assets/women.svg"),
         ]),
       ),
     );

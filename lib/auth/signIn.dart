@@ -298,67 +298,84 @@ class _SignInPageState extends State<SignInPage> {
                         ),
                       ),
                     );
-                  } else if (email.text.isNotEmpty &&
-                      password.text.isNotEmpty) {
-                    if (loginUserModels.status == "success")
+                  } else {
+                    setState(() {
+                      isLoading = true;
+                    });
+                    await signinUser();
+                    if (loginUserModels.status == "success") {
                       print("successful");
 
-                    await signinUser();
-                    prefs = await SharedPreferences.getInstance();
-                    await prefs?.setString(
-                        'userID', "${loginUserModels.data?.usersCustomersId}");
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (BuildContext context) {
-                        return MainScreen(
-                          firstname: "${loginUserModels.data?.firstName}",
-                          lastname: "${loginUserModels.data?.lastName}",
-                          profile: "${loginUserModels.data?.profilePicture}",
-                          userId: "${loginUserModels.data?.usersCustomersId}",
-                          email: "${loginUserModels.data?.email}",
-                          phone: "${loginUserModels.data?.phoneNumber}",
-                        );
-                      },
-                    ));
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        backgroundColor: Color(0xFFF65734),
-                        content: Text(
-                          'Something Went Wrong!',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w300,
-                            fontFamily: "Satoshi",
+                      prefs = await SharedPreferences.getInstance();
+                      await prefs?.setString('userID',
+                          "${loginUserModels.data?.usersCustomersId}");
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) {
+                            return MainScreen(
+                              firstname: "${loginUserModels.data?.firstName}",
+                              lastname: "${loginUserModels.data?.lastName}",
+                              profile:
+                                  "${loginUserModels.data?.profilePicture}",
+                              userId:
+                                  "${loginUserModels.data?.usersCustomersId}",
+                              email: "${loginUserModels.data?.email}",
+                              phone: "${loginUserModels.data?.phoneNumber}",
+                            );
+                          },
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          backgroundColor: Color(0xFFF65734),
+                          content: Text(
+                            'Please Enter Valid Email and Password',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w300,
+                              fontFamily: "Satoshi",
+                            ),
                           ),
                         ),
-                      ),
-                    );
+                      );
+                    }
                   }
+
+                  setState(() {
+                    isLoading = false;
+                  });
                 },
-                child: Container(
-                  height: 48,
-                  width: MediaQuery.of(context).size.width * 0.94,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                    ),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "Sign In",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: "Satoshi",
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      height: 48,
+                      width: MediaQuery.of(context).size.width * 0.94,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                        ),
+                        borderRadius: BorderRadius.circular(15),
                       ),
-                    ],
-                  ),
+                    ),
+                    isLoading
+                        ? CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                          )
+                        : Text(
+                            "Sign In",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: "Satoshi",
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700),
+                          ),
+                  ],
                 ),
               ),
             ],

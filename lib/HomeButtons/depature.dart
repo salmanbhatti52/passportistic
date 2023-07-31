@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:group_radio_button/group_radio_button.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import '../Models/departureModels.dart';
+import '../auth/signUpNextPage.dart';
+import '../auth/signUpPage.dart';
 
 class DepatureDetails extends StatefulWidget {
   const DepatureDetails({super.key});
@@ -12,6 +16,72 @@ class DepatureDetails extends StatefulWidget {
 }
 
 class _DepatureDetailsState extends State<DepatureDetails> {
+  DepartureModel departureModel = DepartureModel();
+
+  // departure() async {
+  //   var headersList = {
+  //     'Accept': '*/*',
+  //     'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
+  //     'Content-Type': 'application/json'
+  //   };
+  //   var url =
+  //       Uri.parse('https://portal.passporttastic.com/api/departure_details');
+
+  //   var body = {
+  //     "country": "America",
+  //     "city_name": "Los Angelas",
+  //     "transport_mode": "SUV",
+  //     "stamp_shape": "round",
+  //     "stamp_color": "blue",
+  //     "departure_date": "2022-11-23",
+  //     "departure_time": "23:50:30",
+  //     "stamp_location": "bottom"
+  //   };
+
+  //   var req = http.Request('POST', url);
+  //   req.headers.addAll(headersList);
+  //   req.body = json.encode(body);
+
+  //   var res = await req.send();
+  //   final resBody = await res.stream.bytesToString();
+
+  //   if (res.statusCode == 200) {
+  //     print(resBody);
+  //   } else {
+  //     print(res.reasonPhrase);
+  //   }
+  // }
+
+  departure() async {
+    // try {
+
+    String apiUrl = "$baseUrl/departure_details";
+    print("api: $apiUrl");
+    print("time: ${time.text}");
+    print("date: ${date.text.trim()}");
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "email": "email.text",
+      "password": "password.text",
+    });
+    final responseString = response.body;
+    print("responsedepartureModel: $responseString");
+    print("status Code departureModel: ${response.statusCode}");
+    print("in 200 departureModel");
+    if (response.statusCode == 200) {
+      print("SuccessFull");
+      departureModel = departureModelFromJson(responseString);
+      setState(() {
+        isLoading = false;
+      });
+      print('departureModel status: ${departureModel.status}');
+    }
+  }
+
   TextEditingController time = TextEditingController();
   TextEditingController date = TextEditingController();
 
@@ -452,40 +522,44 @@ class _DepatureDetailsState extends State<DepatureDetails> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: colors.map((color) {
-                    bool isSelected = selectedColor == color;
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedColor = isSelected ? "" : color;
-                        });
-                      },
-                      child: Container(
-                        width: 48,
-                        height: 48,
-                        margin: EdgeInsets.symmetric(horizontal: 8),
-                        decoration: BoxDecoration(
-                          color: getColor(color),
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            width: 2,
-                            color:
-                                isSelected ? Colors.white : Colors.transparent,
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: colors.map((color) {
+                      bool isSelected = selectedColor == color;
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedColor = isSelected ? "" : color;
+                          });
+                        },
+                        child: Container(
+                          width: 48,
+                          height: 48,
+                          margin: EdgeInsets.symmetric(horizontal: 8),
+                          decoration: BoxDecoration(
+                            color: getColor(color),
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              width: 2,
+                              color: isSelected
+                                  ? Colors.white
+                                  : Colors.transparent,
+                            ),
                           ),
+                          child: isSelected
+                              ? Center(
+                                  child: Icon(
+                                    Icons.check,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                )
+                              : SizedBox(), // Hide the tick mark when not selected
                         ),
-                        child: isSelected
-                            ? Center(
-                                child: Icon(
-                                  Icons.check,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                              )
-                            : SizedBox(), // Hide the tick mark when not selected
-                      ),
-                    );
-                  }).toList(),
+                      );
+                    }).toList(),
+                  ),
                 ),
                 SizedBox(height: 16),
                 Padding(
@@ -781,6 +855,7 @@ class _DepatureDetailsState extends State<DepatureDetails> {
                 children: [
                   GestureDetector(
                     onTap: () async {
+                      await departure();
                       // Navigator.push(context, MaterialPageRoute(
                       //   builder: (BuildContext context) {
                       //     return MainScreen();

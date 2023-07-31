@@ -4,86 +4,89 @@
 
 import 'dart:convert';
 
-LoginUserModels loginUserModelsFromJson(String str) => LoginUserModels.fromJson(json.decode(str));
+LoginUserModels loginUserModelsFromJson(String str) =>
+    LoginUserModels.fromJson(json.decode(str));
 
-String loginUserModelsToJson(LoginUserModels data) => json.encode(data.toJson());
+String loginUserModelsToJson(LoginUserModels data) =>
+    json.encode(data.toJson());
 
 class LoginUserModels {
-    String? status;
-    Data? data;
+  String? status;
+  Data? data;
 
-    LoginUserModels({
-        this.status,
-        this.data,
-    });
+  LoginUserModels({
+    this.status,
+    this.data,
+  });
 
-    factory LoginUserModels.fromJson(Map<String, dynamic> json) => LoginUserModels(
+  factory LoginUserModels.fromJson(Map<String, dynamic> json) =>
+      LoginUserModels(
         status: json["status"],
-        data: Data.fromJson(json["data"]),
-    );
+        data: json["data"] != null ? Data.fromJson(json["data"]) : null,
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "status": status,
         "data": data!.toJson(),
-    };
+      };
 }
 
 class Data {
-    String? usersCustomersId;
-    dynamic oneSignalId;
-    String? fullName;
-    String? username;
-    String? email;
-    String? password;
-    String? accountType;
-    dynamic profilePicture;
-    dynamic socialAccType;
-    dynamic googleAccessToken;
-    dynamic facebookId;
-    DateTime? dateAdded;
-    String? status;
-    String? verifyCode;
-    String? notifications;
-    String? beSeen;
-    String? firstName;
-    String? middleName;
-    String? lastName;
-    String? phoneNumber;
-    String? gender;
-    String? nationality;
-    String? dob;
-    String? numberOfPages;
-    String? currency;
+  String? usersCustomersId;
+  dynamic oneSignalId;
+  String? fullName;
+  String? username;
+  String? email;
+  String? password;
+  String? accountType;
+  dynamic profilePicture;
+  dynamic socialAccType;
+  dynamic googleAccessToken;
+  dynamic facebookId;
+  DateTime? dateAdded;
+  String? status;
+  String? verifyCode;
+  String? notifications;
+  String? beSeen;
+  String? firstName;
+  String? middleName;
+  String? lastName;
+  String? phoneNumber;
+  String? gender;
+  String? nationality;
+  String? dob;
+  String? numberOfPages;
+  String? currency;
 
-    Data({
-        this.usersCustomersId,
-        this.oneSignalId,
-        this.fullName,
-        this.username,
-        this.email,
-        this.password,
-        this.accountType,
-        this.profilePicture,
-        this.socialAccType,
-        this.googleAccessToken,
-        this.facebookId,
-        this.dateAdded,
-        this.status,
-        this.verifyCode,
-        this.notifications,
-        this.beSeen,
-        this.firstName,
-        this.middleName,
-        this.lastName,
-        this.phoneNumber,
-        this.gender,
-        this.nationality,
-        this.dob,
-        this.numberOfPages,
-        this.currency,
-    });
+  Data({
+    this.usersCustomersId,
+    this.oneSignalId,
+    this.fullName,
+    this.username,
+    this.email,
+    this.password,
+    this.accountType,
+    this.profilePicture,
+    this.socialAccType,
+    this.googleAccessToken,
+    this.facebookId,
+    this.dateAdded,
+    this.status,
+    this.verifyCode,
+    this.notifications,
+    this.beSeen,
+    this.firstName,
+    this.middleName,
+    this.lastName,
+    this.phoneNumber,
+    this.gender,
+    this.nationality,
+    this.dob,
+    this.numberOfPages,
+    this.currency,
+  });
 
-    factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
         usersCustomersId: json["users_customers_id"],
         oneSignalId: json["one_signal_id"],
         fullName: json["full_name"],
@@ -109,9 +112,9 @@ class Data {
         dob: json["dob"],
         numberOfPages: json["number_of_pages"],
         currency: json["currency"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "users_customers_id": usersCustomersId,
         "one_signal_id": oneSignalId,
         "full_name": fullName,
@@ -137,5 +140,5 @@ class Data {
         "dob": dob,
         "number_of_pages": numberOfPages,
         "currency": currency,
-    };
+      };
 }

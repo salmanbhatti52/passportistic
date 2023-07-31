@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:scanguard/Home/mainScreenHome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,13 +9,13 @@ import 'auth/signIn.dart';
 import 'onbaording/onboarding.dart';
 
 Future<void> main() async {
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Colors.blue
-        .withOpacity(0.5), // Replace "Colors.blue" with your desired color
-    // You can also customize other aspects of the status bar, such as status bar icons' color:
-    //statusBarIconBrightness: Brightness.light, // For dark status bar icons
-    statusBarIconBrightness: Brightness.dark, // For light status bar icons
-  ));
+  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  //   statusBarColor: Colors.blue
+  //       .withOpacity(0.5), // Replace "Colors.blue" with your desired color
+  //   // You can also customize other aspects of the status bar, such as status bar icons' color:
+  //   //statusBarIconBrightness: Brightness.light, // For dark status bar icons
+  //   statusBarIconBrightness: Brightness.dark, // For light status bar icons
+  // ));
   WidgetsFlutterBinding.ensureInitialized();
   _prefs = await SharedPreferences.getInstance();
   bool shownOnboarding = _prefs?.getBool('shownOnboarding') ?? false;
@@ -146,31 +145,25 @@ class _SplashScreenState extends State<SplashScreen> {
       child: Scaffold(
         // Set the background color to transparent
         body: Container(
-          height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF00AEFF), Color(0xFFC6FFE7)],
-              begin: Alignment.bottomCenter,
-              end: Alignment.topLeft,
+          height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+            color: Color(0xFF00AEFF),
+            image: DecorationImage(
+              image: AssetImage("assets/bg.png"),
+              fit: BoxFit.fill,
             ),
           ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Center(
                 child: SvgPicture.asset(
-                  "assets/background.svg",
-                  width: MediaQuery.of(context).size.width * 0.350,
-                  height: 155,
+                  "assets/Logo.svg",
+                  width: MediaQuery.of(context).size.width * 0.277,
+                  height: 111,
                 ),
-              ),
-              const SizedBox(
-                height: 80,
-              ),
-              SvgPicture.asset(
-                "assets/Logo.svg",
-                width: MediaQuery.of(context).size.width * 0.277,
-                height: 111,
               ),
             ],
           ),

@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
         //         )
         //       ]),
         // ),
-        backgroundColor: Colors.white,
+
         // backgroundColor: Color(0xFF00AEFF),
         body: Builder(builder: (context) {
           return Column(
@@ -92,27 +92,25 @@ class _HomePageState extends State<HomePage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(top: 30, left: 10),
-                                  child: Builder(builder: (context) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        Scaffold.of(context).openDrawer();
-                                      },
+                                Builder(builder: (context) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Scaffold.of(context).openDrawer();
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
                                       child: SvgPicture.asset(
                                         "assets/menu.svg",
                                       ),
-                                    );
-                                  }),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(top: 30, right: 10),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      // Navigator.pushNamed(context, '/notification');
-                                    },
+                                    ),
+                                  );
+                                }),
+                                GestureDetector(
+                                  onTap: () {
+                                    // Navigator.pushNamed(context, '/notification');
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
                                     child: SvgPicture.asset(
                                       "assets/notification.svg",
                                     ),
@@ -180,58 +178,63 @@ class _HomePageState extends State<HomePage> {
                                   ));
                                 },
                                 child: Container(
-                                  margin: EdgeInsets.only(
-                                    left: MediaQuery.of(context).size.width *
-                                        0.0001,
-                                  ),
-                                  height:
-                                      MediaQuery.of(context).size.width * 0.2,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.8,
-                                  decoration: BoxDecoration(
+                                  width: 294,
+                                  height: 72,
+                                  decoration: ShapeDecoration(
                                     color: Colors.white,
-                                    borderRadius: BorderRadius.circular(16),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    shadows: [
+                                      BoxShadow(
+                                        color: Color(0x0F312E23),
+                                        blurRadius: 16,
+                                        offset: Offset(0, 8),
+                                        spreadRadius: 0,
+                                      )
+                                    ],
                                   ),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                  child: Stack(
                                     children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Stamp Passport",
-                                              style: TextStyle(
-                                                fontFamily: "Satoshi",
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w400,
-                                                color: Color(0xFF000000)
-                                                    .withOpacity(0.5),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 6,
-                                            ),
-                                            Text(
-                                              " Departure",
-                                              style: TextStyle(
-                                                fontFamily: "Satoshi",
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w700,
-                                                color: Color(0xFFF65734),
-                                              ),
-                                            ),
-                                          ],
+                                      Positioned(
+                                        left: 16,
+                                        top: 12,
+                                        child: Text(
+                                          'Stamp Passport',
+                                          style: TextStyle(
+                                            color:
+                                                Colors.black.withOpacity(0.5),
+                                            fontSize: 16,
+                                            fontFamily: 'Satoshi',
+                                            fontWeight: FontWeight.w400,
+                                          ),
                                         ),
                                       ),
-                                      Spacer(),
-                                      Padding(
-                                        padding: const EdgeInsets.all(10),
+                                      Positioned(
+                                        left: 16,
+                                        top: 38,
+                                        child: Text(
+                                          'Departure',
+                                          style: TextStyle(
+                                            color: Color(0xFFF65734),
+                                            fontSize: 16,
+                                            fontFamily: 'Satoshi',
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        left: 238,
+                                        top: 16,
                                         child: GestureDetector(
-                                          onTap: () {},
+                                          onTap: () {
+                                            Navigator.push(context,
+                                                MaterialPageRoute(
+                                              builder: (BuildContext context) {
+                                                return DepatureDetails();
+                                              },
+                                            ));
+                                          },
                                           child: SvgPicture.asset(
                                             "assets/arrow.svg",
                                           ),
@@ -253,58 +256,63 @@ class _HomePageState extends State<HomePage> {
                                   ));
                                 },
                                 child: Container(
-                                  margin: EdgeInsets.only(
-                                    left: MediaQuery.of(context).size.width *
-                                        0.0001,
-                                  ),
-                                  height:
-                                      MediaQuery.of(context).size.width * 0.2,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.8,
-                                  decoration: BoxDecoration(
+                                  width: 294,
+                                  height: 72,
+                                  decoration: ShapeDecoration(
                                     color: Colors.white,
-                                    borderRadius: BorderRadius.circular(16),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    shadows: [
+                                      BoxShadow(
+                                        color: Color(0x0F312E23),
+                                        blurRadius: 16,
+                                        offset: Offset(0, 8),
+                                        spreadRadius: 0,
+                                      )
+                                    ],
                                   ),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                  child: Stack(
                                     children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Stamp Passport",
-                                              style: TextStyle(
-                                                fontFamily: "Satoshi",
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w400,
-                                                color: Color(0xFF000000)
-                                                    .withOpacity(0.5),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 6,
-                                            ),
-                                            Text(
-                                              " Arrival",
-                                              style: TextStyle(
-                                                fontFamily: "Satoshi",
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w700,
-                                                color: Color(0xFFF65734),
-                                              ),
-                                            ),
-                                          ],
+                                      Positioned(
+                                        left: 16,
+                                        top: 12,
+                                        child: Text(
+                                          'Stamp Passport',
+                                          style: TextStyle(
+                                            color:
+                                                Colors.black.withOpacity(0.5),
+                                            fontSize: 16,
+                                            fontFamily: 'Satoshi',
+                                            fontWeight: FontWeight.w400,
+                                          ),
                                         ),
                                       ),
-                                      Spacer(),
-                                      Padding(
-                                        padding: const EdgeInsets.all(10),
+                                      Positioned(
+                                        left: 16,
+                                        top: 38,
+                                        child: Text(
+                                          'Arrival ',
+                                          style: TextStyle(
+                                            color: Color(0xFFF65734),
+                                            fontSize: 16,
+                                            fontFamily: 'Satoshi',
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        left: 238,
+                                        top: 16,
                                         child: GestureDetector(
-                                          onTap: () {},
+                                          onTap: () {
+                                            Navigator.push(context,
+                                                MaterialPageRoute(
+                                              builder: (BuildContext context) {
+                                                return ArrivalDetails();
+                                              },
+                                            ));
+                                          },
                                           child: SvgPicture.asset(
                                             "assets/arrow.svg",
                                           ),
@@ -326,48 +334,49 @@ class _HomePageState extends State<HomePage> {
                                   ));
                                 },
                                 child: Container(
-                                  margin: EdgeInsets.only(
-                                    left: MediaQuery.of(context).size.width *
-                                        0.0001,
-                                  ),
-                                  height:
-                                      MediaQuery.of(context).size.width * 0.2,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.8,
-                                  decoration: BoxDecoration(
+                                  width: 294,
+                                  height: 72,
+                                  decoration: ShapeDecoration(
                                     color: Colors.white,
-                                    borderRadius: BorderRadius.circular(16),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    shadows: [
+                                      BoxShadow(
+                                        color: Color(0x0F312E23),
+                                        blurRadius: 16,
+                                        offset: Offset(0, 8),
+                                        spreadRadius: 0,
+                                      )
+                                    ],
                                   ),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                  child: Stack(
                                     children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Text(
-                                              " View Passport",
-                                              style: TextStyle(
-                                                fontFamily: "Satoshi",
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w700,
-                                                color: Color(0xFFF65734),
-                                              ),
-                                            ),
-                                          ],
+                                      Positioned(
+                                        left: 16,
+                                        top: 25,
+                                        child: Text(
+                                          'View Passport',
+                                          style: TextStyle(
+                                            color: Color(0xFFF65734),
+                                            fontSize: 16,
+                                            fontFamily: 'Satoshi',
+                                            fontWeight: FontWeight.w700,
+                                          ),
                                         ),
                                       ),
-                                      Spacer(),
-                                      Padding(
-                                        padding: const EdgeInsets.all(10),
+                                      Positioned(
+                                        left: 238,
+                                        top: 16,
                                         child: GestureDetector(
-                                          onTap: () {},
+                                          onTap: () {
+                                            Navigator.push(context,
+                                                MaterialPageRoute(
+                                              builder: (BuildContext context) {
+                                                return ViewPassport();
+                                              },
+                                            ));
+                                          },
                                           child: SvgPicture.asset(
                                             "assets/arrow.svg",
                                           ),
@@ -389,48 +398,49 @@ class _HomePageState extends State<HomePage> {
                                   ));
                                 },
                                 child: Container(
-                                  margin: EdgeInsets.only(
-                                    left: MediaQuery.of(context).size.width *
-                                        0.0001,
-                                  ),
-                                  height:
-                                      MediaQuery.of(context).size.width * 0.2,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.8,
-                                  decoration: BoxDecoration(
+                                  width: 294,
+                                  height: 72,
+                                  decoration: ShapeDecoration(
                                     color: Colors.white,
-                                    borderRadius: BorderRadius.circular(16),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    shadows: [
+                                      BoxShadow(
+                                        color: Color(0x0F312E23),
+                                        blurRadius: 16,
+                                        offset: Offset(0, 8),
+                                        spreadRadius: 0,
+                                      )
+                                    ],
                                   ),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                  child: Stack(
                                     children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Text(
-                                              " Purchase Stamps",
-                                              style: TextStyle(
-                                                fontFamily: "Satoshi",
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w700,
-                                                color: Color(0xFFF65734),
-                                              ),
-                                            ),
-                                          ],
+                                      Positioned(
+                                        left: 16,
+                                        top: 25,
+                                        child: Text(
+                                          'Purchase Stamps',
+                                          style: TextStyle(
+                                            color: Color(0xFFF65734),
+                                            fontSize: 16,
+                                            fontFamily: 'Satoshi',
+                                            fontWeight: FontWeight.w700,
+                                          ),
                                         ),
                                       ),
-                                      Spacer(),
-                                      Padding(
-                                        padding: const EdgeInsets.all(10),
+                                      Positioned(
+                                        left: 238,
+                                        top: 16,
                                         child: GestureDetector(
-                                          onTap: () {},
+                                          onTap: () {
+                                            Navigator.push(context,
+                                                MaterialPageRoute(
+                                              builder: (BuildContext context) {
+                                                return StampPage();
+                                              },
+                                            ));
+                                          },
                                           child: SvgPicture.asset(
                                             "assets/arrow.svg",
                                           ),
@@ -452,48 +462,49 @@ class _HomePageState extends State<HomePage> {
                                   ));
                                 },
                                 child: Container(
-                                  margin: EdgeInsets.only(
-                                    left: MediaQuery.of(context).size.width *
-                                        0.0001,
-                                  ),
-                                  height:
-                                      MediaQuery.of(context).size.width * 0.2,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.8,
-                                  decoration: BoxDecoration(
+                                  width: 294,
+                                  height: 72,
+                                  decoration: ShapeDecoration(
                                     color: Colors.white,
-                                    borderRadius: BorderRadius.circular(16),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    shadows: [
+                                      BoxShadow(
+                                        color: Color(0x0F312E23),
+                                        blurRadius: 16,
+                                        offset: Offset(0, 8),
+                                        spreadRadius: 0,
+                                      )
+                                    ],
                                   ),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                  child: Stack(
                                     children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Text(
-                                              "Add/Edit itinerary or \nTravel Diary ",
-                                              style: TextStyle(
-                                                fontFamily: "Satoshi",
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w700,
-                                                color: Color(0xFFF65734),
-                                              ),
-                                            ),
-                                          ],
+                                      Positioned(
+                                        left: 16,
+                                        top: 14,
+                                        child: Text(
+                                          'Add/Edit itinerary or \nTravel Diary ',
+                                          style: TextStyle(
+                                            color: Color(0xFFF65734),
+                                            fontSize: 16,
+                                            fontFamily: 'Satoshi',
+                                            fontWeight: FontWeight.w700,
+                                          ),
                                         ),
                                       ),
-                                      Spacer(),
-                                      Padding(
-                                        padding: const EdgeInsets.all(10),
+                                      Positioned(
+                                        left: 238,
+                                        top: 16,
                                         child: GestureDetector(
-                                          onTap: () {},
+                                          onTap: () {
+                                            Navigator.push(context,
+                                                MaterialPageRoute(
+                                              builder: (BuildContext context) {
+                                                return AddItineray();
+                                              },
+                                            ));
+                                          },
                                           child: SvgPicture.asset(
                                             "assets/arrow.svg",
                                           ),

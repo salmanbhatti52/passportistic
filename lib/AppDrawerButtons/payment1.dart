@@ -30,33 +30,37 @@ class _CardPaymentState extends State<CardPayment> {
                 height: 30,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.only(left: 20),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.pop(context);
                       },
                       child: SvgPicture.asset(
-                        "assets/menub.svg",
-                        width: 20,
-                        height: 20,
+                        "assets/menu.svg",
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: 90,
+                  Text(
+                    'Payment',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Color(0xFF141010),
+                      fontSize: 20,
+                      fontFamily: 'Satoshi',
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                  Center(
-                    child: Text(
-                      'Payment',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Color(0xFF141010),
-                        fontSize: 20,
-                        fontFamily: 'Satoshi',
-                        fontWeight: FontWeight.w700,
-                      ),
+                  Text(
+                    '       ',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Color(0xFF141010),
+                      fontSize: 20,
+                      fontFamily: 'Satoshi',
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ],
@@ -98,6 +102,9 @@ class _CardPaymentState extends State<CardPayment> {
                 ),
               ),
               //  Spacer(),
+              SizedBox(
+                height: 80,
+              ),
               Expanded(
                 child: ClipRRect(
                   borderRadius: BorderRadius.only(
@@ -117,7 +124,7 @@ class _CardPaymentState extends State<CardPayment> {
                       child: Column(
                         children: [
                           SizedBox(
-                            height: 10,
+                            height: 20,
                           ),
                           Row(
                             children: [

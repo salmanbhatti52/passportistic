@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:scanguard/Home/mainScreenHome.dart';
 
@@ -26,21 +25,16 @@ class _StampPageState extends State<StampPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        systemOverlayStyle:
-            SystemUiOverlayStyle(statusBarColor: Colors.black.withOpacity(0.5)),
         forceMaterialTransparency: true,
         centerTitle: true,
-        title: Padding(
-          padding: const EdgeInsets.only(top: 20),
-          child: Text(
-            'Purchase Stamps',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Color(0xFFF65734),
-              fontSize: 24,
-              fontFamily: 'Satoshi',
-              fontWeight: FontWeight.w700,
-            ),
+        title: Text(
+          'Purchase Stamps',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Color(0xFFF65734),
+            fontSize: 24,
+            fontFamily: 'Satoshi',
+            fontWeight: FontWeight.w700,
           ),
         ),
         leading: GestureDetector(
@@ -50,21 +44,15 @@ class _StampPageState extends State<StampPage> {
               (Route<dynamic> route) => false,
             );
           },
-          child: Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: SvgPicture.asset(
-              "assets/arrowBack1.svg",
-              fit: BoxFit.scaleDown,
-            ),
+          child: SvgPicture.asset(
+            "assets/menu.svg",
+            fit: BoxFit.scaleDown,
           ),
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(top: 20, right: 15),
-            child: SvgPicture.asset(
-              "assets/notification.svg",
-              fit: BoxFit.scaleDown,
-            ),
+          SvgPicture.asset(
+            "assets/notification.svg",
+            fit: BoxFit.scaleDown,
           ),
         ],
       ),
@@ -76,92 +64,122 @@ class _StampPageState extends State<StampPage> {
           itemCount: stamps.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            crossAxisSpacing: 10.0,
-            mainAxisSpacing: 10.0,
-            childAspectRatio: 0.6,
+            crossAxisSpacing: 6.0,
+            childAspectRatio: 0.65,
           ),
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
-              onTap: () {
-                // Handle stamp selection
-              },
-              child: Container(
-                height: 300,
-                decoration: BoxDecoration(
-                  border: Border.all(width: 0.50, color: Color(0xFFE0E0E5)),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border:
-                              Border.all(width: 0.50, color: Color(0xFFE0E0E5)),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(15),
-                            topRight: Radius.circular(15),
-                          ),
-                          child: Image.asset(
-                            "assets/StampImage.png",
-                            fit: BoxFit.fill,
-                            width: MediaQuery.of(context).size.width,
-                            height: 150,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Text(
-                      stamps[index],
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontFamily: 'Satoshi',
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    Text(
-                      '\$1.99',
-                      style: TextStyle(
-                        color: Color(0xFFF65734),
-                        fontSize: 20,
-                        fontFamily: 'Satoshi',
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    Center(
-                      child: Container(
-                        width: 104,
-                        height: 30,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment(0.00, -1.00),
-                            end: Alignment(0, 1),
-                            colors: [Color(0xFFFF8D74), Color(0xFFF65634)],
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Buy',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontFamily: 'Satoshi',
-                              fontWeight: FontWeight.w700,
+                onTap: () {
+                  // Handle stamp selection
+                },
+                child: Container(
+                  width: 171,
+                  height: 267,
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        left: 0,
+                        top: 0,
+                        child: Container(
+                          width: 171,
+                          height: 267,
+                          decoration: ShapeDecoration(
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  width: 0.50, color: Color(0xFFE0E0E5)),
+                              borderRadius: BorderRadius.circular(15),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            );
+                      Positioned(
+                        left: 0,
+                        top: 0,
+                        child: Container(
+                          width: 171,
+                          height: 151,
+                          decoration: ShapeDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                  "https://images.pexels.com/photos/3839651/pexels-photo-3839651.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"),
+                              fit: BoxFit.fill,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  width: 0.50, color: Color(0xFFE0E0E5)),
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(15),
+                                topRight: Radius.circular(15),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        left: 8,
+                        top: 159,
+                        child: Text(
+                          '25 Stamp Pack',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontFamily: 'Satoshi',
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        left: 8,
+                        top: 186,
+                        child: Text(
+                          '\$2.49',
+                          style: TextStyle(
+                            color: Color(0xFFF65734),
+                            fontSize: 20,
+                            fontFamily: 'Satoshi',
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        left: 34,
+                        top: 223,
+                        child: Container(
+                          width: 104,
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          clipBehavior: Clip.antiAlias,
+                          decoration: ShapeDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment(0.00, -1.00),
+                              end: Alignment(0, 1),
+                              colors: [Color(0xFFFF8D74), Color(0xFFF65634)],
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Buy',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontFamily: 'Satoshi',
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ));
           },
         ),
       ),

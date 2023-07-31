@@ -95,71 +95,69 @@ class _ProfilePageState extends State<ProfilePage> {
     bool isFocused3 = _focusNode3.hasFocus;
     return Scaffold(
       drawer: AppDrawer(),
-      // appBar: AppBar(
-      //   // backgroundColor: Colors.black,
-      //   leading: Builder(builder: (context) {
-      //     return GestureDetector(
-      //       onTap: () {
-      //         Scaffold.of(context).openDrawer();
-      //       },
-      //       child: Padding(
-      //         padding: const EdgeInsets.only(top: 20, left: 8),
-      //         child: SvgPicture.asset(
-      //           "assets/menu.svg",
-      //           fit: BoxFit.scaleDown,
-      //         ),
-      //       ),
-      //     );
-      //   }),
-      //   actions: [
-      //     Padding(
-      //       padding: const EdgeInsets.only(top: 20, right: 8),
-      //       child: GestureDetector(
-      //         onTap: () {
-      //           // Navigator.pushNamed(context, '/notification');
-      //         },
-      //         child: SvgPicture.asset(
-      //           "assets/notification.svg",
-      //           fit: BoxFit.scaleDown,
-      //         ),
-      //       ),
-      //     ),
-      //   ],
-      // ),
+      appBar: AppBar(
+        // backgroundColor: Colors.black,
+        leading: Builder(builder: (context) {
+          return GestureDetector(
+            onTap: () {
+              Scaffold.of(context).openDrawer();
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SvgPicture.asset(
+                "assets/menu.svg",
+              ),
+            ),
+          );
+        }),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              // Navigator.pushNamed(context, '/notification');
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SvgPicture.asset(
+                "assets/notification.svg",
+              ),
+            ),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(children: [
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 30, left: 10),
-                child: Builder(builder: (context) {
-                  return GestureDetector(
-                    onTap: () {
-                      Scaffold.of(context).openDrawer();
-                    },
-                    child: SvgPicture.asset(
-                      "assets/menu.svg",
-                    ),
-                  );
-                }),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 30, right: 10),
-                child: GestureDetector(
-                  onTap: () {
-                    // Navigator.pushNamed(context, '/notification');
-                  },
-                  child: SvgPicture.asset(
-                    "assets/notification.svg",
-                  ),
-                ),
-              ),
-            ],
-          ),
+          // SizedBox(
+          //   height: 10,
+          // ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     Padding(
+          //       padding: const EdgeInsets.only(top: 30, left: 10),
+          //       child: Builder(builder: (context) {
+          //         return GestureDetector(
+          //           onTap: () {
+          //             Scaffold.of(context).openDrawer();
+          //           },
+          //           child: SvgPicture.asset(
+          //             "assets/menu.svg",
+          //           ),
+          //         );
+          //       }),
+          //     ),
+          //     Padding(
+          //       padding: const EdgeInsets.only(top: 30, right: 10),
+          //       child: GestureDetector(
+          //         onTap: () {
+          //           // Navigator.pushNamed(context, '/notification');
+          //         },
+          //         child: SvgPicture.asset(
+          //           "assets/notification.svg",
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // ),
           const SizedBox(
             height: 10,
           ),
@@ -705,7 +703,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ],
               ),
             ),
-          )
+          ),
         ]),
       ),
     );

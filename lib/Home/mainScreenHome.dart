@@ -15,8 +15,14 @@ class MainScreen extends StatefulWidget {
   final String? lastname;
   final String? profile;
 
-  
-  const MainScreen({super.key, this.userId, this.email, this.phone, this.firstname, this.lastname, this.profile});
+  const MainScreen(
+      {super.key,
+      this.userId,
+      this.email,
+      this.phone,
+      this.firstname,
+      this.lastname,
+      this.profile});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -27,7 +33,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       // backgroundColor: Color(0xFF00AEFF),
-
+      appBar: getAppBar(),
       bottomNavigationBar: NavBar(),
     );
   }
