@@ -49,6 +49,7 @@ dependencies:
   table_calendar: ^3.0.9
   printing: ^5.11.0
   http: ^1.1.0
+  flutter_stripe: ^9.3.0
   
 
 

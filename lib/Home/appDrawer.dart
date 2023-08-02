@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../AppDrawerButtons/aboutUs.dart';
 import '../AppDrawerButtons/contact.dart';
-import '../AppDrawerButtons/payment1.dart';
+import '../AppDrawerButtons/gPayApay.dart';
 import '../AppDrawerButtons/privaacy.dart';
 import '../AppDrawerButtons/terms.dart';
 import '../auth/signIn.dart';
@@ -162,7 +162,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(
                       builder: (BuildContext context) {
-                        return CardPayment();
+                        return GpayAPay();
                       },
                     ));
                     // Close the drawer using openEndDrawer()

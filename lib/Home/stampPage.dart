@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:scanguard/Home/mainScreenHome.dart';
+
+import 'appDrawer.dart';
 
 class StampPage extends StatefulWidget {
   const StampPage({Key? key}) : super(key: key);
@@ -24,6 +25,7 @@ class _StampPageState extends State<StampPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: AppDrawer(),
       appBar: AppBar(
         forceMaterialTransparency: true,
         centerTitle: true,
@@ -37,22 +39,27 @@ class _StampPageState extends State<StampPage> {
             fontWeight: FontWeight.w700,
           ),
         ),
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => MainScreen()),
-              (Route<dynamic> route) => false,
-            );
-          },
-          child: SvgPicture.asset(
-            "assets/menu.svg",
-            fit: BoxFit.scaleDown,
-          ),
-        ),
+        leading: Builder(builder: (context) {
+          return GestureDetector(
+            onTap: () {
+              Scaffold.of(context).openDrawer();
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SvgPicture.asset(
+                "assets/menu.svg",
+                // fit: BoxFit.scaleDown,
+              ),
+            ),
+          );
+        }),
         actions: [
-          SvgPicture.asset(
-            "assets/notification.svg",
-            fit: BoxFit.scaleDown,
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: SvgPicture.asset(
+              "assets/notification.svg",
+              // fit: BoxFit.scaleDown,
+            ),
           ),
         ],
       ),
