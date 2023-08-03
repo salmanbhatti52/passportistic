@@ -1,0 +1,197 @@
+import 'package:burger_king/lottieanimation/sucessfulloder.dart';
+import 'package:burger_king/res/constants.dart';
+import 'package:burger_king/viewmodel/controllers/cart_controller.dart';
+import 'package:burger_king/viewmodel/services/firestore_services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+
+class Paymentsummary extends StatefulWidget {
+
+
+  @override
+  State<Paymentsummary> createState() => _PaymentsummaryState();
+}
+
+class _PaymentsummaryState extends State<Paymentsummary> {
+  var controller = Get.put(CartControlletr());
+
+  @override
+  Widget build(BuildContext context) {
+ return Scaffold(
+   appBar:  AppBar(
+     backgroundColor: kPrimeryColor1,
+     leading: InkWell(
+         onTap: (){
+           Get.back();
+         },
+         child: Icon(Icons.arrow_back, color: kSecondaryColor2,size: 35,)),
+     title: const Text('Payment Summary',
+         style: TextStyle(
+             fontFamily: 'Lora',
+             color: Colors.white,
+             fontWeight: FontWeight.bold,
+             fontSize: 23)),
+   ),
+   body: StreamBuilder(
+       stream: FirestorServices.getcart(),
+       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+         if(!snapshot.hasData){
+           return Center(child: CircularProgressIndicator(),);
+         }else if(snapshot.data!.docs.isEmpty){
+           return  Center(child: Text('Cart is empty'),);
+         }
+         else{
+           var data = snapshot.data!.docs;
+           controller.calculate(data);
+           return Padding(
+             padding: const EdgeInsets.all(5),
+             child: Column(
+               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+               children: [
+                 Container(
+                   child: Flexible(
+                     child: Padding(
+                       padding: const EdgeInsets.all(10),
+                       child: Container(
+
+                         child: Column(
+                           children: [
+                             Container(
+                               child: Expanded(
+                                 child: ListView.builder(
+                                   itemCount: data.length,
+                                   itemBuilder: (context, index) {
+                                     return Row(
+                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                       children: [
+
+                                         Column(
+                                           crossAxisAlignment: CrossAxisAlignment.start,
+                                           children: [
+                                             Column(
+                                               children: [
+                                                 Image(image: AssetImage(data[index]['image']),height: 90,width: 90),
+
+                                               ],
+                                             ),
+                                             Row(children: [
+
+                                               Text('${data[index]['title']} ',style: inmenuheading),
+
+                                               Row(
+                                                 children: [
+                                                   Padding(
+                                                     padding:  EdgeInsets.only(top: 5),
+                                                     child: Icon(Icons.close),
+
+                                                   ),
+                                                   SizedBox(width: 4,),
+                                                   Padding(
+                                                     padding: const EdgeInsets.only(top: 6),
+                                                     child: Text(data[index]['qty'].toString(),style: inmenuheading,),
+                                                   )
+                                                 ],
+                                               )
+                                             ]),
+                                             Row(children: [
+                                               Row(
+                                                 children: [
+                                                   Icon(Icons.currency_rupee_rounded,size: 20),
+
+                                                   Text(data[index]['tprice'].toString(),style: inmenuheading,),
+                                                 ],
+                                               ),
+                                             ],)
+                                           ],
+                                         ),
+                                         Column(
+                                           children: [
+                                             InkWell(
+                                                 onTap: (){
+                                                   FirestorServices.deleteDocumet(data[index].id);
+                                                 },
+                                                 child: Icon(Icons.delete,size: 25,color: kPrimeryColor1,)),
+
+                                           ],
+                                         )
+                                       ],
+                                     );
+                                   },),
+                               ),
+                             ),
+
+                           ],
+                         ),
+                       ),
+                     ),
+                   ),
+                 ),
+                 Container(
+                   child: Column(
+                     children: [
+                       Padding(
+                         padding: const EdgeInsets.all(5),
+                         child: Row(
+                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                           children: [
+                             Text('Totol price',style:inhomemenuheading,),
+
+                             Row(
+                               children: [
+                                 Icon(Icons.currency_rupee,size: 20,),
+                                 Obx(()=>   Text('${controller.total.value}',style: inhomemenuheading,),),
+                               ],
+                             ),
+                           ],
+                         ),
+                       ),
+                       Padding(
+                         padding: const EdgeInsets.all(5),
+                         child: Row(
+                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                           children: [
+                             Text('Shipping Charge',style: inhomemenuheading),
+                             Row(
+                               children: [
+
+                                 Text('FREE',style: inhomemenuheading),
+                               ],
+                             )
+                           ],
+                         ),
+                       ),
+
+                       Padding(
+                         padding: const EdgeInsets.all(20),
+                         child: InkWell(
+                           onTap: (){
+                             Get.to(successfully());
+                           },
+                           child: Container(
+                             height: 60,
+                             alignment: Alignment.center,
+                             child: Text('Place order',style: TextStyle(color: Colors.white,fontSize: 24,fontWeight: FontWeight.bold,fontFamily: 'Lora'),),
+                             decoration: BoxDecoration(
+                                 color: kSecondaryColor2,
+                                 borderRadius: BorderRadius.circular(100)
+                             ),
+                           ),
+                         ),
+                       )
+                     ],
+                   ),
+                 )
+
+               ],
+             ),
+           );
+         }
+       }
+
+
+   )
+ );
+  }
+}

@@ -7,7 +7,8 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'createPassword.dart';
 
 class OtpPage extends StatefulWidget {
-  const OtpPage({super.key});
+  final String? otp;
+  const OtpPage({super.key, this.otp});
 
   @override
   State<OtpPage> createState() => _OtpPageState();
@@ -146,6 +147,53 @@ class _OtpPageState extends State<OtpPage> {
                 children: [
                   GestureDetector(
                     onTap: () async {
+                      if (_otp.text.isEmpty){
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "Please enter OTP",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: "Satoshi",
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                        );
+                      } else if (_otp.text != widget.otp) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "Please enter correct OTP",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: "Satoshi",
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                        );
+                      }
+                      else{
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "OTP verified",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: "Satoshi",
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                        );
+                          Navigator.push(context, MaterialPageRoute(
+                        builder: (BuildContext context) {
+                          return CreatePassword();
+                        },
+                      ));
+                      }
+
                       Navigator.push(context, MaterialPageRoute(
                         builder: (BuildContext context) {
                           return CreatePassword();

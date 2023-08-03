@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:scanguard/Home/mainScreenHome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,7 +10,7 @@ import 'onbaording/onboarding.dart';
 
 Future<void> main() async {
 
-   Stripe.publishableKey = 'pk_test_51NLlvKCCEPyXUeT4DjSVqVRbXaDMIhlfi4MaBvtJii1Dmy25jzJAm18CCXH99nSygrwrRHELnm2cmMsebhh6eo7K00WmUQYqVP';
+   //Stripe.publishableKey = 'pk_test_51NLlvKCCEPyXUeT4DjSVqVRbXaDMIhlfi4MaBvtJii1Dmy25jzJAm18CCXH99nSygrwrRHELnm2cmMsebhh6eo7K00WmUQYqVP';
   // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
   //   statusBarColor: Colors.blue
   //       .withOpacity(0.5), // Replace "Colors.blue" with your desired color

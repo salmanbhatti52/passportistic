@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:scanguard/HomeButtons/itineraryDetails.dart/travelDetailsPage.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class DisplayDiary extends StatefulWidget {
@@ -88,7 +89,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
           ),
         ),
         elevation: 0,
-       leading: Padding(
+        leading: Padding(
           padding: const EdgeInsets.all(8.0),
           child: GestureDetector(
             onTap: () {
@@ -322,7 +323,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'Display Travel Diary',
+                      'Save',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
@@ -332,6 +333,50 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                       ),
                     ),
                   ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return TravelDetailsPage();
+                    },
+                  ));
+                },
+                child: Container(
+                  width: 330,
+                  height: 48,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: ShapeDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment(0.00, -1.00),
+                      end: Alignment(0, 1),
+                      colors: [Color(0xFFFF8D74), Color(0xFFF65634)],
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Display Travel Diary',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontFamily: 'Satoshi',
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

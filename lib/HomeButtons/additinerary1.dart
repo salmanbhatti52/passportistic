@@ -168,50 +168,6 @@ class _AdditeneraryNextState extends State<AdditeneraryNext> {
               const SizedBox(
                 width: 10,
               ),
-              GestureDetector(
-                onTap: () {},
-                child: Container(
-                  width: 64,
-                  height: 52,
-                  padding: const EdgeInsets.only(
-                    top: 15,
-                    left: 17,
-                    right: 16,
-                    bottom: 15,
-                  ),
-                  clipBehavior: Clip.antiAlias,
-                  decoration: ShapeDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment(0.00, -1.00),
-                      end: Alignment(0, 1),
-                      colors: [Color(0xFFFF8D74), Color(0xFFF65634)],
-                    ),
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(width: 0.50, color: Color(0xFFFF8D74)),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Add',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontFamily: 'Satoshi',
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
             ],
           ),
           Row(
@@ -443,6 +399,9 @@ class _AdditeneraryNextState extends State<AdditeneraryNext> {
               ),
             ],
           ),
+          SizedBox(
+            height: 50,
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
@@ -477,40 +436,6 @@ class _AdditeneraryNextState extends State<AdditeneraryNext> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 20,
-                        fontFamily: 'Satoshi',
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: GestureDetector(
-              onTap: () {},
-              child: Container(
-                width: 350,
-                height: 48,
-                clipBehavior: Clip.antiAlias,
-                decoration: ShapeDecoration(
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(width: 0.50, color: Color(0xFFFF8D74)),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Continue to Travel Diary',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Color(0xFFFF8D74),
                         fontSize: 20,
                         fontFamily: 'Satoshi',
                         fontWeight: FontWeight.w700,

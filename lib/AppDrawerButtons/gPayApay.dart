@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_svg/svg.dart';
 
 class GpayAPay extends StatefulWidget {
@@ -10,21 +9,21 @@ class GpayAPay extends StatefulWidget {
 }
 
 class _GpayAPayState extends State<GpayAPay> {
-  Future<void> createGooglePayPayment() async {
-    try {
-      // final paymentMethod =
-      //     // ignore: deprecated_member_use
-      //     await Stripe.instance.createGooglePayPaymentMethod(
-      //   // Replace the below values with your own Google Pay API key
-      //     );
-      // Use the paymentMethod.id to make a payment on the server-side
-      // You can pass this paymentMethod.id to your server to create a payment using the Stripe API.
-      // Handle the success and error cases accordingly.
-    } catch (e) {
-      // Handle errors here
-      print('Error creating Google Pay payment: $e');
-    }
-  }
+  // Future<void> createGooglePayPayment() async {
+  //   try {
+  //     // final paymentMethod =
+  //     //     // ignore: deprecated_member_use
+  //     //     await Stripe.instance.createGooglePayPaymentMethod(
+  //     //   // Replace the below values with your own Google Pay API key
+  //     //     );
+  //     // Use the paymentMethod.id to make a payment on the server-side
+  //     // You can pass this paymentMethod.id to your server to create a payment using the Stripe API.
+  //     // Handle the success and error cases accordingly.
+  //   } catch (e) {
+  //     // Handle errors here
+  //     print('Error creating Google Pay payment: $e');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

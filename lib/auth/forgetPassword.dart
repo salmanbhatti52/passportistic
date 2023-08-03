@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:scanguard/auth/signUpNextPage.dart';
+import 'package:scanguard/auth/signUpPage.dart';
+import 'package:http/http.dart' as http;
+import 'package:scanguard/main.dart';
+import '../Models/forgetpassportModel.dart';
 import 'otpPage.dart';
 
 class ForgetPassword extends StatefulWidget {
@@ -12,6 +16,37 @@ class ForgetPassword extends StatefulWidget {
 
 class _ForgetPasswordState extends State<ForgetPassword> {
   TextEditingController email = TextEditingController();
+  ForgetPasswordModel forgetPasswordModel = ForgetPasswordModel();
+
+  forgetPass() async {
+    // try {
+
+    String apiUrl = "$baseUrl/login";
+    print("api: $apiUrl");
+    print("email: ${email.text}");
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "email": email.text,
+    });
+    final responseString = response.body;
+    print("responseForgetPasswordApi: $responseString");
+    print("status Code ForgetPassword: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print("in 200 ForgetPassword");
+      print("SuucessFull");
+      forgetPasswordModel = forgetPasswordModelFromJson(responseString);
+      setState(() {
+        isLoading = false;
+      });
+      print('ForgetPasswordModel status: ${forgetPasswordModel.status}');
+    }
+  }
+
   FocusNode _focusNode = FocusNode();
 
   @override
@@ -142,11 +177,61 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                 children: [
                   GestureDetector(
                     onTap: () async {
-                      Navigator.push(context, MaterialPageRoute(
+                      if(email.text.isEmpty){
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "Please Enter Email",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: "Satoshi",
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }else{
+                        await forgetPass();
+                        if (forgetPasswordModel.status == "success") {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                "Email Sent Successfully",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: "Satoshi",
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                            Navigator.push(context, MaterialPageRoute(
                         builder: (BuildContext context) {
-                          return OtpPage();
+                          return OtpPage(
+                            otp: forgetPasswordModel.data!.otp.toString(),
+                       
+                          );
                         },
                       ));
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                "Email Not Found",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: "Satoshi",
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                      }
+                    
                     },
                     child: Container(
                       height: 48,
