@@ -200,7 +200,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                 "Email Sent Successfully",
                                 style: TextStyle(
                                     color: Colors.white,
-                                    fontFamily: "Satoshi",
+                                    fontFamily: "Satoshi", 
                                     fontSize: 20,
                                     fontWeight: FontWeight.w700),
                               ),
