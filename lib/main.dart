@@ -9,8 +9,7 @@ import 'auth/signIn.dart';
 import 'onbaording/onboarding.dart';
 
 Future<void> main() async {
-
-   //Stripe.publishableKey = 'pk_test_51NLlvKCCEPyXUeT4DjSVqVRbXaDMIhlfi4MaBvtJii1Dmy25jzJAm18CCXH99nSygrwrRHELnm2cmMsebhh6eo7K00WmUQYqVP';
+  //Stripe.publishableKey = 'pk_test_51NLlvKCCEPyXUeT4DjSVqVRbXaDMIhlfi4MaBvtJii1Dmy25jzJAm18CCXH99nSygrwrRHELnm2cmMsebhh6eo7K00WmUQYqVP';
   // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
   //   statusBarColor: Colors.blue
   //       .withOpacity(0.5), // Replace "Colors.blue" with your desired color
@@ -59,7 +58,7 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF00AEFF)),
         useMaterial3: true,
       ),
-      home: SplashScreen(),
+      home: const SplashScreen(),
     );
   }
 }
@@ -83,21 +82,20 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     // checkLoginStatus();
 
-    _timer = Timer(Duration(seconds: 2), () {
+    _timer = Timer(const Duration(seconds: 2), () {
       // Timer duration set to 2 seconds
       checkLoginStatus();
       if (userID == null) {
         Navigator.push(context, MaterialPageRoute(
           builder: (BuildContext context) {
-            return Onboard();
+            return const Onboard();
           },
         ));
       } else {
-        Navigator.push(context, MaterialPageRoute(
-          builder: (BuildContext context) {
-            return SignInPage();
-          },
-        ));
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const SignInPage()),
+          (Route<dynamic> route) => false,
+        );
       }
 
       print("Hammad");
@@ -113,17 +111,17 @@ class _SplashScreenState extends State<SplashScreen> {
   checkLoginStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? userID = prefs.getString('userID');
-    print("userID Main Dart: ${userID}");
+    print("userID Main Dart: $userID");
     if (userID != null) {
       Navigator.push(context, MaterialPageRoute(
         builder: (BuildContext context) {
-          return MainScreen();
+          return const MainScreen();
         },
       ));
     } else {
       Navigator.push(context, MaterialPageRoute(
         builder: (BuildContext context) {
-          return SignInPage();
+          return const SignInPage();
         },
       ));
     }
@@ -149,7 +147,7 @@ class _SplashScreenState extends State<SplashScreen> {
         body: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Color(0xFF00AEFF),
             image: DecorationImage(
               image: AssetImage("assets/bg.png"),

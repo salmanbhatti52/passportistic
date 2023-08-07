@@ -49,7 +49,7 @@ class _OnboardState extends State<Onboard> {
             Expanded(
               child: Container(
                 width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     colors: [Color(0xFF00AEFF), Color(0xFFC6FFE7)],
                     begin: Alignment.bottomCenter,
@@ -76,7 +76,7 @@ class _OnboardState extends State<Onboard> {
                         ),
                         SizedBox(
                             height: MediaQuery.of(context).size.height * 0.09),
-                        Text(
+                        const Text(
                           "Explore the \nBeauty of the \nWorld with us",
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -85,10 +85,10 @@ class _OnboardState extends State<Onboard> {
                               color: Colors.black,
                               fontFamily: "Satoshi"),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
-                        Text(
+                        const Text(
                           "If you like to travel, this is your place! Here you \ncan travel without hassle and enjoy it.",
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -99,24 +99,24 @@ class _OnboardState extends State<Onboard> {
                         )
                       ],
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           GestureDetector(
                             onTap: () async {
-                              Navigator.push(context, MaterialPageRoute(
-                                builder: (BuildContext context) {
-                                  return SignInPage();
-                                },
-                              ));
+                              Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => const SignInPage()),
+                                (Route<dynamic> route) => false,
+                              );
                             },
                             child: Container(
                               height: 48,
                               width: MediaQuery.of(context).size.width * 0.92,
                               decoration: BoxDecoration(
-                                gradient: LinearGradient(
+                                gradient: const LinearGradient(
                                   colors: [
                                     Color(0xFFF65734),
                                     Color(0xFFFF8D74)
@@ -126,10 +126,10 @@ class _OnboardState extends State<Onboard> {
                                 ),
                                 borderRadius: BorderRadius.circular(15),
                               ),
-                              child: Row(
+                              child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Text(
+                                  Text(
                                     "Get Started",
                                     style: TextStyle(
                                         color: Colors.white,
