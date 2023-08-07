@@ -15,15 +15,15 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
   TextEditingController time = TextEditingController();
   TextEditingController date = TextEditingController();
 
-  FocusNode _focusNode1 = FocusNode();
-  FocusNode _focusNode2 = FocusNode();
-  FocusNode _focusNode3 = FocusNode();
-  FocusNode _focusNode4 = FocusNode();
-  FocusNode _focusNode5 = FocusNode();
-  FocusNode _focusNode6 = FocusNode();
-  FocusNode _focusNode7 = FocusNode();
-  FocusNode _focusNode8 = FocusNode();
-  FocusNode _focusNode9 = FocusNode();
+  final FocusNode _focusNode1 = FocusNode();
+  final FocusNode _focusNode2 = FocusNode();
+  final FocusNode _focusNode3 = FocusNode();
+  final FocusNode _focusNode4 = FocusNode();
+  final FocusNode _focusNode5 = FocusNode();
+  final FocusNode _focusNode6 = FocusNode();
+  final FocusNode _focusNode7 = FocusNode();
+  final FocusNode _focusNode8 = FocusNode();
+  final FocusNode _focusNode9 = FocusNode();
 
   @override
   void initState() {
@@ -95,15 +95,15 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                   Row(
                     children: [
                       SvgPicture.asset("assets/approval.svg"),
-                      SizedBox(
+                      const SizedBox(
                         width: 5,
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Stamp Credits"),
-                          SizedBox(
+                          const Text("Stamp Credits"),
+                          const SizedBox(
                             width: 5,
                           ),
                           Text(
@@ -111,7 +111,8 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                             style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w400,
-                                color: Color(0xFF000000).withOpacity(0.5)),
+                                color:
+                                    const Color(0xFF000000).withOpacity(0.5)),
                           ),
                         ],
                       ),
@@ -200,10 +201,10 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
           //     ),
           //   ],
           // ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          Text(
+          const Text(
             "You have insufficient stamps to stamp your passport,\nplease click here to purchase another package",
             textAlign: TextAlign.center,
             style: TextStyle(
@@ -211,11 +212,11 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                 fontWeight: FontWeight.w400,
                 color: Color(0xFFF65734)),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8),
+          const Padding(
+            padding: EdgeInsets.only(left: 8),
             child: Row(
               children: [
                 Text(
@@ -235,10 +236,10 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
-                  color: Color(0xFF141111).withOpacity(0.5)),
+                  color: const Color(0xFF141111).withOpacity(0.5)),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -261,17 +262,17 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                           ),
                         ]),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFFF65734)),
+                      borderSide: const BorderSide(color: Color(0xFFF65734)),
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     hintText: "Select Country",
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         color: Color(0xFFF3F3F3),
                       ),
                     ),
-                    hintStyle: TextStyle(
+                    hintStyle: const TextStyle(
                       color: Color(0xFFA7A9B7),
                       fontSize: 16,
                       fontWeight: FontWeight.w300,
@@ -287,10 +288,10 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                       countryListTheme: CountryListThemeData(
                         flagSize: 25,
                         backgroundColor: Colors.white,
-                        textStyle:
-                            TextStyle(fontSize: 16, color: Colors.blueGrey),
+                        textStyle: const TextStyle(
+                            fontSize: 16, color: Colors.blueGrey),
                         bottomSheetHeight: 500,
-                        borderRadius: BorderRadius.only(
+                        borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(20.0),
                           topRight: Radius.circular(20.0),
                         ),
@@ -339,7 +340,7 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -349,23 +350,24 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
               ),
               Expanded(
                 child: TextFormField(
-                  style: TextStyle(color: Color(0xFF000000), fontSize: 16),
-                  cursorColor: Color(0xFF000000),
+                  style:
+                      const TextStyle(color: Color(0xFF000000), fontSize: 16),
+                  cursorColor: const Color(0xFF000000),
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFFF65734)),
+                      borderSide: const BorderSide(color: Color(0xFFF65734)),
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     // labelText: 'Email',
                     hintText: "Write City Name",
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         color: Color(0xFFF3F3F3),
                       ),
                     ),
-                    hintStyle: TextStyle(
+                    hintStyle: const TextStyle(
                       color: Color(0xFFA7A9B7),
                       fontSize: 16,
                       fontWeight: FontWeight.w300,
@@ -382,7 +384,7 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -392,8 +394,9 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
               ),
               Expanded(
                 child: TextFormField(
-                  style: TextStyle(color: Color(0xFF000000), fontSize: 16),
-                  cursorColor: Color(0xFF000000),
+                  style:
+                      const TextStyle(color: Color(0xFF000000), fontSize: 16),
+                  cursorColor: const Color(0xFF000000),
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
                     suffixIcon: Row(
@@ -406,18 +409,18 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                           ),
                         ]),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFFF65734)),
+                      borderSide: const BorderSide(color: Color(0xFFF65734)),
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     // labelText: 'Email',
                     hintText: "Select mode of transport",
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         color: Color(0xFFF3F3F3),
                       ),
                     ),
-                    hintStyle: TextStyle(
+                    hintStyle: const TextStyle(
                       color: Color(0xFFA7A9B7),
                       fontSize: 16,
                       fontWeight: FontWeight.w300,
@@ -434,7 +437,7 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -445,8 +448,9 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
               Expanded(
                 child: TextFormField(
                   focusNode: _focusNode3,
-                  style: TextStyle(color: Color(0xFF000000), fontSize: 16),
-                  cursorColor: Color(0xFF000000),
+                  style:
+                      const TextStyle(color: Color(0xFF000000), fontSize: 16),
+                  cursorColor: const Color(0xFF000000),
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
                     suffixIcon: Row(
@@ -459,18 +463,18 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                           ),
                         ]),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFFF65734)),
+                      borderSide: const BorderSide(color: Color(0xFFF65734)),
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     // labelText: 'Email',
                     hintText: "Select Stamp Shape",
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         color: Color(0xFFF3F3F3),
                       ),
                     ),
-                    hintStyle: TextStyle(
+                    hintStyle: const TextStyle(
                       color: Color(0xFFA7A9B7),
                       fontSize: 16,
                       fontWeight: FontWeight.w300,
@@ -487,15 +491,15 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 12, top: 10),
+          const Padding(
+            padding: EdgeInsets.only(left: 12, top: 10),
             child: Row(
               children: [
                 Text(
-                  'Stamp Colour ',
+                  'Stamp Colour',
                   style: TextStyle(
                     color: Color(0xFF141010),
                     fontSize: 16,
@@ -506,51 +510,55 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  children: colors.map((color) {
-                    bool isSelected = selectedColor == color;
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedColor = isSelected ? "" : color;
-                        });
-                      },
-                      child: Container(
-                        width: 48,
-                        height: 48,
-                        margin: EdgeInsets.symmetric(horizontal: 8),
-                        decoration: BoxDecoration(
-                          color: getColor(color),
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            width: 2,
-                            color:
-                                isSelected ? Colors.white : Colors.transparent,
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: colors.map((color) {
+                      bool isSelected = selectedColor == color;
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedColor = isSelected ? "" : color;
+                          });
+                        },
+                        child: Container(
+                          width: 48,
+                          height: 48,
+                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                          decoration: BoxDecoration(
+                            color: getColor(color),
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              width: 2,
+                              color: isSelected
+                                  ? Colors.white
+                                  : Colors.transparent,
+                            ),
                           ),
+                          child: isSelected
+                              ? const Center(
+                                  child: Icon(
+                                    Icons.check,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                )
+                              : const SizedBox(), // Hide the tick mark when not selected
                         ),
-                        child: isSelected
-                            ? Center(
-                                child: Icon(
-                                  Icons.check,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                              )
-                            : SizedBox(), // Hide the tick mark when not selected
-                      ),
-                    );
-                  }).toList(),
+                      );
+                    }).toList(),
+                  ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: Container(
@@ -560,7 +568,8 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                     clipBehavior: Clip.antiAlias,
                     decoration: ShapeDecoration(
                       shape: RoundedRectangleBorder(
-                        side: BorderSide(width: 0.50, color: Color(0xFFE0E0E5)),
+                        side: const BorderSide(
+                            width: 0.50, color: Color(0xFFE0E0E5)),
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
@@ -575,10 +584,10 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                             shape: BoxShape.rectangle,
                           ),
                         ),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         Text(
-                          "${getColorHex(selectedColor)}",
-                          style: TextStyle(
+                          getColorHex(selectedColor),
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
@@ -591,13 +600,13 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          Row(
+          const Row(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 10),
+                padding: EdgeInsets.only(left: 10),
                 child: Text(
                   "Arrival Date and Time",
                   style: TextStyle(
@@ -608,7 +617,7 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Column(
@@ -682,8 +691,8 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                           child: Icon(
                             Icons.access_time,
                             color: isFocused5
-                                ? Color(0xFFF65734)
-                                : Color(0xFFE0E0E5),
+                                ? const Color(0xFFF65734)
+                                : const Color(0xFFE0E0E5),
                           ),
                         ),
                       ),
@@ -692,7 +701,7 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                   const SizedBox(width: 10),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               Row(
@@ -727,8 +736,8 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                           child: SvgPicture.asset(
                             "assets/date.svg",
                             color: isFocused6
-                                ? Color(0xFFF65734)
-                                : Color(0xFFE0E0E5),
+                                ? const Color(0xFFF65734)
+                                : const Color(0xFFE0E0E5),
                           ),
                         ),
                         focusedBorder: OutlineInputBorder(
@@ -757,11 +766,11 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                   const SizedBox(width: 10),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Center(child: SvgPicture.asset("assets/iran.svg")),
-              Center(
+              const Center(
                   child: Text(
                 "Arrival",
                 style: TextStyle(
@@ -769,10 +778,10 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                     fontWeight: FontWeight.w400,
                     color: Color(0xFF141111)),
               )),
-              Row(
+              const Row(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 12),
+                    padding: EdgeInsets.only(left: 12),
                     child: Text(
                       "Select Stamp Location",
                       style: TextStyle(
@@ -795,7 +804,7 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                         () => _singleValue = value ?? '',
                       ),
                       activeColor: const Color(0xFFFF8D74),
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
                           color: Color(0xFF141111)),
@@ -808,7 +817,7 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                         () => _singleValue = value ?? '',
                       ),
                       activeColor: const Color(0xFFFF8D74),
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
                           color: Color(0xFF141111)),
@@ -821,7 +830,7 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                         () => _singleValue = value ?? '',
                       ),
                       activeColor: const Color(0xFFFF8D74),
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
                           color: Color(0xFF141111)),
@@ -834,7 +843,7 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                         () => _singleValue = value ?? '',
                       ),
                       activeColor: const Color(0xFFFF8D74),
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
                           color: Color(0xFF141111)),
@@ -857,17 +866,17 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                       height: 48,
                       width: MediaQuery.of(context).size.width * 0.94,
                       decoration: BoxDecoration(
-                        gradient: LinearGradient(
+                        gradient: const LinearGradient(
                           colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
                         ),
                         borderRadius: BorderRadius.circular(15),
                       ),
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text(
+                          Text(
                             "Stamp My Passport",
                             style: TextStyle(
                                 color: Colors.white,
@@ -879,7 +888,7 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                 ],
@@ -894,15 +903,15 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
   Color getColor(String colorName) {
     switch (colorName) {
       case "Black":
-        return Color(0xFF141010);
+        return const Color(0xFF141010);
       case "Red":
-        return Color(0xFFFF3838);
+        return const Color(0xFFFF3838);
       case "Yellow":
-        return Color(0xFFFF8C38);
+        return const Color(0xFFFF8C38);
       case "Blue":
-        return Color(0xFF3888FF);
+        return const Color(0xFF3888FF);
       case "Pink":
-        return Color(0xFFFF3874);
+        return const Color(0xFFFF3874);
       default:
         return Colors.transparent;
     }

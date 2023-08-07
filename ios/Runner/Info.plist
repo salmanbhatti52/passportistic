@@ -33,6 +33,8 @@
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>
+	<string>Our app needs access to your photo library to allow you to upload pictures for your profile.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>

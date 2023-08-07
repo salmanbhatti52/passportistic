@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:scanguard/auth/signUpNextPage.dart';
 import 'package:scanguard/auth/signUpPage.dart';
 import 'package:http/http.dart' as http;
-import 'package:scanguard/main.dart';
 import '../Models/forgetpassportModel.dart';
 import 'otpPage.dart';
 
