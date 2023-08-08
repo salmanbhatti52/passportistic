@@ -66,9 +66,9 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
-  FocusNode _focusNode1 = FocusNode();
-  FocusNode _focusNode2 = FocusNode();
-  FocusNode _focusNode3 = FocusNode();
+  final FocusNode _focusNode1 = FocusNode();
+  final FocusNode _focusNode2 = FocusNode();
+  final FocusNode _focusNode3 = FocusNode();
 
   @override
   void initState() {
@@ -144,14 +144,15 @@ class _SignUpPageState extends State<SignUpPage> {
                       const TextStyle(color: Color(0xFF000000), fontSize: 16),
                   cursorColor: const Color(0xFF000000),
                   controller: email,
-                  keyboardType: TextInputType.name,
+                  keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     prefixIcon: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SvgPicture.asset(
                         'assets/sms.svg',
-                        color:
-                            isFocused1 ? Color(0xFFF65734) : Color(0xFFE0E0E5),
+                        color: isFocused1
+                            ? const Color(0xFFF65734)
+                            : const Color(0xFFE0E0E5),
                       ),
                     ),
 
@@ -215,8 +216,9 @@ class _SignUpPageState extends State<SignUpPage> {
                       padding: const EdgeInsets.all(8.0),
                       child: SvgPicture.asset(
                         'assets/lock.svg',
-                        color:
-                            isFocused2 ? Color(0xFFF65734) : Color(0xFFE0E0E5),
+                        color: isFocused2
+                            ? const Color(0xFFF65734)
+                            : const Color(0xFFE0E0E5),
                       ),
                     ),
                     suffixIcon: Row(
@@ -282,8 +284,9 @@ class _SignUpPageState extends State<SignUpPage> {
                       padding: const EdgeInsets.all(8.0),
                       child: SvgPicture.asset(
                         'assets/lock.svg',
-                        color:
-                            isFocused3 ? Color(0xFFF65734) : Color(0xFFE0E0E5),
+                        color: isFocused3
+                            ? const Color(0xFFF65734)
+                            : const Color(0xFFE0E0E5),
                       ),
                     ),
                     suffixIcon: Row(
@@ -334,7 +337,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 RichText(
                   text: TextSpan(
                     text: "By Clicking Sing Up, you agree to our ",
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontFamily: "Satoshi",
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
@@ -342,7 +345,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     children: [
                       TextSpan(
                         text: "Terms and Policy",
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
                             color: Color(0xFFF65734),
@@ -356,7 +359,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             // ));
                           },
                       ),
-                      TextSpan(
+                      const TextSpan(
                         text: "\nthat you have read.",
                         style: TextStyle(
                             fontFamily: "Satoshi",
@@ -431,7 +434,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
                     // Simulate a loading state for 2 seconds.
 
-                    await Future.delayed(Duration(seconds: 2));
+                    await Future.delayed(const Duration(seconds: 2));
                     setState(() {
                       isLoading = false;
                     });
@@ -443,17 +446,17 @@ class _SignUpPageState extends State<SignUpPage> {
                         height: 48,
                         width: MediaQuery.of(context).size.width * 0.94,
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
+                          gradient: const LinearGradient(
                             colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
                             begin: Alignment.bottomCenter,
                             end: Alignment.topCenter,
                           ),
                           borderRadius: BorderRadius.circular(15),
                         ),
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text(
+                            Text(
                               "Sign Up",
                               style: TextStyle(
                                 color: Colors.white,
@@ -466,7 +469,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                       if (isLoading)
-                        CircularProgressIndicator(
+                        const CircularProgressIndicator(
                           valueColor:
                               AlwaysStoppedAnimation<Color>(Colors.white),
                         ),
@@ -484,7 +487,7 @@ class _SignUpPageState extends State<SignUpPage> {
             child: RichText(
               text: TextSpan(
                 text: "Already have an account? ",
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                   color: Colors.black,
@@ -492,7 +495,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 children: [
                   TextSpan(
                     text: "Sign In",
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                       color: Color(0xFFF65734),
@@ -501,7 +504,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       ..onTap = () {
                         Navigator.push(context, MaterialPageRoute(
                           builder: (BuildContext context) {
-                            return SignInPage();
+                            return const SignInPage();
                           },
                         ));
                       },
@@ -510,7 +513,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 4,
           )
         ]),

@@ -47,7 +47,7 @@ class _SignInPageState extends State<SignInPage> {
     final responseString = response.body;
     print("responseSignInApi: $responseString");
     print("status Code SignIn: ${response.statusCode}");
-    
+
     if (response.statusCode == 200) {
       print("in 200 signIn");
       print("SuucessFull");
@@ -59,8 +59,8 @@ class _SignInPageState extends State<SignInPage> {
     }
   }
 
-  FocusNode _focusNode1 = FocusNode();
-  FocusNode _focusNode2 = FocusNode();
+  final FocusNode _focusNode1 = FocusNode();
+  final FocusNode _focusNode2 = FocusNode();
 
   @override
   void initState() {
@@ -96,9 +96,7 @@ class _SignInPageState extends State<SignInPage> {
 
     return Scaffold(
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-
+        child: Column(children: [
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.08,
           ),
@@ -132,14 +130,15 @@ class _SignInPageState extends State<SignInPage> {
                       const TextStyle(color: Color(0xFF000000), fontSize: 16),
                   cursorColor: const Color(0xFF000000),
                   controller: email,
-                  keyboardType: TextInputType.name,
+                  keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     prefixIcon: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SvgPicture.asset(
                         'assets/sms.svg',
-                        color:
-                            isFocused1 ? Color(0xFFF65734) : Color(0xFFE0E0E5),
+                        color: isFocused1
+                            ? const Color(0xFFF65734)
+                            : const Color(0xFFE0E0E5),
                       ),
                     ),
 
@@ -154,7 +153,7 @@ class _SignInPageState extends State<SignInPage> {
                       borderSide: const BorderSide(
                           color: Color(0xFFF3F3F3)), // change border color
                     ),
-                  
+
                     hintStyle: const TextStyle(
                         color: Color(0xFFA7A9B7),
                         fontSize: 16,
@@ -203,8 +202,9 @@ class _SignInPageState extends State<SignInPage> {
                       padding: const EdgeInsets.all(8.0),
                       child: SvgPicture.asset(
                         'assets/lock.svg',
-                        color:
-                            isFocused2 ? Color(0xFFF65734) : Color(0xFFE0E0E5),
+                        color: isFocused2
+                            ? const Color(0xFFF65734)
+                            : const Color(0xFFE0E0E5),
                       ),
                     ),
                     suffixIcon: Row(
@@ -254,17 +254,17 @@ class _SignInPageState extends State<SignInPage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Container(
-                  padding: EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                       bottom: 2.0), // Add some spacing below the text
                   child: TextButton(
                     onPressed: () {
                       Navigator.push(context, MaterialPageRoute(
                         builder: (BuildContext context) {
-                          return ForgetPassword();
+                          return const ForgetPassword();
                         },
                       ));
                     },
-                    child: Text(
+                    child: const Text(
                       "Forget Password?",
                       style: TextStyle(
                         fontSize: 14,
@@ -357,7 +357,7 @@ class _SignInPageState extends State<SignInPage> {
                       height: 48,
                       width: MediaQuery.of(context).size.width * 0.94,
                       decoration: BoxDecoration(
-                        gradient: LinearGradient(
+                        gradient: const LinearGradient(
                           colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
@@ -366,11 +366,11 @@ class _SignInPageState extends State<SignInPage> {
                       ),
                     ),
                     isLoading
-                        ? CircularProgressIndicator(
+                        ? const CircularProgressIndicator(
                             valueColor:
                                 AlwaysStoppedAnimation<Color>(Colors.white),
                           )
-                        : Text(
+                        : const Text(
                             "Sign In",
                             style: TextStyle(
                                 color: Colors.white,
@@ -391,7 +391,7 @@ class _SignInPageState extends State<SignInPage> {
             child: RichText(
               text: TextSpan(
                 text: "Doesn't have an account? ",
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                   color: Colors.black,
@@ -399,7 +399,7 @@ class _SignInPageState extends State<SignInPage> {
                 children: [
                   TextSpan(
                     text: "Sign Up",
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                       color: Color(0xFFF65734),
@@ -408,7 +408,7 @@ class _SignInPageState extends State<SignInPage> {
                       ..onTap = () {
                         Navigator.push(context, MaterialPageRoute(
                           builder: (BuildContext context) {
-                            return SignUpPage();
+                            return const SignUpPage();
                           },
                         ));
                       },
@@ -417,7 +417,7 @@ class _SignInPageState extends State<SignInPage> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           )
         ]),

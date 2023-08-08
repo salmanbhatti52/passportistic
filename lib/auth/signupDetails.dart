@@ -69,15 +69,15 @@ class _SignupDetailsState extends State<SignupDetails> {
     }
   }
 
-  FocusNode _focusNode1 = FocusNode();
-  FocusNode _focusNode2 = FocusNode();
-  FocusNode _focusNode3 = FocusNode();
-  FocusNode _focusNode4 = FocusNode();
-  FocusNode _focusNode5 = FocusNode();
-  FocusNode _focusNode6 = FocusNode();
-  FocusNode _focusNode7 = FocusNode();
-  FocusNode _focusNode8 = FocusNode();
-  FocusNode _focusNode9 = FocusNode();
+  final FocusNode _focusNode1 = FocusNode();
+  final FocusNode _focusNode2 = FocusNode();
+  final FocusNode _focusNode3 = FocusNode();
+  final FocusNode _focusNode4 = FocusNode();
+  final FocusNode _focusNode5 = FocusNode();
+  final FocusNode _focusNode6 = FocusNode();
+  final FocusNode _focusNode7 = FocusNode();
+  final FocusNode _focusNode8 = FocusNode();
+  final FocusNode _focusNode9 = FocusNode();
 
   @override
   void initState() {
@@ -128,7 +128,8 @@ class _SignupDetailsState extends State<SignupDetails> {
       appBar: AppBar(
         centerTitle: true,
         forceMaterialTransparency: true,
-        title: Text(
+        // scrolledUnderElevation: 10,
+        title: const Text(
           "Sign Up",
           style: TextStyle(
             fontSize: 20,
@@ -137,11 +138,11 @@ class _SignupDetailsState extends State<SignupDetails> {
           ),
         ),
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        // backgroundColor: Colors.transparent,
       ),
       body: SingleChildScrollView(
           child: Column(children: [
-        Center(
+        const Center(
             child: Text(
           "Enter Details",
           style: TextStyle(
@@ -170,7 +171,9 @@ class _SignupDetailsState extends State<SignupDetails> {
                     padding: const EdgeInsets.all(8.0),
                     child: SvgPicture.asset(
                       'assets/person.svg',
-                      color: isFocused1 ? Color(0xFFF65734) : Color(0xFFE0E0E5),
+                      color: isFocused1
+                          ? const Color(0xFFF65734)
+                          : const Color(0xFFE0E0E5),
                     ),
                   ),
 
@@ -221,7 +224,9 @@ class _SignupDetailsState extends State<SignupDetails> {
                     padding: const EdgeInsets.all(8.0),
                     child: SvgPicture.asset(
                       'assets/person.svg',
-                      color: isFocused2 ? Color(0xFFF65734) : Color(0xFFE0E0E5),
+                      color: isFocused2
+                          ? const Color(0xFFF65734)
+                          : const Color(0xFFE0E0E5),
                     ),
                   ),
 
@@ -272,7 +277,9 @@ class _SignupDetailsState extends State<SignupDetails> {
                     padding: const EdgeInsets.all(8.0),
                     child: SvgPicture.asset(
                       'assets/person.svg',
-                      color: isFocused3 ? Color(0xFFF65734) : Color(0xFFE0E0E5),
+                      color: isFocused3
+                          ? const Color(0xFFF65734)
+                          : const Color(0xFFE0E0E5),
                     ),
                   ),
 
@@ -323,7 +330,9 @@ class _SignupDetailsState extends State<SignupDetails> {
                     padding: const EdgeInsets.all(8.0),
                     child: SvgPicture.asset(
                       'assets/sms.svg',
-                      color: isFocused4 ? Color(0xFFF65734) : Color(0xFFE0E0E5),
+                      color: isFocused4
+                          ? const Color(0xFFF65734)
+                          : const Color(0xFFE0E0E5),
                     ),
                   ),
 
@@ -386,7 +395,9 @@ class _SignupDetailsState extends State<SignupDetails> {
                     padding: const EdgeInsets.all(8.0),
                     child: SvgPicture.asset(
                       'assets/phone.svg',
-                      color: isFocused5 ? Color(0xFFF65734) : Color(0xFFE0E0E5),
+                      color: isFocused5
+                          ? const Color(0xFFF65734)
+                          : const Color(0xFFE0E0E5),
                     ),
                   ),
 
@@ -410,7 +421,6 @@ class _SignupDetailsState extends State<SignupDetails> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15)),
                 ),
-                
               ),
             ),
             const SizedBox(
@@ -428,17 +438,17 @@ class _SignupDetailsState extends State<SignupDetails> {
             value: selectedOption,
             decoration: InputDecoration(
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFFF65734)),
+                borderSide: const BorderSide(color: Color(0xFFF65734)),
                 borderRadius: BorderRadius.circular(15.0),
               ),
               hintText: "Gender",
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Color(0xFFF3F3F3),
                 ),
               ),
-              hintStyle: TextStyle(
+              hintStyle: const TextStyle(
                 color: Color(0xFFA7A9B7),
                 fontSize: 16,
                 fontWeight: FontWeight.w300,
@@ -451,22 +461,24 @@ class _SignupDetailsState extends State<SignupDetails> {
                 padding: const EdgeInsets.all(8.0),
                 child: SvgPicture.asset(
                   'assets/gender.svg',
-                  color: isFocused6 ? Color(0xFFF65734) : Color(0xFFE0E0E5),
+                  color: isFocused6
+                      ? const Color(0xFFF65734)
+                      : const Color(0xFFE0E0E5),
                 ),
               ),
             ),
-            items: [
+            items: const [
               DropdownMenuItem(
-                child: Text('Male'),
                 value: 'Male',
+                child: Text('Male'),
               ),
               DropdownMenuItem(
-                child: Text('Female'),
                 value: 'Female',
+                child: Text('Female'),
               ),
               DropdownMenuItem(
-                child: Text('other'),
                 value: 'other',
+                child: Text('other'),
               ),
             ],
             onChanged: (value) {
@@ -490,17 +502,17 @@ class _SignupDetailsState extends State<SignupDetails> {
                 readOnly: true,
                 decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFF65734)),
+                    borderSide: const BorderSide(color: Color(0xFFF65734)),
                     borderRadius: BorderRadius.circular(15.0),
                   ),
                   hintText: "Nationality",
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: Color(0xFFF3F3F3),
                     ),
                   ),
-                  hintStyle: TextStyle(
+                  hintStyle: const TextStyle(
                     color: Color(0xFFA7A9B7),
                     fontSize: 16,
                     fontWeight: FontWeight.w300,
@@ -513,7 +525,9 @@ class _SignupDetailsState extends State<SignupDetails> {
                     padding: const EdgeInsets.all(8.0),
                     child: SvgPicture.asset(
                       'assets/flag.svg',
-                      color: isFocused7 ? Color(0xFFF65734) : Color(0xFFE0E0E5),
+                      color: isFocused7
+                          ? const Color(0xFFF65734)
+                          : const Color(0xFFE0E0E5),
                     ),
                   ),
                 ),
@@ -524,9 +538,9 @@ class _SignupDetailsState extends State<SignupDetails> {
                       flagSize: 25,
                       backgroundColor: Colors.white,
                       textStyle:
-                          TextStyle(fontSize: 16, color: Colors.blueGrey),
+                          const TextStyle(fontSize: 16, color: Colors.blueGrey),
                       bottomSheetHeight: 500,
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(20.0),
                         topRight: Radius.circular(20.0),
                       ),
@@ -536,8 +550,8 @@ class _SignupDetailsState extends State<SignupDetails> {
                           child: SvgPicture.asset(
                             'assets/flag.svg',
                             color: isFocused7
-                                ? Color(0xFFF65734)
-                                : Color(0xFFE0E0E5),
+                                ? const Color(0xFFF65734)
+                                : const Color(0xFFE0E0E5),
                           ),
                         ),
 
@@ -601,7 +615,7 @@ class _SignupDetailsState extends State<SignupDetails> {
                   showDatePicker(
                     context: context,
                     initialDate: DateTime.now(),
-                    firstDate: DateTime(2000),
+                    firstDate: DateTime(1950),
                     lastDate: DateTime(2100),
                   ).then((selectedDate) {
                     if (selectedDate != null) {
@@ -657,8 +671,9 @@ class _SignupDetailsState extends State<SignupDetails> {
                       padding: const EdgeInsets.all(7),
                       child: SvgPicture.asset(
                         'assets/calendar.svg',
-                        color:
-                            isFocused8 ? Color(0xFFF65734) : Color(0xFFE0E0E5),
+                        color: isFocused8
+                            ? const Color(0xFFF65734)
+                            : const Color(0xFFE0E0E5),
                       ),
                     ),
                   ),
@@ -671,8 +686,8 @@ class _SignupDetailsState extends State<SignupDetails> {
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.02,
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 12),
+        const Padding(
+          padding: EdgeInsets.only(left: 12),
           child: Row(
             children: [
               Text(
@@ -709,7 +724,10 @@ class _SignupDetailsState extends State<SignupDetails> {
                       decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: _isSelected1
-                                ? [Color(0xFFFF8D74), Color(0xFFF65734)]
+                                ? [
+                                    const Color(0xFFFF8D74),
+                                    const Color(0xFFF65734)
+                                  ]
                                 : [Colors.white, Colors.white],
                             begin: Alignment.bottomCenter,
                             end: Alignment.topCenter,
@@ -717,8 +735,8 @@ class _SignupDetailsState extends State<SignupDetails> {
                           borderRadius: BorderRadius.circular(15),
                           border: Border.all(
                             color: _isSelected1
-                                ? Color(0xFFF65734)
-                                : Color(0xFFE0E0E5),
+                                ? const Color(0xFFF65734)
+                                : const Color(0xFFE0E0E5),
                           )),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -727,8 +745,8 @@ class _SignupDetailsState extends State<SignupDetails> {
                             "Pages 24",
                             style: TextStyle(
                               color: _isSelected1
-                                  ? Color(0xFFFFFFFF)
-                                  : Color(0xFFA7A9B7),
+                                  ? const Color(0xFFFFFFFF)
+                                  : const Color(0xFFA7A9B7),
                               fontFamily: "Satoshi",
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -738,7 +756,7 @@ class _SignupDetailsState extends State<SignupDetails> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 3,
                   ),
                   GestureDetector(
@@ -756,7 +774,10 @@ class _SignupDetailsState extends State<SignupDetails> {
                       decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: _isSelected2
-                                ? [Color(0xFFFF8D74), Color(0xFFF65734)]
+                                ? [
+                                    const Color(0xFFFF8D74),
+                                    const Color(0xFFF65734)
+                                  ]
                                 : [Colors.white, Colors.white],
                             begin: Alignment.bottomCenter,
                             end: Alignment.topCenter,
@@ -764,8 +785,8 @@ class _SignupDetailsState extends State<SignupDetails> {
                           borderRadius: BorderRadius.circular(15),
                           border: Border.all(
                             color: _isSelected2
-                                ? Color(0xFFF65734)
-                                : Color(0xFFE0E0E5),
+                                ? const Color(0xFFF65734)
+                                : const Color(0xFFE0E0E5),
                           )),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -774,8 +795,8 @@ class _SignupDetailsState extends State<SignupDetails> {
                             "Pages 48",
                             style: TextStyle(
                                 color: _isSelected2
-                                    ? Color(0xFFFFFFFF)
-                                    : Color(0xFFA7A9B7),
+                                    ? const Color(0xFFFFFFFF)
+                                    : const Color(0xFFA7A9B7),
                                 fontFamily: "Satoshi",
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400),
@@ -784,7 +805,7 @@ class _SignupDetailsState extends State<SignupDetails> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 3,
                   ),
                   GestureDetector(
@@ -802,7 +823,10 @@ class _SignupDetailsState extends State<SignupDetails> {
                       decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: _isSelected3
-                                ? [Color(0xFFFF8D74), Color(0xFFF65734)]
+                                ? [
+                                    const Color(0xFFFF8D74),
+                                    const Color(0xFFF65734)
+                                  ]
                                 : [Colors.white, Colors.white],
                             begin: Alignment.bottomCenter,
                             end: Alignment.topCenter,
@@ -810,8 +834,8 @@ class _SignupDetailsState extends State<SignupDetails> {
                           borderRadius: BorderRadius.circular(15),
                           border: Border.all(
                             color: _isSelected3
-                                ? Color(0xFFF65734)
-                                : Color(0xFFE0E0E5),
+                                ? const Color(0xFFF65734)
+                                : const Color(0xFFE0E0E5),
                           )),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -820,8 +844,8 @@ class _SignupDetailsState extends State<SignupDetails> {
                             "Pages 96",
                             style: TextStyle(
                                 color: _isSelected3
-                                    ? Color(0xFFFFFFFF)
-                                    : Color(0xFFA7A9B7),
+                                    ? const Color(0xFFFFFFFF)
+                                    : const Color(0xFFA7A9B7),
                                 fontFamily: "Satoshi",
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400),
@@ -832,11 +856,11 @@ class _SignupDetailsState extends State<SignupDetails> {
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               if (selectedPageText.isNotEmpty)
                 Text(
                   selectedPageText,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: "Satoshi",
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
@@ -860,17 +884,17 @@ class _SignupDetailsState extends State<SignupDetails> {
                 readOnly: true,
                 decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFF65734)),
+                    borderSide: const BorderSide(color: Color(0xFFF65734)),
                     borderRadius: BorderRadius.circular(15.0),
                   ),
                   hintText: "Currency",
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: Color(0xFFF3F3F3),
                     ),
                   ),
-                  hintStyle: TextStyle(
+                  hintStyle: const TextStyle(
                     color: Color(0xFFA7A9B7),
                     fontSize: 16,
                     fontWeight: FontWeight.w300,
@@ -880,10 +904,12 @@ class _SignupDetailsState extends State<SignupDetails> {
                     borderRadius: BorderRadius.circular(15),
                   ),
                   prefixIcon: Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: SvgPicture.asset(
                       'assets/currency.svg',
-                      color: isFocused9 ? Color(0xFFF65734) : Color(0xFFE0E0E5),
+                      color: isFocused9
+                          ? const Color(0xFFF65734)
+                          : const Color(0xFFE0E0E5),
                     ),
                   ),
                 ),
@@ -898,7 +924,7 @@ class _SignupDetailsState extends State<SignupDetails> {
                       flagSize: 25,
                       backgroundColor: Colors.white,
                       titleTextStyle:
-                          TextStyle(fontSize: 16, color: Colors.blueGrey),
+                          const TextStyle(fontSize: 16, color: Colors.blueGrey),
                       bottomSheetHeight: 400,
                       shape: ShapeBorder.lerp(
                           RoundedRectangleBorder(
@@ -1009,7 +1035,7 @@ class _SignupDetailsState extends State<SignupDetails> {
                         ));
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                             content: Text("Something Went Wrong!"),
                             backgroundColor: Color(0xFFF65734),
                           ),
@@ -1017,7 +1043,7 @@ class _SignupDetailsState extends State<SignupDetails> {
                       }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           content: Text("Please Put all the Data!"),
                           backgroundColor: Color(0xFFF65734),
                         ),
@@ -1028,17 +1054,17 @@ class _SignupDetailsState extends State<SignupDetails> {
                     height: 48,
                     width: MediaQuery.of(context).size.width * 0.94,
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
+                      gradient: const LinearGradient(
                         colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
                       ),
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
+                        Text(
                           "Sign Up",
                           style: TextStyle(
                               color: Colors.white,
@@ -1053,8 +1079,8 @@ class _SignupDetailsState extends State<SignupDetails> {
               ],
             ),
             if (isLoading) // Show the circular progress indicator if isLoading is true
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Center(
                   child: CircularProgressIndicator(
                     color: Colors.white,
@@ -1077,7 +1103,7 @@ class _SignupDetailsState extends State<SignupDetails> {
   String? validatePhoneNumber(String? value) {
     if (value == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text("Please Enter Valid the Number"),
         ),
       );
@@ -1086,7 +1112,7 @@ class _SignupDetailsState extends State<SignupDetails> {
     // Customize the phone number validation logic here
     if (value!.length != 11) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text("Please Enter a Valid Number"),
         ),
       );

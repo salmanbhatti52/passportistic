@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:scanguard/Home/mainScreenHome.dart';
@@ -8,15 +7,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'auth/signIn.dart';
 import 'onbaording/onboarding.dart';
 
-Future<void> main() async {
-  //Stripe.publishableKey = 'pk_test_51NLlvKCCEPyXUeT4DjSVqVRbXaDMIhlfi4MaBvtJii1Dmy25jzJAm18CCXH99nSygrwrRHELnm2cmMsebhh6eo7K00WmUQYqVP';
-  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-  //   statusBarColor: Colors.blue
-  //       .withOpacity(0.5), // Replace "Colors.blue" with your desired color
-  //   // You can also customize other aspects of the status bar, such as status bar icons' color:
-  //   //statusBarIconBrightness: Brightness.light, // For dark status bar icons
-  //   statusBarIconBrightness: Brightness.dark, // For light status bar icons
-  // ));
+SharedPreferences? _prefs;
+SharedPreferences? prefs;
+String? userID;
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   _prefs = await SharedPreferences.getInstance();
   bool shownOnboarding = _prefs?.getBool('shownOnboarding') ?? false;
@@ -25,36 +20,19 @@ Future<void> main() async {
 
 class MyApp extends StatefulWidget {
   final bool shownOnboarding;
+
   const MyApp({Key? key, required this.shownOnboarding}) : super(key: key);
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    super.initState();
-    _initPrefs();
-  }
-
-  Future<void> _initPrefs() async {
-    _prefs = await SharedPreferences.getInstance();
-    bool shownOnboarding = _prefs?.getBool('shownOnboarding') ?? false;
-
-    if (!shownOnboarding) {
-      // First-time launch, show onboarding screen
-      await _prefs?.setBool('shownOnboarding', true);
-      setState(() {});
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // scaffoldBackgroundColor: Colors.black,
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF00AEFF)),
         useMaterial3: true,
       ),
@@ -62,10 +40,6 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
-SharedPreferences? _prefs;
-SharedPreferences? prefs;
-String? userID;
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -80,25 +54,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // checkLoginStatus();
-
     _timer = Timer(const Duration(seconds: 2), () {
-      // Timer duration set to 2 seconds
-      checkLoginStatus();
-      if (userID == null) {
-        Navigator.push(context, MaterialPageRoute(
-          builder: (BuildContext context) {
-            return const Onboard();
-          },
-        ));
-      } else {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const SignInPage()),
-          (Route<dynamic> route) => false,
-        );
-      }
-
-      print("Hammad");
+      checkOnboardingStatus();
     });
   }
 
@@ -108,42 +65,39 @@ class _SplashScreenState extends State<SplashScreen> {
     super.dispose();
   }
 
-  checkLoginStatus() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? userID = prefs.getString('userID');
-    print("userID Main Dart: $userID");
-    if (userID != null) {
-      Navigator.push(context, MaterialPageRoute(
-        builder: (BuildContext context) {
-          return const MainScreen();
-        },
-      ));
+  void checkOnboardingStatus() async {
+    bool shownOnboarding = _prefs?.getBool('shownOnboarding') ?? false;
+    userID = _prefs?.getString('userID');
+
+    print("Onboarding Status: $shownOnboarding");
+    print("User ID: $userID");
+
+    if (shownOnboarding) {
+      if (userID != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => const MainScreen()),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => const SignInPage()),
+        );
+      }
     } else {
-      Navigator.push(context, MaterialPageRoute(
-        builder: (BuildContext context) {
-          return const SignInPage();
-        },
-      ));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) => const Onboard()),
+      );
     }
-    // return userID != null;
   }
-
-  // void navigateToNextScreen() async {
-  //   // LoginUserModels loginModel = LoginUserModels();
-
-  //   bool isLoggedIn = await checkLoginStatus();
-  //   Navigator.of(context).pushReplacement(
-  //     MaterialPageRoute(
-  //       builder: (context) => isLoggedIn ? MainScreen() : SignInPage(),
-  //     ),
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        // Set the background color to transparent
         body: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
