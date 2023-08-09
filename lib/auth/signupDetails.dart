@@ -324,7 +324,7 @@ class _SignupDetailsState extends State<SignupDetails> {
                 style: const TextStyle(color: Color(0xFF000000), fontSize: 16),
                 cursorColor: const Color(0xFF000000),
                 controller: email,
-                keyboardType: TextInputType.emailAddress,
+                // keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   prefixIcon: Padding(
                     padding: const EdgeInsets.all(8.0),

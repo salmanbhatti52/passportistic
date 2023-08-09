@@ -12,21 +12,25 @@ String loginUserModelsToJson(LoginUserModels data) =>
 
 class LoginUserModels {
   String? status;
+  String? message;
   Data? data;
 
   LoginUserModels({
     this.status,
+    this.message,
     this.data,
   });
 
   factory LoginUserModels.fromJson(Map<String, dynamic> json) =>
       LoginUserModels(
         status: json["status"],
+        message: json["message"],
         data: json["data"] != null ? Data.fromJson(json["data"]) : null,
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
+        "message": message,
         "data": data!.toJson(),
       };
 }

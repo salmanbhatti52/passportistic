@@ -144,7 +144,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       const TextStyle(color: Color(0xFF000000), fontSize: 16),
                   cursorColor: const Color(0xFF000000),
                   controller: email,
-                  keyboardType: TextInputType.emailAddress,
+                  // keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     prefixIcon: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -385,6 +385,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   onTap: () async {
                     if (email.text.isNotEmpty &&
                         password.text.isNotEmpty &&
+                        confirmPassword.text.isNotEmpty &&
                         isValidEmail(email.text)) {
                       await signUpUser();
                       setState(() {
@@ -412,10 +413,9 @@ class _SignUpPageState extends State<SignUpPage> {
                             },
                           ),
                         );
-                      } else if (signUpModels.status == "error") {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text("Password do not match."),
+                      } else if (signUpModels.status != "success") {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(signUpModels.message.toString()),
                           backgroundColor: Colors.red,
                         ));
                       } else if (email.text.isEmpty || password.text.isEmpty) {

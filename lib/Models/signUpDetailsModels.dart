@@ -12,21 +12,25 @@ String signUpDetailsModelToJson(SignUpDetailsModel data) =>
 
 class SignUpDetailsModel {
   String? status;
+  String? message;
   Data? data;
 
   SignUpDetailsModel({
     this.status,
+    this.message,
     this.data,
   });
 
   factory SignUpDetailsModel.fromJson(Map<String, dynamic> json) =>
       SignUpDetailsModel(
         status: json["status"],
+        message: json["message"],
         data: json["data"] != null ? Data.fromJson(json["data"]) : null,
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
+        "message": message,
         "data": data!.toJson(),
       };
 }

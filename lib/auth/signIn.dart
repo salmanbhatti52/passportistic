@@ -130,7 +130,7 @@ class _SignInPageState extends State<SignInPage> {
                       const TextStyle(color: Color(0xFF000000), fontSize: 16),
                   cursorColor: const Color(0xFF000000),
                   controller: email,
-                  keyboardType: TextInputType.emailAddress,
+                  // keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     prefixIcon: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -329,13 +329,13 @@ class _SignInPageState extends State<SignInPage> {
                           },
                         ),
                       );
-                    } else {
+                    } else if (loginUserModels.status != "success") {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          backgroundColor: Color(0xFFF65734),
+                        SnackBar(
+                          backgroundColor: const Color(0xFFF65734),
                           content: Text(
-                            'Please Enter Valid Email and Password',
-                            style: TextStyle(
+                            loginUserModels.message.toString(),
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w300,
                               fontFamily: "Satoshi",
