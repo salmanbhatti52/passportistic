@@ -4,95 +4,99 @@
 
 import 'dart:convert';
 
-LoginUserModels loginUserModelsFromJson(String str) =>
-    LoginUserModels.fromJson(json.decode(str));
+LoginUserModels loginUserModelsFromJson(String str) => LoginUserModels.fromJson(json.decode(str));
 
-String loginUserModelsToJson(LoginUserModels data) =>
-    json.encode(data.toJson());
+String loginUserModelsToJson(LoginUserModels data) => json.encode(data.toJson());
 
 class LoginUserModels {
-  String? status;
-  String? message;
-  Data? data;
+    String? status;
+    String? message;
+    Data? data;
 
-  LoginUserModels({
-    this.status,
-    this.message,
-    this.data,
-  });
+    LoginUserModels({
+        this.status,
+        this.message,
+        this.data,
+    });
 
-  factory LoginUserModels.fromJson(Map<String, dynamic> json) =>
-      LoginUserModels(
+    factory LoginUserModels.fromJson(Map<String, dynamic> json) => LoginUserModels(
         status: json["status"],
         message: json["message"],
-        data: json["data"] != null ? Data.fromJson(json["data"]) : null,
-      );
+        data: Data.fromJson(json["data"]),
+    );
 
-  Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "data": data!.toJson(),
-      };
+    "data": data!.toJson(),
+    };
 }
 
 class Data {
-  String? usersCustomersId;
-  dynamic oneSignalId;
-  String? fullName;
-  String? username;
-  String? email;
-  String? password;
-  String? accountType;
-  dynamic profilePicture;
-  dynamic socialAccType;
-  dynamic googleAccessToken;
-  dynamic facebookId;
-  DateTime? dateAdded;
-  String? status;
-  String? verifyCode;
-  String? notifications;
-  String? beSeen;
-  String? firstName;
-  String? middleName;
-  String? lastName;
-  String? phoneNumber;
-  String? gender;
-  String? nationality;
-  String? dob;
-  String? numberOfPages;
-  String? currency;
+    String? passportHolderId;
+    dynamic oneSignalId;
+    dynamic passportDesignId;
+    String? fullName;
+    String? username;
+    String? email;
+    String? password;
+    String? accountType;
+    dynamic profilePicture;
+    dynamic socialAccType;
+    dynamic googleAccessToken;
+    dynamic facebookId;
+    DateTime? dateAdded;
+    String? status;
+    String? verifyCode;
+    String? notifications;
+    String? beSeen;
+    String? firstName;
+    String? middleName;
+    String? lastName;
+    String? phoneNumber;
+    String? genderId;
+    dynamic nationality;
+    String? dob;
+    String? numberOfPages;
+    dynamic currencyId;
+    String? passportStampsHeld;
+    String? isCancelled;
 
-  Data({
-    this.usersCustomersId,
-    this.oneSignalId,
-    this.fullName,
-    this.username,
-    this.email,
-    this.password,
-    this.accountType,
-    this.profilePicture,
-    this.socialAccType,
-    this.googleAccessToken,
-    this.facebookId,
-    this.dateAdded,
-    this.status,
-    this.verifyCode,
-    this.notifications,
-    this.beSeen,
-    this.firstName,
-    this.middleName,
-    this.lastName,
-    this.phoneNumber,
-    this.gender,
-    this.nationality,
-    this.dob,
-    this.numberOfPages,
-    this.currency,
-  });
+    Data({
+        this.passportHolderId,
+        this.oneSignalId,
+        this.passportDesignId,
+        this.fullName,
+        this.username,
+        this.email,
+        this.password,
+        this.accountType,
+        this.profilePicture,
+        this.socialAccType,
+        this.googleAccessToken,
+        this.facebookId,
+        this.dateAdded,
+        this.status,
+        this.verifyCode,
+        this.notifications,
+        this.beSeen,
+        this.firstName,
+        this.middleName,
+        this.lastName,
+        this.phoneNumber,
+        this.genderId,
+        this.nationality,
+        this.dob,
+        this.numberOfPages,
+        this.currencyId,
+        this.passportStampsHeld,
+        this.isCancelled,
+    });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-        usersCustomersId: json["users_customers_id"],
+    factory Data.fromJson(Map<String, dynamic> json) => Data(
+        passportHolderId: json["passport_holder_id"],
         oneSignalId: json["one_signal_id"],
+        passportDesignId: json["passport_design_id"],
         fullName: json["full_name"],
         username: json["username"],
         email: json["email"],
@@ -111,16 +115,19 @@ class Data {
         middleName: json["middle_name"],
         lastName: json["last_name"],
         phoneNumber: json["phone_number"],
-        gender: json["gender"],
+        genderId: json["gender_id"],
         nationality: json["nationality"],
         dob: json["dob"],
         numberOfPages: json["number_of_pages"],
-        currency: json["currency"],
-      );
+        currencyId: json["currency_id"],
+        passportStampsHeld: json["passport_stamps_held"],
+        isCancelled: json["is_cancelled"],
+    );
 
-  Map<String, dynamic> toJson() => {
-        "users_customers_id": usersCustomersId,
+    Map<String, dynamic> toJson() => {
+        "passport_holder_id": passportHolderId,
         "one_signal_id": oneSignalId,
+        "passport_design_id": passportDesignId,
         "full_name": fullName,
         "username": username,
         "email": email,
@@ -139,10 +146,12 @@ class Data {
         "middle_name": middleName,
         "last_name": lastName,
         "phone_number": phoneNumber,
-        "gender": gender,
+        "gender_id": genderId,
         "nationality": nationality,
         "dob": dob,
         "number_of_pages": numberOfPages,
-        "currency": currency,
-      };
+        "currency_id": currencyId,
+        "passport_stamps_held": passportStampsHeld,
+        "is_cancelled": isCancelled,
+    };
 }
