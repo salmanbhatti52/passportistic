@@ -31,19 +31,19 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       // backgroundColor: Color(0xFF00AEFF),
-      appBar: getAppBar(),
+
       bottomNavigationBar: NavBar(),
     );
   }
 
   getbody() {
     List<Widget> pages = [
-      HomePage(),
-      DirayPage(),
-      StampPage(),
-      ProfilePage(),
+      const HomePage(),
+      const DirayPage(),
+      const StampPage(),
+      const ProfilePage(),
     ];
     return IndexedStack(
       index: pageindex,
@@ -67,7 +67,7 @@ class _MainScreenState extends State<MainScreen> {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 70,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20.0),
@@ -113,7 +113,7 @@ class _MainScreenState extends State<MainScreen> {
                         fontWeight: FontWeight.w400,
                         color: pageindex == index
                             ? Colors.black
-                            : Color(0xFFC1C1C1),
+                            : const Color(0xFFC1C1C1),
                       ),
                     )),
               ),
@@ -151,7 +151,7 @@ class _MainScreenState extends State<MainScreen> {
         ),
         backgroundColor: const Color(0xFF2B65EC),
         centerTitle: true,
-        actions: [
+        actions: const [
           // IconButton(
           //   onPressed: () {},
           //   icon: SvgPicture.asset(
@@ -193,7 +193,7 @@ class _MainScreenState extends State<MainScreen> {
       return AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        actions: [
+        actions: const [
           // IconButton(
           //   onPressed: () {
           //     // Navigator.push(context, MaterialPageRoute<void>(

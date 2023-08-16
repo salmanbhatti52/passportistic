@@ -394,7 +394,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       if (signUpModels.status == "success") {
                         _prefs = await SharedPreferences.getInstance();
                         await _prefs.setString(
-                            'userID', "${signUpModels.data?.usersCustomersId}");
+                            'userID', "${signUpModels.data?.passportHolderId}");
 
                         await _prefs.setString(
                             'email', email.text); // Save email
@@ -406,7 +406,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           MaterialPageRoute(
                             builder: (BuildContext context) {
                               return VerifyAccountPage(
-                                userId: signUpModels.data?.usersCustomersId
+                                userId: signUpModels.data?.passportHolderId
                                     .toString(),
                                 otp: signUpModels.data!.verifyCode,
                               );

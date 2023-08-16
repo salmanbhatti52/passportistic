@@ -34,8 +34,9 @@ class SignUpModels {
 }
 
 class Data {
-  String? usersCustomersId;
+  String? passportHolderId;
   dynamic oneSignalId;
+  String? passportDesignId;
   String? fullName;
   String? username;
   String? email;
@@ -54,15 +55,18 @@ class Data {
   String? middleName;
   String? lastName;
   String? phoneNumber;
-  String? gender;
+  String? genderId;
   String? nationality;
   String? dob;
   String? numberOfPages;
-  String? currency;
+  String? currencyId;
+  String? passportStampsHeld;
+  String? isCancelled;
 
   Data({
-    this.usersCustomersId,
+    this.passportHolderId,
     this.oneSignalId,
+    this.passportDesignId,
     this.fullName,
     this.username,
     this.email,
@@ -81,16 +85,19 @@ class Data {
     this.middleName,
     this.lastName,
     this.phoneNumber,
-    this.gender,
+    this.genderId,
     this.nationality,
     this.dob,
     this.numberOfPages,
-    this.currency,
+    this.currencyId,
+    this.passportStampsHeld,
+    this.isCancelled,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        usersCustomersId: json["users_customers_id"],
+        passportHolderId: json["passport_holder_id"],
         oneSignalId: json["one_signal_id"],
+        passportDesignId: json["passport_design_id"],
         fullName: json["full_name"],
         username: json["username"],
         email: json["email"],
@@ -109,16 +116,19 @@ class Data {
         middleName: json["middle_name"],
         lastName: json["last_name"],
         phoneNumber: json["phone_number"],
-        gender: json["gender"],
+        genderId: json["gender_id"],
         nationality: json["nationality"],
         dob: json["dob"],
         numberOfPages: json["number_of_pages"],
-        currency: json["currency"],
+        currencyId: json["currency_id"],
+        passportStampsHeld: json["passport_stamps_held"],
+        isCancelled: json["is_cancelled"],
       );
 
   Map<String, dynamic> toJson() => {
-        "users_customers_id": usersCustomersId,
+        "passport_holder_id": passportHolderId,
         "one_signal_id": oneSignalId,
+        "passport_design_id": passportDesignId,
         "full_name": fullName,
         "username": username,
         "email": email,
@@ -137,10 +147,12 @@ class Data {
         "middle_name": middleName,
         "last_name": lastName,
         "phone_number": phoneNumber,
-        "gender": gender,
+        "gender_id": genderId,
         "nationality": nationality,
         "dob": dob,
         "number_of_pages": numberOfPages,
-        "currency": currency,
+        "currency_id": currencyId,
+        "passport_stamps_held": passportStampsHeld,
+        "is_cancelled": isCancelled,
       };
 }

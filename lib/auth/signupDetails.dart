@@ -1,5 +1,4 @@
 import 'package:country_picker/country_picker.dart';
-import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +6,7 @@ import 'package:scanguard/auth/signUpNextPage.dart';
 import 'package:scanguard/auth/signUpPage.dart';
 import 'package:http/http.dart' as http;
 import '../Home/mainScreenHome.dart';
+import '../Models/currencyModel.dart';
 import '../Models/signUpDetailsModels.dart';
 // import 'package:country_picker/country_picker.dart';
 
@@ -24,12 +24,14 @@ class _SignupDetailsState extends State<SignupDetails> {
   TextEditingController firstname = TextEditingController();
   TextEditingController lastname = TextEditingController();
   TextEditingController middleName = TextEditingController();
-  TextEditingController gender = TextEditingController();
   TextEditingController nationality = TextEditingController();
   TextEditingController phone = TextEditingController();
   TextEditingController dob = TextEditingController();
   TextEditingController email = TextEditingController();
   SignUpDetailsModel signUpDetailsModel = SignUpDetailsModel();
+
+  String? selectedCurrencyId;
+
   signUpUser() async {
     // try {
 
@@ -43,15 +45,15 @@ class _SignupDetailsState extends State<SignupDetails> {
     final response = await http.post(Uri.parse(apiUrl), headers: {
       'Accept': 'application/json',
     }, body: {
-      "users_customers_id": widget.userId,
+      "passport_holder_id": widget.userId,
       "first_name": firstname.text,
       "middle_name": middleName.text,
       "last_name": lastname.text,
       "nationality": _selectedCountry?.displayNameNoCountryCode.toString(),
-      "gender": selectedOption.toString(),
+      "gender_id": selectedOption.toString(),
       "dob": dob.text,
       "number_of_pages": selectedPageText,
-      "currency": _selectedCurrency?.name.toString(),
+      "currency_id": selectedCurrencyId,
       "phone_number": phone.text.toString(),
     });
     final responseString = response.body;
@@ -69,6 +71,54 @@ class _SignupDetailsState extends State<SignupDetails> {
     }
   }
 
+  CurrencyModel currencyModel = CurrencyModel();
+  List<Datum> _currencyList = [];
+
+  getCurrency() async {
+    // try {
+
+    String apiUrl = "$baseUrl/get_currency_list";
+    print("api: $apiUrl");
+
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "passport_holder_id": widget.userId,
+    });
+    final responseString = response.body;
+    print("responsecurrencyModelApi: $responseString");
+    print("status Code currencyModel : ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print("SuucessFull");
+      print("in 200 Currency list");
+      currencyModel = currencyModelFromJson(responseString);
+      setState(() {
+        isLoading = false;
+      });
+      print('currecnyModel status: ${signUpDetailsModel.status}');
+    }
+  }
+
+  Future<void> fetchCurrencyData() async {
+    try {
+      await getCurrency(); // Use your getCurrency function to fetch data
+      setState(() {
+        _currencyList = currencyModel.data ??
+            []; // Set the _currencyList using the parsed data
+        selectedCurrencyId = _currencyList.isNotEmpty
+            ? _currencyList[0].currencyId
+            : null; // Set the selectedCurrencyId to the first currency ID if available
+      });
+      print('Currency data fetched successfully');
+    } catch (error) {
+      print("Error fetching currency data: $error");
+    }
+  }
+
   final FocusNode _focusNode1 = FocusNode();
   final FocusNode _focusNode2 = FocusNode();
   final FocusNode _focusNode3 = FocusNode();
@@ -82,6 +132,7 @@ class _SignupDetailsState extends State<SignupDetails> {
   @override
   void initState() {
     super.initState();
+    fetchCurrencyData();
     _focusNode1.addListener(_onFocusChange);
     _focusNode2.addListener(_onFocusChange);
     _focusNode3.addListener(_onFocusChange);
@@ -469,16 +520,12 @@ class _SignupDetailsState extends State<SignupDetails> {
             ),
             items: const [
               DropdownMenuItem(
-                value: 'Male',
+                value: '1',
                 child: Text('Male'),
               ),
               DropdownMenuItem(
-                value: 'Female',
+                value: '2',
                 child: Text('Female'),
-              ),
-              DropdownMenuItem(
-                value: 'other',
-                child: Text('other'),
               ),
             ],
             onChanged: (value) {
@@ -875,13 +922,9 @@ class _SignupDetailsState extends State<SignupDetails> {
         ),
         Row(
           children: [
-            const SizedBox(
-              width: 10,
-            ),
+            const SizedBox(width: 10),
             Expanded(
-              child: TextFormField(
-                focusNode: _focusNode9,
-                readOnly: true,
+              child: DropdownButtonFormField<Datum>(
                 decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Color(0xFFF65734)),
@@ -913,76 +956,24 @@ class _SignupDetailsState extends State<SignupDetails> {
                     ),
                   ),
                 ),
-                onTap: () {
-                  showCurrencyPicker(
-                    context: context,
-                    showFlag: true,
-                    showSearchField: true,
-                    showCurrencyName: true,
-                    showCurrencyCode: true,
-                    theme: CurrencyPickerThemeData(
-                      flagSize: 25,
-                      backgroundColor: Colors.white,
-                      titleTextStyle:
-                          const TextStyle(fontSize: 16, color: Colors.blueGrey),
-                      bottomSheetHeight: 400,
-                      shape: ShapeBorder.lerp(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(2)),
-                          1),
-
-                      // inputDecoration: InputDecoration(
-                      //   prefixIcon: Padding(
-                      //     padding: const EdgeInsets.all(8.0),
-                      //     child: SvgPicture.asset(
-                      //       'assets/flag.svg',
-                      //       color: isFocused7
-                      //           ? Color(0xFFF65734)
-                      //           : Color(0xFFE0E0E5),
-                      //     ),
-                      //   ),
-
-                      //   focusedBorder: OutlineInputBorder(
-                      //     borderSide:
-                      //         const BorderSide(color: Color(0xFFF65734)),
-                      //     borderRadius: BorderRadius.circular(15.0),
-                      //   ),
-                      //   // labelText: 'Email',
-                      //   hintText: "Country Name",
-                      //   enabledBorder: OutlineInputBorder(
-                      //     borderRadius: BorderRadius.circular(15),
-                      //     borderSide: const BorderSide(
-                      //         color: Color(0xFFF3F3F3)), // change border color
-                      //   ),
-                      //   labelStyle: const TextStyle(),
-                      //   hintStyle: const TextStyle(
-                      //       color: Color(0xFFA7A9B7),
-                      //       fontSize: 16,
-                      //       fontWeight: FontWeight.w300,
-                      //       fontFamily: "Satoshi"),
-                      //   border: OutlineInputBorder(
-                      //       borderRadius: BorderRadius.circular(15)),
-                      // ),
-                    ),
-                    onSelect: (Currency currency) {
-                      setState(() {
-                        _selectedCurrency = currency;
-                        print('Selected currency: ${currency.name}');
-                      });
-                    },
+                value: _currencyList.isNotEmpty
+                    ? _currencyList[0]
+                    : null, // Set initial value
+                items: _currencyList.map((currency) {
+                  return DropdownMenuItem<Datum>(
+                    value: currency,
+                    child: Text(currency.currencyCode ?? ''),
                   );
+                }).toList(),
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedCurrencyId = newValue?.currencyId;
+                    print(selectedCurrencyId);
+                  });
                 },
-                controller: TextEditingController(
-                  text:
-                      _selectedCurrency != null ? _selectedCurrency?.name : '',
-                ),
               ),
             ),
-            const SizedBox(
-              width: 10,
-            ),
+            const SizedBox(width: 10),
           ],
         ),
         SizedBox(
@@ -1005,14 +996,13 @@ class _SignupDetailsState extends State<SignupDetails> {
                     print(_selectedCountry?.displayNameNoCountryCode);
                     print(dob.text);
                     print(selectedPageText);
-                    print(_selectedCurrency?.name);
+
                     print("Sign Up Button Pressed");
                     if (firstname.text.isNotEmpty &&
                         middleName.text.isNotEmpty &&
                         lastname.text.isNotEmpty &&
                         dob.text.isNotEmpty &&
                         _selectedCountry != null &&
-                        _selectedCurrency != null &&
                         selectedOption != null) {
                       setState(() {
                         isLoading = true; // Show the progress indicator
@@ -1125,7 +1115,7 @@ class _SignupDetailsState extends State<SignupDetails> {
   bool _isSelected2 = false;
   bool _isSelected3 = false;
   String selectedPageText = "";
-  Currency? _selectedCurrency;
+
   Country? _selectedCountry;
 
   String? phoneNumber;

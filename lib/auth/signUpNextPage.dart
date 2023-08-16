@@ -32,7 +32,7 @@ class _SignupNextPageState extends State<SignupNextPage> {
     final response = await http.post(Uri.parse(apiUrl), headers: {
       'Accept': 'application/json',
     }, body: {
-      "users_customers_id": widget.userId,
+      "passport_holder_id": widget.userId,
     });
 
     final responseString = response.body;
@@ -42,7 +42,7 @@ class _SignupNextPageState extends State<SignupNextPage> {
 
     if (response.statusCode == 200) {
       print("Successful");
-      print("Cover Design Data: ${responseString}");
+      print("Cover Design Data: $responseString");
       setState(() {
         coverDesignDataModel = coverDesignDataModelFromJson(responseString);
         isLoading = false;
@@ -62,8 +62,8 @@ class _SignupNextPageState extends State<SignupNextPage> {
     final response = await http.post(Uri.parse(apiUrl), headers: {
       'Accept': 'application/json',
     }, body: {
-      "users_customers_id": widget.userId,
-      "cover_images_id": selectedOption,
+      "passport_holder_id": widget.userId,
+      "passport_design_id": selectedOption,
     });
 
     final responseString = response.body;
@@ -93,8 +93,8 @@ class _SignupNextPageState extends State<SignupNextPage> {
       appBar: AppBar(
         centerTitle: true,
         forceMaterialTransparency: true,
-        title: Text(
-          "Cover Design",
+        title: const Text(
+          "Passport Cover Design",
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w700,
@@ -118,22 +118,22 @@ class _SignupNextPageState extends State<SignupNextPage> {
                   ),
           ),
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: DropdownButtonFormField<String>(
               value: selectedOption,
               decoration: InputDecoration(
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFF65734)),
+                  borderSide: const BorderSide(color: Color(0xFFF65734)),
                   borderRadius: BorderRadius.circular(15.0),
                 ),
                 hintText: "Select Cover Design",
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide(
+                  borderSide: const BorderSide(
                     color: Color(0xFFF3F3F3),
                   ),
                 ),
-                hintStyle: TextStyle(
+                hintStyle: const TextStyle(
                   color: Color(0xFFA7A9B7),
                   fontSize: 16,
                   fontWeight: FontWeight.w300,
@@ -146,8 +146,8 @@ class _SignupNextPageState extends State<SignupNextPage> {
               items: coverDesignDataModel.data
                       ?.map<DropdownMenuItem<String>>((data) {
                     return DropdownMenuItem<String>(
-                      child: Text(data.name ?? ''),
-                      value: data.coverImagesId ?? '',
+                      value: data.passportDesignId ?? '',
+                      child: Text(data.passportCountry ?? ''),
                     );
                   }).toList() ??
                   [],
@@ -189,7 +189,7 @@ class _SignupNextPageState extends State<SignupNextPage> {
                         }
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                             content: Text("Please select a cover design"),
                           ),
                         );
@@ -199,17 +199,17 @@ class _SignupNextPageState extends State<SignupNextPage> {
                       height: 48,
                       width: MediaQuery.of(context).size.width * 0.94,
                       decoration: BoxDecoration(
-                        gradient: LinearGradient(
+                        gradient: const LinearGradient(
                           colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
                         ),
                         borderRadius: BorderRadius.circular(15),
                       ),
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text(
+                          Text(
                             "Next",
                             style: TextStyle(
                               color: Colors.white,
@@ -225,8 +225,8 @@ class _SignupNextPageState extends State<SignupNextPage> {
                 ),
                 if (isLoading)
                   // Show the circular progress indicator if isLoading is true
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
                     child: Center(
                       child: CircularProgressIndicator(
                         color: Colors.white,
@@ -246,8 +246,8 @@ class _SignupNextPageState extends State<SignupNextPage> {
     Datum? selectedDatum;
 
     for (var datum in coverDesignDataModel.data!) {
-      if (datum.coverImagesId == selectedOption) {
-        print(datum.coverImagesId);
+      if (datum.passportDesignId == selectedOption) {
+        print(datum.passportDesignId);
         selectedDatum = datum;
         break;
       }
@@ -256,7 +256,7 @@ class _SignupNextPageState extends State<SignupNextPage> {
     if (selectedDatum != null) {
       String baseUrl = "https://portal.passporttastic.com/public/";
       String imageUrl =
-          baseUrl + (selectedDatum.image ?? ''); // Use 'image' field
+          baseUrl + (selectedDatum.passportFrontCover ?? ''); // Use 'image' field
 
       // Print the complete image link before returning the Image widget
       print("Image Link: $imageUrl");

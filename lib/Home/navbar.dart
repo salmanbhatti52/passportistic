@@ -28,8 +28,9 @@ class _NavBarState extends State<NavBar> {
     Color scaffoldColor = index == 0 ? Color(0xFF00AEFF) : Colors.white;
     return WillPopScope(
       onWillPop: () async {
-        // When the back button is pressed, exit the app
         SystemNavigator.pop();
+        // When the back button is pressed, exit the app
+    
         return false;
       },
       child: Padding(

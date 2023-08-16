@@ -29,33 +29,45 @@ class CoverDesignDataModel {
 }
 
 class Datum {
-    String? coverImagesId;
-    String? name;
-    String? image;
-    String? status;
+    String? passportDesignId;
+    String? passportCountry;
+    String? passportFrontCover;
+    String? passportDataDesign;
+    String? passportLegalDesign;
     DateTime? dateAdded;
+    String? isCancalled;
+    String? actions;
 
     Datum({
-        this.coverImagesId,
-        this.name,
-        this.image,
-        this.status,
+        this.passportDesignId,
+        this.passportCountry,
+        this.passportFrontCover,
+        this.passportDataDesign,
+        this.passportLegalDesign,
         this.dateAdded,
+        this.isCancalled,
+        this.actions,
     });
 
     factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        coverImagesId: json["cover_images_id"],
-        name: json["name"],
-        image: json["image"],
-        status: json["status"],
+        passportDesignId: json["passport_design_id"],
+        passportCountry: json["passport_country"],
+        passportFrontCover: json["passport_front_cover"],
+        passportDataDesign: json["passport_data_design"],
+        passportLegalDesign: json["passport_legal_design"],
         dateAdded: DateTime.parse(json["date_added"]),
+        isCancalled: json["is_cancalled"],
+        actions: json["actions"],
     );
 
     Map<String, dynamic> toJson() => {
-        "cover_images_id": coverImagesId,
-        "name": name,
-        "image": image,
-        "status": status,
+        "passport_design_id": passportDesignId,
+        "passport_country": passportCountry,
+        "passport_front_cover": passportFrontCover,
+        "passport_data_design": passportDataDesign,
+        "passport_legal_design": passportLegalDesign,
         "date_added": dateAdded!.toIso8601String(),
+        "is_cancalled": isCancalled,
+        "actions": actions,
     };
 }

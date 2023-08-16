@@ -41,7 +41,7 @@ class _AddPictureSignupState extends State<AddPictureSignup> {
     final response = await http.post(Uri.parse(apiUrl), headers: {
       'Accept': 'application/json',
     }, body: {
-      "users_customers_id": widget.userId,
+      "passport_holder_id": widget.userId,
       "profile_picture": selectedImage,
     });
 
@@ -53,7 +53,7 @@ class _AddPictureSignupState extends State<AddPictureSignup> {
     if (response.statusCode == 200) {
       print("200 Successful");
       setState(() {
-        profilePictureModels = ProfilePictureModelsFromJson(responseString);
+        profilePictureModels = profilePictureModelsFromJson(responseString);
         isLoading = false;
       });
     }

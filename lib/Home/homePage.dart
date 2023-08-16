@@ -9,7 +9,9 @@ import '../HomeButtons/passport.dart';
 import 'appDrawer.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key});
+  const HomePage({
+    super.key,
+  });
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -19,7 +21,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: AppDrawer(),
+      drawer: const AppDrawer(),
       // appBar: PreferredSize(
       //   preferredSize: Size.fromHeight(70),
       //   child: AppBar(
@@ -73,7 +75,7 @@ class _HomePageState extends State<HomePage> {
               child: Container(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Color(0xFF00AEFF),
                     image: DecorationImage(
                       image: AssetImage("assets/bg.png"),
@@ -82,8 +84,10 @@ class _HomePageState extends State<HomePage> {
                   ),
                   child: SingleChildScrollView(
                     child: Padding(
-                      padding:
-                          const EdgeInsets.only(top: 1, left: 10, right: 10),
+                      padding: const EdgeInsets.only(
+                        top: 1,
+                        left: 4,
+                      ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,22 +125,22 @@ class _HomePageState extends State<HomePage> {
                             Row(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 10, left: 15),
+                                  padding:
+                                      const EdgeInsets.only(top: 10, left: 15),
                                   child: Container(
                                     // margin: EdgeInsets.only(top: 80, right: 210, left: 20),
-                                    child: CircleAvatar(
+                                    child: const CircleAvatar(
                                       radius: 25,
                                       backgroundImage: NetworkImage(
                                           "https://images.pexels.com/photos/17457999/pexels-photo-17457999/free-photo-of-a-garbage-collector.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"),
                                     ),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 20),
+                                const Padding(
+                                  padding: EdgeInsets.only(top: 20),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -172,7 +176,7 @@ class _HomePageState extends State<HomePage> {
                               onTap: () {
                                 Navigator.push(context, MaterialPageRoute(
                                   builder: (BuildContext context) {
-                                    return DepatureDetails();
+                                    return const DepatureDetails();
                                   },
                                 ));
                               },
@@ -184,7 +188,7 @@ class _HomePageState extends State<HomePage> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(16),
                                   ),
-                                  shadows: [
+                                  shadows: const [
                                     BoxShadow(
                                       color: Color(0x0F312E23),
                                       blurRadius: 16,
@@ -201,15 +205,14 @@ class _HomePageState extends State<HomePage> {
                                       child: Text(
                                         'Stamp Passport',
                                         style: TextStyle(
-                                          color:
-                                              Colors.black.withOpacity(0.5),
+                                          color: Colors.black.withOpacity(0.5),
                                           fontSize: 16,
                                           fontFamily: 'Satoshi',
                                           fontWeight: FontWeight.w400,
                                         ),
                                       ),
                                     ),
-                                    Positioned(
+                                    const Positioned(
                                       left: 16,
                                       top: 38,
                                       child: Text(
@@ -230,7 +233,7 @@ class _HomePageState extends State<HomePage> {
                                           Navigator.push(context,
                                               MaterialPageRoute(
                                             builder: (BuildContext context) {
-                                              return DepatureDetails();
+                                              return const DepatureDetails();
                                             },
                                           ));
                                         },
@@ -243,14 +246,14 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 8,
                             ),
                             GestureDetector(
                               onTap: () {
                                 Navigator.push(context, MaterialPageRoute(
                                   builder: (BuildContext context) {
-                                    return ArrivalDetails();
+                                    return const ArrivalDetails();
                                   },
                                 ));
                               },
@@ -262,7 +265,7 @@ class _HomePageState extends State<HomePage> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(16),
                                   ),
-                                  shadows: [
+                                  shadows: const [
                                     BoxShadow(
                                       color: Color(0x0F312E23),
                                       blurRadius: 16,
@@ -279,15 +282,14 @@ class _HomePageState extends State<HomePage> {
                                       child: Text(
                                         'Stamp Passport',
                                         style: TextStyle(
-                                          color:
-                                              Colors.black.withOpacity(0.5),
+                                          color: Colors.black.withOpacity(0.5),
                                           fontSize: 16,
                                           fontFamily: 'Satoshi',
                                           fontWeight: FontWeight.w400,
                                         ),
                                       ),
                                     ),
-                                    Positioned(
+                                    const Positioned(
                                       left: 16,
                                       top: 38,
                                       child: Text(
@@ -308,7 +310,7 @@ class _HomePageState extends State<HomePage> {
                                           Navigator.push(context,
                                               MaterialPageRoute(
                                             builder: (BuildContext context) {
-                                              return ArrivalDetails();
+                                              return const ArrivalDetails();
                                             },
                                           ));
                                         },
@@ -321,14 +323,14 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 8,
                             ),
                             GestureDetector(
                               onTap: () {
                                 Navigator.push(context, MaterialPageRoute(
                                   builder: (BuildContext context) {
-                                    return ViewPassport();
+                                    return const ViewPassport();
                                   },
                                 ));
                               },
@@ -340,7 +342,7 @@ class _HomePageState extends State<HomePage> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(16),
                                   ),
-                                  shadows: [
+                                  shadows: const [
                                     BoxShadow(
                                       color: Color(0x0F312E23),
                                       blurRadius: 16,
@@ -351,7 +353,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 child: Stack(
                                   children: [
-                                    Positioned(
+                                    const Positioned(
                                       left: 16,
                                       top: 25,
                                       child: Text(
@@ -372,7 +374,7 @@ class _HomePageState extends State<HomePage> {
                                           Navigator.push(context,
                                               MaterialPageRoute(
                                             builder: (BuildContext context) {
-                                              return ViewPassport();
+                                              return const ViewPassport();
                                             },
                                           ));
                                         },
@@ -385,14 +387,14 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 8,
                             ),
                             GestureDetector(
                               onTap: () {
                                 Navigator.push(context, MaterialPageRoute(
                                   builder: (BuildContext context) {
-                                    return StampPage();
+                                    return const StampPage();
                                   },
                                 ));
                               },
@@ -404,7 +406,7 @@ class _HomePageState extends State<HomePage> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(16),
                                   ),
-                                  shadows: [
+                                  shadows: const [
                                     BoxShadow(
                                       color: Color(0x0F312E23),
                                       blurRadius: 16,
@@ -415,7 +417,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 child: Stack(
                                   children: [
-                                    Positioned(
+                                    const Positioned(
                                       left: 16,
                                       top: 25,
                                       child: Text(
@@ -436,7 +438,7 @@ class _HomePageState extends State<HomePage> {
                                           Navigator.push(context,
                                               MaterialPageRoute(
                                             builder: (BuildContext context) {
-                                              return StampPage();
+                                              return const StampPage();
                                             },
                                           ));
                                         },
@@ -449,14 +451,14 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 8,
                             ),
                             GestureDetector(
                               onTap: () {
                                 Navigator.push(context, MaterialPageRoute(
                                   builder: (BuildContext context) {
-                                    return AddItineray();
+                                    return const AddItineray();
                                   },
                                 ));
                               },
@@ -468,7 +470,7 @@ class _HomePageState extends State<HomePage> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(16),
                                   ),
-                                  shadows: [
+                                  shadows: const [
                                     BoxShadow(
                                       color: Color(0x0F312E23),
                                       blurRadius: 16,
@@ -479,7 +481,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 child: Stack(
                                   children: [
-                                    Positioned(
+                                    const Positioned(
                                       left: 16,
                                       top: 14,
                                       child: Text(
@@ -500,7 +502,7 @@ class _HomePageState extends State<HomePage> {
                                           Navigator.push(context,
                                               MaterialPageRoute(
                                             builder: (BuildContext context) {
-                                              return AddItineray();
+                                              return const AddItineray();
                                             },
                                           ));
                                         },
@@ -513,7 +515,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 7,
                             ),
                           ]),
