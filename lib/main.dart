@@ -13,8 +13,8 @@ String? userID;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  _prefs = await SharedPreferences.getInstance();
-  bool shownOnboarding = _prefs?.getBool('shownOnboarding') ?? true;
+  prefs = await SharedPreferences.getInstance();
+  bool shownOnboarding = prefs?.getBool('shownOnboarding') ?? true;
   runApp(MyApp(shownOnboarding: shownOnboarding));
 }
 
@@ -66,7 +66,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void checkOnboardingStatus() async {
-    bool shownOnboarding = _prefs?.getBool('shownOnboarding') ?? false;
+    bool shownOnboarding = prefs?.getBool('shownOnboarding') ?? false;
     userID = _prefs?.getString('userID');
 
     print("Onboarding Status: $shownOnboarding");
