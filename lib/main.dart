@@ -66,8 +66,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void checkOnboardingStatus() async {
-    bool shownOnboarding = prefs?.getBool('shownOnboarding') ?? false;
-    userID = _prefs?.getString('userID');
+  bool shownOnboarding = prefs?.getBool('shownOnboarding') ?? true; // Use true as default
+    userID = prefs?.getString('userID'); // Use prefs here
 
     print("Onboarding Status: $shownOnboarding");
     print("User ID: $userID");
