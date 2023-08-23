@@ -65,8 +65,20 @@ class _DepatureDetailsState extends State<DepatureDetails> {
     final response = await http.post(Uri.parse(apiUrl), headers: {
       'Accept': 'application/json',
     }, body: {
-      "email": "email.text",
-      "password": "password.text",
+   "stamps_country":"Pakistan",
+   "passport_holder_id":"32",
+   "stamps_city":"Lahore",
+   "transport_mode_id":"3",
+   "stamp_shape_id": "4",
+   "stamps_color_id":"5",
+   "stamps_date" : "2022-12-12",
+   "stamps_offset_rotation": "-5",
+   "stamps_offset_vertical":"5",
+   "stamps_offset_horizental":"8",
+   "stamps_page_number" : "48",
+   "stamps_time": "13:45:34",
+   "stamps_position_number":"12",
+   "stamps_arrive_depart": "Depart"
     });
     final responseString = response.body;
     print("responsedepartureModel: $responseString");
@@ -860,7 +872,7 @@ class _DepatureDetailsState extends State<DepatureDetails> {
                 children: [
                   GestureDetector(
                     onTap: () async {
-                      await departure();
+                     // await departure();
                       // Navigator.push(context, MaterialPageRoute(
                       //   builder: (BuildContext context) {
                       //     return MainScreen();
