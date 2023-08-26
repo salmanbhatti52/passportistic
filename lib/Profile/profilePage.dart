@@ -62,6 +62,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   GetProfileModels getProfileModels = GetProfileModels();
   getUserProfile() async {
+
+       prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
     String apiUrl = "$baseUrl/get_profile";
     print("api: $apiUrl");
     if (!mounted) {

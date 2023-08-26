@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,7 +11,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Home/mainScreenHome.dart';
 import '../Models/LoginModels.dart';
 import 'forgetPassword.dart';
-
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -311,17 +312,19 @@ class _SignInPageState extends State<SignInPage> {
                       print("successful");
 
                       prefs = await SharedPreferences.getInstance();
-                      await prefs?.setString('userID',
-                          "${loginUserModels.data?.passportHolderId}");
+                      // await prefs?.setString('userID',
+                      //     "${loginUserModels.data?.passportHolderId}");
+                      String userID =
+                          loginUserModels.data?.passportHolderId ?? "";
+                      await prefs?.setString('userID', userID);
+
+                      print("Sign in userID${userID}");
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (BuildContext context) {
                             return MainScreen(
-                            
-                              userId:
-                                  "${loginUserModels.data?.passportHolderId}",
-                         
+                              userId: userID,
                             );
                           },
                         ),

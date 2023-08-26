@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:scanguard/Home/stampPage.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../HomeButtons/addItinerary.dart';
 import '../HomeButtons/arrivalDetails.dart';
 import '../HomeButtons/depature.dart';
@@ -28,6 +29,8 @@ class _HomePageState extends State<HomePage> {
   getUserProfile() async {
     String apiUrl = "$baseUrl/get_profile";
     print("api: $apiUrl");
+    prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
     if (!mounted) {
       return; // Check if the widget is still mounted
     }

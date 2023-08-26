@@ -6,11 +6,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:scanguard/HomeButtons/itineraryDetails.dart/travelDetailsPage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:http/http.dart' as http;
 import '../../Models/diaryDetailsModels.dart';
 import '../../auth/signUpNextPage.dart';
 import '../../auth/signUpPage.dart';
+import '../../main.dart';
 
 class DisplayDiary extends StatefulWidget {
   final String? itinid;
@@ -115,6 +117,9 @@ class _DisplayDiaryState extends State<DisplayDiary> {
   DirayDetailsModels dirayDetailsModels = DirayDetailsModels();
 
   dirayDetails() async {
+
+       prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
     try {
       String apiUrl = "$baseUrl/add_travel_diary";
       print("api: $apiUrl");

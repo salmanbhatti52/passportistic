@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Models/addItineraryModels.dart';
 import '../Models/itineraryGetModels.dart';
@@ -33,6 +34,9 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
   ItinerayAddModels itineraryAddModels = ItinerayAddModels();
 
   itinerayGet() async {
+
+       prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
     // try {
 
     String apiUrl = "$baseUrl/get_itinerary";

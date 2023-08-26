@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Models/itineraryGetModels.dart';
 import '../auth/signUpNextPage.dart';
 import '../auth/signUpPage.dart';
+import '../main.dart';
 import 'addItinerary2.dart';
 
 class AdditeneraryNext extends StatefulWidget {
@@ -39,6 +41,9 @@ class _AdditeneraryNextState extends State<AdditeneraryNext> {
   IteneraryGetModels iteneraryGetModels = IteneraryGetModels();
 
   itinerayGet() async {
+
+       prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
     // try {
 
     String apiUrl = "$baseUrl/get_itinerary";

@@ -5,10 +5,12 @@ import 'package:intl/intl.dart';
 import 'package:scanguard/auth/signUpNextPage.dart';
 import 'package:scanguard/auth/signUpPage.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Home/mainScreenHome.dart';
 import '../Models/currencyModel.dart';
 import '../Models/getGenderList.dart';
 import '../Models/signUpDetailsModels.dart';
+import '../main.dart';
 // import 'package:country_picker/country_picker.dart';
 
 class SignupDetails extends StatefulWidget {
@@ -1052,6 +1054,9 @@ class _SignupDetailsState extends State<SignupDetails> {
                         isLoading = false; // Show the progress indicator
                       });
                       if (signUpDetailsModel.status == "success") {
+                        prefs = await SharedPreferences.getInstance();
+                        await prefs?.setString('userID',
+                            "${signUpDetailsModel.data?.passportHolderId}");
                         Navigator.push(context, MaterialPageRoute(
                           builder: (BuildContext context) {
                             return MainScreen(

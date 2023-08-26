@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Models/coverDesignModels.dart';
 import '../Models/getGenderList.dart';
 import '../Models/getProfileModels.dart';
@@ -34,7 +35,8 @@ class _EditProfileState extends State<EditProfile> {
   GetProfileModels getProfileModels = GetProfileModels();
   getUserProfile() async {
     // try {
-
+   prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
     String apiUrl = "$baseUrl/get_profile";
     print("api: $apiUrl");
     setState(() {

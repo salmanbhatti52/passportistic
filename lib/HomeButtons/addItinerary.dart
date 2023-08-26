@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Models/addItineraryModels.dart';
 import '../auth/signUpNextPage.dart';
 import '../auth/signUpPage.dart';
@@ -25,9 +26,13 @@ class _AddItinerayState extends State<AddItineray> {
 
   ItinerayAddModels itineraryAddModels = ItinerayAddModels();
   String desiredItineraryId = "";
+
+  
   itinerayAdd() async {
     // try {
 
+   prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
     String apiUrl = "$baseUrl/add_itinerary";
     print("api: $apiUrl");
     print("name: ${addItineray.text}");

@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Models/coverDesignModels.dart';
 import '../Models/getGenderList.dart';
 import '../Models/getProfileModels.dart';
@@ -61,6 +62,8 @@ class _ViewProfileState extends State<ViewProfile> {
 
 //  List<Map<String, dynamic>> coverDesignData = [];
   coverDesign() async {
+    prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
     String apiUrl = "$baseUrl/get_cover_design";
     print("api: $apiUrl");
 
@@ -106,6 +109,8 @@ class _ViewProfileState extends State<ViewProfile> {
 
   GetGenderListModels getGenderListModels = GetGenderListModels();
   genderid() async {
+    prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
     String apiUrl = "$baseUrl/get_gender_list";
     print("api: $apiUrl");
 
@@ -149,6 +154,8 @@ class _ViewProfileState extends State<ViewProfile> {
   String? selectedgenderId;
   GetProfileModels getProfileModels = GetProfileModels();
   getUserProfile() async {
+    prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
     String apiUrl = "$baseUrl/get_profile";
     print("api: $apiUrl");
     if (!mounted) {

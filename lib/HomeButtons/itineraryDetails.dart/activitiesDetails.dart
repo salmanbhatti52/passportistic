@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../Models/activityDetailsModels.dart';
 import '../../auth/signUpNextPage.dart';
 import '../../auth/signUpPage.dart';
@@ -30,7 +31,8 @@ class _ActivitiesDetailsState extends State<ActivitiesDetails> {
 
   activityDetails() async {
     // try {
-
+   prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
     String apiUrl = "$baseUrl/add_itinerary_activities";
     print("api: $apiUrl");
 

@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:scanguard/HomeButtons/itineraryDetails.dart/travelDetailsPage.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../Models/transportListModels.dart';
 import '../../Models/travalDetailsModels.dart';
 import '../../auth/signUpNextPage.dart';
@@ -35,7 +36,8 @@ class _TravelDetailsState extends State<TravelDetails> {
   TransportListModels transportListModels = TransportListModels();
   mdoeofTransport() async {
     // try {
-
+   prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
     String apiUrl = "$baseUrl/get_transport_mode";
     print("api: $apiUrl");
     setState(() {
@@ -65,6 +67,8 @@ class _TravelDetailsState extends State<TravelDetails> {
 
   itinerayAdd() async {
     // try {
+         prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
 
     String apiUrl = "$baseUrl/add_itinerary_details";
     print("api: $apiUrl");
