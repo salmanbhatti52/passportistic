@@ -10,6 +10,7 @@ import '../Home/mainScreenHome.dart';
 import '../Models/LoginModels.dart';
 import 'forgetPassword.dart';
 
+
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
 
@@ -317,14 +318,10 @@ class _SignInPageState extends State<SignInPage> {
                         MaterialPageRoute(
                           builder: (BuildContext context) {
                             return MainScreen(
-                              firstname: "${loginUserModels.data?.firstName}",
-                              lastname: "${loginUserModels.data?.lastName}",
-                              profile:
-                                  "${loginUserModels.data?.profilePicture}",
+                            
                               userId:
                                   "${loginUserModels.data?.passportHolderId}",
-                              email: "${loginUserModels.data?.email}",
-                              phone: "${loginUserModels.data?.phoneNumber}",
+                         
                             );
                           },
                         ),

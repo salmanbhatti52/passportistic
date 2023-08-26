@@ -132,7 +132,7 @@ class _AddPictureSignupState extends State<AddPictureSignup> {
       appBar: AppBar(
         centerTitle: true,
         forceMaterialTransparency: true,
-        title: Text(
+        title: const Text(
           "Add Picture",
           style: TextStyle(
             fontSize: 20,
@@ -155,7 +155,7 @@ class _AddPictureSignupState extends State<AddPictureSignup> {
                       fontFamily: "Satoshi",
                       fontSize: 16,
                       fontWeight: FontWeight.w300,
-                      color: Color(0xFF222222).withOpacity(0.5)),
+                      color: const Color(0xFF222222).withOpacity(0.5)),
                 ),
               ),
               SizedBox(
@@ -183,11 +183,11 @@ class _AddPictureSignupState extends State<AddPictureSignup> {
                     width: 169,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-                      color: Color(0xFFE0E0E5),
+                      color: const Color(0xFFE0E0E5),
                       border: isContainerSelected
                           ? Border.all(
                               width: 2,
-                              color: Color(0xFFF65734),
+                              color: const Color(0xFFF65734),
                             ) // Show border if selected
                           : null,
                     ),
@@ -209,7 +209,7 @@ class _AddPictureSignupState extends State<AddPictureSignup> {
                   ),
                 ),
               ),
-              Center(
+              const Center(
                   child: Text(
                 "Default Image",
                 style: TextStyle(
@@ -230,7 +230,7 @@ class _AddPictureSignupState extends State<AddPictureSignup> {
                     width: 169,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-                      color: Color(0xFFE0E0E5),
+                      color: const Color(0xFFE0E0E5),
                     ),
                     child: imagePathGallery !=
                             null // Show the selected image if available
@@ -251,7 +251,7 @@ class _AddPictureSignupState extends State<AddPictureSignup> {
                   ),
                 ),
               ),
-              Center(
+              const Center(
                   child: Text(
                 "Select Image",
                 style: TextStyle(
@@ -268,10 +268,10 @@ class _AddPictureSignupState extends State<AddPictureSignup> {
                   SvgPicture.asset(
                     "assets/Line.svg",
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 5,
                   ),
-                  Text(
+                  const Text(
                     "OR",
                     style: TextStyle(
                         fontSize: 16,
@@ -279,7 +279,7 @@ class _AddPictureSignupState extends State<AddPictureSignup> {
                         fontFamily: "Satoshi",
                         color: Color(0xFFF65734)),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 5,
                   ),
                   SvgPicture.asset(
@@ -301,10 +301,10 @@ class _AddPictureSignupState extends State<AddPictureSignup> {
                       "assets/cam.svg",
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 2,
                   ),
-                  Text("Take a Photo"),
+                  const Text("Take a Photo"),
                 ],
               ),
               SizedBox(
@@ -335,7 +335,9 @@ class _AddPictureSignupState extends State<AddPictureSignup> {
                                 ),
                               );
                             }
-                            if (base64SvgImage != null) {
+                            if (base64SvgImage != null ||
+                                base64imgGallery != null ||
+                                cam64Image != null) {
                               setState(() {
                                 isLoading = true;
                               });
@@ -351,23 +353,36 @@ class _AddPictureSignupState extends State<AddPictureSignup> {
                               setState(() {
                                 isLoading = false;
                               });
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    "Please select an image",
+                                    style: TextStyle(
+                                      fontFamily: "Satoshi",
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                  ),
+                                ),
+                              );
                             }
                           },
                           child: Container(
                             height: 51,
                             width: MediaQuery.of(context).size.width * 0.92,
                             decoration: BoxDecoration(
-                              gradient: LinearGradient(
+                              gradient: const LinearGradient(
                                 colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
                                 begin: Alignment.bottomCenter,
                                 end: Alignment.topCenter,
                               ),
                               borderRadius: BorderRadius.circular(15),
                             ),
-                            child: Row(
+                            child: const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Text(
+                                Text(
                                   "Next",
                                   style: TextStyle(
                                       color: Colors.white,
@@ -383,8 +398,8 @@ class _AddPictureSignupState extends State<AddPictureSignup> {
                     ),
                     if (isLoading)
                       // Show the circular progress indicator if isLoading is true
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
                         child: Center(
                           child: CircularProgressIndicator(
                             color: Colors.white,

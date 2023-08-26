@@ -1,25 +1,80 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-
-import 'additinerary1.dart';
+import 'package:http/http.dart' as http;
+import '../Models/addItineraryModels.dart';
+import '../auth/signUpNextPage.dart';
+import '../auth/signUpPage.dart';
+import '../main.dart';
+import 'addItinerary2.dart';
 
 class AddItineray extends StatefulWidget {
-  const AddItineray({super.key});
+  final String? userId;
+  const AddItineray({super.key, this.userId});
 
   @override
   State<AddItineray> createState() => _AddItinerayState();
 }
 
 class _AddItinerayState extends State<AddItineray> {
-  TextEditingController add = TextEditingController();
-  TextEditingController name = TextEditingController();
-  TextEditingController _Startdate = TextEditingController();
-  TextEditingController _Enddate = TextEditingController();
+  TextEditingController addItineray = TextEditingController();
+  final TextEditingController _Startdate = TextEditingController();
+  final TextEditingController _Enddate = TextEditingController();
 
-  FocusNode _focusNode1 = FocusNode();
-  FocusNode _focusNode2 = FocusNode();
-  FocusNode _focusNode6 = FocusNode();
+  ItinerayAddModels itineraryAddModels = ItinerayAddModels();
+  String desiredItineraryId = "";
+  itinerayAdd() async {
+    // try {
+
+    String apiUrl = "$baseUrl/add_itinerary";
+    print("api: $apiUrl");
+    print("name: ${addItineray.text}");
+    print("start date: ${_Startdate.text}");
+    print("end date: ${_Enddate.text}");
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "itinerary_name": addItineray.text,
+      "passport_holder_id": "$userID",
+      "departure_date": _Startdate.text,
+      "return_date": _Enddate.text
+    });
+    final responseString = response.body;
+    print("responseitineraryAddModelsi: $responseString");
+    print("status Code itineraryAddModels: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print("in 200 itineraryAddModels");
+      print("SuucessFull");
+      itineraryAddModels = itinerayAddModelsFromJson(responseString);
+      String desiredItineraryName = addItineray.text;
+
+      if (itineraryAddModels.data != null) {
+        for (var itinerary in itineraryAddModels.data!) {
+          if (itinerary.travelLtineraryName == desiredItineraryName) {
+            desiredItineraryId = itinerary.travelLtineraryId!;
+            break; // Found the desired itinerary, exit the loop
+          }
+        }
+      }
+
+      print("Desired Itinerary ID: $desiredItineraryId");
+
+      setState(() {
+        isLoading = false;
+      });
+      print('itineraryAddModels status: ${itineraryAddModels.status}');
+    }
+  }
+
+  final FocusNode _focusNode1 = FocusNode();
+  final FocusNode _focusNode2 = FocusNode();
+  final FocusNode _focusNode6 = FocusNode();
 
   @override
   void initState() {
@@ -77,8 +132,8 @@ class _AddItinerayState extends State<AddItineray> {
       ),
       body: SingleChildScrollView(
         child: Column(children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 10, left: 15),
+          const Padding(
+            padding: EdgeInsets.only(top: 10, left: 15),
             child: Row(
               children: [
                 Text(
@@ -93,8 +148,8 @@ class _AddItinerayState extends State<AddItineray> {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 10, left: 15),
+          const Padding(
+            padding: EdgeInsets.only(top: 10, left: 15),
             child: Row(
               children: [
                 Text(
@@ -119,41 +174,44 @@ class _AddItinerayState extends State<AddItineray> {
               ),
               Expanded(
                 child: TextFormField(
+                  controller: addItineray,
                   focusNode: _focusNode1,
-                  style: TextStyle(color: Color(0xFF000000), fontSize: 16),
-                  cursorColor: Color(0xFF000000),
+                  style:
+                      const TextStyle(color: Color(0xFF000000), fontSize: 16),
+                  cursorColor: const Color(0xFF000000),
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
                     prefixIcon: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SvgPicture.asset(
                         "assets/routing.svg",
-                        color:
-                            isFocused1 ? Color(0xFFF65734) : Color(0xFFE0E0E5),
+                        color: isFocused1
+                            ? const Color(0xFFF65734)
+                            : const Color(0xFFE0E0E5),
                       ),
                     ),
-                    suffixIcon: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SvgPicture.asset("assets/arrowDown1.svg"),
-                          ),
-                        ]),
+                    // suffixIcon: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.end,
+                    //     mainAxisSize: MainAxisSize.min,
+                    //     children: [
+                    //       Padding(
+                    //         padding: const EdgeInsets.all(8.0),
+                    //         child: SvgPicture.asset("assets/arrowDown1.svg"),
+                    //       ),
+                    //     ]),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFFF65734)),
+                      borderSide: const BorderSide(color: Color(0xFFF65734)),
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     // labelText: 'Email',
                     hintText: "Add new itinerary ",
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         color: Color(0xFFF3F3F3),
                       ),
                     ),
-                    hintStyle: TextStyle(
+                    hintStyle: const TextStyle(
                       color: Color(0xFF525252),
                       fontSize: 14,
                       fontFamily: 'Satoshi',
@@ -165,99 +223,24 @@ class _AddItinerayState extends State<AddItineray> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
             ],
           ),
           Column(
             children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 10,
-                      left: 10,
-                    ),
-                    child: Text(
-                      'Add Itinerary',
-                      style: TextStyle(
-                        color: Color(0xFF141010),
-                        fontSize: 16,
-                        fontFamily: 'Satoshi',
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: TextFormField(
-                      focusNode: _focusNode2,
-                      controller: name,
-                      style: TextStyle(color: Color(0xFF000000), fontSize: 16),
-                      cursorColor: Color(0xFF000000),
-                      keyboardType: TextInputType.name,
-                      decoration: InputDecoration(
-                        prefixIcon: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SvgPicture.asset(
-                            "assets/sms.svg",
-                            color: isFocused2
-                                ? Color(0xFFF65734)
-                                : Color(0xFFE0E0E5),
-                          ),
-                        ),
-
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xFFF65734)),
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        // labelText: 'Email',
-                        hintText: "Write itinerary name",
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(
-                            color: Color(0xFFF3F3F3),
-                          ),
-                        ),
-                        hintStyle: TextStyle(
-                          color: Color(0xFF9C9999),
-                          fontSize: 14,
-                          fontFamily: 'Satoshi',
-                          fontWeight: FontWeight.w400,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                ],
-              ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
+                  const Row(
                     children: [
                       Padding(
-                        padding:
-                            const EdgeInsets.only(top: 8, left: 15, bottom: 8),
+                        padding: EdgeInsets.only(top: 8, left: 15, bottom: 8),
                         child: Text(
                           'Departure Date',
                           style: TextStyle(
@@ -272,7 +255,7 @@ class _AddItinerayState extends State<AddItineray> {
                         width: 60,
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: EdgeInsets.all(8.0),
                         child: Text(
                           'Return Date',
                           style: TextStyle(
@@ -317,8 +300,8 @@ class _AddItinerayState extends State<AddItineray> {
                               child: SvgPicture.asset(
                                 "assets/date.svg",
                                 color: isFocused6
-                                    ? Color(0xFFF65734)
-                                    : Color(0xFFE0E0E5),
+                                    ? const Color(0xFFF65734)
+                                    : const Color(0xFFE0E0E5),
                               ),
                             ),
                             focusedBorder: OutlineInputBorder(
@@ -374,8 +357,8 @@ class _AddItinerayState extends State<AddItineray> {
                               child: SvgPicture.asset(
                                 "assets/date.svg",
                                 color: isFocused6
-                                    ? Color(0xFFF65734)
-                                    : Color(0xFFE0E0E5),
+                                    ? const Color(0xFFF65734)
+                                    : const Color(0xFFE0E0E5),
                               ),
                             ),
                             focusedBorder: OutlineInputBorder(
@@ -406,53 +389,113 @@ class _AddItinerayState extends State<AddItineray> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 50,
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
-              onTap: () {},
-              child: Container(
-                width: 350,
-                height: 51,
-                clipBehavior: Clip.antiAlias,
-                decoration: ShapeDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment(0.00, -1.00),
-                    end: Alignment(0, 1),
-                    colors: [Color(0xFFFF8D74), Color(0xFFF65634)],
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Save',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontFamily: 'Satoshi',
-                        fontWeight: FontWeight.w700,
+              onTap: () async {
+                setState(() {
+                  isLoading = true;
+                });
+                if (addItineray.text.isEmpty &&
+                    _Startdate.text.isEmpty &&
+                    _Enddate.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Please fill all the fields'),
+                    ),
+                  );
+                } else {
+                  await itinerayAdd();
+                  if (itineraryAddModels.status == "success") {
+                    // Navigator.push(context, MaterialPageRoute(
+                    //   builder: (BuildContext context) {
+                    //     return AdditeneraryNext(
+                    //       // itinId: "${itineraryAddModels.data[''].travelLtineraryId}",
+                    //       userId: widget.userId,
+                    //       additinerarywidget: addItineray.text,
+                    //       startDate: _Startdate.text,
+                    //       endDate: _Enddate.text,
+                    //     );
+                    //   },
+                    // ));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Data is Saved Successfully'),
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Something went wrong'),
+                      ),
+                    );
+                  }
+                }
+                setState(() {
+                  isLoading = false;
+                });
+              },
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    width: 350,
+                    height: 51,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: ShapeDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment(0.00, -1.00),
+                        end: Alignment(0, 1),
+                        colors: [Color(0xFFFF8D74), Color(0xFFF65634)],
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
                       ),
                     ),
-                  ],
-                ),
+                    // child: const Row(
+                    //   mainAxisSize: MainAxisSize.min,
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   crossAxisAlignment: CrossAxisAlignment.center,
+                    //   children: [
+                    //     Text(
+                    //       'Save',
+                    //       textAlign: TextAlign.center,
+                    //       style: TextStyle(
+                    //         color: Colors.white,
+                    //         fontSize: 20,
+                    //         fontFamily: 'Satoshi',
+                    //         fontWeight: FontWeight.w700,
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                  ),
+                  isLoading
+                      ? const CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
+                        )
+                      : const Text(
+                          "Save",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: "Satoshi",
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700),
+                        ),
+                ],
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Padding(
@@ -461,7 +504,11 @@ class _AddItinerayState extends State<AddItineray> {
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(
                   builder: (BuildContext context) {
-                    return AdditeneraryNext();
+                    return ItineraryTwo(
+                      //userId: widget.userId,
+                      itinid: desiredItineraryId,
+                      additinerarywidget: addItineray.text,
+                    );
                   },
                 ));
               },
@@ -470,7 +517,7 @@ class _AddItinerayState extends State<AddItineray> {
                 height: 51,
                 clipBehavior: Clip.antiAlias,
                 decoration: ShapeDecoration(
-                  gradient: LinearGradient(
+                  gradient: const LinearGradient(
                     begin: Alignment(0.00, -1.00),
                     end: Alignment(0, 1),
                     colors: [Color(0xFFFF8D74), Color(0xFFF65634)],
@@ -479,7 +526,7 @@ class _AddItinerayState extends State<AddItineray> {
                     borderRadius: BorderRadius.circular(15),
                   ),
                 ),
-                child: Row(
+                child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,

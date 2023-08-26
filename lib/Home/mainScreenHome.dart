@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:scanguard/Home/stampPage.dart';
-
+import 'package:http/http.dart' as http;
+import '../Models/getProfileModels.dart';
+import '../auth/signUpNextPage.dart';
+import '../auth/signUpPage.dart';
+import '../main.dart';
 import 'dirayPage.dart';
 import 'homePage.dart';
 import 'navbar.dart';
@@ -9,32 +13,54 @@ import '../Profile/profilePage.dart';
 
 class MainScreen extends StatefulWidget {
   final String? userId;
-  final String? email;
-  final String? phone;
-  final String? firstname;
-  final String? lastname;
-  final String? profile;
 
-  const MainScreen(
-      {super.key,
-      this.userId,
-      this.email,
-      this.phone,
-      this.firstname,
-      this.lastname,
-      this.profile});
+  const MainScreen({
+    super.key,
+    this.userId,
+  });
 
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
+  GetProfileModels getProfileModels = GetProfileModels();
+  getUserProfile() async {
+    // try {
+
+    String apiUrl = "$baseUrl/get_profile";
+    print("api: $apiUrl");
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "passport_holder_id": "$userID"
+    });
+    final responseString = response.body;
+    print("getProfileModels Response: $responseString");
+    print("status Code getProfileModels: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print("in 200 getProfileModels");
+      print("SuucessFull");
+      getProfileModels = getProfileModelsFromJson(responseString);
+      setState(() {
+        isLoading = false;
+      });
+      print('getProfileModels status: ${getProfileModels.status}');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return  Scaffold(
       // backgroundColor: Color(0xFF00AEFF),
 
-      bottomNavigationBar: NavBar(),
+      bottomNavigationBar: NavBar(
+        userId:  "${widget.userId}",
+      ),
     );
   }
 

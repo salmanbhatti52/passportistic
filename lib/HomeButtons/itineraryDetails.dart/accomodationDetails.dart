@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import '../../Models/accomodationModels.dart';
+import '../../auth/signUpNextPage.dart';
+import '../../auth/signUpPage.dart';
+import '../../main.dart';
+import 'activitiesDetails.dart';
 
 class AccommodationDetails extends StatefulWidget {
-  const AccommodationDetails({super.key});
+  final String? itinid;
+  const AccommodationDetails({super.key, this.itinid});
 
   @override
   State<AccommodationDetails> createState() => _AccommodationDetailsState();
@@ -18,12 +26,54 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
   TextEditingController nights = TextEditingController();
   TextEditingController breakfasTIncluded = TextEditingController();
 
+  AccommodationModels accommodationModels = AccommodationModels();
+  String? _selectedTransportMode;
+
+  accommodationDetails() async {
+    // try {
+
+    String apiUrl = "$baseUrl/add_itinerary_accomodations";
+    print("api: $apiUrl");
+
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "travel_ltinerary_id": "${widget.itinid}",
+      "passport_holder_id": "$userID",
+      "accomodation_city": city.text,
+      "establishment_name": establishmentName.text,
+      "accomodation_address": Address.text,
+      "accomodation_type": typeoFAccommodation.text,
+      "accomodation_checkin_date": checkInDate.text,
+      "accomodation_nights": nights.text,
+      "accomodation_breakfast": breakfasTIncluded.text,
+      "accomodation_checkout_date": checkOuTDate.text
+    });
+    final responseString = response.body;
+    print("response_travalDetailsModels: $responseString");
+    print("status Code travalDetailsModels: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print("in 200 itineraryAddModels");
+      print("SuucessFull");
+      accommodationModels = accommodationModelsFromJson(responseString);
+      setState(() {
+        isLoading = false;
+      });
+      print(
+          'AaccommodationModelsDetailsModels status: ${accommodationModels.status}');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
+        title: const Text(
           'UK 2023',
           style: TextStyle(
             color: Color(0xFF525252),
@@ -53,10 +103,10 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
       ),
       body: SingleChildScrollView(
         child: Column(children: [
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          Center(
+          const Center(
             child: Text(
               'Accomodation',
               textAlign: TextAlign.center,
@@ -126,6 +176,25 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                   cursorColor: const Color(0xFF000000),
                   controller: checkInDate,
                   keyboardType: TextInputType.name,
+                  readOnly: true, // Prevent manual text input
+                  onTap: () {
+                    // Open the date picker when the field is tapped
+                    showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2100),
+                    ).then((selectedDate) {
+                      if (selectedDate != null) {
+                        // Handle the selected date
+                        setState(() {
+                          checkInDate.text =
+                              DateFormat('yyyy-MM-dd').format(selectedDate);
+                          // Date.text = DateFormat.yMd().format(selectedDate);
+                        });
+                      }
+                    });
+                  },
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
                       borderSide: const BorderSide(color: Color(0xFFF65734)),
@@ -298,6 +367,25 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                   cursorColor: const Color(0xFF000000),
                   controller: checkOuTDate,
                   keyboardType: TextInputType.name,
+                  readOnly: true, // Prevent manual text input
+                  onTap: () {
+                    // Open the date picker when the field is tapped
+                    showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2100),
+                    ).then((selectedDate) {
+                      if (selectedDate != null) {
+                        // Handle the selected date
+                        setState(() {
+                          checkOuTDate.text =
+                              DateFormat('yyyy-MM-dd').format(selectedDate);
+                          // Date.text = DateFormat.yMd().format(selectedDate);
+                        });
+                      }
+                    });
+                  },
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
                       borderSide: const BorderSide(color: Color(0xFFF65734)),
@@ -416,40 +504,117 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
             height: MediaQuery.of(context).size.height * 0.02,
           ),
           GestureDetector(
-            onTap: () {},
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: 350,
-                height: 48,
-                clipBehavior: Clip.antiAlias,
-                decoration: ShapeDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment(0.00, -1.00),
-                    end: Alignment(0, 1),
-                    colors: [Color(0xFFFF8D74), Color(0xFFF65634)],
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Save and continue',
+            onTap: () async {
+              // setState(() {
+              // isLoading = true;
+              // });
+              if (checkInDate.text.isEmpty &&
+                  checkOuTDate.text.isEmpty &&
+                  Address.text.isEmpty &&
+                  establishmentName.text.isEmpty &&
+                  typeoFAccommodation.text.isEmpty &&
+                  nights.text.isEmpty &&
+                  breakfasTIncluded.text.isEmpty &&
+                  city.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      'Please fill all the fields',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontFamily: 'Satoshi',
-                        fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                );
+              } else {
+                await accommodationDetails();
+                if (accommodationModels.status == "success") {
+                  Future.delayed(const Duration(seconds: 2));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'Accommodation Added Successfully',
                       ),
                     ),
-                  ],
-                ),
+                  );
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return ActivitiesDetails(
+                        itinid: widget.itinid,
+                      );
+                    },
+                  ));
+                } else if (accommodationModels.status != "success") {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        accommodationModels.message.toString(),
+                      ),
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'Something went wrong',
+                      ),
+                    ),
+                  );
+                }
+              }
+              // setState(() {
+              // isLoading = false;
+              // });
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    width: 350,
+                    height: 51,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: ShapeDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment(0.00, -1.00),
+                        end: Alignment(0, 1),
+                        colors: [Color(0xFFFF8D74), Color(0xFFF65634)],
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                    // child: const Row(
+                    //   mainAxisSize: MainAxisSize.min,
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   crossAxisAlignment: CrossAxisAlignment.center,
+                    //   children: [
+                    //     Text(
+                    //       'Save',
+                    //       textAlign: TextAlign.center,
+                    //       style: TextStyle(
+                    //         color: Colors.white,
+                    //         fontSize: 20,
+                    //         fontFamily: 'Satoshi',
+                    //         fontWeight: FontWeight.w700,
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                  ),
+                  isLoading
+                      ? const CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
+                        )
+                      : const Text(
+                          "Save and Continue",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: "Satoshi",
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700),
+                        ),
+                ],
               ),
             ),
           ),
@@ -466,11 +631,12 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                 clipBehavior: Clip.antiAlias,
                 decoration: ShapeDecoration(
                   shape: RoundedRectangleBorder(
-                    side: BorderSide(width: 0.50, color: Color(0xFFFF8D74)),
+                    side:
+                        const BorderSide(width: 0.50, color: Color(0xFFFF8D74)),
                     borderRadius: BorderRadius.circular(15),
                   ),
                 ),
-                child: Row(
+                child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,

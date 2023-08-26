@@ -8,7 +8,8 @@ import '../Profile/profilePage.dart';
 import 'stampPage.dart';
 
 class NavBar extends StatefulWidget {
-  const NavBar({Key? key});
+  final String? userId;
+  const NavBar({super.key, Key, this.userId});
 
   @override
   State<NavBar> createState() => _NavBarState();
@@ -16,29 +17,47 @@ class NavBar extends StatefulWidget {
 
 class _NavBarState extends State<NavBar> {
   int index = 0;
-  final screens = const [
-    HomePage(),
-    DirayPage(),
-    StampPage(),
-    ProfilePage(),
-  ];
+  late List<Widget> screens;
+
+  @override
+  void initState() {
+    super.initState();
+    screens = [
+      HomePage(
+        userId: widget.userId,
+      ),
+      const DirayPage(),
+      const StampPage(),
+       ProfilePage(
+          userId: widget.userId,
+      ),
+    ];
+  }
+  // var screens = [
+  //   HomePage(
+  //     userId: widget.userId,
+  //   ),
+  //    DirayPage(),
+  //    StampPage(),
+  //    ProfilePage(),
+  // ];
 
   @override
   Widget build(BuildContext context) {
-    Color scaffoldColor = index == 0 ? Color(0xFF00AEFF) : Colors.white;
+    Color scaffoldColor = index == 0 ? const Color(0xFF00AEFF) : Colors.white;
     return WillPopScope(
       onWillPop: () async {
         SystemNavigator.pop();
         // When the back button is pressed, exit the app
-    
+
         return false;
       },
       child: Padding(
-        padding: EdgeInsets.only(top: 28),
+        padding: const EdgeInsets.only(top: 28),
         child: Scaffold(
           backgroundColor: scaffoldColor,
           bottomNavigationBar: ClipRRect(
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(20),
               topRight: Radius.circular(20),
             ),
@@ -111,7 +130,7 @@ class _NavBarState extends State<NavBar> {
         ),
         backgroundColor: const Color(0xFF2B65EC),
         centerTitle: true,
-        actions: [
+        actions: const [
           // IconButton(
           //   onPressed: () {},
           //   icon: SvgPicture.asset(
@@ -153,7 +172,7 @@ class _NavBarState extends State<NavBar> {
       return AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        actions: [
+        actions: const [
           // IconButton(
           //   onPressed: () {
           //     // Navigator.push(context, MaterialPageRoute<void>(

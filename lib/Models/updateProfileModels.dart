@@ -1,50 +1,52 @@
 // To parse this JSON data, do
 //
-//     final loginUserModels = loginUserModelsFromJson(jsonString);
+//     final updateProfileModels = updateProfileModelsFromJson(jsonString);
 
 import 'dart:convert';
 
-LoginUserModels loginUserModelsFromJson(String str) =>
-    LoginUserModels.fromJson(json.decode(str));
+UpdateProfileModels updateProfileModelsFromJson(String str) =>
+    UpdateProfileModels.fromJson(json.decode(str));
 
-String loginUserModelsToJson(LoginUserModels data) =>
+String updateProfileModelsToJson(UpdateProfileModels data) =>
     json.encode(data.toJson());
 
-class LoginUserModels {
+class UpdateProfileModels {
   String? status;
   String? message;
-  Data? data;
+  List<Datum>? data;
 
-  LoginUserModels({
+  UpdateProfileModels({
     this.status,
     this.message,
     this.data,
   });
 
-  factory LoginUserModels.fromJson(Map<String, dynamic> json) =>
-      LoginUserModels(
+  factory UpdateProfileModels.fromJson(Map<String, dynamic> json) =>
+      UpdateProfileModels(
         status: json["status"],
         message: json["message"],
-        data: json["data"] != null ? Data.fromJson(json["data"]) : null,
+        data: json["data"] != null
+            ? List<Datum>.from(json["data"].map((x) => Datum.fromJson(x)))
+            : null,
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "data": data!.toJson(),
+        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
 
-class Data {
+class Datum {
   String? passportHolderId;
   dynamic oneSignalId;
-  dynamic passportDesignId;
+  String? passportDesignId;
   String? fullName;
   String? username;
   String? email;
   String? password;
   String? accountType;
-  dynamic profilePicture;
+  String? profilePicture;
   dynamic socialAccType;
   dynamic googleAccessToken;
   dynamic facebookId;
@@ -58,14 +60,14 @@ class Data {
   String? lastName;
   String? phoneNumber;
   String? genderId;
-  dynamic nationality;
-  String? dob;
+  String? nationality;
+  DateTime? dob;
   String? numberOfPages;
-  dynamic currencyId;
+  String? currencyId;
   String? passportStampsHeld;
   String? isCancelled;
 
-  Data({
+  Datum({
     this.passportHolderId,
     this.oneSignalId,
     this.passportDesignId,
@@ -96,7 +98,7 @@ class Data {
     this.isCancelled,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         passportHolderId: json["passport_holder_id"],
         oneSignalId: json["one_signal_id"],
         passportDesignId: json["passport_design_id"],
@@ -120,7 +122,7 @@ class Data {
         phoneNumber: json["phone_number"],
         genderId: json["gender_id"],
         nationality: json["nationality"],
-        dob: json["dob"],
+        dob: DateTime.parse(json["dob"]),
         numberOfPages: json["number_of_pages"],
         currencyId: json["currency_id"],
         passportStampsHeld: json["passport_stamps_held"],
@@ -151,7 +153,8 @@ class Data {
         "phone_number": phoneNumber,
         "gender_id": genderId,
         "nationality": nationality,
-        "dob": dob,
+        "dob":
+            "${dob!.year.toString().padLeft(4, '0')}-${dob!.month.toString().padLeft(2, '0')}-${dob!.day.toString().padLeft(2, '0')}",
         "number_of_pages": numberOfPages,
         "currency_id": currencyId,
         "passport_stamps_held": passportStampsHeld,

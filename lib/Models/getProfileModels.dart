@@ -1,54 +1,50 @@
 // To parse this JSON data, do
 //
-//     final loginUserModels = loginUserModelsFromJson(jsonString);
+//     final getProfileModels = getProfileModelsFromJson(jsonString);
 
 import 'dart:convert';
 
-LoginUserModels loginUserModelsFromJson(String str) =>
-    LoginUserModels.fromJson(json.decode(str));
+GetProfileModels getProfileModelsFromJson(String str) =>
+    GetProfileModels.fromJson(json.decode(str));
 
-String loginUserModelsToJson(LoginUserModels data) =>
+String getProfileModelsToJson(GetProfileModels data) =>
     json.encode(data.toJson());
 
-class LoginUserModels {
+class GetProfileModels {
   String? status;
-  String? message;
   Data? data;
 
-  LoginUserModels({
+  GetProfileModels({
     this.status,
-    this.message,
     this.data,
   });
 
-  factory LoginUserModels.fromJson(Map<String, dynamic> json) =>
-      LoginUserModels(
+  factory GetProfileModels.fromJson(Map<String, dynamic> json) =>
+      GetProfileModels(
         status: json["status"],
-        message: json["message"],
         data: json["data"] != null ? Data.fromJson(json["data"]) : null,
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
-        "message": message,
         "data": data!.toJson(),
       };
 }
 
 class Data {
   String? passportHolderId;
-  dynamic oneSignalId;
-  dynamic passportDesignId;
+  String? oneSignalId;
+  String? passportDesignId;
   String? fullName;
   String? username;
   String? email;
   String? password;
   String? accountType;
-  dynamic profilePicture;
-  dynamic socialAccType;
-  dynamic googleAccessToken;
+  String? profilePicture;
+  String? socialAccType;
+  String? googleAccessToken;
   dynamic facebookId;
-  DateTime? dateAdded;
+  dynamic dateAdded;
   String? status;
   String? verifyCode;
   String? notifications;
@@ -57,8 +53,8 @@ class Data {
   String? middleName;
   String? lastName;
   String? phoneNumber;
-  String? genderId;
-  dynamic nationality;
+  dynamic genderId;
+  String? nationality;
   String? dob;
   String? numberOfPages;
   dynamic currencyId;
@@ -109,7 +105,7 @@ class Data {
         socialAccType: json["social_acc_type"],
         googleAccessToken: json["google_access_token"],
         facebookId: json["facebook_id"],
-        dateAdded: DateTime.parse(json["date_added"]),
+        dateAdded: json["date_added"],
         status: json["status"],
         verifyCode: json["verify_code"],
         notifications: json["notifications"],
@@ -140,7 +136,7 @@ class Data {
         "social_acc_type": socialAccType,
         "google_access_token": googleAccessToken,
         "facebook_id": facebookId,
-        "date_added": dateAdded!.toIso8601String(),
+        "date_added": dateAdded,
         "status": status,
         "verify_code": verifyCode,
         "notifications": notifications,

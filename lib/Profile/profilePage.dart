@@ -1,18 +1,22 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:scanguard/Profile/viewProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:http/http.dart' as http;
 import '../Home/appDrawer.dart';
+import '../Models/getProfileModels.dart';
 import '../auth/signIn.dart';
+import '../auth/signUpNextPage.dart';
+import '../auth/signUpPage.dart';
+import '../main.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  final String? userId;
+  const ProfilePage({super.key, this.userId});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -56,19 +60,56 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  GetProfileModels getProfileModels = GetProfileModels();
+  getUserProfile() async {
+    String apiUrl = "$baseUrl/get_profile";
+    print("api: $apiUrl");
+    if (!mounted) {
+      return; // Check if the widget is still mounted
+    }
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "passport_holder_id": "$userID"
+    });
+    if (!mounted) {
+      return; // Check again if the widget is still mounted after the HTTP request
+    }
+    final responseString = response.body;
+    print("getProfileModels Response: $responseString");
+    print("status Code getProfileModels: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print("in 200 getProfileModels");
+      print("SuucessFull");
+      getProfileModels = getProfileModelsFromJson(responseString);
+      if (!mounted) {
+        return; // Check once more if the widget is still mounted before updating the state
+      }
+      setState(() {
+        isLoading = false;
+      });
+      print('getProfileModels status: ${getProfileModels.status}');
+    }
+  }
+
   bool _obscureText = true;
 
   void _toggle() {
     _obscureText = !_obscureText;
   }
 
-  FocusNode _focusNode1 = FocusNode();
-  FocusNode _focusNode2 = FocusNode();
-  FocusNode _focusNode3 = FocusNode();
+  final FocusNode _focusNode1 = FocusNode();
+  final FocusNode _focusNode2 = FocusNode();
+  final FocusNode _focusNode3 = FocusNode();
 
   @override
   void initState() {
     super.initState();
+    getUserProfile();
     _focusNode1.addListener(_onFocusChange);
     _focusNode2.addListener(_onFocusChange);
     _focusNode3.addListener(_onFocusChange);
@@ -94,7 +135,7 @@ class _ProfilePageState extends State<ProfilePage> {
     bool isFocused2 = _focusNode2.hasFocus;
     bool isFocused3 = _focusNode3.hasFocus;
     return Scaffold(
-      drawer: AppDrawer(),
+      drawer: const AppDrawer(),
       appBar: AppBar(
         // backgroundColor: Colors.black,
         leading: Builder(builder: (context) {
@@ -169,10 +210,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: 120,
                   width: 120,
                   child: imagePathGallery != null
-                      ? Image.file(imagePathGallery!)
-                      : Image.network(
-                          "https://images.pexels.com/photos/17457999/pexels-photo-17457999/free-photo-of-a-garbage-collector.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-                          fit: BoxFit.cover),
+                      ? Image.file(imagePathGallery!, fit: BoxFit.cover)
+                      : getProfileModels.data?.profilePicture != null
+                          ? Image.network(
+                              "https://portal.passporttastic.com/public/${getProfileModels.data!.profilePicture}",
+                              fit: BoxFit.cover,
+                            )
+                          : Container(), // Empty container as a fallback
                 ),
               ),
               GestureDetector(
@@ -203,9 +247,9 @@ class _ProfilePageState extends State<ProfilePage> {
           const SizedBox(
             height: 10,
           ),
-          const Text(
-            "John Doe",
-            style: TextStyle(
+          Text(
+            "${getProfileModels.data?.firstName ?? ''} ${getProfileModels.data?.lastName ?? ''}",
+            style: const TextStyle(
                 fontSize: 20, fontWeight: FontWeight.w700, color: Colors.black),
           ),
           Row(
@@ -213,21 +257,22 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               SvgPicture.asset(
                 "assets/sms.svg",
-                color: Color(0xFFFF8D74),
+                color: const Color(0xFFFF8D74),
                 width: 15,
                 height: 15,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 4,
               ),
               Text(
-                "JhonDeo@gmail.com",
-                style: TextStyle(
-                    fontFamily: "Satoshi",
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    color: Color(0xFF9C9999)),
-              )
+                getProfileModels.data?.email ?? '', // Use ?. instead of !
+                style: const TextStyle(
+                  fontFamily: "Satoshi",
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xFF9C9999),
+                ),
+              ),
             ],
           ),
           const SizedBox(
@@ -238,16 +283,16 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               SvgPicture.asset(
                 "assets/phone.svg",
-                color: Color(0xFFFF8D74),
+                color: const Color(0xFFFF8D74),
                 width: 15,
                 height: 15,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 3,
               ),
               Text(
-                "+92 9876543210",
-                style: TextStyle(
+                getProfileModels.data?.phoneNumber ?? '',
+                style: const TextStyle(
                     fontFamily: "Satoshi",
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
@@ -262,7 +307,7 @@ class _ProfilePageState extends State<ProfilePage> {
             onTap: () {
               Navigator.push(context, MaterialPageRoute(
                 builder: (BuildContext context) {
-                  return ViewProfile();
+                  return ViewProfile(userId: "${widget.userId}");
                 },
               ));
             },
@@ -274,7 +319,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
-                shadows: [
+                shadows: const [
                   BoxShadow(
                     color: Color(0x0F312E23),
                     blurRadius: 16,
@@ -285,7 +330,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               child: Stack(
                 children: [
-                  Positioned(
+                  const Positioned(
                     left: 16,
                     top: 25,
                     child: Text(
@@ -330,14 +375,14 @@ class _ProfilePageState extends State<ProfilePage> {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text(
+                                const Text(
                                   "Change Your Password",
                                   style: TextStyle(
                                       fontWeight: FontWeight.w700,
                                       fontSize: 24,
                                       color: Color(0xFFF65734)),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 5,
                                 ),
                                 Text(
@@ -346,10 +391,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w400,
-                                      color:
-                                          Color(0xFF141111).withOpacity(0.5)),
+                                      color: const Color(0xFF141111)
+                                          .withOpacity(0.5)),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 Row(
@@ -359,10 +404,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                       child: TextFormField(
                                         focusNode: _focusNode1,
                                         obscureText: _obscureText,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             color: Color(0xFF000000),
                                             fontSize: 16),
-                                        cursorColor: Color(0xFF000000),
+                                        cursorColor: const Color(0xFF000000),
                                         controller: currentPass,
                                         keyboardType: TextInputType.name,
                                         decoration: InputDecoration(
@@ -371,8 +416,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                             child: SvgPicture.asset(
                                               'assets/lock.svg',
                                               color: isFocused1
-                                                  ? Color(0xFFF65734)
-                                                  : Color(0xFFE0E0E5),
+                                                  ? const Color(0xFFF65734)
+                                                  : const Color(0xFFE0E0E5),
                                             ),
                                           ),
                                           suffixIcon: Row(
@@ -391,7 +436,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             ],
                                           ),
                                           focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
+                                            borderSide: const BorderSide(
                                                 color: Color(0xFFF65734)),
                                             borderRadius:
                                                 BorderRadius.circular(15.0),
@@ -400,11 +445,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                           enabledBorder: OutlineInputBorder(
                                             borderRadius:
                                                 BorderRadius.circular(15),
-                                            borderSide: BorderSide(
+                                            borderSide: const BorderSide(
                                               color: Color(0xFFE0E0E5),
                                             ),
                                           ),
-                                          hintStyle: TextStyle(
+                                          hintStyle: const TextStyle(
                                               color: Color(0xFFA7A9B7),
                                               fontSize: 16,
                                               fontWeight: FontWeight.w300,
@@ -426,10 +471,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                       child: TextFormField(
                                         focusNode: _focusNode2,
                                         obscureText: _obscureText,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             color: Color(0xFF000000),
                                             fontSize: 16),
-                                        cursorColor: Color(0xFF000000),
+                                        cursorColor: const Color(0xFF000000),
                                         controller: createPass,
                                         keyboardType: TextInputType.name,
                                         decoration: InputDecoration(
@@ -438,8 +483,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                             child: SvgPicture.asset(
                                               'assets/lock.svg',
                                               color: isFocused2
-                                                  ? Color(0xFFF65734)
-                                                  : Color(0xFFE0E0E5),
+                                                  ? const Color(0xFFF65734)
+                                                  : const Color(0xFFE0E0E5),
                                             ),
                                           ),
                                           suffixIcon: Row(
@@ -456,7 +501,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             ],
                                           ),
                                           focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
+                                            borderSide: const BorderSide(
                                                 color: Color(0xFFF65734)),
                                             borderRadius:
                                                 BorderRadius.circular(15.0),
@@ -465,11 +510,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                           enabledBorder: OutlineInputBorder(
                                             borderRadius:
                                                 BorderRadius.circular(15),
-                                            borderSide: BorderSide(
+                                            borderSide: const BorderSide(
                                               color: Color(0xFFE0E0E5),
                                             ),
                                           ),
-                                          hintStyle: TextStyle(
+                                          hintStyle: const TextStyle(
                                               color: Color(0xFFA7A9B7),
                                               fontSize: 16,
                                               fontWeight: FontWeight.w300,
@@ -491,10 +536,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                       child: TextFormField(
                                         focusNode: _focusNode3,
                                         obscureText: _obscureText,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             color: Color(0xFF000000),
                                             fontSize: 16),
-                                        cursorColor: Color(0xFF000000),
+                                        cursorColor: const Color(0xFF000000),
                                         controller: confirmPass,
                                         keyboardType: TextInputType.name,
                                         decoration: InputDecoration(
@@ -503,8 +548,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                             child: SvgPicture.asset(
                                               'assets/lock.svg',
                                               color: isFocused3
-                                                  ? Color(0xFFF65734)
-                                                  : Color(0xFFE0E0E5),
+                                                  ? const Color(0xFFF65734)
+                                                  : const Color(0xFFE0E0E5),
                                             ),
                                           ),
                                           suffixIcon: Row(
@@ -521,7 +566,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             ],
                                           ),
                                           focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
+                                            borderSide: const BorderSide(
                                                 color: Color(0xFFF65734)),
                                             borderRadius:
                                                 BorderRadius.circular(15.0),
@@ -530,11 +575,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                           enabledBorder: OutlineInputBorder(
                                             borderRadius:
                                                 BorderRadius.circular(15),
-                                            borderSide: BorderSide(
+                                            borderSide: const BorderSide(
                                               color: Color(0xFFE0E0E5),
                                             ),
                                           ),
-                                          hintStyle: TextStyle(
+                                          hintStyle: const TextStyle(
                                               color: Color(0xFFA7A9B7),
                                               fontSize: 16,
                                               fontWeight: FontWeight.w300,
@@ -566,7 +611,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   .width *
                                               0.84,
                                           decoration: BoxDecoration(
-                                            gradient: LinearGradient(
+                                            gradient: const LinearGradient(
                                               colors: [
                                                 Color(0xFFF65734),
                                                 Color(0xFFFF8D74)
@@ -577,7 +622,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             borderRadius:
                                                 BorderRadius.circular(15),
                                           ),
-                                          child: Row(
+                                          child: const Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
@@ -615,7 +660,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
-                shadows: [
+                shadows: const [
                   BoxShadow(
                     color: Color(0x0F312E23),
                     blurRadius: 16,
@@ -626,7 +671,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               child: Stack(
                 children: [
-                  Positioned(
+                  const Positioned(
                     left: 16,
                     top: 25,
                     child: Text(
@@ -657,7 +702,7 @@ class _ProfilePageState extends State<ProfilePage> {
             onTap: () {
               removeDataFormSharedPreferences();
               Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => SignInPage()),
+                MaterialPageRoute(builder: (context) => const SignInPage()),
                 (Route<dynamic> route) => false,
               );
             },
@@ -669,7 +714,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
-                shadows: [
+                shadows: const [
                   BoxShadow(
                     color: Color(0x0F312E23),
                     blurRadius: 16,
@@ -680,7 +725,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               child: Stack(
                 children: [
-                  Positioned(
+                  const Positioned(
                     left: 16,
                     top: 25,
                     child: Text(

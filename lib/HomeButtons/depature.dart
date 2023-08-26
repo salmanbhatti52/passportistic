@@ -1,15 +1,19 @@
 import 'package:country_picker/country_picker.dart';
+import 'package:csc_picker/csc_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:group_radio_button/group_radio_button.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import '../Models/departureModels.dart';
+import '../Models/shaplistModels.dart';
+import '../Models/transportListModels.dart';
 import '../auth/signUpNextPage.dart';
 import '../auth/signUpPage.dart';
 
 class DepatureDetails extends StatefulWidget {
-  const DepatureDetails({super.key});
+  final String? userId;
+  const DepatureDetails({super.key, this.userId});
 
   @override
   State<DepatureDetails> createState() => _DepatureDetailsState();
@@ -17,6 +21,8 @@ class DepatureDetails extends StatefulWidget {
 
 class _DepatureDetailsState extends State<DepatureDetails> {
   DepartureModel departureModel = DepartureModel();
+  final GlobalKey<CSCPickerState> _cscPickerKey = GlobalKey();
+  List<String> cityList = [];
 
   // departure() async {
   //   var headersList = {
@@ -51,6 +57,128 @@ class _DepatureDetailsState extends State<DepatureDetails> {
   //     print(res.reasonPhrase);
   //   }
   // }
+  // Show the city picker dialog
+  String countryValue = "";
+  String stateValue = "";
+  String cityValue = "";
+  void _showCityPicker(BuildContext context) async {
+    String? selectedCity = await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Select City"),
+          content: CSCPicker(
+            ///Enable disable state dropdown [OPTIONAL PARAMETER]
+            showStates: true,
+
+            /// Enable disable city drop down [OPTIONAL PARAMETER]
+            showCities: true,
+
+            ///Enable (get flag with country name) / Disable (Disable flag) / ShowInDropdownOnly (display flag in dropdown only) [OPTIONAL PARAMETER]
+            flagState: CountryFlag.DISABLE,
+
+            ///Dropdown box decoration to style your dropdown selector [OPTIONAL PARAMETER] (USE with disabledDropdownDecoration)
+            dropdownDecoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                color: Colors.white,
+                border: Border.all(color: Colors.grey.shade300, width: 1)),
+
+            ///Disabled Dropdown box decoration to style your dropdown selector [OPTIONAL PARAMETER]  (USE with disabled dropdownDecoration)
+            disabledDropdownDecoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                color: Colors.grey.shade300,
+                border: Border.all(color: Colors.grey.shade300, width: 1)),
+
+            ///placeholders for dropdown search field
+            countrySearchPlaceholder: "Country",
+            stateSearchPlaceholder: "State",
+            citySearchPlaceholder: "City",
+
+            ///labels for dropdown
+            countryDropdownLabel: "*Country",
+            stateDropdownLabel: "*State",
+            cityDropdownLabel: "*City",
+
+            ///Default Country
+            //defaultCountry: CscCountry.India,
+
+            ///Disable country dropdown (Note: use it with default country)
+            //disableCountry: true,
+
+            ///Country Filter [OPTIONAL PARAMETER]
+            countryFilter: const [
+              CscCountry.India,
+              CscCountry.United_States,
+              CscCountry.Canada
+            ],
+
+            ///selected item style [OPTIONAL PARAMETER]
+            selectedItemStyle: const TextStyle(
+              color: Colors.black,
+              fontSize: 14,
+            ),
+
+            ///DropdownDialog Heading style [OPTIONAL PARAMETER]
+            dropdownHeadingStyle: const TextStyle(
+                color: Colors.black, fontSize: 17, fontWeight: FontWeight.bold),
+
+            ///DropdownDialog Item style [OPTIONAL PARAMETER]
+            dropdownItemStyle: const TextStyle(
+              color: Colors.black,
+              fontSize: 14,
+            ),
+
+            ///Dialog box radius [OPTIONAL PARAMETER]
+            dropdownDialogRadius: 10.0,
+
+            ///Search bar radius [OPTIONAL PARAMETER]
+            searchBarRadius: 10.0,
+
+            ///triggers once country selected in dropdown
+            onCountryChanged: (value) {
+              setState(() {
+                ///store value in country variable
+                countryValue = value;
+              });
+            },
+
+            ///triggers once state selected in dropdown
+            onStateChanged: (value) {
+              setState(() {
+                ///store value in state variable
+                stateValue = value!;
+              });
+            },
+
+            ///triggers once city selected in dropdown
+            onCityChanged: (value) {
+              setState(() {
+                ///store value in city variable
+                cityValue = value!;
+              });
+            },
+          ),
+        );
+      },
+    );
+
+    if (cityValue != null) {
+      setState(() {
+        cityValue = cityValue;
+        print("Selected City: $cityValue");
+      });
+    } else if (countryValue != null) {
+      setState(() {
+        countryValue = countryValue;
+        print("Selected Country: $countryValue");
+      });
+    } else {
+      setState(() {
+        stateValue = stateValue;
+        print("Selected State: $stateValue");
+      });
+    }
+  }
 
   departure() async {
     // try {
@@ -94,9 +222,67 @@ class _DepatureDetailsState extends State<DepatureDetails> {
     }
   }
 
+  TransportListModels transportListModels = TransportListModels();
+  mdoeofTransport() async {
+    // try {
+
+    String apiUrl = "$baseUrl/get_transport_mode";
+    print("api: $apiUrl");
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "passport_holder_id": "${widget.userId}"
+    });
+    final responseString = response.body;
+    print("responseModeTransportModel: $responseString");
+    print("status Code responseModeTransportModel: ${response.statusCode}");
+    print("in 200 responseModeTransportModel");
+    if (response.statusCode == 200) {
+      print("SuccessFull");
+      transportListModels = transportListModelsFromJson(responseString);
+      setState(() {
+        isLoading = false;
+      });
+      print('responseModeTransportModel status: ${transportListModels.status}');
+    }
+  }
+
+  ShapeListModels shapeListModels = ShapeListModels();
+  StampshapeList() async {
+    // try {
+
+    String apiUrl = "$baseUrl/get_stamp_shape";
+    print("api: $apiUrl");
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "passport_holder_id": "${widget.userId}"
+    });
+    final responseString = response.body;
+    print("responseshapeListModels: $responseString");
+    print("status Code shapeListModels: ${response.statusCode}");
+    print("in 200 shapeListModels");
+    if (response.statusCode == 200) {
+      print("SuccessFull");
+      shapeListModels = shapeListModelsFromJson(responseString);
+      setState(() {
+        isLoading = false;
+      });
+      print('shapeListModels status: ${shapeListModels.status}');
+    }
+  }
+
+  String? _selectedTransportMode;
+  String? _selectedStampShape;
   TextEditingController time = TextEditingController();
   TextEditingController date = TextEditingController();
-
+  TextEditingController city = TextEditingController();
   final FocusNode _focusNode1 = FocusNode();
   final FocusNode _focusNode2 = FocusNode();
   final FocusNode _focusNode3 = FocusNode();
@@ -110,6 +296,8 @@ class _DepatureDetailsState extends State<DepatureDetails> {
   @override
   void initState() {
     super.initState();
+    mdoeofTransport();
+    StampshapeList();
     _focusNode1.addListener(_onFocusChange);
     _focusNode2.addListener(_onFocusChange);
     _focusNode3.addListener(_onFocusChange);
@@ -372,6 +560,7 @@ class _DepatureDetailsState extends State<DepatureDetails> {
               ),
               Expanded(
                 child: TextFormField(
+                  controller: city,
                   style:
                       const TextStyle(color: Color(0xFF000000), fontSize: 16),
                   cursorColor: const Color(0xFF000000),
@@ -409,109 +598,112 @@ class _DepatureDetailsState extends State<DepatureDetails> {
           const SizedBox(
             height: 10,
           ),
-          Row(
-            children: [
-              const SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: TextFormField(
-                  style:
-                      const TextStyle(color: Color(0xFF000000), fontSize: 16),
-                  cursorColor: const Color(0xFF000000),
-                  keyboardType: TextInputType.name,
-                  decoration: InputDecoration(
-                    suffixIcon: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SvgPicture.asset("assets/arrowDown1.svg"),
-                          ),
-                        ]),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xFFF65734)),
-                      borderRadius: BorderRadius.circular(15.0),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: DropdownButtonFormField<String>(
+              iconDisabledColor: Colors.transparent,
+              iconEnabledColor: Colors.transparent,
+              value: _selectedTransportMode,
+              onChanged: (newValue) {
+                setState(() {
+                  _selectedTransportMode = newValue;
+                });
+              },
+              items: transportListModels.data?.map((mode) {
+                    return DropdownMenuItem<String>(
+                      value: mode.modeName,
+                      child: Text(mode.modeName ?? ''),
+                    );
+                  }).toList() ??
+                  [],
+              decoration: InputDecoration(
+                suffixIcon: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SvgPicture.asset("assets/arrowDown1.svg"),
                     ),
-                    // labelText: 'Email',
-                    hintText: "Select mode of transport",
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: const BorderSide(
-                        color: Color(0xFFF3F3F3),
-                      ),
-                    ),
-                    hintStyle: const TextStyle(
-                      color: Color(0xFFA7A9B7),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w300,
-                      fontFamily: "Satoshi",
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
+                  ],
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Color(0xFFF65734)),
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                hintText: "Select mode of transport",
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                    color: Color(0xFFF3F3F3),
                   ),
                 ),
+                hintStyle: const TextStyle(
+                  color: Color(0xFFA7A9B7),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w300,
+                  fontFamily: "Satoshi",
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
               ),
-              const SizedBox(
-                width: 10,
-              ),
-            ],
+            ),
           ),
           const SizedBox(
             height: 10,
           ),
-          Row(
-            children: [
-              const SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: TextFormField(
-                  focusNode: _focusNode3,
-                  style:
-                      const TextStyle(color: Color(0xFF000000), fontSize: 16),
-                  cursorColor: const Color(0xFF000000),
-                  keyboardType: TextInputType.name,
-                  decoration: InputDecoration(
-                    suffixIcon: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SvgPicture.asset("assets/arrowDown1.svg"),
-                          ),
-                        ]),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xFFF65734)),
-                      borderRadius: BorderRadius.circular(15.0),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: DropdownButtonFormField<String>(
+              iconDisabledColor: Colors.transparent,
+              iconEnabledColor: Colors.transparent,
+              value: _selectedStampShape,
+              onChanged: (newValue) {
+                setState(() {
+                  _selectedStampShape = newValue;
+                });
+              },
+              items: shapeListModels.data?.map((shape) {
+                    return DropdownMenuItem<String>(
+                      value: shape.shapeName,
+                      child: Text(shape.shapeName ?? ''),
+                    );
+                  }).toList() ??
+                  [],
+              decoration: InputDecoration(
+                suffixIcon: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SvgPicture.asset("assets/arrowDown1.svg"),
                     ),
-                    // labelText: 'Email',
-                    hintText: "Select Stamp Shape",
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: const BorderSide(
-                        color: Color(0xFFF3F3F3),
-                      ),
-                    ),
-                    hintStyle: const TextStyle(
-                      color: Color(0xFFA7A9B7),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w300,
-                      fontFamily: "Satoshi",
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
+                  ],
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Color(0xFFF65734)),
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                hintText: "Select Stamp Shape",
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                    color: Color(0xFFF3F3F3),
                   ),
                 ),
+                hintStyle: const TextStyle(
+                  color: Color(0xFFA7A9B7),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w300,
+                  fontFamily: "Satoshi",
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
               ),
-              const SizedBox(
-                width: 10,
-              ),
-            ],
+            ),
           ),
           const Padding(
             padding: EdgeInsets.only(left: 12, top: 10),
@@ -785,7 +977,40 @@ class _DepatureDetailsState extends State<DepatureDetails> {
               const SizedBox(
                 height: 10,
               ),
-              Center(child: SvgPicture.asset("assets/France.svg")),
+              Center(
+                child: SvgPicture.asset(
+                  "assets/France.svg",
+                  color: getColor(selectedColor),
+                ),
+              ),
+              // if (_selectedStampShape != null)
+              //   FutureBuilder<ShapeListModels>(
+              //     future: StampshapeList(), // Fetch the shape data
+              //     builder: (context, snapshot) {
+              //       if (snapshot.connectionState == ConnectionState.waiting) {
+              //         return const CircularProgressIndicator();
+              //       } else if (snapshot.hasData) {
+              //         final shape = snapshot.data!.data?.firstWhere(
+              //             (shape) => shape.shapeName == _selectedStampShape,
+              //             orElse: () => shape(shapeImage: ''),
+              //         );
+
+              //         if (shape != null) {
+              //           return Image.network(
+              //             'https://portal.passporttastic.com/public/${shape.shapeImage}',
+              //             height: 100,
+              //             width: 100,
+              //           );
+              //         } else {
+              //           return const Text('No shape data found.');
+              //         }
+              //       } else if (snapshot.hasError) {
+              //         return const Text('Error fetching shape data.');
+              //       } else {
+              //         return const Text('Select a shape from the dropdown.');
+              //       }
+              //     },
+              //   ),
               const Center(
                   child: Text(
                 "Departed",
@@ -950,7 +1175,23 @@ class _DepatureDetailsState extends State<DepatureDetails> {
         return "";
     }
   }
+// Widget _getShapeImage(String shapeName) {
+//     final shape = shapeListModels.data?.firstWhere(
+//       (shape) => shape.shapeName == shapeName,
+//       orElse: () => null,
+//     );
 
+//     if (shape != null) {
+//       return Image.network(
+//         'https://portal.passporttastic.com/${shape.shapeImage}',
+//         height: 100,
+//         width: 100,
+//       );
+//     } else {
+//       return Text('No shape data found.');
+//     }
+//   }
+// }
   List<String> colors = ["Black", "Red", "Yellow", "Blue", "Pink"];
 
   String selectedHexColor = "";

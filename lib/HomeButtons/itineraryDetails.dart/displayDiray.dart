@@ -1,20 +1,32 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:scanguard/HomeButtons/itineraryDetails.dart/travelDetailsPage.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:http/http.dart' as http;
+import '../../Models/diaryDetailsModels.dart';
+import '../../auth/signUpNextPage.dart';
+import '../../auth/signUpPage.dart';
 
 class DisplayDiary extends StatefulWidget {
+  final String? itinid;
+
+  const DisplayDiary({super.key, this.itinid});
   @override
   _DisplayDiaryState createState() => _DisplayDiaryState();
 }
 
 class _DisplayDiaryState extends State<DisplayDiary> {
+  List<File?> selectedImages = [];
+  String buildImageUrlsString(List<String> imageUrls) {
+    return imageUrls.join(
+        ','); // Join the list elements with a comma (or another delimiter)
+  }
+
   File? imagePathGallery;
   String? base64imgGallery;
   File? imagePathGallery1;
@@ -44,6 +56,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
     }
   }
 
+  List<String> base64ImageUrls = [];
   Future pickImageGallery1() async {
     try {
       final ImagePicker picker = ImagePicker();
@@ -52,7 +65,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
         // Handle if no image is selected
       } else {
         Uint8List imageBytes = await xFile.readAsBytes();
-        base64imgGallery1 = base64.encode(imageBytes);
+        final String base64imgGallery1 = base64.encode(imageBytes);
         print("base64img $base64imgGallery1");
 
         final imageTemporary = File(xFile.path);
@@ -61,6 +74,31 @@ class _DisplayDiaryState extends State<DisplayDiary> {
           imagePathGallery1 = imageTemporary;
           print("newImage $imagePathGallery1");
           print("newImage64 $base64imgGallery1");
+          selectedImages.add(File(xFile.path));
+          base64ImageUrls.add(base64imgGallery1);
+        });
+      }
+    } catch (e) {
+      print('Failed to pick image: $e');
+    }
+  }
+
+  String? formattedDate;
+  List<String> base64EncodedImageList = [];
+  // List<File?> selectedImageList = [];
+
+  Future<void> pickImageFromGallery(int index) async {
+    try {
+      final ImagePicker picker = ImagePicker();
+      final XFile? xFile = await picker.pickImage(source: ImageSource.gallery);
+
+      if (xFile != null) {
+        Uint8List imageBytes = await xFile.readAsBytes();
+        String base64EncodedImage = base64.encode(imageBytes);
+
+        setState(() {
+          base64EncodedImageList[index] = base64EncodedImage;
+          selectedImages[index] = File(xFile.path);
         });
       }
     } catch (e) {
@@ -74,12 +112,65 @@ class _DisplayDiaryState extends State<DisplayDiary> {
   CalendarFormat _calendarFormat = CalendarFormat.week;
   DateTime _focusedDay = DateTime.now();
 
+  DirayDetailsModels dirayDetailsModels = DirayDetailsModels();
+
+  dirayDetails() async {
+    try {
+      String apiUrl = "$baseUrl/add_travel_diary";
+      print("api: $apiUrl");
+
+      setState(() {
+        isLoading = true;
+      });
+
+      // Convert base64EncodedImageList to JSON array format
+      String imagesJson = jsonEncode(base64EncodedImageList);
+
+      final response = await http.post(Uri.parse(apiUrl), headers: {
+        'Accept': 'application/json',
+      }, body: {
+        "travel_ltinerary_id": "${widget.itinid}",
+        "travel_diary_date": formattedDate,
+        "travel_diary_entry": comments.text,
+        "tavel_diary_picture_images":
+            base64ImageUrls.toString() // Add the images JSON array
+      });
+
+      final responseString = response.body;
+      print("response_travalDetailsModels: $responseString");
+      print("status Code travalDetailsModels: ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+        print("in 200 itineraryAddModels");
+        print("SuucessFull");
+        dirayDetailsModels = dirayDetailsModelsFromJson(responseString);
+        setState(() {
+          isLoading = false;
+        });
+        print(
+            'AaccommodationModelsDetailsModels status: ${dirayDetailsModels.status}');
+      }
+    } catch (e) {
+      print('Failed to make API request: $e');
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    List<String> base64Images = selectedImages
+        .map((image) =>
+            image != null ? base64.encode(image.readAsBytesSync()) : "")
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
+        title: const Text(
           'UK 2023',
           style: TextStyle(
             color: Color(0xFF525252),
@@ -112,28 +203,25 @@ class _DisplayDiaryState extends State<DisplayDiary> {
           children: [
             Center(
               child: Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: TableCalendar(
                   headerStyle: HeaderStyle(
-                    headerPadding: EdgeInsets.all(8),
+                    headerPadding: const EdgeInsets.all(8),
                     titleCentered: true,
                     formatButtonVisible: false, // Hide the format button
                     titleTextFormatter: (date, _) =>
-                        DateFormat.MMMM().format(date) +
-                        ' ' +
-                        DateFormat.y()
-                            .format(date), // Format the month and year
-                    titleTextStyle: TextStyle(
+                        '${DateFormat.MMMM().format(date)} ${DateFormat.y().format(date)}', // Format the month and year
+                    titleTextStyle: const TextStyle(
                       color: Color(0xFF525252),
                       fontSize: 16,
                       fontFamily: 'Satoshi',
                       fontWeight: FontWeight.w700,
                     ),
-                    leftChevronIcon: Icon(
+                    leftChevronIcon: const Icon(
                       Icons.chevron_left,
                       color: Color(0xFFF65734),
                     ),
-                    rightChevronIcon: Icon(
+                    rightChevronIcon: const Icon(
                       Icons.chevron_right,
                       color: Color(0xFFF65734),
                     ),
@@ -141,18 +229,21 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                   // daysOfWeekStyle: DaysOfWeekStyle(
                   //     weekdayStyle: TextStyle(
                   //         letterSpacing: 0.4, color: Color(0xFFE0E0E5))),
-                  calendarStyle: CalendarStyle(
+                  calendarStyle: const CalendarStyle(
                     todayTextStyle: TextStyle(color: Colors.black),
                     selectedDecoration: BoxDecoration(
-                        color: Color(0xFFF65734), // Color of the selected day
-                        borderRadius: BorderRadius.circular(
-                            10) // Shape of the selected day
+                        color: Color(0xFFF65734),
+                        shape: BoxShape.rectangle // Color of the selected day
+                        // borderRadius: BorderRadius.circular(
+                        //     10), // Adjust the border radius as needed
                         ),
                     todayDecoration: BoxDecoration(
-                      color: Colors.transparent, // Color of the today day
-                      shape: BoxShape.rectangle, // Shape of the today day
-                    ),
+                        color: Colors.transparent,
+                        shape: BoxShape.rectangle // Color of the selected day
+// Color of the today day
+                        ),
                   ),
+
                   firstDay: DateTime.utc(2010, 10, 16),
                   lastDay: DateTime.utc(2030, 3, 14),
                   focusedDay: _focusedDay,
@@ -165,9 +256,14 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                       _selectedDay = selectedDay;
                       _focusedDay = selectedDay;
                       _calendarFormat = CalendarFormat.week;
-                      print(_selectedDay);
+
+                      // Format the selected date without the time and ".000Z" part
+                      formattedDate =
+                          DateFormat('yyyy-MM-dd').format(selectedDay);
+                      print(formattedDate);
                     });
                   },
+
                   onPageChanged: (focusedDay) {
                     _focusedDay = focusedDay;
                   },
@@ -221,8 +317,8 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 12, top: 10),
+            const Padding(
+              padding: EdgeInsets.only(left: 12, top: 10),
               child: Row(
                 children: [
                   Text(
@@ -237,101 +333,218 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                 ],
               ),
             ),
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.grey[200],
-                    ),
-                    child: Center(
-                      child: imagePathGallery != null
-                          ? Image.memory(
-                              imagePathGallery!.readAsBytesSync(),
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: double.infinity,
-                            )
-                          : Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                GestureDetector(
-                                    onTap: () {
-                                      pickImageGallery();
-                                    },
-                                    child: SvgPicture.asset("assets/addP.svg"))
-                              ],
-                            ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.grey[200],
-                    ),
-                    child: Center(
-                      child: imagePathGallery1 != null
-                          ? Image.memory(
-                              imagePathGallery1!.readAsBytesSync(),
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: double.infinity,
-                            )
-                          : Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                GestureDetector(
-                                    onTap: () {
-                                      pickImageGallery1();
-                                    },
-                                    child: SvgPicture.asset("assets/addP.svg"))
-                              ],
-                            ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: 330,
-                height: 48,
-                clipBehavior: Clip.antiAlias,
-                decoration: ShapeDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment(0.00, -1.00),
-                    end: Alignment(0, 1),
-                    colors: [Color(0xFFFF8D74), Color(0xFFF65634)],
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Save',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontFamily: 'Satoshi',
-                        fontWeight: FontWeight.w700,
+            // Row(
+            //   children: [
+            //     Padding(
+            //       padding: const EdgeInsets.all(8.0),
+            //       child: Container(
+            //         width: 100,
+            //         height: 100,
+            //         decoration: BoxDecoration(
+            //           borderRadius: BorderRadius.circular(10),
+            //           color: Colors.grey[200],
+            //         ),
+            //         child: Center(
+            //           child: imagePathGallery != null
+            //               ? Image.memory(
+            //                   imagePathGallery!.readAsBytesSync(),
+            //                   fit: BoxFit.cover,
+            //                   width: double.infinity,
+            //                   height: double.infinity,
+            //                 )
+            //               : Column(
+            //                   mainAxisAlignment: MainAxisAlignment.center,
+            //                   children: [
+            //                     GestureDetector(
+            //                         onTap: () {
+            //                           pickImageGallery();
+            //                         },
+            //                         child: SvgPicture.asset("assets/addP.svg"))
+            //                   ],
+            //                 ),
+            //         ),
+            //       ),
+            //     ),
+            //     Padding(
+            //       padding: const EdgeInsets.all(8.0),
+            //       child: Container(
+            //         width: 100,
+            //         height: 100,
+            //         decoration: BoxDecoration(
+            //           borderRadius: BorderRadius.circular(10),
+            //           color: Colors.grey[200],
+            //         ),
+            //         child: Center(
+            //           child: imagePathGallery1 != null
+            //               ? Image.memory(
+            //                   imagePathGallery1!.readAsBytesSync(),
+            //                   fit: BoxFit.cover,
+            //                   width: double.infinity,
+            //                   height: double.infinity,
+            //                 )
+            //               : Column(
+            //                   mainAxisAlignment: MainAxisAlignment.center,
+            //                   children: [
+            //                     GestureDetector(
+            //                         onTap: () {
+            //                           pickImageGallery1();
+            //                         },
+            //                         child: SvgPicture.asset("assets/addP.svg"))
+            //                   ],
+            //                 ),
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
+
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  for (File? image in selectedImages)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.grey[200],
+                        ),
+                        child: image != null
+                            ? Image.file(
+                                image,
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: double.infinity,
+                              )
+                            : GestureDetector(
+                                onTap: () {
+                                  pickImageGallery1();
+                                },
+                                child: SvgPicture.asset("assets/addP.svg"),
+                              ),
                       ),
                     ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        pickImageGallery1();
+                      },
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.grey[200],
+                        ),
+                        child: const Center(
+                          child: Icon(Icons.add),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            GestureDetector(
+              onTap: () async {
+                if (comments.text.isEmpty &&
+                    formattedDate == null &&
+                    base64ImageUrls == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'Please fill all the fields',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
+                } else {
+                  await dirayDetails();
+                  if (dirayDetailsModels.status == "success") {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Successfully Added',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    );
+                  } else if (dirayDetailsModels.status != "success") {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          dirayDetailsModels.message.toString(),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Something Went Wrong',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    );
+                  }
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      width: 350,
+                      height: 51,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: ShapeDecoration(
+                        gradient: const LinearGradient(
+                          begin: Alignment(0.00, -1.00),
+                          end: Alignment(0, 1),
+                          colors: [Color(0xFFFF8D74), Color(0xFFF65634)],
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+                      // child: const Row(
+                      //   mainAxisSize: MainAxisSize.min,
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   crossAxisAlignment: CrossAxisAlignment.center,
+                      //   children: [
+                      //     Text(
+                      //       'Save',
+                      //       textAlign: TextAlign.center,
+                      //       style: TextStyle(
+                      //         color: Colors.white,
+                      //         fontSize: 20,
+                      //         fontFamily: 'Satoshi',
+                      //         fontWeight: FontWeight.w700,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                    ),
+                    isLoading
+                        ? const CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                          )
+                        : const Text(
+                            "Save",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: "Satoshi",
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700),
+                          ),
                   ],
                 ),
               ),
@@ -339,10 +552,10 @@ class _DisplayDiaryState extends State<DisplayDiary> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: GestureDetector(
-                onTap: (){
+                onTap: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return TravelDetailsPage();
+                      return const TravelDetailsPage();
                     },
                   ));
                 },
@@ -351,7 +564,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                   height: 48,
                   clipBehavior: Clip.antiAlias,
                   decoration: ShapeDecoration(
-                    gradient: LinearGradient(
+                    gradient: const LinearGradient(
                       begin: Alignment(0.00, -1.00),
                       end: Alignment(0, 1),
                       colors: [Color(0xFFFF8D74), Color(0xFFF65634)],
@@ -360,7 +573,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                       borderRadius: BorderRadius.circular(15),
                     ),
                   ),
-                  child: Row(
+                  child: const Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -380,10 +593,10 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                 ),
               ),
             ),
-            Row(
+            const Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   child: Text(
                     'Shared with',
                     style: TextStyle(
@@ -407,7 +620,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                         Container(
                           width: 48,
                           height: 48,
-                          decoration: ShapeDecoration(
+                          decoration: const ShapeDecoration(
                             image: DecorationImage(
                               image: NetworkImage(
                                   "https://images.pexels.com/photos/16377866/pexels-photo-16377866/free-photo-of-woman-wearing-dress-on-meadow.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"),
@@ -416,7 +629,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                             shape: OvalBorder(),
                           ),
                         ),
-                        Text(
+                        const Text(
                           'Eleanor Pena',
                           style: TextStyle(
                             color: Colors.black,
@@ -435,7 +648,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                         Container(
                           width: 48,
                           height: 48,
-                          decoration: ShapeDecoration(
+                          decoration: const ShapeDecoration(
                             image: DecorationImage(
                               image: NetworkImage(
                                   "https://images.pexels.com/photos/14142370/pexels-photo-14142370.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"),
@@ -444,7 +657,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                             shape: OvalBorder(),
                           ),
                         ),
-                        Text(
+                        const Text(
                           'Bella Adison',
                           style: TextStyle(
                             color: Colors.black,
@@ -463,7 +676,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                         Container(
                           width: 48,
                           height: 48,
-                          decoration: ShapeDecoration(
+                          decoration: const ShapeDecoration(
                             image: DecorationImage(
                               image: NetworkImage(
                                   "https://images.pexels.com/photos/17309792/pexels-photo-17309792/free-photo-of-woman-with-red-roses-posing-in-nature.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"),
@@ -472,7 +685,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                             shape: OvalBorder(),
                           ),
                         ),
-                        Text(
+                        const Text(
                           'Cameron \nWilliamson',
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -492,7 +705,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                         Container(
                           width: 48,
                           height: 48,
-                          decoration: ShapeDecoration(
+                          decoration: const ShapeDecoration(
                             image: DecorationImage(
                               image: NetworkImage(
                                   "https://images.pexels.com/photos/17253417/pexels-photo-17253417/free-photo-of-light-fashion-people-woman.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"),
@@ -501,7 +714,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                             shape: OvalBorder(),
                           ),
                         ),
-                        Text(
+                        const Text(
                           'Brooklyn \nSimmons',
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -521,7 +734,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                         Container(
                           width: 48,
                           height: 48,
-                          decoration: ShapeDecoration(
+                          decoration: const ShapeDecoration(
                             image: DecorationImage(
                               image: NetworkImage(
                                   "https://images.pexels.com/photos/17585373/pexels-photo-17585373.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"),
@@ -530,7 +743,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                             shape: OvalBorder(),
                           ),
                         ),
-                        Text(
+                        const Text(
                           'Ralph \nEdwards',
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -550,7 +763,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                         Container(
                           width: 48,
                           height: 48,
-                          decoration: ShapeDecoration(
+                          decoration: const ShapeDecoration(
                             image: DecorationImage(
                               image: NetworkImage(
                                   "https://images.pexels.com/photos/6640696/pexels-photo-6640696.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"),
@@ -559,7 +772,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                             shape: OvalBorder(),
                           ),
                         ),
-                        Text(
+                        const Text(
                           'Floyd Miles',
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -582,14 +795,14 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                   showModalBottomSheet(
                     context: context,
                     builder: (BuildContext context) {
-                      return Container(
+                      return SizedBox(
                         height: 300,
                         child: Column(
                           children: [
                             Container(
                               alignment: Alignment.topCenter,
-                              padding: EdgeInsets.all(16),
-                              child: Text(
+                              padding: const EdgeInsets.all(16),
+                              child: const Text(
                                 'Share Using',
                                 style: TextStyle(
                                   color: Color(0xFFF65734),
@@ -624,11 +837,12 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                   clipBehavior: Clip.antiAlias,
                   decoration: ShapeDecoration(
                     shape: RoundedRectangleBorder(
-                      side: BorderSide(width: 0.50, color: Color(0xFFFF8D74)),
+                      side: const BorderSide(
+                          width: 0.50, color: Color(0xFFFF8D74)),
                       borderRadius: BorderRadius.circular(15),
                     ),
                   ),
-                  child: Row(
+                  child: const Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -652,6 +866,69 @@ class _DisplayDiaryState extends State<DisplayDiary> {
         ),
       ),
     );
+  }
+
+  Widget buildImageWidget(int index) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        width: 100,
+        height: 100,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.grey[200],
+        ),
+        child: Center(
+          child: selectedImages[index] != null
+              ? Image.memory(
+                  selectedImages[index]!.readAsBytesSync(),
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: double.infinity,
+                )
+              : GestureDetector(
+                  onTap: () {
+                    pickImageFromGallery(index);
+                  },
+                  child: SvgPicture.asset("assets/addP.svg"),
+                ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildAddImageButton() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        width: 100,
+        height: 100,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.grey[200],
+        ),
+        child: const Center(
+          child: Icon(Icons.add, size: 48), // Adjust the size as needed
+        ),
+      ),
+    );
+  }
+
+  Widget buildImageListView() {
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: selectedImages.length + 1,
+      itemBuilder: (context, index) {
+        if (index == selectedImages.length) {
+          return buildAddImageButton();
+        }
+        return buildImageWidget(index);
+      },
+    );
+  }
+
+  Widget defaultImageWidget() {
+    return SvgPicture.asset("assets/addP.svg");
   }
 
   Widget buildSocialIcon({required IconData iconData}) {

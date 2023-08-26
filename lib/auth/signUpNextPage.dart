@@ -79,14 +79,14 @@ class _SignupNextPageState extends State<SignupNextPage> {
       });
     }
   }
-
+String? selectedOption;
   @override
   void initState() {
     super.initState();
     coverDesign();
   }
 
-  String? selectedOption;
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:scanguard/Home/stampPage.dart';
-
+import 'package:http/http.dart' as http;
 import '../HomeButtons/addItinerary.dart';
 import '../HomeButtons/arrivalDetails.dart';
 import '../HomeButtons/depature.dart';
 import '../HomeButtons/passport.dart';
+import '../Models/getProfileModels.dart';
+import '../auth/signUpNextPage.dart';
+import '../auth/signUpPage.dart';
+import '../main.dart';
 import 'appDrawer.dart';
 
 class HomePage extends StatefulWidget {
+  final String? userId;
   const HomePage({
     super.key,
+    this.userId,
   });
 
   @override
@@ -18,6 +24,49 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  GetProfileModels getProfileModels = GetProfileModels();
+  getUserProfile() async {
+    String apiUrl = "$baseUrl/get_profile";
+    print("api: $apiUrl");
+    if (!mounted) {
+      return; // Check if the widget is still mounted
+    }
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "passport_holder_id": "$userID"
+    });
+    if (!mounted) {
+      return; // Check again if the widget is still mounted after the HTTP request
+    }
+    final responseString = response.body;
+    print("getProfileModels Response: $responseString");
+    print("status Code getProfileModels: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print("in 200 getProfileModels");
+      print("SuucessFull");
+      getProfileModels = getProfileModelsFromJson(responseString);
+      if (!mounted) {
+        return; // Check once more if the widget is still mounted before updating the state
+      }
+      setState(() {
+        isLoading = false;
+      });
+      print('getProfileModels status: ${getProfileModels.status}');
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserProfile();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,7 +134,7 @@ class _HomePageState extends State<HomePage> {
                   child: SingleChildScrollView(
                     child: Padding(
                       padding: const EdgeInsets.only(
-                        top: 1,
+                        top: 5,
                         left: 4,
                       ),
                       child: Column(
@@ -127,25 +176,28 @@ class _HomePageState extends State<HomePage> {
                                 Padding(
                                   padding:
                                       const EdgeInsets.only(top: 10, left: 15),
-                                  child: Container(
-                                    // margin: EdgeInsets.only(top: 80, right: 210, left: 20),
-                                    child: const CircleAvatar(
-                                      radius: 25,
-                                      backgroundImage: NetworkImage(
-                                          "https://images.pexels.com/photos/17457999/pexels-photo-17457999/free-photo-of-a-garbage-collector.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"),
-                                    ),
-                                  ),
+                                  child: getProfileModels
+                                              .data?.profilePicture !=
+                                          null
+                                      ? Container(
+                                          child: CircleAvatar(
+                                            radius: 25,
+                                            backgroundImage: NetworkImage(
+                                                "https://portal.passporttastic.com/public/${getProfileModels.data!.profilePicture}"),
+                                          ),
+                                        )
+                                      : const SizedBox(), // Don't render anything if profilePicture is null
                                 ),
                                 const SizedBox(
                                   width: 10,
                                 ),
-                                const Padding(
-                                  padding: EdgeInsets.only(top: 20),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 20),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         "Welcome Home",
                                         style: TextStyle(
                                           fontSize: 12,
@@ -154,8 +206,8 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                       ),
                                       Text(
-                                        "John Doe",
-                                        style: TextStyle(
+                                        "${getProfileModels.data?.firstName ?? ''} ${getProfileModels.data?.lastName ?? ''}",
+                                        style: const TextStyle(
                                           fontSize: 24,
                                           fontWeight: FontWeight.w500,
                                           color: Color(0xFF452933),
@@ -233,7 +285,9 @@ class _HomePageState extends State<HomePage> {
                                           Navigator.push(context,
                                               MaterialPageRoute(
                                             builder: (BuildContext context) {
-                                              return const DepatureDetails();
+                                              return DepatureDetails(
+                                                userId: userID,
+                                              );
                                             },
                                           ));
                                         },
@@ -502,7 +556,9 @@ class _HomePageState extends State<HomePage> {
                                           Navigator.push(context,
                                               MaterialPageRoute(
                                             builder: (BuildContext context) {
-                                              return const AddItineray();
+                                              return AddItineray(
+                                                userId: userID,
+                                              );
                                             },
                                           ));
                                         },

@@ -7,6 +7,7 @@ import 'package:scanguard/auth/signUpPage.dart';
 import 'package:http/http.dart' as http;
 import '../Home/mainScreenHome.dart';
 import '../Models/currencyModel.dart';
+import '../Models/getGenderList.dart';
 import '../Models/signUpDetailsModels.dart';
 // import 'package:country_picker/country_picker.dart';
 
@@ -30,7 +31,8 @@ class _SignupDetailsState extends State<SignupDetails> {
   TextEditingController email = TextEditingController();
   SignUpDetailsModel signUpDetailsModel = SignUpDetailsModel();
 
-  String? selectedCurrencyId;
+  String? _selectedcurrency;
+  String? _slectedGenderId;
 
   signUpUser() async {
     // try {
@@ -50,10 +52,10 @@ class _SignupDetailsState extends State<SignupDetails> {
       "middle_name": middleName.text,
       "last_name": lastname.text,
       "nationality": _selectedCountry?.displayNameNoCountryCode.toString(),
-      "gender_id": selectedOption.toString(),
+      "gender_id": _slectedGenderId.toString(),
       "dob": dob.text,
       "number_of_pages": selectedPageText,
-      "currency_id": selectedCurrencyId,
+      "currency_id": _selectedcurrency,
       "phone_number": phone.text.toString(),
     });
     final responseString = response.body;
@@ -72,7 +74,6 @@ class _SignupDetailsState extends State<SignupDetails> {
   }
 
   CurrencyModel currencyModel = CurrencyModel();
-  List<Datum> _currencyList = [];
 
   getCurrency() async {
     // try {
@@ -103,19 +104,34 @@ class _SignupDetailsState extends State<SignupDetails> {
     }
   }
 
-  Future<void> fetchCurrencyData() async {
-    try {
-      await getCurrency(); // Use your getCurrency function to fetch data
+  GetGenderListModels getGenderListModels = GetGenderListModels();
+
+  getGenderList() async {
+    // try {
+    String apiUrl = "$baseUrl/get_gender_list";
+    print("api: $apiUrl");
+
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "passport_holder_id": widget.userId,
+    });
+    final responseString = response.body;
+    print("getGenderListModels: $responseString");
+    print("status Code getGenderListModels : ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print("SuucessFull");
+      print("in 200 getGenderListModels list");
+      getGenderListModels = getGenderListModelsFromJson(responseString);
       setState(() {
-        _currencyList = currencyModel.data ??
-            []; // Set the _currencyList using the parsed data
-        selectedCurrencyId = _currencyList.isNotEmpty
-            ? _currencyList[0].currencyId
-            : null; // Set the selectedCurrencyId to the first currency ID if available
+        isLoading = false;
       });
-      print('Currency data fetched successfully');
-    } catch (error) {
-      print("Error fetching currency data: $error");
+
+      print('getGenderListModels status: ${getGenderListModels.status}');
     }
   }
 
@@ -132,7 +148,8 @@ class _SignupDetailsState extends State<SignupDetails> {
   @override
   void initState() {
     super.initState();
-    fetchCurrencyData();
+    getGenderList();
+    getCurrency();
     _focusNode1.addListener(_onFocusChange);
     _focusNode2.addListener(_onFocusChange);
     _focusNode3.addListener(_onFocusChange);
@@ -485,9 +502,34 @@ class _SignupDetailsState extends State<SignupDetails> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: DropdownButtonFormField<String>(
+            iconDisabledColor: Colors.transparent,
+            iconEnabledColor: Colors.transparent,
+            value: _slectedGenderId,
+            onChanged: (newValue) {
+              setState(() {
+                _slectedGenderId = newValue;
+                print(" _slectedGenderId $_slectedGenderId");
+              });
+            },
+            items: getGenderListModels.data?.map((gender) {
+                  return DropdownMenuItem<String>(
+                    value: gender.genderId,
+                    child: Text(gender.gender ?? ''),
+                  );
+                }).toList() ??
+                [],
             focusNode: _focusNode6,
-            value: selectedOption,
             decoration: InputDecoration(
+              suffixIcon: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SvgPicture.asset("assets/arrowDown1.svg"),
+                  ),
+                ],
+              ),
               focusedBorder: OutlineInputBorder(
                 borderSide: const BorderSide(color: Color(0xFFF65734)),
                 borderRadius: BorderRadius.circular(15.0),
@@ -518,21 +560,6 @@ class _SignupDetailsState extends State<SignupDetails> {
                 ),
               ),
             ),
-            items: const [
-              DropdownMenuItem(
-                value: '1',
-                child: Text('Male'),
-              ),
-              DropdownMenuItem(
-                value: '2',
-                child: Text('Female'),
-              ),
-            ],
-            onChanged: (value) {
-              setState(() {
-                selectedOption = value;
-              });
-            },
           ),
         ),
         SizedBox(
@@ -924,8 +951,43 @@ class _SignupDetailsState extends State<SignupDetails> {
           children: [
             const SizedBox(width: 10),
             Expanded(
-              child: DropdownButtonFormField<Datum>(
+              child: DropdownButtonFormField<String>(
+                iconDisabledColor: Colors.transparent,
+                iconEnabledColor: Colors.transparent,
+                value: _selectedcurrency,
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedcurrency = newValue;
+                    print("_selectedcurrency $_selectedcurrency");
+                  });
+                },
+                items: currencyModel.data?.map((currency) {
+                      return DropdownMenuItem<String>(
+                        value: currency.currencyId,
+                        child: Text(currency.currencyCode ?? ''),
+                      );
+                    }).toList() ??
+                    [],
                 decoration: InputDecoration(
+                  suffixIcon: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SvgPicture.asset("assets/arrowDown1.svg"),
+                      ),
+                    ],
+                  ),
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SvgPicture.asset(
+                      'assets/currency.svg',
+                      color: isFocused9
+                          ? const Color(0xFFF65734)
+                          : const Color(0xFFE0E0E5),
+                    ),
+                  ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Color(0xFFF65734)),
                     borderRadius: BorderRadius.circular(15.0),
@@ -946,31 +1008,7 @@ class _SignupDetailsState extends State<SignupDetails> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  prefixIcon: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SvgPicture.asset(
-                      'assets/currency.svg',
-                      color: isFocused9
-                          ? const Color(0xFFF65734)
-                          : const Color(0xFFE0E0E5),
-                    ),
-                  ),
                 ),
-                value: _currencyList.isNotEmpty
-                    ? _currencyList[0]
-                    : null, // Set initial value
-                items: _currencyList.map((currency) {
-                  return DropdownMenuItem<Datum>(
-                    value: currency,
-                    child: Text(currency.currencyCode ?? ''),
-                  );
-                }).toList(),
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedCurrencyId = newValue?.currencyId;
-                    print(selectedCurrencyId);
-                  });
-                },
               ),
             ),
             const SizedBox(width: 10),
@@ -992,7 +1030,8 @@ class _SignupDetailsState extends State<SignupDetails> {
                     print(lastname.text);
                     print(email.text);
                     print(phone.text);
-                    print(selectedOption);
+                    print(_slectedGenderId);
+
                     print(_selectedCountry?.displayNameNoCountryCode);
                     print(dob.text);
                     print(selectedPageText);
@@ -1003,7 +1042,8 @@ class _SignupDetailsState extends State<SignupDetails> {
                         lastname.text.isNotEmpty &&
                         dob.text.isNotEmpty &&
                         _selectedCountry != null &&
-                        selectedOption != null) {
+                        _slectedGenderId != null &&
+                        _selectedcurrency != null) {
                       setState(() {
                         isLoading = true; // Show the progress indicator
                       });
@@ -1015,11 +1055,7 @@ class _SignupDetailsState extends State<SignupDetails> {
                         Navigator.push(context, MaterialPageRoute(
                           builder: (BuildContext context) {
                             return MainScreen(
-                              firstname: firstname.text,
                               userId: widget.userId,
-                              lastname: lastname.text,
-                              email: email.text,
-                              phone: phone.text,
                             );
                           },
                         ));

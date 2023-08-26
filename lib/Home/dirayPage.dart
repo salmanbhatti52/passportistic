@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:scanguard/Home/appDrawer.dart';
 
+import '../HomeButtons/addItinerary2.dart';
+import '../HomeButtons/itineraryDetails.dart/displayDiray.dart';
+
 class DirayPage extends StatefulWidget {
   const DirayPage({super.key});
 
@@ -13,7 +16,7 @@ class _DirayPageState extends State<DirayPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: AppDrawer(),
+      drawer: const AppDrawer(),
       appBar: AppBar(
         elevation: 0,
         leading: Builder(builder: (context) {
@@ -49,10 +52,10 @@ class _DirayPageState extends State<DirayPage> {
           const SizedBox(
             height: 10,
           ),
-          Row(
+          const Row(
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 10, left: 20),
+                padding: EdgeInsets.only(top: 10, left: 20),
                 child: Text(
                   "Itinerary & Travel Diary",
                   style: TextStyle(
@@ -70,11 +73,21 @@ class _DirayPageState extends State<DirayPage> {
             width: 190,
             height: 200,
           )),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return const ItineraryTwo(
+                      //userId: widget.userId,
+                      // itinid: desiredItineraryId,
+                      // additinerarywidget: addItineray.text,
+                      );
+                },
+              ));
+            },
             child: Container(
               width: 294,
               height: 60,
@@ -83,7 +96,7 @@ class _DirayPageState extends State<DirayPage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
-                shadows: [
+                shadows: const [
                   BoxShadow(
                     color: Color(0x0F312E23),
                     blurRadius: 16,
@@ -97,7 +110,7 @@ class _DirayPageState extends State<DirayPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     'Itinerary',
                     style: TextStyle(
                       color: Color(0xFF525252),
@@ -107,7 +120,7 @@ class _DirayPageState extends State<DirayPage> {
                     ),
                   ),
                   const SizedBox(width: 159),
-                  Container(
+                  SizedBox(
                     width: 40,
                     height: 41,
                     child: Stack(
@@ -120,11 +133,21 @@ class _DirayPageState extends State<DirayPage> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return DisplayDiary(
+                      //userId: widget.userId,
+                      // itinid: desiredItineraryId,
+                      // additinerarywidget: addItineray.text,
+                      );
+                },
+              ));
+            },
             child: Container(
               width: 294,
               height: 60,
@@ -133,7 +156,7 @@ class _DirayPageState extends State<DirayPage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
-                shadows: [
+                shadows: const [
                   BoxShadow(
                     color: Color(0x0F312E23),
                     blurRadius: 16,
@@ -147,7 +170,7 @@ class _DirayPageState extends State<DirayPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     'Travel Diary',
                     style: TextStyle(
                       color: Color(0xFF525252),
@@ -157,7 +180,7 @@ class _DirayPageState extends State<DirayPage> {
                     ),
                   ),
                   const SizedBox(width: 134),
-                  Container(
+                  SizedBox(
                     width: 40,
                     height: 41,
                     child: Stack(
