@@ -66,9 +66,11 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void checkOnboardingStatus() async {
+    _prefs = await SharedPreferences.getInstance();
     bool shownOnboarding =
         _prefs?.getBool('shownOnboarding') ?? true; // Use true as default
 
+    prefs = await SharedPreferences.getInstance();
     // bool shownOnboarding = prefs?.getBool('shownOnboarding') ?? true; // Use true as default
     userID = prefs?.getString('userID'); // Use prefs here
 
