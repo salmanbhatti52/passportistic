@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:scanguard/Home/appDrawer.dart';
 
 import '../HomeButtons/addItinerary2.dart';
-import '../HomeButtons/itineraryDetails.dart/displayDiray.dart';
+import '../HomeButtons/AdditineraryDetails/displayDiray.dart';
 
 class DirayPage extends StatefulWidget {
   const DirayPage({super.key});

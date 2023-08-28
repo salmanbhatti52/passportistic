@@ -1,42 +1,76 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:scanguard/HomeButtons/ItineraryDetails/travelDetailsPage.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../Models/accomodationModels.dart';
+import '../../Models/transportListModels.dart';
+import '../../Models/travalDetailsModels.dart';
 import '../../auth/signUpNextPage.dart';
 import '../../auth/signUpPage.dart';
 import '../../main.dart';
-import 'activitiesDetails.dart';
+import 'accomodationDetails.dart';
 
-class AccommodationDetails extends StatefulWidget {
+class TravelDetails extends StatefulWidget {
   final String? itinid;
-  const AccommodationDetails({super.key, this.itinid});
+  const TravelDetails({super.key,  this.itinid});
 
   @override
-  State<AccommodationDetails> createState() => _AccommodationDetailsState();
+  State<TravelDetails> createState() => _TravelDetailsState();
 }
 
-class _AccommodationDetailsState extends State<AccommodationDetails> {
-  TextEditingController city = TextEditingController();
-  TextEditingController checkInDate = TextEditingController();
-  TextEditingController establishmentName = TextEditingController();
-  TextEditingController typeoFAccommodation = TextEditingController();
-  TextEditingController Address = TextEditingController();
-  TextEditingController checkOuTDate = TextEditingController();
-  TextEditingController nights = TextEditingController();
-  TextEditingController breakfasTIncluded = TextEditingController();
+class _TravelDetailsState extends State<TravelDetails> {
+  TextEditingController travelMode = TextEditingController();
+  TextEditingController departureCity = TextEditingController();
+  TextEditingController departureDate = TextEditingController();
+  TextEditingController departureTime = TextEditingController();
+  TextEditingController operator = TextEditingController();
+  TextEditingController tripDetails = TextEditingController();
+  TextEditingController arrivalCity = TextEditingController();
+  TextEditingController arrivalDate = TextEditingController();
+  TextEditingController arrivalTime = TextEditingController();
+  TextEditingController travelTime = TextEditingController();
+  TextEditingController layOver = TextEditingController();
+  TextEditingController dayno = TextEditingController();
 
-  AccommodationModels accommodationModels = AccommodationModels();
+  TransportListModels transportListModels = TransportListModels();
+  mdoeofTransport() async {
+    // try {
+    prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
+    String apiUrl = "$baseUrl/get_transport_mode";
+    print("api: $apiUrl");
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "passport_holder_id": "$userID"
+    });
+    final responseString = response.body;
+    print("responseModeTransportModel: $responseString");
+    print("status Code responseModeTransportModel: ${response.statusCode}");
+    print("in 200 responseModeTransportModel");
+    if (response.statusCode == 200) {
+      print("SuccessFull");
+      transportListModels = transportListModelsFromJson(responseString);
+      setState(() {
+        isLoading = false;
+      });
+      print('responseModeTransportModel status: ${transportListModels.status}');
+    }
+  }
+
+  TravalDetailsModels travalDetailsModels = TravalDetailsModels();
   String? _selectedTransportMode;
 
-  accommodationDetails() async {
+  itinerayAdd() async {
     // try {
-
-         prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
 
-    String apiUrl = "$baseUrl/add_itinerary_accomodations";
+    String apiUrl = "$baseUrl/add_itinerary_details";
     print("api: $apiUrl");
 
     setState(() {
@@ -45,16 +79,19 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
     final response = await http.post(Uri.parse(apiUrl), headers: {
       'Accept': 'application/json',
     }, body: {
-      "travel_ltinerary_id": "${widget.itinid}",
+      "travel_ltinerary_id": widget.itinid,
       "passport_holder_id": "$userID",
-      "accomodation_city": city.text,
-      "establishment_name": establishmentName.text,
-      "accomodation_address": Address.text,
-      "accomodation_type": typeoFAccommodation.text,
-      "accomodation_checkin_date": checkInDate.text,
-      "accomodation_nights": nights.text,
-      "accomodation_breakfast": breakfasTIncluded.text,
-      "accomodation_checkout_date": checkOuTDate.text
+      "departure_city": departureCity.text,
+      "transport_id": "$_selectedTransportMode",
+      "day_no": dayno.text,
+      "trip_details": tripDetails.text,
+      "departure_date": departureDate.text,
+      "departure_time": departureTime.text,
+      "travel_time": travelTime.text,
+      "arrive_city": arrivalCity.text,
+      "arrive_time": arrivalTime.text,
+      "arrive_date": arrivalDate.text,
+      "operator": operator.text
     });
     final responseString = response.body;
     print("response_travalDetailsModels: $responseString");
@@ -63,19 +100,26 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
     if (response.statusCode == 200) {
       print("in 200 itineraryAddModels");
       print("SuucessFull");
-      accommodationModels = accommodationModelsFromJson(responseString);
+      travalDetailsModels = travalDetailsModelsFromJson(responseString);
       setState(() {
         isLoading = false;
       });
-      print(
-          'AaccommodationModelsDetailsModels status: ${accommodationModels.status}');
+      print('travalDetailsModels status: ${travalDetailsModels.status}');
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    mdoeofTransport();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        forceMaterialTransparency: true,
         centerTitle: true,
         title: const Text(
           'UK 2023',
@@ -112,7 +156,7 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
           ),
           const Center(
             child: Text(
-              'Accomodation',
+              'Ininerary',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Color(0xFFF65734),
@@ -135,7 +179,7 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                   style:
                       const TextStyle(color: Color(0xFF000000), fontSize: 16),
                   cursorColor: const Color(0xFF000000),
-                  controller: city,
+                  controller: dayno,
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
@@ -143,7 +187,106 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     // labelText: 'Email',
-                    hintText: "City",
+                    hintText: "Day No",
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: const BorderSide(
+                          color: Color(0xFFF3F3F3)), // change border color
+                    ),
+                    labelStyle: const TextStyle(),
+                    hintStyle: const TextStyle(
+                        color: Color(0xFFA7A9B7),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w300,
+                        fontFamily: "Satoshi"),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+            ],
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.02,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: DropdownButtonFormField<String>(
+              iconDisabledColor: Colors.transparent,
+              iconEnabledColor: Colors.transparent,
+              value: _selectedTransportMode,
+              onChanged: (newValue) {
+                setState(() {
+                  _selectedTransportMode = newValue;
+                  print(_selectedTransportMode);
+                });
+              },
+              items: transportListModels.data?.map((mode) {
+                    return DropdownMenuItem<String>(
+                      value: mode.transportModeId,
+                      child: Text(mode.modeName ?? ''),
+                    );
+                  }).toList() ??
+                  [],
+              decoration: InputDecoration(
+                suffixIcon: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SvgPicture.asset("assets/arrowDown1.svg"),
+                    ),
+                  ],
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Color(0xFFF65734)),
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                hintText: "Select mode of transport",
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                    color: Color(0xFFF3F3F3),
+                  ),
+                ),
+                hintStyle: const TextStyle(
+                  color: Color(0xFFA7A9B7),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w300,
+                  fontFamily: "Satoshi",
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.02,
+          ),
+          Row(
+            children: [
+              const SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: TextFormField(
+                  style:
+                      const TextStyle(color: Color(0xFF000000), fontSize: 16),
+                  cursorColor: const Color(0xFF000000),
+                  controller: departureCity,
+                  keyboardType: TextInputType.name,
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Color(0xFFF65734)),
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    // labelText: 'Email',
+                    hintText: "Departure City",
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: const BorderSide(
@@ -178,7 +321,7 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                   style:
                       const TextStyle(color: Color(0xFF000000), fontSize: 16),
                   cursorColor: const Color(0xFF000000),
-                  controller: checkInDate,
+                  controller: departureDate,
                   keyboardType: TextInputType.name,
                   readOnly: true, // Prevent manual text input
                   onTap: () {
@@ -192,7 +335,7 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                       if (selectedDate != null) {
                         // Handle the selected date
                         setState(() {
-                          checkInDate.text =
+                          departureDate.text =
                               DateFormat('yyyy-MM-dd').format(selectedDate);
                           // Date.text = DateFormat.yMd().format(selectedDate);
                         });
@@ -205,7 +348,7 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     // labelText: 'Email',
-                    hintText: "CheckI In Date",
+                    hintText: "Departure Date",
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: const BorderSide(
@@ -240,7 +383,66 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                   style:
                       const TextStyle(color: Color(0xFF000000), fontSize: 16),
                   cursorColor: const Color(0xFF000000),
-                  controller: establishmentName,
+                  controller: departureTime,
+                  keyboardType: TextInputType.name,
+                  readOnly: true,
+                  onTap: () {
+                    showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    ).then((selectedTime) {
+                      if (selectedTime != null) {
+                        // Handle the selected time
+                        setState(() {
+                          final formattedTime =
+                              '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}:00';
+                          departureTime.text = formattedTime;
+                        });
+                      }
+                    });
+                  },
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Color(0xFFF65734)),
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    // labelText: 'Email',
+                    hintText: "Departure Time",
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: const BorderSide(
+                          color: Color(0xFFF3F3F3)), // change border color
+                    ),
+                    labelStyle: const TextStyle(),
+                    hintStyle: const TextStyle(
+                        color: Color(0xFFA7A9B7),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w300,
+                        fontFamily: "Satoshi"),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+            ],
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.02,
+          ),
+          Row(
+            children: [
+              const SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: TextFormField(
+                  style:
+                      const TextStyle(color: Color(0xFF000000), fontSize: 16),
+                  cursorColor: const Color(0xFF000000),
+                  controller: operator,
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
@@ -248,7 +450,7 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     // labelText: 'Email',
-                    hintText: "Establishment Name",
+                    hintText: "Operator",
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: const BorderSide(
@@ -283,7 +485,7 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                   style:
                       const TextStyle(color: Color(0xFF000000), fontSize: 16),
                   cursorColor: const Color(0xFF000000),
-                  controller: typeoFAccommodation,
+                  controller: tripDetails,
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
@@ -291,7 +493,7 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     // labelText: 'Email',
-                    hintText: "Type of Accommodation",
+                    hintText: "Trip Details",
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: const BorderSide(
@@ -326,7 +528,7 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                   style:
                       const TextStyle(color: Color(0xFF000000), fontSize: 16),
                   cursorColor: const Color(0xFF000000),
-                  controller: Address,
+                  controller: arrivalCity,
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
@@ -334,7 +536,7 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     // labelText: 'Email',
-                    hintText: "Address",
+                    hintText: "Arrival City",
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: const BorderSide(
@@ -369,7 +571,7 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                   style:
                       const TextStyle(color: Color(0xFF000000), fontSize: 16),
                   cursorColor: const Color(0xFF000000),
-                  controller: checkOuTDate,
+                  controller: arrivalDate,
                   keyboardType: TextInputType.name,
                   readOnly: true, // Prevent manual text input
                   onTap: () {
@@ -383,7 +585,7 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                       if (selectedDate != null) {
                         // Handle the selected date
                         setState(() {
-                          checkOuTDate.text =
+                          arrivalDate.text =
                               DateFormat('yyyy-MM-dd').format(selectedDate);
                           // Date.text = DateFormat.yMd().format(selectedDate);
                         });
@@ -396,7 +598,7 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     // labelText: 'Email',
-                    hintText: "Check out Date",
+                    hintText: "Arrival Date",
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: const BorderSide(
@@ -431,15 +633,31 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                   style:
                       const TextStyle(color: Color(0xFF000000), fontSize: 16),
                   cursorColor: const Color(0xFF000000),
-                  controller: nights,
+                  controller: arrivalTime,
                   keyboardType: TextInputType.name,
+                  readOnly: true,
+                  onTap: () {
+                    showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    ).then((selectedTime) {
+                      if (selectedTime != null) {
+                        // Handle the selected time
+                        setState(() {
+                          final formattedTime =
+                              '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}:00';
+                          arrivalTime.text = formattedTime;
+                        });
+                      }
+                    });
+                  },
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
                       borderSide: const BorderSide(color: Color(0xFFF65734)),
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     // labelText: 'Email',
-                    hintText: "Nights",
+                    hintText: "Arrival Time",
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: const BorderSide(
@@ -474,7 +692,66 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                   style:
                       const TextStyle(color: Color(0xFF000000), fontSize: 16),
                   cursorColor: const Color(0xFF000000),
-                  controller: breakfasTIncluded,
+                  controller: travelTime,
+                  keyboardType: TextInputType.name,
+                  readOnly: true,
+                  onTap: () {
+                    showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    ).then((selectedTime) {
+                      if (selectedTime != null) {
+                        // Handle the selected time
+                        setState(() {
+                          final formattedTime =
+                              '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}:00';
+                          travelTime.text = formattedTime;
+                        });
+                      }
+                    });
+                  },
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Color(0xFFF65734)),
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    // labelText: 'Email',
+                    hintText: "Travel Time",
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: const BorderSide(
+                          color: Color(0xFFF3F3F3)), // change border color
+                    ),
+                    labelStyle: const TextStyle(),
+                    hintStyle: const TextStyle(
+                        color: Color(0xFFA7A9B7),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w300,
+                        fontFamily: "Satoshi"),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+            ],
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.02,
+          ),
+          Row(
+            children: [
+              const SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: TextFormField(
+                  style:
+                      const TextStyle(color: Color(0xFF000000), fontSize: 16),
+                  cursorColor: const Color(0xFF000000),
+                  controller: layOver,
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
@@ -482,7 +759,7 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     // labelText: 'Email',
-                    hintText: "Breakfast Included",
+                    hintText: "Lay-over",
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: const BorderSide(
@@ -509,17 +786,33 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
           ),
           GestureDetector(
             onTap: () async {
-              // setState(() {
-              // isLoading = true;
-              // });
-              if (checkInDate.text.isEmpty &&
-                  checkOuTDate.text.isEmpty &&
-                  Address.text.isEmpty &&
-                  establishmentName.text.isEmpty &&
-                  typeoFAccommodation.text.isEmpty &&
-                  nights.text.isEmpty &&
-                  breakfasTIncluded.text.isEmpty &&
-                  city.text.isEmpty) {
+              setState(() {
+                isLoading = true;
+              });
+              if (operator.text.isEmpty &&
+                  arrivalTime.text.isEmpty &&
+                  arrivalDate.text.isEmpty &&
+                  arrivalCity.text.isEmpty &&
+                  travelTime.text.isEmpty &&
+                  departureTime.text.isEmpty &&
+                  departureDate.text.isEmpty &&
+                  departureCity.text.isEmpty &&
+                  tripDetails.text.isEmpty &&
+                  dayno.text.isEmpty &&
+                  _selectedTransportMode == null) {
+                print(operator.text);
+                print(arrivalTime.text);
+                print(arrivalDate.text);
+                print(arrivalCity.text);
+                print(travelTime.text);
+                print(departureTime.text);
+                print(departureDate.text);
+                print(departureCity.text);
+                print(tripDetails.text);
+                print(dayno.text);
+                print("$_selectedTransportMode");
+                print(widget.itinid);
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text(
@@ -529,28 +822,22 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                   ),
                 );
               } else {
-                await accommodationDetails();
-                if (accommodationModels.status == "success") {
-                  Future.delayed(const Duration(seconds: 2));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'Accommodation Added Successfully',
-                      ),
-                    ),
-                  );
+                await itinerayAdd();
+                print(_selectedTransportMode);
+                print(widget.itinid);
+                if (travalDetailsModels.status == "success") {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return ActivitiesDetails(
+                      return AccommodationDetails(
                         itinid: widget.itinid,
                       );
                     },
                   ));
-                } else if (accommodationModels.status != "success") {
+                } else if (travalDetailsModels.status != "success") {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        accommodationModels.message.toString(),
+                        travalDetailsModels.message.toString(),
                       ),
                     ),
                   );
@@ -559,14 +846,15 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                     const SnackBar(
                       content: Text(
                         'Something went wrong',
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   );
                 }
+                setState(() {
+                  isLoading = false;
+                });
               }
-              // setState(() {
-              // isLoading = false;
-              // });
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -626,7 +914,15 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
             height: MediaQuery.of(context).size.height * 0.02,
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return TravelDetailsPage(
+                    itinid: widget.itinid,
+                  );
+                },
+              ));
+            },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(

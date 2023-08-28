@@ -12,25 +12,21 @@ String dirayDetailsModelsToJson(DirayDetailsModels data) =>
 
 class DirayDetailsModels {
   String? status;
-  String? message;
   Data? data;
 
   DirayDetailsModels({
     this.status,
-    this.message,
     this.data,
   });
 
   factory DirayDetailsModels.fromJson(Map<String, dynamic> json) =>
       DirayDetailsModels(
         status: json["status"],
-        message: json["message"],
         data: Data.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
-        "message": message,
         "data": data!.toJson(),
       };
 }

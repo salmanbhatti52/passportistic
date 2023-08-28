@@ -1,22 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import '../../Models/getAccomodationDetailsModels.dart';
+import '../../auth/signUpNextPage.dart';
+import '../../auth/signUpPage.dart';
+import '../../main.dart';
 
-class TravelDetailsPage extends StatefulWidget {
-  const TravelDetailsPage({Key, key}) : super(key: key);
+class AccomodationDetailsPage extends StatefulWidget {
+  final String? itinid;
+  const AccomodationDetailsPage({Key, key, this.itinid}) : super(key: key);
 
   @override
-  State<TravelDetailsPage> createState() => _TravelDetailsPageState();
+  State<AccomodationDetailsPage> createState() =>
+      _AccomodationDetailsPageState();
 }
 
-class _TravelDetailsPageState extends State<TravelDetailsPage> {
+class _AccomodationDetailsPageState extends State<AccomodationDetailsPage> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
-  final List<ContainerData> _containerDataList = [
-    ContainerData(title: 'Container 1'),
-    ContainerData(title: 'Container 2'),
-    ContainerData(title: 'Container 3'),
-  ];
+  int accommodationsPerPage = 1;
+  GetAccomodationsDetailsModels getAccomodationsDetailsModels =
+      GetAccomodationsDetailsModels();
+  accommodationDetails() async {
+    // try {
+
+    prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
+
+    String apiUrl = "$baseUrl/get_itinerary_accomodations";
+    print("api: $apiUrl");
+
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "travel_ltinerary_id": "${widget.itinid}",
+      "passport_holder_id": "$userID",
+    });
+    final responseString = response.body;
+    print("responseModels: $responseString");
+    print("status Code Accomodation DetailsModels: ${response.statusCode}");
+    if (response.statusCode == 200) {
+      print("in 200 itineraryAddModels");
+      print("SuucessFull");
+      getAccomodationsDetailsModels =
+          getAccomodationsDetailsModelsFromJson(responseString);
+      setState(() {
+        isLoading = false;
+      });
+      print(
+          'AaccommodationModelsDetailsModels status: ${getAccomodationsDetailsModels.status}');
+    }
+  }
+
+  int itemsPerPage = 1;
 
   @override
   void dispose() {
@@ -39,13 +81,23 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
   }
 
   @override
+  initState() {
+    // TODO: implement initState
+    super.initState();
+    userID = prefs?.getString('userID');
+    print("${widget.itinid}");
+    accommodationDetails();
+    print("$userID");
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
           child: GestureDetector(
-            onTap: () {
+            onTap: () async {
               Navigator.pop(context);
             },
             child: SvgPicture.asset(
@@ -53,7 +105,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
             ),
           ),
         ),
-        title: Text(
+        title: const Text(
           'UK 2023',
           style: TextStyle(
             color: Color(0xFF525252),
@@ -72,9 +124,9 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
       ),
       body: Column(
         children: [
-          SizedBox(height: 20),
-          Text(
-            'Travel Details',
+          const SizedBox(height: 20),
+          const Text(
+            'Accomodation Details',
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Color(0xFFF65734),
@@ -91,14 +143,18 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                 IconButton(
                   icon: SvgPicture.asset("assets/arrow1.svg"),
                   onPressed: () {
+                    final dataLength =
+                        getAccomodationsDetailsModels.data?.length ?? 0;
                     if (_currentPage > 0) {
                       _goToPage(_currentPage - 1);
                     }
                   },
                 ),
                 Text(
-                  'Day ${_currentPage + 1}',
-                  style: TextStyle(
+                  getAccomodationsDetailsModels
+                          .data?[_currentPage].accomodationCity ??
+                      "",
+                  style: const TextStyle(
                     color: Color(0xFF525252),
                     fontSize: 16,
                     fontFamily: 'Satoshi',
@@ -108,7 +164,9 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                 IconButton(
                   icon: SvgPicture.asset("assets/arrow.svg"),
                   onPressed: () {
-                    if (_currentPage < _containerDataList.length - 1) {
+                    final dataLength =
+                        getAccomodationsDetailsModels.data?.length ?? 0;
+                    if (_currentPage < dataLength - 1) {
                       _goToPage(_currentPage + 1);
                     }
                   },
@@ -119,20 +177,31 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
           Expanded(
             child: PageView.builder(
               controller: _pageController,
-              itemCount: _containerDataList.length,
+              itemCount: (getAccomodationsDetailsModels.data?.length ??
+                      0 / accommodationsPerPage)
+                  .ceil(),
               onPageChanged: _onPageChanged,
               itemBuilder: (context, index) {
-                final containerData = _containerDataList[index];
+                final startIndex = index * accommodationsPerPage;
+                final endIndex = (startIndex + accommodationsPerPage) <=
+                        (getAccomodationsDetailsModels.data?.length ?? 0)
+                    ? (startIndex + accommodationsPerPage)
+                    : (getAccomodationsDetailsModels.data?.length ?? 0);
+
+                final accommodationsForPage = getAccomodationsDetailsModels.data
+                        ?.sublist(startIndex, endIndex) ??
+                    [];
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Container(
                     width: 250,
+                    height: 350,
                     decoration: ShapeDecoration(
                       color: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
-                      shadows: [
+                      shadows: const [
                         BoxShadow(
                           color: Color(0x0F312E23),
                           blurRadius: 16,
@@ -150,10 +219,11 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                             children: [
                               Column(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                    MainAxisAlignment.spaceBetween,
+                                // crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
-                                  Text(
-                                    'Day No',
+                                  const Text(
+                                    "City",
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 16,
@@ -162,8 +232,10 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                     ),
                                   ),
                                   Text(
-                                    '1',
-                                    style: TextStyle(
+                                    accommodationsForPage[index % itemsPerPage]
+                                            .accomodationName ??
+                                        '',
+                                    style: const TextStyle(
                                       color: Color(0xFFF65734),
                                       fontSize: 18,
                                       fontFamily: 'Satoshi',
@@ -171,28 +243,8 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                     ),
                                   ),
                                   // ---
-                                  Text(
-                                    'Travel Mode',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                      fontFamily: 'Satoshi',
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  // ---
-                                  Text(
-                                    'Air',
-                                    style: TextStyle(
-                                      color: Color(0xFFF65734),
-                                      fontSize: 18,
-                                      fontFamily: 'Satoshi',
-                                      fontWeight: FontWeight.w900,
-                                    ),
-                                  ),
-                                  // ---
-                                  Text(
-                                    'Trip Details',
+                                  const Text(
+                                    'Accommodation',
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 16,
@@ -202,8 +254,10 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                   ),
                                   // ---
                                   Text(
-                                    'SG2023',
-                                    style: TextStyle(
+                                    accommodationsForPage[index % itemsPerPage]
+                                            .accomodationName ??
+                                        '',
+                                    style: const TextStyle(
                                       color: Color(0xFFF65734),
                                       fontSize: 18,
                                       fontFamily: 'Satoshi',
@@ -211,8 +265,8 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                     ),
                                   ),
                                   // ---
-                                  Text(
-                                    'Travel Time',
+                                  const Text(
+                                    'Type',
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 16,
@@ -222,8 +276,10 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                   ),
                                   // ---
                                   Text(
-                                    '10:00',
-                                    style: TextStyle(
+                                    accommodationsForPage[index % itemsPerPage]
+                                            .accomodationType ??
+                                        '',
+                                    style: const TextStyle(
                                       color: Color(0xFFF65734),
                                       fontSize: 18,
                                       fontFamily: 'Satoshi',
@@ -231,8 +287,8 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                     ),
                                   ),
                                   // ---
-                                  Text(
-                                    'Local Time',
+                                  const Text(
+                                    'Check Out',
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 16,
@@ -242,22 +298,53 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                   ),
                                   // ---
                                   Text(
-                                    '10:05',
-                                    style: TextStyle(
+                                    DateFormat('dd MMM yyyy').format(
+                                      accommodationsForPage[
+                                                  index % itemsPerPage]
+                                              .accomodationCheckoutDate ??
+                                          DateTime.now(),
+                                    ),
+                                    style: const TextStyle(
                                       color: Color(0xFFF65734),
                                       fontSize: 18,
                                       fontFamily: 'Satoshi',
                                       fontWeight: FontWeight.w900,
                                     ),
-                                  )
+                                  ),
+
+                                  // ---
+                                  const Text(
+                                    'Check In',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontFamily: 'Satoshi',
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  // ---
+                                  Text(
+                                    DateFormat('dd MMM yyyy').format(
+                                      accommodationsForPage[
+                                                  index % itemsPerPage]
+                                              .accomodationCheckinDate ??
+                                          DateTime.now(),
+                                    ),
+                                    style: const TextStyle(
+                                      color: Color(0xFFF65734),
+                                      fontSize: 18,
+                                      fontFamily: 'Satoshi',
+                                      fontWeight: FontWeight.w900,
+                                    ),
+                                  ),
                                 ],
                               ),
                               Column(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    'Local Date',
+                                  const Text(
+                                    "Breakfast",
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 16,
@@ -267,8 +354,10 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                   ),
                                   // ---
                                   Text(
-                                    '07 May 2023',
-                                    style: TextStyle(
+                                    accommodationsForPage[index % itemsPerPage]
+                                            .accomodationBreakfast ??
+                                        '',
+                                    style: const TextStyle(
                                       color: Color(0xFFF65734),
                                       fontSize: 18,
                                       fontFamily: 'Satoshi',
@@ -276,8 +365,8 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                     ),
                                   ),
                                   // ---
-                                  Text(
-                                    'From',
+                                  const Text(
+                                    'Nights',
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 16,
@@ -287,74 +376,16 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                   ),
                                   // ---
                                   Text(
-                                    'Brisbane',
-                                    style: TextStyle(
+                                    accommodationsForPage[index % itemsPerPage]
+                                            .accomodationNights ??
+                                        '',
+                                    style: const TextStyle(
                                       color: Color(0xFFF65734),
                                       fontSize: 18,
                                       fontFamily: 'Satoshi',
                                       fontWeight: FontWeight.w900,
                                     ),
                                   ),
-                                  // ---
-                                  Text(
-                                    'Local Time',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                      fontFamily: 'Satoshi',
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  // ---
-                                  Text(
-                                    '2:45 PM',
-                                    style: TextStyle(
-                                      color: Color(0xFFF65734),
-                                      fontSize: 18,
-                                      fontFamily: 'Satoshi',
-                                      fontWeight: FontWeight.w900,
-                                    ),
-                                  ),
-                                  // ---
-                                  Text(
-                                    'To',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                      fontFamily: 'Satoshi',
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  // ---
-                                  Text(
-                                    'Singapore',
-                                    style: TextStyle(
-                                      color: Color(0xFFF65734),
-                                      fontSize: 18,
-                                      fontFamily: 'Satoshi',
-                                      fontWeight: FontWeight.w900,
-                                    ),
-                                  ),
-                                  // ---
-                                  Text(
-                                    'Layover',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                      fontFamily: 'Satoshi',
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  // ---
-                                  Text(
-                                    '2:15',
-                                    style: TextStyle(
-                                      color: Color(0xFFF65734),
-                                      fontSize: 18,
-                                      fontFamily: 'Satoshi',
-                                      fontWeight: FontWeight.w900,
-                                    ),
-                                  )
                                 ],
                               ),
 
@@ -367,19 +398,19 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
               },
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: _buildIndicators(),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
                 width: 72,
                 height: 72,
-                decoration: ShapeDecoration(
+                decoration: const ShapeDecoration(
                   gradient: LinearGradient(
                     begin: Alignment(0.00, -1.00),
                     end: Alignment(0, 1),
@@ -389,13 +420,13 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                 ),
                 child: Center(child: SvgPicture.asset("assets/share1.svg")),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 20,
               ),
               Container(
                 width: 72,
                 height: 72,
-                decoration: ShapeDecoration(
+                decoration: const ShapeDecoration(
                   gradient: LinearGradient(
                     begin: Alignment(0.00, -1.00),
                     end: Alignment(0, 1),
@@ -405,13 +436,13 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                 ),
                 child: Center(child: SvgPicture.asset("assets/import.svg")),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 20,
               ),
               Container(
                 width: 72,
                 height: 72,
-                decoration: ShapeDecoration(
+                decoration: const ShapeDecoration(
                   gradient: LinearGradient(
                     begin: Alignment(0.00, -1.00),
                     end: Alignment(0, 1),
@@ -423,7 +454,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
               ),
             ],
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
         ],
       ),
     );
@@ -471,15 +502,19 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
 // }
 
   List<Widget> _buildIndicators() {
+    final dataLength = getAccomodationsDetailsModels.data?.length ?? 0;
+
     return List.generate(
-      _containerDataList.length,
+      dataLength,
       (index) => Container(
         width: 10,
         height: 6,
-        margin: EdgeInsets.symmetric(horizontal: 4),
+        margin: const EdgeInsets.symmetric(horizontal: 4),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(3),
-          color: _currentPage == index ? Colors.orange : Color(0xFF9C9999),
+          color: _currentPage == index
+              ? const Color(0xFFF65734)
+              : const Color(0xFF9C9999),
         ),
       ),
     );

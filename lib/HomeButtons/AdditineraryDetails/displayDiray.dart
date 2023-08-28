@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:scanguard/HomeButtons/itineraryDetails.dart/travelDetailsPage.dart';
+import 'package:scanguard/HomeButtons/ItineraryDetails/travelDetailsPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:http/http.dart' as http;
@@ -59,10 +59,12 @@ class _DisplayDiaryState extends State<DisplayDiary> {
   }
 
   List<String> base64ImageUrls = [];
+
   Future pickImageGallery1() async {
     try {
       final ImagePicker picker = ImagePicker();
       final XFile? xFile = await picker.pickImage(source: ImageSource.gallery);
+
       if (xFile == null) {
         // Handle if no image is selected
       } else {
@@ -78,6 +80,8 @@ class _DisplayDiaryState extends State<DisplayDiary> {
           print("newImage64 $base64imgGallery1");
           selectedImages.add(File(xFile.path));
           base64ImageUrls.add(base64imgGallery1);
+          print("base64ImageUrls ${base64ImageUrls.join(', ')}");
+          print("Number of base64ImageUrls: ${base64ImageUrls.length}");
         });
       }
     } catch (e) {
@@ -117,8 +121,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
   DirayDetailsModels dirayDetailsModels = DirayDetailsModels();
 
   dirayDetails() async {
-
-       prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
     try {
       String apiUrl = "$baseUrl/add_travel_diary";
@@ -129,17 +132,21 @@ class _DisplayDiaryState extends State<DisplayDiary> {
       });
 
       // Convert base64EncodedImageList to JSON array format
-      String imagesJson = jsonEncode(base64EncodedImageList);
+      String imagesJson = jsonEncode(base64ImageUrls);
+      String imageUrlString = base64ImageUrls.join(",");
 
-      final response = await http.post(Uri.parse(apiUrl), headers: {
-        'Accept': 'application/json',
-      }, body: {
-        "travel_ltinerary_id": "${widget.itinid}",
-        "travel_diary_date": formattedDate,
-        "travel_diary_entry": comments.text,
-        "tavel_diary_picture_images":
-            base64ImageUrls.toString() // Add the images JSON array
-      });
+      final response = await http.post(Uri.parse(apiUrl),
+          headers: {
+            'Accept': 'application/json',
+          },
+          body: jsonEncode({
+            "travel_ltinerary_id": "${widget.itinid}",
+            "travel_diary_date": formattedDate,
+            "travel_diary_entry": comments.text,
+            "tavel_diary_picture_images": [
+              imageUrlString
+            ] // Add the images JSON array
+          }));
 
       final responseString = response.body;
       print("response_travalDetailsModels: $responseString");
@@ -152,11 +159,65 @@ class _DisplayDiaryState extends State<DisplayDiary> {
         setState(() {
           isLoading = false;
         });
-        print(
-            'AaccommodationModelsDetailsModels status: ${dirayDetailsModels.status}');
+        print('dirayDetailsModels status: ${dirayDetailsModels.status}');
       }
     } catch (e) {
       print('Failed to make API request: $e');
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  fucntion() async {
+    var headersList = {'Accept': '*/*', 'Content-Type': 'application/json'};
+    var url =
+        Uri.parse('https://portal.passporttastic.com/api/add_travel_diary');
+    String imagesJson = jsonEncode(base64ImageUrls);
+    String imageUrlString = base64ImageUrls.join(",");
+    var body = {
+      "travel_ltinerary_id": "${widget.itinid}",
+      "travel_diary_date": formattedDate,
+      "travel_diary_entry": comments.text,
+      "tavel_diary_picture_images": base64ImageUrls
+    };
+
+    var req = http.Request('POST', url);
+    req.headers.addAll(headersList);
+    req.body = json.encode(body);
+
+    var res = await req.send();
+    final resBody = await res.stream.bytesToString();
+
+    if (res.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Successfully Added',
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+      print(resBody);
+    } else if (res.statusCode == 404) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Error",
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+      print(res.reasonPhrase);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Something Went Wrong',
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
     }
   }
 
@@ -457,6 +518,9 @@ class _DisplayDiaryState extends State<DisplayDiary> {
 
             GestureDetector(
               onTap: () async {
+                setState(() {
+                  isLoading = true;
+                });
                 if (comments.text.isEmpty &&
                     formattedDate == null &&
                     base64ImageUrls == null) {
@@ -469,36 +533,11 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                     ),
                   );
                 } else {
-                  await dirayDetails();
-                  if (dirayDetailsModels.status == "success") {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          'Successfully Added',
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    );
-                  } else if (dirayDetailsModels.status != "success") {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          dirayDetailsModels.message.toString(),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          'Something Went Wrong',
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    );
-                  }
+                  await fucntion();
                 }
+                setState(() {
+                  isLoading = false;
+                });
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -537,7 +576,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                       //   ],
                       // ),
                     ),
-                    isLoading
+                    isLoading == true
                         ? const CircularProgressIndicator(
                             valueColor:
                                 AlwaysStoppedAnimation<Color>(Colors.white),

@@ -8,11 +8,11 @@ import '../Models/itineraryGetModels.dart';
 import '../auth/signUpNextPage.dart';
 import '../auth/signUpPage.dart';
 import '../main.dart';
+import 'AdditineraryDetails/accomodationDetails.dart';
 import 'additinerary1.dart';
-import 'itineraryDetails.dart/accomodationDetails.dart';
-import 'itineraryDetails.dart/activitiesDetails.dart';
-import 'itineraryDetails.dart/displayDiray.dart';
-import 'itineraryDetails.dart/travalDetails.dart';
+import 'AdditineraryDetails/activities.dart';
+import 'AdditineraryDetails/displayDiray.dart';
+import 'AdditineraryDetails/traval.dart';
 
 class ItineraryTwo extends StatefulWidget {
   final String? itinid;
@@ -34,8 +34,7 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
   ItinerayAddModels itineraryAddModels = ItinerayAddModels();
 
   itinerayGet() async {
-
-       prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
     // try {
 
@@ -268,13 +267,24 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (BuildContext context) {
-                      return TravelDetails(
-                        itinid: _slecteditinerary!,
-                      );
-                    },
-                  ));
+                  if (_slecteditinerary == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Please select an itinerary',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    );
+                  } else {
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (BuildContext context) {
+                        return TravelDetails(
+                          itinid: _slecteditinerary!,
+                        );
+                      },
+                    ));
+                  }
                 },
                 child: Container(
                   width: 294,
@@ -318,13 +328,24 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (BuildContext context) {
-                      return AccommodationDetails(
-                        itinid: _slecteditinerary!,
-                      );
-                    },
-                  ));
+                  if (_slecteditinerary == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Please select an itinerary',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    );
+                  } else {
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (BuildContext context) {
+                        return AccommodationDetails(
+                          itinid: _slecteditinerary!,
+                        );
+                      },
+                    ));
+                  }
                 },
                 child: Container(
                   width: 294,
@@ -370,13 +391,24 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (BuildContext context) {
-                      return ActivitiesDetails(
-                        itinid: _slecteditinerary!,
-                      );
-                    },
-                  ));
+                  if (_slecteditinerary == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Please select an itinerary',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    );
+                  } else {
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (BuildContext context) {
+                        return ActivitiesDetails(
+                          itinid: _slecteditinerary!,
+                        );
+                      },
+                    ));
+                  }
                 },
                 child: Container(
                   width: 294,
@@ -422,13 +454,24 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (BuildContext context) {
-                      return DisplayDiary(
-                        itinid: _slecteditinerary!,
-                      );
-                    },
-                  ));
+                  if (_slecteditinerary == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Please select an itinerary',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    );
+                  } else {
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (BuildContext context) {
+                        return DisplayDiary(
+                          itinid: _slecteditinerary!,
+                        );
+                      },
+                    ));
+                  }
                 },
                 child: Container(
                   width: 294,
