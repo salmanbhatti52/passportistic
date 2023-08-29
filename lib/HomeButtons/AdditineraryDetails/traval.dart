@@ -13,7 +13,7 @@ import 'accomodationDetails.dart';
 
 class TravelDetails extends StatefulWidget {
   final String? itinid;
-  const TravelDetails({super.key,  this.itinid});
+  const TravelDetails({super.key, this.itinid});
 
   @override
   State<TravelDetails> createState() => _TravelDetailsState();

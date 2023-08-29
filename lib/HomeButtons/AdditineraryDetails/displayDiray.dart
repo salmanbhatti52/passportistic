@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:scanguard/HomeButtons/ItineraryDetails/travelDetailsPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:http/http.dart' as http;
@@ -13,6 +12,7 @@ import '../../Models/diaryDetailsModels.dart';
 import '../../auth/signUpNextPage.dart';
 import '../../auth/signUpPage.dart';
 import '../../main.dart';
+import '../ItineraryDetails/getDisplayDairy.dart';
 
 class DisplayDiary extends StatefulWidget {
   final String? itinid;
@@ -599,7 +599,9 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return const TravelDetailsPage();
+                      return DisplayDairyDetailsPage(
+                        itinid: widget.itinid,
+                      );
                     },
                   ));
                 },

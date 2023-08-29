@@ -1,33 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../Models/getTravelDetailsModels.dart';
-import '../../Models/transportModeNamesModels.dart';
+import 'package:http/http.dart' as http;
+import '../../Models/getActivityDetailsModels.dart';
 import '../../auth/signUpNextPage.dart';
 import '../../auth/signUpPage.dart';
 import '../../main.dart';
 
-class TravelDetailsPage extends StatefulWidget {
+class AcitvityDetailsPage extends StatefulWidget {
   final String? itinid;
-  const TravelDetailsPage({Key, key, this.itinid}) : super(key: key);
+  const AcitvityDetailsPage({Key, key, this.itinid}) : super(key: key);
 
   @override
-  State<TravelDetailsPage> createState() => _TravelDetailsPageState();
+  State<AcitvityDetailsPage> createState() => _AcitvityDetailsPageState();
 }
 
-class _TravelDetailsPageState extends State<TravelDetailsPage> {
+class _AcitvityDetailsPageState extends State<AcitvityDetailsPage> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
-  GetTravelDetailsModels getTravelDetailsModels = GetTravelDetailsModels();
 
-  int travelDetailsPerPage = 1;
-  travelDetails() async {
+  int activityPerPage = 1;
+  GetActivitylDetailsModels getActivityDetailsModels =
+      GetActivitylDetailsModels();
+  acitvityDetails() async {
+    // try {
+
     prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
-    String apiUrl = "$baseUrl/get_itinerary_details";
+
+    String apiUrl = "$baseUrl/get_itinerary_activities";
     print("api: $apiUrl");
+
     setState(() {
       isLoading = true;
     });
@@ -35,7 +39,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
       'Accept': 'application/json',
     }, body: {
       "travel_ltinerary_id": "${widget.itinid}",
-      "passport_holder_id": "$userID"
+      "passport_holder_id": "$userID",
     });
     final responseString = response.body;
     print("responseModels: $responseString");
@@ -43,55 +47,31 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
     if (response.statusCode == 200) {
       print("in 200 itineraryAddModels");
       print("SuucessFull");
-      getTravelDetailsModels = getTravelDetailsModelsFromJson(responseString);
+      getActivityDetailsModels =
+          getActivitylDetailsModelsFromJson(responseString);
       setState(() {
         isLoading = false;
       });
       print(
-          'AaccommodationModelsDetailsModels status: ${getTravelDetailsModels.status}');
-    }
-  }
-
-  TransportModeNamesModels transportModeNamesModels =
-      TransportModeNamesModels();
-
-  transportModeNames() async {
-    prefs = await SharedPreferences.getInstance();
-    userID = prefs?.getString('userID');
-    String apiUrl = "$baseUrl/get_itinerary_details";
-    print("api: $apiUrl");
-    //  final startIndex = index * travelDetailsPerPage;
-    //             final endIndex = (startIndex + travelDetailsPerPage) <=
-    //                     (getTravelDetailsModels.data?.length ?? 0)
-    //                 ? (startIndex + travelDetailsPerPage)
-    //                 : (getTravelDetailsModels.data?.length ?? 0);
-
-    //             final travelForPage = getTravelDetailsModels.data
-    //                     ?.sublist(startIndex, endIndex) ??
-    //                 [];
-    setState(() {
-      isLoading = true;
-    });
-    final response = await http.post(Uri.parse(apiUrl), headers: {
-      'Accept': 'application/json',
-    }, body: {
-      // "transport_mode_id":
-      //     "${travelForPage[index % itemsPerPage].transportModeId ?? ''}"
-    });
-    final responseString = response.body;
-    print("responseModels: $responseString");
-    print(
-        "status Code transportModeNamesModels DetailsModels: ${response.statusCode}");
-    if (response.statusCode == 200) {
-      print("in 200 itineraryAddModels");
-      print("SuucessFull");
-      transportModeNamesModels =
-          transportModeNamesModelsFromJson(responseString);
-      setState(() {
-        isLoading = false;
-      });
-      print(
-          'transportModeNamesModels status: ${transportModeNamesModels.status}');
+          'AaccommodationModelsDetailsModels status: ${getActivityDetailsModels.status}');
+    } else {
+      // Show a dialog box if data is not available
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Error"),
+          content: const Text("Data is not available."),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+                Navigator.pop(context); // Close the page
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        ),
+      );
     }
   }
 
@@ -123,7 +103,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
     super.initState();
     userID = prefs?.getString('userID');
     print("${widget.itinid}");
-    travelDetails();
+    acitvityDetails();
     print("$userID");
   }
 
@@ -143,7 +123,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
           leading: Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
-              onTap: () {
+              onTap: () async {
                 Navigator.pop(context);
               },
               child: SvgPicture.asset(
@@ -172,7 +152,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
           children: [
             const SizedBox(height: 20),
             const Text(
-              'Travel Details',
+              'Activity Details',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Color(0xFFF65734),
@@ -189,13 +169,15 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                   IconButton(
                     icon: SvgPicture.asset("assets/arrow1.svg"),
                     onPressed: () {
+                      final dataLength =
+                          getActivityDetailsModels.data?.length ?? 0;
                       if (_currentPage > 0) {
                         _goToPage(_currentPage - 1);
                       }
                     },
                   ),
                   Text(
-                    "Day ${getTravelDetailsModels.data?[_currentPage].travelDayNumber ?? ""}",
+                    "Day ${_currentPage >= 0 && _currentPage < (getActivityDetailsModels.data?.length ?? 0) ? getActivityDetailsModels.data![_currentPage.toInt()].dayNumber ?? "" : ""}",
                     style: const TextStyle(
                       color: Color(0xFF525252),
                       fontSize: 16,
@@ -207,7 +189,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                     icon: SvgPicture.asset("assets/arrow.svg"),
                     onPressed: () {
                       final dataLength =
-                          getTravelDetailsModels.data?.length ?? 0;
+                          getActivityDetailsModels.data?.length ?? 0;
                       if (_currentPage < dataLength - 1) {
                         _goToPage(_currentPage + 1);
                       }
@@ -219,22 +201,22 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
             Expanded(
               child: PageView.builder(
                 controller: _pageController,
-                itemCount: (getTravelDetailsModels.data?.length ??
-                        0 / travelDetailsPerPage)
+                itemCount: (getActivityDetailsModels.data?.length ??
+                        0 / activityPerPage)
                     .ceil(),
                 onPageChanged: _onPageChanged,
                 itemBuilder: (context, index) {
-                  final startIndex = index * travelDetailsPerPage;
-                  final endIndex = (startIndex + travelDetailsPerPage) <=
-                          (getTravelDetailsModels.data?.length ?? 0)
-                      ? (startIndex + travelDetailsPerPage)
-                      : (getTravelDetailsModels.data?.length ?? 0);
+                  final startIndex = index * activityPerPage;
+                  final endIndex = (startIndex + activityPerPage) <=
+                          (getActivityDetailsModels.data?.length ?? 0)
+                      ? (startIndex + activityPerPage)
+                      : (getActivityDetailsModels.data?.length ?? 0);
 
-                  final travelForPage = getTravelDetailsModels.data
+                  final activityForPage = getActivityDetailsModels.data
                           ?.sublist(startIndex, endIndex) ??
                       [];
                   return Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(16.0),
                     child: Container(
                       width: 250,
                       decoration: ShapeDecoration(
@@ -260,10 +242,11 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                               children: [
                                 Column(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                      MainAxisAlignment.spaceBetween,
+                                  // crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: [
                                     const Text(
-                                      'Day No',
+                                      "Day",
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 16,
@@ -272,8 +255,8 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                       ),
                                     ),
                                     Text(
-                                      travelForPage[index % itemsPerPage]
-                                              .travelDayNumber ??
+                                      activityForPage[index % itemsPerPage]
+                                              .dayNumber ??
                                           '',
                                       style: const TextStyle(
                                         color: Color(0xFFF65734),
@@ -289,7 +272,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                               0.02,
                                     ),
                                     const Text(
-                                      'Travel Mode',
+                                      'Activity',
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 16,
@@ -299,8 +282,8 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                     ),
                                     // ---
                                     Text(
-                                      travelForPage[index % itemsPerPage]
-                                              .transportModeId ??
+                                      activityForPage[index % itemsPerPage]
+                                              .activity ??
                                           '',
                                       style: const TextStyle(
                                         color: Color(0xFFF65734),
@@ -316,7 +299,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                               0.02,
                                     ),
                                     const Text(
-                                      'Trip Details',
+                                      'Comments',
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 16,
@@ -326,8 +309,8 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                     ),
                                     // ---
                                     Text(
-                                      travelForPage[index % itemsPerPage]
-                                              .travelDepartTripDetails ??
+                                      activityForPage[index % itemsPerPage]
+                                              .comments ??
                                           '',
                                       style: const TextStyle(
                                         color: Color(0xFFF65734),
@@ -343,7 +326,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                               0.02,
                                     ),
                                     const Text(
-                                      'Travel Time',
+                                      'Breakfast',
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 16,
@@ -353,9 +336,15 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                     ),
                                     // ---
                                     Text(
-                                      travelForPage[index % itemsPerPage]
-                                              .tripTravelTime ??
+                                      activityForPage[index % itemsPerPage]
+                                              .breakfast ??
                                           '',
+                                      // DateFormat('dd MMM yyyy').format(
+                                      //   activityForPage[
+                                      //               index % itemsPerPage]
+                                      //           .accomodationCheckoutDate ??
+                                      //       DateTime.now(),
+                                      // ),
                                       style: const TextStyle(
                                         color: Color(0xFFF65734),
                                         fontSize: 18,
@@ -363,6 +352,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                         fontWeight: FontWeight.w900,
                                       ),
                                     ),
+
                                     // ---
                                     SizedBox(
                                       height:
@@ -370,7 +360,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                               0.02,
                                     ),
                                     const Text(
-                                      'Local Time',
+                                      'Dinner',
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 16,
@@ -380,24 +370,30 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                     ),
                                     // ---
                                     Text(
-                                      travelForPage[index % itemsPerPage]
-                                              .departureTime ??
+                                      activityForPage[index % itemsPerPage]
+                                              .dinner ??
                                           '',
+                                      // DateFormat('dd MMM yyyy').format(
+                                      //   activityForPage[
+                                      //               index % itemsPerPage]
+                                      //           .accomodationCheckinDate ??
+                                      //       DateTime.now(),
+                                      // ),
                                       style: const TextStyle(
                                         color: Color(0xFFF65734),
                                         fontSize: 18,
                                         fontFamily: 'Satoshi',
                                         fontWeight: FontWeight.w900,
                                       ),
-                                    )
+                                    ),
                                   ],
                                 ),
                                 Column(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text(
-                                      'Local Date',
+                                      "Local Date",
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 16,
@@ -408,8 +404,8 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                     // ---
                                     Text(
                                       DateFormat('dd MMM yyyy').format(
-                                        travelForPage[index % itemsPerPage]
-                                                .departureDate ??
+                                        activityForPage[index % itemsPerPage]
+                                                .activityDate ??
                                             DateTime.now(),
                                       ),
                                       style: const TextStyle(
@@ -426,7 +422,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                               0.02,
                                     ),
                                     const Text(
-                                      'From',
+                                      'Lunch',
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 16,
@@ -436,8 +432,8 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                     ),
                                     // ---
                                     Text(
-                                      travelForPage[index % itemsPerPage]
-                                              .travelDepartCity ??
+                                      activityForPage[index % itemsPerPage]
+                                              .lunch ??
                                           '',
                                       style: const TextStyle(
                                         color: Color(0xFFF65734),
@@ -446,86 +442,6 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                         fontWeight: FontWeight.w900,
                                       ),
                                     ),
-                                    // ---
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                    ),
-                                    const Text(
-                                      'Local Time',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    // ---
-                                    Text(
-                                      travelForPage[index % itemsPerPage]
-                                              .arrivalTime ??
-                                          '',
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                    ),
-                                    // ---
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                    ),
-                                    const Text(
-                                      'To',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    // ---
-                                    Text(
-                                      travelForPage[index % itemsPerPage]
-                                              .travelArriveCity ??
-                                          '',
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                    ),
-                                    // ---
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                    ),
-                                    const Text(
-                                      'Layover',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    Text(
-                                      travelForPage[index % itemsPerPage]
-                                              .layoverTime ??
-                                          '',
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                    )
                                   ],
                                 ),
 
@@ -539,9 +455,12 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
               ),
             ),
             const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: _buildIndicators(),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: _buildIndicators(),
+              ),
             ),
             const SizedBox(height: 20),
             Row(
@@ -643,7 +562,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
 // }
 
   List<Widget> _buildIndicators() {
-    final dataLength = getTravelDetailsModels.data?.length ?? 0;
+    final dataLength = getActivityDetailsModels.data?.length ?? 0;
 
     return List.generate(
       dataLength,

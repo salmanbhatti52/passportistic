@@ -205,7 +205,8 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
                           onChanged: (newValue) {
                             setState(() {
                               _slecteditinerary = newValue;
-                              print(" _slectedGenderId $_slecteditinerary");
+                              print(" _slecteditineraryId $_slecteditinerary");
+                              
                             });
                           },
                           items: iteneraryGetModels.data?.map((gender) {

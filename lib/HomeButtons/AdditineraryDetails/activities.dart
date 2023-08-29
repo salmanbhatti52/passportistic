@@ -7,6 +7,7 @@ import '../../Models/activityDetailsModels.dart';
 import '../../auth/signUpNextPage.dart';
 import '../../auth/signUpPage.dart';
 import '../../main.dart';
+import '../ItineraryDetails/getActivityDetails.dart';
 import 'displayDiray.dart';
 
 class ActivitiesDetails extends StatefulWidget {
@@ -31,7 +32,7 @@ class _ActivitiesDetailsState extends State<ActivitiesDetails> {
 
   activityDetails() async {
     // try {
-   prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
     String apiUrl = "$baseUrl/add_itinerary_activities";
     print("api: $apiUrl");
@@ -559,7 +560,15 @@ class _ActivitiesDetailsState extends State<ActivitiesDetails> {
             height: MediaQuery.of(context).size.height * 0.02,
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return AcitvityDetailsPage(
+                    itinid: widget.itinid,
+                  );
+                },
+              ));
+            },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
