@@ -13,7 +13,8 @@ import 'accomodationDetails.dart';
 
 class TravelDetails extends StatefulWidget {
   final String? itinid;
-  const TravelDetails({super.key, this.itinid});
+  final String? itinname;
+  const TravelDetails({super.key, this.itinid, this.itinname});
 
   @override
   State<TravelDetails> createState() => _TravelDetailsState();
@@ -121,9 +122,9 @@ class _TravelDetailsState extends State<TravelDetails> {
       appBar: AppBar(
         forceMaterialTransparency: true,
         centerTitle: true,
-        title: const Text(
-          'UK 2023',
-          style: TextStyle(
+        title: Text(
+          "${widget.itinname}",
+          style: const TextStyle(
             color: Color(0xFF525252),
             fontSize: 24,
             fontFamily: 'Satoshi',
@@ -918,8 +919,7 @@ class _TravelDetailsState extends State<TravelDetails> {
               Navigator.push(context, MaterialPageRoute(
                 builder: (BuildContext context) {
                   return TravelDetailsPage(
-                    itinid: widget.itinid,
-                  );
+                      itinid: widget.itinid, itinname: widget.itinname);
                 },
               ));
             },

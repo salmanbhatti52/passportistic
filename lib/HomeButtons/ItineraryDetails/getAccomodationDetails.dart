@@ -10,7 +10,9 @@ import '../../main.dart';
 
 class AccomodationDetailsPage extends StatefulWidget {
   final String? itinid;
-  const AccomodationDetailsPage({Key, key, this.itinid}) : super(key: key);
+  final String? itinname;
+  const AccomodationDetailsPage({Key, key, this.itinid, this.itinname})
+      : super(key: key);
 
   @override
   State<AccomodationDetailsPage> createState() =>
@@ -132,9 +134,9 @@ class _AccomodationDetailsPageState extends State<AccomodationDetailsPage> {
               ),
             ),
           ),
-          title: const Text(
-            'UK 2023',
-            style: TextStyle(
+          title: Text(
+            "${widget.itinname}",
+            style: const TextStyle(
               color: Color(0xFF525252),
               fontSize: 24,
               fontFamily: 'Satoshi',

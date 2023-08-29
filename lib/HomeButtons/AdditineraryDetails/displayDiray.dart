@@ -16,8 +16,8 @@ import '../ItineraryDetails/getDisplayDairy.dart';
 
 class DisplayDiary extends StatefulWidget {
   final String? itinid;
-
-  const DisplayDiary({super.key, this.itinid});
+  final String? itinname;
+  const DisplayDiary({super.key, this.itinid, this.itinname});
   @override
   _DisplayDiaryState createState() => _DisplayDiaryState();
 }
@@ -236,9 +236,9 @@ class _DisplayDiaryState extends State<DisplayDiary> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
-          'UK 2023',
-          style: TextStyle(
+        title: Text(
+          "${widget.itinname}",
+          style: const TextStyle(
             color: Color(0xFF525252),
             fontSize: 24,
             fontFamily: 'Satoshi',
@@ -601,6 +601,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                     builder: (BuildContext context) {
                       return DisplayDairyDetailsPage(
                         itinid: widget.itinid,
+                        itinname: widget.itinname,
                       );
                     },
                   ));

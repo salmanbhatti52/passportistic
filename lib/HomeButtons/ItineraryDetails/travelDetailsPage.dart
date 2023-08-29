@@ -11,7 +11,9 @@ import '../../main.dart';
 
 class TravelDetailsPage extends StatefulWidget {
   final String? itinid;
-  const TravelDetailsPage({Key, key, this.itinid}) : super(key: key);
+  final String? itinname;
+  const TravelDetailsPage({Key, key, this.itinid, this.itinname})
+      : super(key: key);
 
   @override
   State<TravelDetailsPage> createState() => _TravelDetailsPageState();
@@ -21,7 +23,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
   GetTravelDetailsModels getTravelDetailsModels = GetTravelDetailsModels();
-
+  List<Datum>? travelDetailsData = [];
   int travelDetailsPerPage = 1;
   travelDetails() async {
     prefs = await SharedPreferences.getInstance();
@@ -44,6 +46,18 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
       print("in 200 itineraryAddModels");
       print("SuucessFull");
       getTravelDetailsModels = getTravelDetailsModelsFromJson(responseString);
+      travelDetailsData = getTravelDetailsModels.data;
+
+      if (travelDetailsData != null) {
+        // Loop through the travel details data and call transportModeNames for each item
+        for (var travelDetail in travelDetailsData!) {
+          transportModeId =
+              getTravelDetailsModels.data![0].transportModeId ?? '';
+          await transportModeNames(transportModeId.toString());
+          print("transportModeId $transportModeId");
+        }
+      }
+      //  transportModeNames(getTravelDetailsModels.data?.length ?? '');
       setState(() {
         isLoading = false;
       });
@@ -52,31 +66,26 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
     }
   }
 
+  String? transportModeId;
+
   TransportModeNamesModels transportModeNamesModels =
       TransportModeNamesModels();
 
-  transportModeNames() async {
+  transportModeNames(String transportModeId) async {
     prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
-    String apiUrl = "$baseUrl/get_itinerary_details";
+    String apiUrl = "$baseUrl/get_transport_mode_itinerary";
     print("api: $apiUrl");
-    //  final startIndex = index * travelDetailsPerPage;
-    //             final endIndex = (startIndex + travelDetailsPerPage) <=
-    //                     (getTravelDetailsModels.data?.length ?? 0)
-    //                 ? (startIndex + travelDetailsPerPage)
-    //                 : (getTravelDetailsModels.data?.length ?? 0);
-
-    //             final travelForPage = getTravelDetailsModels.data
-    //                     ?.sublist(startIndex, endIndex) ??
-    //                 [];
     setState(() {
       isLoading = true;
     });
+    // String transportModeId =
+    //     travelForPage[index % itemsPerPage].transportModeId ?? '';
+
     final response = await http.post(Uri.parse(apiUrl), headers: {
       'Accept': 'application/json',
     }, body: {
-      // "transport_mode_id":
-      //     "${travelForPage[index % itemsPerPage].transportModeId ?? ''}"
+      "transport_mode_id": transportModeId
     });
     final responseString = response.body;
     print("responseModels: $responseString");
@@ -87,6 +96,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
       print("SuucessFull");
       transportModeNamesModels =
           transportModeNamesModelsFromJson(responseString);
+      print('Mode name: ${transportModeNamesModels.data?.modeName}');
       setState(() {
         isLoading = false;
       });
@@ -151,9 +161,9 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
               ),
             ),
           ),
-          title: const Text(
-            'UK 2023',
-            style: TextStyle(
+          title: Text(
+            "${widget.itinname}",
+            style: const TextStyle(
               color: Color(0xFF525252),
               fontSize: 24,
               fontFamily: 'Satoshi',
@@ -299,8 +309,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                     ),
                                     // ---
                                     Text(
-                                      travelForPage[index % itemsPerPage]
-                                              .transportModeId ??
+                                      transportModeNamesModels.data?.modeName ??
                                           '',
                                       style: const TextStyle(
                                         color: Color(0xFFF65734),

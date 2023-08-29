@@ -3,27 +3,27 @@ import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../Models/addItineraryModels.dart';
-import '../Models/itineraryGetModels.dart';
-import '../auth/signUpNextPage.dart';
-import '../auth/signUpPage.dart';
-import '../main.dart';
-import 'AdditineraryDetails/accomodationDetails.dart';
-import 'additinerary1.dart';
-import 'AdditineraryDetails/activities.dart';
-import 'AdditineraryDetails/displayDiray.dart';
-import 'AdditineraryDetails/traval.dart';
+import '../../Models/addItineraryModels.dart';
+import '../../Models/itineraryGetModels.dart';
+import '../../auth/signUpNextPage.dart';
+import '../../auth/signUpPage.dart';
+import '../../main.dart';
+import '../ItineraryDetails/getAccomodationDetails.dart';
+import '../ItineraryDetails/getActivityDetails.dart';
+import '../ItineraryDetails/getDisplayDairy.dart';
+import '../ItineraryDetails/travelDetailsPage.dart';
+import '../additinerary1.dart';
 
-class ItineraryTwo extends StatefulWidget {
+class itineraryview extends StatefulWidget {
   final String? itinid;
   final String? additinerarywidget;
-  const ItineraryTwo({super.key, this.additinerarywidget, this.itinid});
+  const itineraryview({super.key, this.additinerarywidget, this.itinid});
 
   @override
-  State<ItineraryTwo> createState() => _ItineraryTwoState();
+  State<itineraryview> createState() => _itineraryviewState();
 }
 
-class _ItineraryTwoState extends State<ItineraryTwo> {
+class _itineraryviewState extends State<itineraryview> {
   String? selectedItinerary;
   String? _slecteditinerary;
   String desiredItineraryId = "";
@@ -203,7 +203,6 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
                             setState(() {
                               _slecteditinerary = newValue;
                               print("Selected Itinerary: $_slecteditinerary");
-                              
 
                               for (var itinerary
                                   in iteneraryGetModels.data ?? []) {
@@ -291,10 +290,9 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
                   } else {
                     Navigator.push(context, MaterialPageRoute(
                       builder: (BuildContext context) {
-                        return TravelDetails(
-                          itinid: _slecteditinerary!,
-                          itinname: _selectedItineraryName!
-                        );
+                        return TravelDetailsPage(
+                            itinid: _slecteditinerary!,
+                            itinname: _selectedItineraryName!);
                       },
                     ));
                   }
@@ -353,11 +351,9 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
                   } else {
                     Navigator.push(context, MaterialPageRoute(
                       builder: (BuildContext context) {
-                        return AccommodationDetails(
-                          itinid: _slecteditinerary!,
-                           itinname: _selectedItineraryName!
-
-                        );
+                        return AccomodationDetailsPage(
+                            itinid: _slecteditinerary!,
+                            itinname: _selectedItineraryName!);
                       },
                     ));
                   }
@@ -418,10 +414,9 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
                   } else {
                     Navigator.push(context, MaterialPageRoute(
                       builder: (BuildContext context) {
-                        return ActivitiesDetails(
-                          itinid: _slecteditinerary!,
-                           itinname: _selectedItineraryName!
-                        );
+                        return AcitvityDetailsPage(
+                            itinid: _slecteditinerary!,
+                            itinname: _selectedItineraryName!);
                       },
                     ));
                   }
@@ -482,10 +477,9 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
                   } else {
                     Navigator.push(context, MaterialPageRoute(
                       builder: (BuildContext context) {
-                        return DisplayDiary(
-                          itinid: _slecteditinerary!,
-                           itinname: _selectedItineraryName
-                        );
+                        return DisplayDairyDetailsPage(
+                            itinid: _slecteditinerary!,
+                            itinname: _selectedItineraryName);
                       },
                     ));
                   }

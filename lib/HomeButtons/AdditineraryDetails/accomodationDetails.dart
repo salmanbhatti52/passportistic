@@ -12,7 +12,8 @@ import 'activities.dart';
 
 class AccommodationDetails extends StatefulWidget {
   final String? itinid;
-  const AccommodationDetails({super.key, this.itinid});
+  final String? itinname;
+  const AccommodationDetails({super.key, this.itinid, this.itinname});
 
   @override
   State<AccommodationDetails> createState() => _AccommodationDetailsState();
@@ -34,7 +35,7 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
   accommodationDetails() async {
     // try {
 
-         prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
 
     String apiUrl = "$baseUrl/add_itinerary_accomodations";
@@ -78,8 +79,8 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
-          'UK 2023',
+        title:  Text(
+          "${widget.itinname}",
           style: TextStyle(
             color: Color(0xFF525252),
             fontSize: 24,

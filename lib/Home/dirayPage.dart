@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:scanguard/Home/appDrawer.dart';
 
+import '../HomeButtons/VeiwItinerary2Page/viewDetails.dart';
 import '../HomeButtons/addItinerary2.dart';
 import '../HomeButtons/AdditineraryDetails/displayDiray.dart';
 
@@ -80,7 +81,7 @@ class _DirayPageState extends State<DirayPage> {
             onTap: () {
               Navigator.push(context, MaterialPageRoute(
                 builder: (BuildContext context) {
-                  return const ItineraryTwo(
+                  return const itineraryview(
                       //userId: widget.userId,
                       // itinid: desiredItineraryId,
                       // additinerarywidget: addItineray.text,
@@ -140,7 +141,7 @@ class _DirayPageState extends State<DirayPage> {
             onTap: () {
               Navigator.push(context, MaterialPageRoute(
                 builder: (BuildContext context) {
-                  return DisplayDiary(
+                  return const DisplayDiary(
                       //userId: widget.userId,
                       // itinid: desiredItineraryId,
                       // additinerarywidget: addItineray.text,

@@ -13,7 +13,9 @@ import 'package:photo_view/photo_view_gallery.dart';
 
 class DisplayDairyDetailsPage extends StatefulWidget {
   final String? itinid;
-  const DisplayDairyDetailsPage({Key, key, this.itinid}) : super(key: key);
+  final String? itinname;
+  const DisplayDairyDetailsPage({Key, key, this.itinid, this.itinname})
+      : super(key: key);
 
   @override
   State<DisplayDairyDetailsPage> createState() =>
@@ -134,9 +136,9 @@ class _DisplayDairyDetailsPageState extends State<DisplayDairyDetailsPage> {
               ),
             ),
           ),
-          title: const Text(
-            'UK 2023',
-            style: TextStyle(
+          title: Text(
+            "${widget.itinname}",
+            style: const TextStyle(
               color: Color(0xFF525252),
               fontSize: 24,
               fontFamily: 'Satoshi',
