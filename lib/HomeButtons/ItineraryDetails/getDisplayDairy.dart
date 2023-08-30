@@ -444,7 +444,18 @@ class FullScreenImageGallery extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: const Text(
+          "Travel Photos",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+            fontFamily: 'Satoshi',
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+        centerTitle: true,
         backgroundColor: const Color(0xFFF65734),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       backgroundColor: Colors.black, // Background color
       body: PhotoViewGallery.builder(

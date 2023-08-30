@@ -198,6 +198,14 @@ class _DisplayDiaryState extends State<DisplayDiary> {
           ),
         ),
       );
+      Navigator.push(context, MaterialPageRoute(
+        builder: (BuildContext context) {
+          return DisplayDairyDetailsPage(
+            itinid: widget.itinid,
+            itinname: widget.itinname,
+          );
+        },
+      ));
       print(resBody);
     } else if (res.statusCode == 404) {
       ScaffoldMessenger.of(context).showSnackBar(

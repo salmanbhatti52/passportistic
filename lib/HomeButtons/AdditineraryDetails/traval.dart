@@ -830,7 +830,7 @@ class _TravelDetailsState extends State<TravelDetails> {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
                       return AccommodationDetails(
-                        itinid: widget.itinid,
+                        itinid: widget.itinid, itinname: widget.itinname
                       );
                     },
                   ));

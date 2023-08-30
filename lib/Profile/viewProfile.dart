@@ -213,337 +213,347 @@ class _ViewProfileState extends State<ViewProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Profile",
-          style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w900,
-              color: Color(0xFF525252)),
-        ),
-        centerTitle: true,
-        backgroundColor: const Color(0xFFC6FFE7),
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: SvgPicture.asset(
-              "assets/arrowLeft.svg",
-              width: 20,
-              height: 20,
-            ),
+    if (isLoading) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(
+            color: Color(0xFFF65734),
           ),
         ),
-        actions: [
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          EditProfile(userId: "${widget.userId}")));
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SvgPicture.asset("assets/edit.svg"),
+      );
+    } else {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            "Profile",
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w900,
+                color: Color(0xFF525252)),
+          ),
+          centerTitle: true,
+          backgroundColor: const Color(0xFFC6FFE7),
+          leading: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: SvgPicture.asset(
+                "assets/arrowLeft.svg",
+                width: 20,
+                height: 20,
+              ),
             ),
           ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Center(
-            child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color(0xFFC6FFE7),
-                Color(0xFF00AEFF),
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
+          actions: [
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            EditProfile(userId: "${widget.userId}")));
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset("assets/edit.svg"),
+              ),
             ),
-          ),
-          child: Column(children: [
-            const SizedBox(
-              height: 10,
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Center(
+              child: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFFC6FFE7),
+                  Color(0xFF00AEFF),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
             ),
-            Center(
-              child: GestureDetector(
-                onTap: () {
-                  pickImageGallery();
-                },
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(64),
-                  child: SizedBox(
-                    height: 120,
-                    width: 120,
-                    child: imagePathGallery != null
-                        ? Image.file(imagePathGallery!)
-                        : getProfileModels.data?.profilePicture != null
-                            ? Image.network(
-                                "https://portal.passporttastic.com/public/${getProfileModels.data!.profilePicture}",
-                                fit: BoxFit.cover,
-                              )
-                            : Container(), // Empty container as a fallback
+            child: Column(children: [
+              const SizedBox(
+                height: 10,
+              ),
+              Center(
+                child: GestureDetector(
+                  onTap: () {
+                    pickImageGallery();
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(64),
+                    child: SizedBox(
+                      height: 120,
+                      width: 120,
+                      child: imagePathGallery != null
+                          ? Image.file(imagePathGallery!)
+                          : getProfileModels.data?.profilePicture != null
+                              ? Image.network(
+                                  "https://portal.passporttastic.com/public/${getProfileModels.data!.profilePicture}",
+                                  fit: BoxFit.cover,
+                                )
+                              : Container(), // Empty container as a fallback
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 4,
-            ),
-            Center(
-              child: Text(
-                "${getProfileModels.data?.firstName ?? ''} ${getProfileModels.data?.lastName ?? ''}",
-                style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF000000)),
+              const SizedBox(
+                height: 4,
               ),
-            ),
-            const SizedBox(
-              height: 4,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Container(
-                height: 48,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(
-                      'assets/phone.svg',
-                      color: const Color(0xFfFF8D74),
-                    ),
-                    const SizedBox(width: 8.0),
-                    const Text(
-                      'Mobile Number',
-                      style: TextStyle(
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFF525252)),
-                    ),
-                    const Spacer(),
-                    Text(
-                      getProfileModels.data?.phoneNumber ?? '',
-                      style: const TextStyle(
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFF000000)),
-                    ),
-                  ],
+              Center(
+                child: Text(
+                  "${getProfileModels.data?.firstName ?? ''} ${getProfileModels.data?.lastName ?? ''}",
+                  style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF000000)),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Container(
-                height: 48,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(
-                      'assets/sms.svg',
-                      color: const Color(0xFfFF8D74),
-                    ),
-                    const SizedBox(width: 8.0),
-                    const Text(
-                      'Email',
-                      style: TextStyle(
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFF525252)),
-                    ),
-                    const Spacer(),
-                    Text(
-                      getProfileModels.data?.email ?? '',
-                      style: const TextStyle(
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFF000000)),
-                    ),
-                  ],
-                ),
+              const SizedBox(
+                height: 4,
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Container(
-                height: 48,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(
-                      'assets/gender.svg',
-                      color: const Color(0xFfFF8D74),
-                    ),
-                    const SizedBox(width: 8.0),
-                    const Text(
-                      'Gender',
-                      style: TextStyle(
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFF525252)),
-                    ),
-                    const Spacer(),
-                    Text(
-                      " ${selectedgenderId ?? ''} ",
-                      style: const TextStyle(
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFF000000),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: Container(
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/phone.svg',
+                        color: const Color(0xFfFF8D74),
                       ),
-                    )
-                  ],
+                      const SizedBox(width: 8.0),
+                      const Text(
+                        'Mobile Number',
+                        style: TextStyle(
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF525252)),
+                      ),
+                      const Spacer(),
+                      Text(
+                        getProfileModels.data?.phoneNumber ?? '',
+                        style: const TextStyle(
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF000000)),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Container(
-                height: 48,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15.0),
+              const SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: Container(
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/sms.svg',
+                        color: const Color(0xFfFF8D74),
+                      ),
+                      const SizedBox(width: 8.0),
+                      const Text(
+                        'Email',
+                        style: TextStyle(
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF525252)),
+                      ),
+                      const Spacer(),
+                      Text(
+                        getProfileModels.data?.email ?? '',
+                        style: const TextStyle(
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF000000)),
+                      ),
+                    ],
+                  ),
                 ),
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(
-                      'assets/calendar.svg',
-                      color: const Color(0xFfFF8D74),
-                    ),
-                    const SizedBox(width: 8.0),
-                    const Text(
-                      'Date of Birth',
-                      style: TextStyle(
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFF525252)),
-                    ),
-                    const Spacer(),
-                    Text(
-                      getProfileModels.data?.dob ?? '',
-                      style: const TextStyle(
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: Container(
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/gender.svg',
+                        color: const Color(0xFfFF8D74),
+                      ),
+                      const SizedBox(width: 8.0),
+                      const Text(
+                        'Gender',
+                        style: TextStyle(
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF525252)),
+                      ),
+                      const Spacer(),
+                      Text(
+                        " ${selectedgenderId ?? ''} ",
+                        style: const TextStyle(
                           fontSize: 14.0,
                           fontWeight: FontWeight.w700,
-                          color: Color(0xFF000000)),
-                    ),
-                  ],
+                          color: Color(0xFF000000),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Container(
-                height: 48,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(
-                      'assets/flag.svg',
-                      color: const Color(0xFfFF8D74),
-                    ),
-                    const SizedBox(width: 8.0),
-                    const Text(
-                      'Nationality',
-                      style: TextStyle(
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFF525252)),
-                    ),
-                    const Spacer(),
-                    Text(
-                      getProfileModels.data?.nationality ?? '',
-                      style: const TextStyle(
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFF000000)),
-                    ),
-                  ],
+              const SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: Container(
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/calendar.svg',
+                        color: const Color(0xFfFF8D74),
+                      ),
+                      const SizedBox(width: 8.0),
+                      const Text(
+                        'Date of Birth',
+                        style: TextStyle(
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF525252)),
+                      ),
+                      const Spacer(),
+                      Text(
+                        getProfileModels.data?.dob ?? '',
+                        style: const TextStyle(
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF000000)),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Container(
-                height: 48,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(
-                      'assets/terms.svg',
-                      color: const Color(0xFfFF8D74),
-                    ),
-                    const SizedBox(width: 8.0),
-                    const Text(
-                      'Passport Design',
-                      style: TextStyle(
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFF525252)),
-                    ),
-                    const Spacer(),
-                  ],
+              const SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: Container(
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/flag.svg',
+                        color: const Color(0xFfFF8D74),
+                      ),
+                      const SizedBox(width: 8.0),
+                      const Text(
+                        'Nationality',
+                        style: TextStyle(
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF525252)),
+                      ),
+                      const Spacer(),
+                      Text(
+                        getProfileModels.data?.nationality ?? '',
+                        style: const TextStyle(
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF000000)),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * .04,
-            ),
-            selectedOption != null
-                ? Center(
-                    child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Image.network(
-                      "https://portal.passporttastic.com/public/$selectedOption",
-                      width: 150,
-                      height: 150,
-                    ),
-                  ))
-                : const SizedBox()
-          ]),
-        )),
-      ),
-    );
+              const SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: Container(
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/terms.svg',
+                        color: const Color(0xFfFF8D74),
+                      ),
+                      const SizedBox(width: 8.0),
+                      const Text(
+                        'Passport Design',
+                        style: TextStyle(
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF525252)),
+                      ),
+                      const Spacer(),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * .04,
+              ),
+              selectedOption != null
+                  ? Center(
+                      child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Image.network(
+                        "https://portal.passporttastic.com/public/$selectedOption",
+                        width: 150,
+                        height: 150,
+                      ),
+                    ))
+                  : const SizedBox()
+            ]),
+          )),
+        ),
+      );
+    }
   }
 
   // Widget getImageWidget(String selectedOption) {

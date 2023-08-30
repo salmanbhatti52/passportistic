@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -30,12 +29,13 @@ class _EditProfileState extends State<EditProfile> {
   final TextEditingController _mobileNumberController = TextEditingController();
   final TextEditingController _dob = TextEditingController();
   final TextEditingController _flag = TextEditingController();
-  final TextEditingController _passportDesign = TextEditingController();
+  String? _slectedGenderId;
+  String? selectedgenderId;
 
   GetProfileModels getProfileModels = GetProfileModels();
   getUserProfile() async {
     // try {
-   prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
     String apiUrl = "$baseUrl/get_profile";
     print("api: $apiUrl");
@@ -55,6 +55,13 @@ class _EditProfileState extends State<EditProfile> {
       print("in 200 getProfileModels");
       print("SuucessFull");
       getProfileModels = getProfileModelsFromJson(responseString);
+      _email.text = getProfileModels.data?.email ?? '';
+      _mobileNumberController.text = getProfileModels.data?.phoneNumber ?? '';
+      _dob.text = getProfileModels.data?.dob ?? '';
+      _flag.text = getProfileModels.data?.nationality ?? '';
+      _slectedGenderId = getProfileModels.data?.genderId ?? "";
+      selectedOption = getProfileModels.data?.passportDesignId ?? "";
+
       setState(() {
         isLoading = false;
       });
@@ -83,7 +90,7 @@ class _EditProfileState extends State<EditProfile> {
       "dob": _dob.text,
       "nationality": _flag.text,
       "passport_design_id": selectedOption,
-      "profile_picture": base64imgGallery
+      "profile_picture": base64imgGallery ?? "",
     });
     final responseString = response.body;
     print("responseupdateProfileModelsAPI: $responseString");
@@ -99,8 +106,6 @@ class _EditProfileState extends State<EditProfile> {
       print('updateProfileModels status: ${updateProfileModels.status}');
     }
   }
-
-  String? _slectedGenderId;
 
   GetGenderListModels getGenderListModels = GetGenderListModels();
 
@@ -172,9 +177,7 @@ class _EditProfileState extends State<EditProfile> {
   //     });
   //   }
   // }
-  Country? _selectedCountry;
 
-  String? selectedgenderId;
   CoverDesignDataModel coverDesignDataModel = CoverDesignDataModel();
   SelectedCoverDesign selectedCoverDesign = SelectedCoverDesign();
   coverDesign() async {
@@ -348,13 +351,24 @@ class _EditProfileState extends State<EditProfile> {
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () async {
+                if (_email.text.isEmpty &&
+                    _mobileNumberController.text.isEmpty &&
+                    _dob.text.isEmpty &&
+                    _flag.text.isEmpty &&
+                    selectedOption == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Please fill all the fields"),
+                    ),
+                  );
+                }
+
                 showDialog(
                   context: context,
                   barrierDismissible: false,
                   builder: (context) =>
                       const ProgressDialog(), // Show the custom dialog
                 );
-
                 await updateProfile();
 
                 Navigator.pop(context); // Close the dialog after update
@@ -365,6 +379,12 @@ class _EditProfileState extends State<EditProfile> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(updateProfileModels.message.toString()),
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Something Went Wrong"),
                     ),
                   );
                 }

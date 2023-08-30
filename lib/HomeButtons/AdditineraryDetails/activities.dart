@@ -477,8 +477,7 @@ class _ActivitiesDetailsState extends State<ActivitiesDetails> {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
                       return DisplayDiary(
-                        itinid: widget.itinid,
-                      );
+                          itinid: widget.itinid, itinname: widget.itinname);
                     },
                   ));
                 } else if (activityDetailsModels.status != "success") {

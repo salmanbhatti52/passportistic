@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../Home/appDrawer.dart';
 import '../Models/getProfileModels.dart';
+import '../Models/updatePasswordModels.dart';
 import '../auth/signIn.dart';
 import '../auth/signUpNextPage.dart';
 import '../auth/signUpPage.dart';
@@ -62,8 +63,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   GetProfileModels getProfileModels = GetProfileModels();
   getUserProfile() async {
-
-       prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
     String apiUrl = "$baseUrl/get_profile";
     print("api: $apiUrl");
@@ -96,6 +96,47 @@ class _ProfilePageState extends State<ProfilePage> {
         isLoading = false;
       });
       print('getProfileModels status: ${getProfileModels.status}');
+    }
+  }
+
+  UpdatePasswordModel updatePasswordModel = UpdatePasswordModel();
+  updatePassword() async {
+    prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
+    String apiUrl = "$baseUrl/change_password";
+    print("api: $apiUrl");
+    if (!mounted) {
+      return; // Check if the widget is still mounted
+    }
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "passport_holder_id": "$userID",
+      "old_password": currentPass.text,
+      "password": createPass.text,
+      "confirm_password": confirmPass.text
+    });
+    if (!mounted) {
+      return; // Check again if the widget is still mounted after the HTTP request
+    }
+    final responseString = response.body;
+    print("updatePasswordModel Response: $responseString");
+    print("status Code updatePasswordModel: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print("in 200 updatePasswordModel");
+      print("SuucessFull");
+      updatePasswordModel = updatePasswordModelFromJson(responseString);
+      if (!mounted) {
+        return; // Check once more if the widget is still mounted before updating the state
+      }
+      setState(() {
+        isLoading = false;
+      });
+      print('updatePasswordModel status: ${updatePasswordModel.status}');
     }
   }
 
@@ -603,43 +644,69 @@ class _ProfilePageState extends State<ProfilePage> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       GestureDetector(
-                                        onTap: () {
+                                        onTap: () async {
+                                          if (createPass.text.isEmpty &&
+                                              currentPass.text.isEmpty &&
+                                              confirmPass.text.isEmpty) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                                    content: Text(
+                                                        "Please enter new password")));
+                                          } else {
+                                            await updatePassword();
+                                            if (updatePasswordModel.status ==
+                                                "success") {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(const SnackBar(
+                                                      content: Text(
+                                                          "Password Updated Successfully")));
+                                              Navigator.pop(context);
+                                            } else {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(const SnackBar(
+                                                      content: Text(
+                                                          "Password Not Updated")));
+                                            }
+                                          }
                                           // Perform your action here
                                           print('Update Password tapped');
                                         },
-                                        child: Container(
-                                          height: 48,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.84,
-                                          decoration: BoxDecoration(
-                                            gradient: const LinearGradient(
-                                              colors: [
-                                                Color(0xFFF65734),
-                                                Color(0xFFFF8D74)
-                                              ],
-                                              begin: Alignment.bottomCenter,
-                                              end: Alignment.topCenter,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                          ),
-                                          child: const Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                "Update Password",
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontFamily: "Satoshi",
-                                                    fontSize: 20,
-                                                    fontWeight:
-                                                        FontWeight.w700),
+                                        child: Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            Container(
+                                              height: 48,
+                                              width: 256,
+                                              decoration: BoxDecoration(
+                                                gradient: const LinearGradient(
+                                                  colors: [
+                                                    Color(0xFFF65734),
+                                                    Color(0xFFFF8D74)
+                                                  ],
+                                                  begin: Alignment.bottomCenter,
+                                                  end: Alignment.topCenter,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
                                               ),
-                                            ],
-                                          ),
+                                            ),
+                                            isLoading
+                                                ? const CircularProgressIndicator(
+                                                    valueColor:
+                                                        AlwaysStoppedAnimation<
+                                                                Color>(
+                                                            Colors.white),
+                                                  )
+                                                : const Text(
+                                                    "Update Password",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontFamily: "Satoshi",
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                                  ),
+                                          ],
                                         ),
                                       ),
                                     ],

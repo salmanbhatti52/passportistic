@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:scanguard/auth/signIn.dart';
+import 'package:scanguard/auth/signUpNextPage.dart';
+import 'package:scanguard/auth/signUpPage.dart';
+import 'package:http/http.dart' as http;
+import '../Models/resetPasswordModels.dart';
 
 class CreatePassword extends StatefulWidget {
-  const CreatePassword({super.key});
+  final String? otp;
+  final String? email;
+  const CreatePassword({super.key, this.otp, this.email});
 
   @override
   State<CreatePassword> createState() => _CreatePasswordState();
@@ -11,6 +18,42 @@ class CreatePassword extends StatefulWidget {
 class _CreatePasswordState extends State<CreatePassword> {
   TextEditingController createPass = TextEditingController();
   TextEditingController conPass = TextEditingController();
+
+  ResetPasswordModel resetPasswordModel = ResetPasswordModel();
+  resettPass() async {
+    // try {
+
+    String apiUrl = "$baseUrl/modify_password";
+    print("api: $apiUrl");
+    print(createPass.text);
+    print(conPass.text);
+
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "email": "${widget.email}",
+      "otp": "${widget.otp}",
+      "password": createPass.text,
+      "confirm_password": conPass.text
+    });
+    final responseString = response.body;
+    print("responseForgetPasswordApi: $responseString");
+    print("status Code ForgetPassword: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print("in 200 ForgetPassword");
+      print("SuucessFull");
+      resetPasswordModel = resetPasswordModelFromJson(responseString);
+      setState(() {
+        isLoading = false;
+      });
+      print('ForgetPasswordModel status: ${resetPasswordModel.status}');
+    }
+  }
+
   bool _obscureText = true;
   void _toggle() {
     setState(() {
@@ -18,8 +61,8 @@ class _CreatePasswordState extends State<CreatePassword> {
     });
   }
 
-  FocusNode _focusNode1 = FocusNode();
-  FocusNode _focusNode2 = FocusNode();
+  final FocusNode _focusNode1 = FocusNode();
+  final FocusNode _focusNode2 = FocusNode();
 
   @override
   void initState() {
@@ -48,13 +91,13 @@ class _CreatePasswordState extends State<CreatePassword> {
     return Scaffold(
       appBar: AppBar(
         forceMaterialTransparency: true,
-        title: Text(""),
+        title: const Text(""),
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
       body: SingleChildScrollView(
         child: Column(children: [
-          SizedBox(
+          const SizedBox(
             height: 2,
           ),
           Center(
@@ -96,8 +139,9 @@ class _CreatePasswordState extends State<CreatePassword> {
                       padding: const EdgeInsets.all(8.0),
                       child: SvgPicture.asset(
                         'assets/lock.svg',
-                        color:
-                            isFocused1 ? Color(0xFFF65734) : Color(0xFFE0E0E5),
+                        color: isFocused1
+                            ? const Color(0xFFF65734)
+                            : const Color(0xFFE0E0E5),
                       ),
                     ),
                     suffixIcon: Row(
@@ -163,8 +207,9 @@ class _CreatePasswordState extends State<CreatePassword> {
                       padding: const EdgeInsets.all(8.0),
                       child: SvgPicture.asset(
                         'assets/lock.svg',
-                        color:
-                            isFocused2 ? Color(0xFFF65734) : Color(0xFFE0E0E5),
+                        color: isFocused2
+                            ? const Color(0xFFF65734)
+                            : const Color(0xFFE0E0E5),
                       ),
                     ),
                     suffixIcon: Row(
@@ -218,36 +263,71 @@ class _CreatePasswordState extends State<CreatePassword> {
               children: [
                 GestureDetector(
                   onTap: () async {
-                    // Navigator.push(context, MaterialPageRoute(
-                    //   builder: (BuildContext context) {
-                    //     return OtpPage();
-                    //   },
-                    // ));
-                  },
-                  child: Container(
-                    height: 48,
-                    width: MediaQuery.of(context).size.width * 0.94,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                      ),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Reset Password",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: "Satoshi",
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700),
+                    if (conPass.text.isEmpty && createPass.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Please Enter Password"),
                         ),
-                      ],
-                    ),
+                      );
+                    } else {
+                      await resettPass();
+                      if (resetPasswordModel.status == "success") {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Password Reset Successfully"),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (BuildContext context) {
+                            return const SignInPage();
+                          },
+                        ));
+                      } else if (resetPasswordModel.data != "success") {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content:
+                                Text(resetPasswordModel.message.toString()),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Something Went Wrong"),
+                          ),
+                        );
+                      }
+                    }
+                  },
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        height: 48,
+                        width: MediaQuery.of(context).size.width * 0.94,
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+                      isLoading
+                          ? const CircularProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.white),
+                            )
+                          : const Text(
+                              "Reset Password",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: "Satoshi",
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                    ],
                   ),
                 ),
               ],

@@ -20,7 +20,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
   forgetPass() async {
     // try {
 
-    String apiUrl = "$baseUrl/login";
+    String apiUrl = "$baseUrl/forgot_password";
     print("api: $apiUrl");
     print("email: ${email.text}");
     setState(() {
@@ -46,7 +46,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
     }
   }
 
-  FocusNode _focusNode = FocusNode();
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
@@ -73,7 +73,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
         forceMaterialTransparency: true,
         elevation: 0,
       ),
-      body: Container(
+      body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
           child: Column(children: [
@@ -123,8 +123,9 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                         padding: const EdgeInsets.all(8.0),
                         child: SvgPicture.asset(
                           'assets/sms.svg',
-                          color:
-                              isFocused ? Color(0xFFF65734) : Color(0xFFE0E0E5),
+                          color: isFocused
+                              ? const Color(0xFFF65734)
+                              : const Color(0xFFE0E0E5),
                         ),
                       ),
 
@@ -133,7 +134,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                         borderRadius: BorderRadius.circular(15.0),
                       ),
                       // labelText: 'Email',
-                      hintText: "Enter Your Password",
+                      hintText: "Enter Your Email",
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                         borderSide: const BorderSide(
@@ -176,7 +177,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                 children: [
                   GestureDetector(
                     onTap: () async {
-                      if(email.text.isEmpty){
+                      if (email.text.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text(
@@ -190,7 +191,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                             backgroundColor: Colors.red,
                           ),
                         );
-                      }else{
+                      } else {
                         await forgetPass();
                         if (forgetPasswordModel.status == "success") {
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -199,22 +200,22 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                 "Email Sent Successfully",
                                 style: TextStyle(
                                     color: Colors.white,
-                                    fontFamily: "Satoshi", 
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w700),
+                                    fontFamily: "Satoshi",
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w400),
                               ),
                               backgroundColor: Colors.green,
                             ),
                           );
-                            Navigator.push(context, MaterialPageRoute(
-                        builder: (BuildContext context) {
-                          return OtpPage(
-                            otp: forgetPasswordModel.data!.otp.toString(),
-                       
-                          );
-                        },
-                      ));
-                        } else {
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (BuildContext context) {
+                              return OtpPage(
+                                otp: forgetPasswordModel.data!.otp.toString(),
+                                email: email.text,
+                              );
+                            },
+                          ));
+                        } else if (forgetPasswordModel.status != "success") {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text(
@@ -230,32 +231,36 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                           );
                         }
                       }
-                    
                     },
-                    child: Container(
-                      height: 48,
-                      width: MediaQuery.of(context).size.width * 0.94,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter,
-                        ),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Send Code",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: "Satoshi",
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          height: 48,
+                          width: MediaQuery.of(context).size.width * 0.94,
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                            ),
+                            borderRadius: BorderRadius.circular(15),
                           ),
-                        ],
-                      ),
+                        ),
+                        isLoading
+                            ? const CircularProgressIndicator(
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                              )
+                            : const Text(
+                                "Send Code",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: "Satoshi",
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                      ],
                     ),
                   ),
                 ],

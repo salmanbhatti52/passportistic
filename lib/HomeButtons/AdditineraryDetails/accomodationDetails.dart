@@ -79,9 +79,9 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title:  Text(
+        title: Text(
           "${widget.itinname}",
-          style: TextStyle(
+          style: const TextStyle(
             color: Color(0xFF525252),
             fontSize: 24,
             fontFamily: 'Satoshi',
@@ -544,8 +544,7 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
                       return ActivitiesDetails(
-                        itinid: widget.itinid,
-                      );
+                          itinid: widget.itinid, itinname: widget.itinname);
                     },
                   ));
                 } else if (accommodationModels.status != "success") {

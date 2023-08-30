@@ -278,6 +278,11 @@ class _AccomodationDetailsPageState extends State<AccomodationDetailsPage> {
                                       ),
                                     ),
                                     // ---
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.02,
+                                    ),
                                     const Text(
                                       'Accommodation',
                                       style: TextStyle(
@@ -301,6 +306,11 @@ class _AccomodationDetailsPageState extends State<AccomodationDetailsPage> {
                                       ),
                                     ),
                                     // ---
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.02,
+                                    ),
                                     const Text(
                                       'Type',
                                       style: TextStyle(
@@ -324,6 +334,11 @@ class _AccomodationDetailsPageState extends State<AccomodationDetailsPage> {
                                       ),
                                     ),
                                     // ---
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.02,
+                                    ),
                                     const Text(
                                       'Check Out',
                                       style: TextStyle(
@@ -350,6 +365,11 @@ class _AccomodationDetailsPageState extends State<AccomodationDetailsPage> {
                                     ),
 
                                     // ---
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.02,
+                                    ),
                                     const Text(
                                       'Check In',
                                       style: TextStyle(
@@ -403,6 +423,11 @@ class _AccomodationDetailsPageState extends State<AccomodationDetailsPage> {
                                       ),
                                     ),
                                     // ---
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.02,
+                                    ),
                                     const Text(
                                       'Nights',
                                       style: TextStyle(
