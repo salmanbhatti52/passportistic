@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:scanguard/Profile/viewProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Models/coverDesignModels.dart';
 import '../Models/getGenderList.dart';
@@ -34,38 +35,53 @@ class _EditProfileState extends State<EditProfile> {
 
   GetProfileModels getProfileModels = GetProfileModels();
   getUserProfile() async {
-    // try {
     prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
     String apiUrl = "$baseUrl/get_profile";
     print("api: $apiUrl");
+
     setState(() {
       isLoading = true;
     });
-    final response = await http.post(Uri.parse(apiUrl), headers: {
-      'Accept': 'application/json',
-    }, body: {
-      "passport_holder_id": "$userID"
-    });
-    final responseString = response.body;
-    print("getProfileModels Response: $responseString");
-    print("status Code getProfileModels: ${response.statusCode}");
 
-    if (response.statusCode == 200) {
-      print("in 200 getProfileModels");
-      print("SuucessFull");
-      getProfileModels = getProfileModelsFromJson(responseString);
-      _email.text = getProfileModels.data?.email ?? '';
-      _mobileNumberController.text = getProfileModels.data?.phoneNumber ?? '';
-      _dob.text = getProfileModels.data?.dob ?? '';
-      _flag.text = getProfileModels.data?.nationality ?? '';
-      _slectedGenderId = getProfileModels.data?.genderId ?? "";
-      selectedOption = getProfileModels.data?.passportDesignId ?? "";
-
-      setState(() {
-        isLoading = false;
+    try {
+      final response = await http.post(Uri.parse(apiUrl), headers: {
+        'Accept': 'application/json',
+      }, body: {
+        "passport_holder_id": "$userID"
       });
-      print('getProfileModels status: ${getProfileModels.status}');
+
+      final responseString = response.body;
+      print("getProfileModels Response: $responseString");
+      print("status Code getProfileModels: ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+        print("in 200 getProfileModels");
+        print("SuccessFull");
+        getProfileModels = getProfileModelsFromJson(responseString);
+
+        if (getProfileModels.data != null) {
+          _email.text = getProfileModels.data?.email ?? '';
+          _mobileNumberController.text =
+              getProfileModels.data?.phoneNumber ?? '';
+          _dob.text = getProfileModels.data?.dob ?? '';
+          _flag.text = getProfileModels.data?.nationality ?? '';
+          _slectedGenderId = getProfileModels.data?.genderId ?? "";
+          selectedOption = getProfileModels.data?.passportDesignId ?? "";
+        }
+
+        setState(() {
+          isLoading = false;
+        });
+
+        print('getProfileModels status: ${getProfileModels.status}');
+      } else {
+        print("Error: ${response.reasonPhrase}");
+        // Handle error cases if needed
+      }
+    } catch (e) {
+      print("Error during API request: $e");
+      // Handle exception if needed
     }
   }
 
@@ -322,342 +338,333 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Profile",
-          style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w900,
-              color: Color(0xFF525252)),
-        ),
-        centerTitle: true,
-        backgroundColor: const Color(0xFFC6FFE7),
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: SvgPicture.asset(
-              "assets/arrowLeft.svg",
-              width: 20,
-              height: 20,
-            ),
+    if (isLoading) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(
+            color: Color(0xFFF65734),
           ),
         ),
-        actions: [
-          Padding(
+      );
+    } else {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            "Profile",
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w900,
+                color: Color(0xFF525252)),
+          ),
+          centerTitle: true,
+          backgroundColor: const Color(0xFFC6FFE7),
+          leading: Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
-              onTap: () async {
-                if (_email.text.isEmpty &&
-                    _mobileNumberController.text.isEmpty &&
-                    _dob.text.isEmpty &&
-                    _flag.text.isEmpty &&
-                    selectedOption == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Please fill all the fields"),
-                    ),
-                  );
-                }
-
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (context) =>
-                      const ProgressDialog(), // Show the custom dialog
-                );
-                await updateProfile();
-
-                Navigator.pop(context); // Close the dialog after update
-
-                if (updateProfileModels.status == "success") {
-                  Navigator.pop(context);
-                } else if (updateProfileModels.status != "success") {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(updateProfileModels.message.toString()),
-                    ),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Something Went Wrong"),
-                    ),
-                  );
-                }
+              onTap: () {
+                Navigator.pop(context);
               },
-              child: const Text(
-                "Save",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF525252),
-                ),
+              child: SvgPicture.asset(
+                "assets/arrowLeft.svg",
+                width: 20,
+                height: 20,
               ),
             ),
           ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          // height: MediaQuery.of(context).size.height,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color(0xFFC6FFE7),
-                Color(0xFF00AEFF),
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-          ),
-          child: Column(children: [
-            Center(
-              child: Stack(children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(64),
-                  child: SizedBox(
-                    height: 120,
-                    width: 120,
-                    child: imagePathGallery != null
-                        ? Image.file(imagePathGallery!, fit: BoxFit.cover)
-                        : getProfileModels.data?.profilePicture != null
-                            ? Image.network(
-                                "https://portal.passporttastic.com/public/${getProfileModels.data!.profilePicture}",
-                                fit: BoxFit.cover,
-                              )
-                            : Container(), // Empty container as a fallback
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    pickImageGallery();
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(
-                      top: 80,
-                      left: 90,
-                    ),
-                    height: 32,
-                    width: 32,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFF8D74),
-                      border: Border.all(width: 4, color: Colors.transparent),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: SvgPicture.asset(
-                      'assets/cam2.svg',
-                      width: 10,
-                      height: 10,
-                    ),
-                  ),
-                ),
-              ]),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
+          actions: [
             Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Container(
-                height: 48,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                padding: const EdgeInsets.all(8.0),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        'assets/phone.svg',
-                        color: const Color(0xFFFF8D74),
+              padding: const EdgeInsets.all(8.0),
+              child: GestureDetector(
+                onTap: () async {
+                  if (_email.text.isEmpty &&
+                      _mobileNumberController.text.isEmpty &&
+                      _dob.text.isEmpty &&
+                      _flag.text.isEmpty &&
+                      selectedOption == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Please fill all the fields"),
                       ),
-                      const SizedBox(width: 8.0),
-                      Expanded(
-                        child: TextFormField(
-                          controller: _mobileNumberController,
-                          decoration: const InputDecoration(
-                            hintText: 'Mobile Number',
-                            hintStyle: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFF525252),
-                            ),
-                            border: InputBorder.none,
-                          ),
-                          style: const TextStyle(
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF525252),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Container(
-                height: 48,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                padding: const EdgeInsets.all(8.0),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        'assets/sms.svg',
-                        color: const Color(0xFFFF8D74),
-                      ),
-                      const SizedBox(width: 8.0),
-                      Expanded(
-                        child: TextFormField(
-                          controller: _email,
-                          decoration: const InputDecoration(
-                            hintText: 'Email',
-                            hintStyle: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFF525252),
-                            ),
-                            border: InputBorder.none,
-                          ),
-                          style: const TextStyle(
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF525252),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 10,
-                right: 10,
-              ),
-              child: Container(
-                height: 48,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                padding: const EdgeInsets.all(3.0),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        'assets/gender.svg',
-                        color: const Color(0xFFFF8D74),
-                      ),
-                      const SizedBox(width: 8.0),
-                      Expanded(
-                        child: DropdownButtonFormField<String>(
-                          iconDisabledColor: Colors.transparent,
-                          iconEnabledColor: Colors.transparent,
-                          value: _slectedGenderId,
-                          onChanged: (newValue) {
-                            setState(() {
-                              _slectedGenderId = newValue;
-                              print(" _slectedGenderId $_slectedGenderId");
-                            });
-                          },
-                          items: getGenderListModels.data?.map((gender) {
-                                return DropdownMenuItem<String>(
-                                  value: gender.genderId,
-                                  child: Text(
-                                    gender.gender ?? '',
-                                    style: const TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w500,
-                                      color: Color(0xFF525252),
-                                    ),
-                                  ),
-                                );
-                              }).toList() ??
-                              [],
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Gender',
-                            hintStyle: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFF525252),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Container(
-                height: 48,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                padding: const EdgeInsets.all(8.0),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(1950),
-                            lastDate: DateTime(2100),
-                          ).then((selectedDate) {
-                            if (selectedDate != null) {
-                              // Handle the selected date
-                              setState(() {
-                                _dob.text = DateFormat('yyyy-MM-dd')
-                                    .format(selectedDate);
-                                // Date.text = DateFormat.yMd().format(selectedDate);
-                              });
-                            }
-                          });
+                    );
+                  }
+
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) =>
+                        const ProgressDialog(), // Show the custom dialog
+                  );
+                  await updateProfile();
+                  Navigator.pop(context);
+
+                  // Close the dialog after update
+
+                  if (updateProfileModels.status == "success") {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) {
+                          return ViewProfile(
+                            userId: userID,
+                          );
                         },
-                        child: SvgPicture.asset(
-                          'assets/calendar.svg',
+                      ),
+                    );
+                  } else if (updateProfileModels.status != "success") {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(updateProfileModels.message.toString()),
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Something Went Wrong"),
+                      ),
+                    );
+                  }
+                },
+                child: const Text(
+                  "Save",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xFF525252),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+            // height: MediaQuery.of(context).size.height,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFFC6FFE7),
+                  Color(0xFF00AEFF),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+            child: Column(children: [
+              Center(
+                child: Stack(children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(64),
+                    child: SizedBox(
+                      height: 120,
+                      width: 120,
+                      child: imagePathGallery != null
+                          ? Image.file(imagePathGallery!, fit: BoxFit.cover)
+                          : getProfileModels.data?.profilePicture != null
+                              ? Image.network(
+                                  "https://portal.passporttastic.com/public/${getProfileModels.data!.profilePicture}",
+                                  fit: BoxFit.cover,
+                                )
+                              : Container(), // Empty container as a fallback
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      pickImageGallery();
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(
+                        top: 80,
+                        left: 90,
+                      ),
+                      height: 32,
+                      width: 32,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFF8D74),
+                        border: Border.all(width: 4, color: Colors.transparent),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: SvgPicture.asset(
+                        'assets/cam2.svg',
+                        width: 10,
+                        height: 10,
+                      ),
+                    ),
+                  ),
+                ]),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: Container(
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          'assets/phone.svg',
                           color: const Color(0xFFFF8D74),
                         ),
-                      ),
-                      const SizedBox(width: 8.0),
-                      Expanded(
-                        child: TextFormField(
-                          controller: _dob,
-                          readOnly: true, // Prevent manual text input
+                        const SizedBox(width: 8.0),
+                        Expanded(
+                          child: TextFormField(
+                            controller: _mobileNumberController,
+                            decoration: const InputDecoration(
+                              hintText: 'Mobile Number',
+                              hintStyle: TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFF525252),
+                              ),
+                              border: InputBorder.none,
+                            ),
+                            style: const TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFF525252),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: Container(
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          'assets/sms.svg',
+                          color: const Color(0xFFFF8D74),
+                        ),
+                        const SizedBox(width: 8.0),
+                        Expanded(
+                          child: TextFormField(
+                            controller: _email,
+                            decoration: const InputDecoration(
+                              hintText: 'Email',
+                              hintStyle: TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFF525252),
+                              ),
+                              border: InputBorder.none,
+                            ),
+                            style: const TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFF525252),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 10,
+                  right: 10,
+                ),
+                child: Container(
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  padding: const EdgeInsets.all(3.0),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          'assets/gender.svg',
+                          color: const Color(0xFFFF8D74),
+                        ),
+                        const SizedBox(width: 8.0),
+                        Expanded(
+                          child: DropdownButtonFormField<String>(
+                            iconDisabledColor: Colors.transparent,
+                            iconEnabledColor: Colors.transparent,
+                            value: _slectedGenderId,
+                            onChanged: (newValue) {
+                              setState(() {
+                                _slectedGenderId = newValue;
+                                print(" _slectedGenderId $_slectedGenderId");
+                              });
+                            },
+                            items:
+                                (getGenderListModels.data ?? []).map((gender) {
+                              return DropdownMenuItem<String>(
+                                value: gender.genderId,
+                                child: Text(
+                                  gender.gender ?? '',
+                                  style: const TextStyle(
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xFF525252),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'Gender',
+                              hintStyle: TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFF525252),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: Container(
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Row(
+                      children: [
+                        GestureDetector(
                           onTap: () {
-                            // Open the date picker when the field is tapped
                             showDatePicker(
                               context: context,
                               initialDate: DateTime.now(),
@@ -674,235 +681,264 @@ class _EditProfileState extends State<EditProfile> {
                               }
                             });
                           },
-                          decoration: const InputDecoration(
-                            hintText: 'Date of Birth',
-                            hintStyle: TextStyle(
+                          child: SvgPicture.asset(
+                            'assets/calendar.svg',
+                            color: const Color(0xFFFF8D74),
+                          ),
+                        ),
+                        const SizedBox(width: 8.0),
+                        Expanded(
+                          child: TextFormField(
+                            controller: _dob,
+                            readOnly: true, // Prevent manual text input
+                            onTap: () {
+                              // Open the date picker when the field is tapped
+                              showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1950),
+                                lastDate: DateTime(2100),
+                              ).then((selectedDate) {
+                                if (selectedDate != null) {
+                                  // Handle the selected date
+                                  setState(() {
+                                    _dob.text = DateFormat('yyyy-MM-dd')
+                                        .format(selectedDate);
+                                    // Date.text = DateFormat.yMd().format(selectedDate);
+                                  });
+                                }
+                              });
+                            },
+                            decoration: const InputDecoration(
+                              hintText: 'Date of Birth',
+                              hintStyle: TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFF525252),
+                              ),
+                              border: InputBorder.none,
+                            ),
+                            style: const TextStyle(
                               fontSize: 14.0,
                               fontWeight: FontWeight.w500,
                               color: Color(0xFF525252),
                             ),
-                            border: InputBorder.none,
-                          ),
-                          style: const TextStyle(
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF525252),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Container(
-                height: 48,
+              const SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: Container(
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  padding: const EdgeInsets.all(3.0),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          'assets/flag.svg',
+                          color: const Color(0xFFFF8D74),
+                        ),
+                        const SizedBox(width: 8.0),
+                        Expanded(
+                          child: TextFormField(
+                            controller: _flag,
+
+                            // readOnly: true,
+                            // onTap: () {
+                            //   showCountryPicker(
+                            //     context: context,
+                            //     countryListTheme: CountryListThemeData(
+                            //       flagSize: 25,
+                            //       backgroundColor: Colors.white,
+                            //       textStyle: const TextStyle(
+                            //           fontSize: 16, color: Colors.blueGrey),
+                            //       bottomSheetHeight: 500,
+                            //       borderRadius: const BorderRadius.only(
+                            //         topLeft: Radius.circular(20.0),
+                            //         topRight: Radius.circular(20.0),
+                            //       ),
+                            //       inputDecoration: InputDecoration(
+                            //         prefixIcon: Padding(
+                            //           padding: const EdgeInsets.all(8.0),
+                            //           child: SvgPicture.asset(
+                            //             'assets/flag.svg',
+                            //           ),
+                            //         ),
+
+                            //         focusedBorder: OutlineInputBorder(
+                            //           borderSide: const BorderSide(
+                            //               color: Color(0xFFF65734)),
+                            //           borderRadius: BorderRadius.circular(15.0),
+                            //         ),
+                            //         // labelText: 'Email',
+                            //         hintText: "Country Name",
+                            //         enabledBorder: OutlineInputBorder(
+                            //           borderRadius: BorderRadius.circular(15),
+                            //           borderSide: const BorderSide(
+                            //               color: Color(
+                            //                   0xFFF3F3F3)), // change border color
+                            //         ),
+                            //         labelStyle: const TextStyle(),
+                            //         hintStyle: const TextStyle(
+                            //             color: Color(0xFFA7A9B7),
+                            //             fontSize: 16,
+                            //             fontWeight: FontWeight.w300,
+                            //             fontFamily: "Satoshi"),
+                            //         border: OutlineInputBorder(
+                            //             borderRadius: BorderRadius.circular(15)),
+                            //       ),
+                            //     ),
+                            //     onSelect: (Country country) {
+                            //       setState(() {
+                            //         _selectedCountry = country;
+                            //         print(
+                            //             'Selected country: ${country.displayNameNoCountryCode}');
+                            //         print(_selectedCountry);
+                            //       });
+                            //     },
+                            //   );
+                            // },
+                            // controller: TextEditingController(
+                            //   text: _selectedCountry != null
+                            //       ? _selectedCountry?.displayNameNoCountryCode
+                            //       : '',
+                            // ),
+
+                            decoration: const InputDecoration(
+                              hintText: 'Nationality',
+                              hintStyle: TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFF525252),
+                              ),
+                              border: InputBorder.none,
+                            ),
+                            style: const TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFF525252),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  padding: const EdgeInsets.all(3.0),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          'assets/terms.svg',
+                          color: const Color(0xFFFF8D74),
+                        ),
+                        const SizedBox(width: 8.0),
+                        Expanded(
+                          child: DropdownButtonFormField<String>(
+                            iconDisabledColor: Colors.transparent,
+                            iconEnabledColor: Colors.transparent,
+                            value: selectedOption,
+                            decoration: InputDecoration(
+                              suffixIcon: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    GestureDetector(
+                                        onTap: () {},
+                                        child: SvgPicture.asset(
+                                            "assets/arrowDown.svg"))
+                                  ]),
+                              hintText: 'Change the Passport Design',
+                              hintStyle: const TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFF525252),
+                              ),
+                              border: InputBorder.none,
+                            ),
+                            items: coverDesignDataModel.data
+                                    ?.map<DropdownMenuItem<String>>((data) {
+                                  return DropdownMenuItem<String>(
+                                    value: data.passportDesignId ?? '',
+                                    child: Text(data.passportCountry ?? ''),
+                                  );
+                                }).toList() ??
+                                [],
+                            onChanged: (value) {
+                              setState(() {
+                                selectedOption = value;
+                                selectedCoverImage = coverDesignDataModel.data
+                                    ?.firstWhereOrNull(
+                                      (data) => data.passportDesignId == value,
+                                    )
+                                    ?.passportFrontCover;
+                                print("Selected Option: $selectedOption");
+                                print(
+                                    "Selected Cover Image: $selectedCoverImage");
+                              });
+                            },
+                            style: const TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFF525252),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Container(
+                width: 150,
+                height: 210,
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                padding: const EdgeInsets.all(3.0),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        'assets/flag.svg',
-                        color: const Color(0xFFFF8D74),
-                      ),
-                      const SizedBox(width: 8.0),
-                      Expanded(
-                        child: TextFormField(
-                          controller: _flag,
-
-                          // readOnly: true,
-                          // onTap: () {
-                          //   showCountryPicker(
-                          //     context: context,
-                          //     countryListTheme: CountryListThemeData(
-                          //       flagSize: 25,
-                          //       backgroundColor: Colors.white,
-                          //       textStyle: const TextStyle(
-                          //           fontSize: 16, color: Colors.blueGrey),
-                          //       bottomSheetHeight: 500,
-                          //       borderRadius: const BorderRadius.only(
-                          //         topLeft: Radius.circular(20.0),
-                          //         topRight: Radius.circular(20.0),
-                          //       ),
-                          //       inputDecoration: InputDecoration(
-                          //         prefixIcon: Padding(
-                          //           padding: const EdgeInsets.all(8.0),
-                          //           child: SvgPicture.asset(
-                          //             'assets/flag.svg',
-                          //           ),
-                          //         ),
-
-                          //         focusedBorder: OutlineInputBorder(
-                          //           borderSide: const BorderSide(
-                          //               color: Color(0xFFF65734)),
-                          //           borderRadius: BorderRadius.circular(15.0),
-                          //         ),
-                          //         // labelText: 'Email',
-                          //         hintText: "Country Name",
-                          //         enabledBorder: OutlineInputBorder(
-                          //           borderRadius: BorderRadius.circular(15),
-                          //           borderSide: const BorderSide(
-                          //               color: Color(
-                          //                   0xFFF3F3F3)), // change border color
-                          //         ),
-                          //         labelStyle: const TextStyle(),
-                          //         hintStyle: const TextStyle(
-                          //             color: Color(0xFFA7A9B7),
-                          //             fontSize: 16,
-                          //             fontWeight: FontWeight.w300,
-                          //             fontFamily: "Satoshi"),
-                          //         border: OutlineInputBorder(
-                          //             borderRadius: BorderRadius.circular(15)),
-                          //       ),
-                          //     ),
-                          //     onSelect: (Country country) {
-                          //       setState(() {
-                          //         _selectedCountry = country;
-                          //         print(
-                          //             'Selected country: ${country.displayNameNoCountryCode}');
-                          //         print(_selectedCountry);
-                          //       });
-                          //     },
-                          //   );
-                          // },
-                          // controller: TextEditingController(
-                          //   text: _selectedCountry != null
-                          //       ? _selectedCountry?.displayNameNoCountryCode
-                          //       : '',
-                          // ),
-
-                          decoration: const InputDecoration(
-                            hintText: 'Nationality',
-                            hintStyle: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFF525252),
-                            ),
-                            border: InputBorder.none,
-                          ),
-                          style: const TextStyle(
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF525252),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  image: selectedCoverImage != null
+                      ? DecorationImage(
+                          image: NetworkImage(
+                              "https://portal.passporttastic.com/public/$selectedCoverImage"),
+                          fit: BoxFit.cover,
+                        )
+                      : null,
+                  borderRadius: BorderRadius.circular(1),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                padding: const EdgeInsets.all(3.0),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        'assets/terms.svg',
-                        color: const Color(0xFFFF8D74),
-                      ),
-                      const SizedBox(width: 8.0),
-                      Expanded(
-                        child: DropdownButtonFormField<String>(
-                          iconDisabledColor: Colors.transparent,
-                          iconEnabledColor: Colors.transparent,
-                          value: selectedOption,
-                          decoration: InputDecoration(
-                            suffixIcon: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  GestureDetector(
-                                      onTap: () {},
-                                      child: SvgPicture.asset(
-                                          "assets/arrowDown.svg"))
-                                ]),
-                            hintText: 'Change the Passport Design',
-                            hintStyle: const TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFF525252),
-                            ),
-                            border: InputBorder.none,
-                          ),
-                          items: coverDesignDataModel.data
-                                  ?.map<DropdownMenuItem<String>>((data) {
-                                return DropdownMenuItem<String>(
-                                  value: data.passportDesignId ?? '',
-                                  child: Text(data.passportCountry ?? ''),
-                                );
-                              }).toList() ??
-                              [],
-                          onChanged: (value) {
-                            setState(() {
-                              selectedOption = value;
-                              selectedCoverImage = coverDesignDataModel.data
-                                  ?.firstWhereOrNull(
-                                    (data) => data.passportDesignId == value,
-                                  )
-                                  ?.passportFrontCover;
-                              print("Selected Option: $selectedOption");
-                              print(
-                                  "Selected Cover Image: $selectedCoverImage");
-                            });
-                          },
-                          style: const TextStyle(
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF525252),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              const SizedBox(
+                height: 10,
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Container(
-              width: 150,
-              height: 210,
-              decoration: BoxDecoration(
-                image: selectedCoverImage != null
-                    ? DecorationImage(
-                        image: NetworkImage(
-                            "https://portal.passporttastic.com/public/$selectedCoverImage"),
-                        fit: BoxFit.cover,
-                      )
-                    : null,
-                borderRadius: BorderRadius.circular(1),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-          ]),
+            ]),
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   String? selectedCoverImage;

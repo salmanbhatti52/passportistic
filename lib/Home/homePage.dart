@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../HomeButtons/addItinerary.dart';
 import '../HomeButtons/arrivalDetails.dart';
 import '../HomeButtons/depature.dart';
-import '../HomeButtons/viewpassport.dart';
+import '../HomeButtons/passport.dart';
 import '../Models/getProfileModels.dart';
 import '../auth/signUpNextPage.dart';
 import '../auth/signUpPage.dart';
@@ -387,7 +387,7 @@ class _HomePageState extends State<HomePage> {
                               onTap: () {
                                 Navigator.push(context, MaterialPageRoute(
                                   builder: (BuildContext context) {
-                                    return const ViewPassportPage();
+                                    return const ViewPassport();
                                   },
                                 ));
                               },
@@ -431,7 +431,7 @@ class _HomePageState extends State<HomePage> {
                                           Navigator.push(context,
                                               MaterialPageRoute(
                                             builder: (BuildContext context) {
-                                              return const ViewPassportPage();
+                                              return const ViewPassport();
                                             },
                                           ));
                                         },
