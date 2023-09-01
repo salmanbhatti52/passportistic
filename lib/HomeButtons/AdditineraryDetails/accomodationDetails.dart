@@ -75,6 +75,20 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
   }
 
   @override
+  void dispose() {
+    city.dispose();
+    checkInDate.dispose();
+    establishmentName.dispose();
+    typeoFAccommodation.dispose();
+    Address.dispose();
+    checkOuTDate.dispose();
+    nights.dispose();
+    breakfasTIncluded.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -533,7 +547,6 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
               } else {
                 await accommodationDetails();
                 if (accommodationModels.status == "success") {
-                  Future.delayed(const Duration(seconds: 2));
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text(
@@ -541,7 +554,7 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                       ),
                     ),
                   );
-                  Navigator.push(context, MaterialPageRoute(
+                  Navigator.pushReplacement(context, MaterialPageRoute(
                     builder: (BuildContext context) {
                       return ActivitiesDetails(
                           itinid: widget.itinid, itinname: widget.itinname);

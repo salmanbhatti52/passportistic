@@ -71,6 +71,20 @@ class _ActivitiesDetailsState extends State<ActivitiesDetails> {
   }
 
   @override
+  void dispose() {
+    dayNum.dispose();
+    activityDate.dispose();
+    activity.dispose();
+    comments.dispose();
+    breakfast.dispose();
+    lunch.dispose();
+    dinner.dispose();
+    breakfasTIncluded.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -474,7 +488,7 @@ class _ActivitiesDetailsState extends State<ActivitiesDetails> {
                       ),
                     ),
                   );
-                  Navigator.push(context, MaterialPageRoute(
+                  Navigator.pushReplacement(context, MaterialPageRoute(
                     builder: (BuildContext context) {
                       return DisplayDiary(
                           itinid: widget.itinid, itinname: widget.itinname);

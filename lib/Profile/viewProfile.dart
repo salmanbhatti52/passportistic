@@ -536,7 +536,7 @@ class _ViewProfileState extends State<ViewProfile> {
                 ),
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * .04,
+                height: MediaQuery.of(context).size.height * .01,
               ),
               selectedOption != null
                   ? Center(
@@ -544,11 +544,14 @@ class _ViewProfileState extends State<ViewProfile> {
                       padding: const EdgeInsets.all(4.0),
                       child: Image.network(
                         "https://portal.passporttastic.com/public/$selectedOption",
-                        width: 150,
-                        height: 150,
+                        width: 200,
+                        height: 200,
                       ),
                     ))
-                  : const SizedBox()
+                  : const SizedBox(),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * .02,
+              ),
             ]),
           )),
         ),

@@ -262,280 +262,288 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                         ],
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(18.0),
                         child: SingleChildScrollView(
                           scrollDirection: Axis.vertical,
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    const Text(
-                                      'Day No',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
+                                Container(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Day No',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      travelForPage[index % itemsPerPage]
-                                              .travelDayNumber ??
-                                          '',
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                    ),
-                                    // ---
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                    ),
-                                    const Text(
-                                      'Travel Mode',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    // ---
-                                    Text(
-                                      transportModeNamesModels.data?.modeName ??
-                                          '',
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                    ),
-                                    // ---
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                    ),
-                                    const Text(
-                                      'Trip Details',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    // ---
-                                    Text(
-                                      travelForPage[index % itemsPerPage]
-                                              .travelDepartTripDetails ??
-                                          '',
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                    ),
-                                    // ---
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                    ),
-                                    const Text(
-                                      'Travel Time',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    // ---
-                                    Text(
-                                      travelForPage[index % itemsPerPage]
-                                              .tripTravelTime ??
-                                          '',
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                    ),
-                                    // ---
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                    ),
-                                    const Text(
-                                      'Local Time',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    // ---
-                                    Text(
-                                      travelForPage[index % itemsPerPage]
-                                              .departureTime ??
-                                          '',
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    const Text(
-                                      'Local Date',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    // ---
-                                    Text(
-                                      DateFormat('dd MMM yyyy').format(
+                                      Text(
                                         travelForPage[index % itemsPerPage]
-                                                .departureDate ??
-                                            DateTime.now(),
+                                                .travelDayNumber ??
+                                            '',
+                                        style: const TextStyle(
+                                          color: Color(0xFFF65734),
+                                          fontSize: 18,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w900,
+                                        ),
                                       ),
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
+                                      // ---
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
                                       ),
-                                    ),
-                                    // ---
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                    ),
-                                    const Text(
-                                      'From',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
+                                      const Text(
+                                        'Travel Mode',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                       ),
-                                    ),
-                                    // ---
-                                    Text(
-                                      travelForPage[index % itemsPerPage]
-                                              .travelDepartCity ??
-                                          '',
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
+                                      // ---
+                                      Text(
+                                        transportModeNamesModels
+                                                .data?.modeName ??
+                                            '',
+                                        style: const TextStyle(
+                                          color: Color(0xFFF65734),
+                                          fontSize: 18,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w900,
+                                        ),
                                       ),
-                                    ),
-                                    // ---
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                    ),
-                                    const Text(
-                                      'Local Time',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
+                                      // ---
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
                                       ),
-                                    ),
-                                    // ---
-                                    Text(
-                                      travelForPage[index % itemsPerPage]
-                                              .arrivalTime ??
-                                          '',
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
+                                      const Text(
+                                        'Trip Details',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                       ),
-                                    ),
-                                    // ---
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                    ),
-                                    const Text(
-                                      'To',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
+                                      // ---
+                                      Text(
+                                        travelForPage[index % itemsPerPage]
+                                                .travelDepartTripDetails ??
+                                            '',
+                                        style: const TextStyle(
+                                          color: Color(0xFFF65734),
+                                          fontSize: 18,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w900,
+                                        ),
                                       ),
-                                    ),
-                                    // ---
-                                    Text(
-                                      travelForPage[index % itemsPerPage]
-                                              .travelArriveCity ??
-                                          '',
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
+                                      // ---
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
                                       ),
-                                    ),
-                                    // ---
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                    ),
-                                    const Text(
-                                      'Layover',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
+                                      const Text(
+                                        'Travel Time',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      travelForPage[index % itemsPerPage]
-                                              .layoverTime ??
-                                          '',
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
+                                      // ---
+                                      Text(
+                                        travelForPage[index % itemsPerPage]
+                                                .tripTravelTime ??
+                                            '',
+                                        style: const TextStyle(
+                                          color: Color(0xFFF65734),
+                                          fontSize: 18,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w900,
+                                        ),
                                       ),
-                                    )
-                                  ],
+                                      // ---
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
+                                      ),
+                                      const Text(
+                                        'Local Time',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      // ---
+                                      Text(
+                                        travelForPage[index % itemsPerPage]
+                                                .departureTime ??
+                                            '',
+                                        style: const TextStyle(
+                                          color: Color(0xFFF65734),
+                                          fontSize: 18,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Local Date',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      // ---
+                                      Text(
+                                        DateFormat('dd MMM yyyy').format(
+                                          travelForPage[index % itemsPerPage]
+                                                  .departureDate ??
+                                              DateTime.now(),
+                                        ),
+                                        style: const TextStyle(
+                                          color: Color(0xFFF65734),
+                                          fontSize: 18,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                                      // ---
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
+                                      ),
+                                      const Text(
+                                        'From',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      // ---
+                                      Text(
+                                        travelForPage[index % itemsPerPage]
+                                                .travelDepartCity ??
+                                            '',
+                                        style: const TextStyle(
+                                          color: Color(0xFFF65734),
+                                          fontSize: 18,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                                      // ---
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
+                                      ),
+                                      const Text(
+                                        'Local Time',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      // ---
+                                      Text(
+                                        travelForPage[index % itemsPerPage]
+                                                .arrivalTime ??
+                                            '',
+                                        style: const TextStyle(
+                                          color: Color(0xFFF65734),
+                                          fontSize: 18,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                                      // ---
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
+                                      ),
+                                      const Text(
+                                        'To',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      // ---
+                                      Text(
+                                        travelForPage[index % itemsPerPage]
+                                                .travelArriveCity ??
+                                            '',
+                                        style: const TextStyle(
+                                          color: Color(0xFFF65734),
+                                          fontSize: 18,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                                      // ---
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
+                                      ),
+                                      const Text(
+                                        'Layover',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      Text(
+                                        travelForPage[index % itemsPerPage]
+                                                .layoverTime ??
+                                            '',
+                                        style: const TextStyle(
+                                          color: Color(0xFFF65734),
+                                          fontSize: 18,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
 
                                 // ---

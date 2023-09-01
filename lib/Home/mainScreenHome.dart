@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:scanguard/Home/stampPage.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Models/getProfileModels.dart';
 import '../auth/signUpNextPage.dart';
 import '../auth/signUpPage.dart';
@@ -27,6 +28,9 @@ class _MainScreenState extends State<MainScreen> {
   GetProfileModels getProfileModels = GetProfileModels();
   getUserProfile() async {
     // try {
+
+        prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
 
     String apiUrl = "$baseUrl/get_profile";
     print("api: $apiUrl");

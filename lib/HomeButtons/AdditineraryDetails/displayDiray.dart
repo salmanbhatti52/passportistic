@@ -198,7 +198,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
           ),
         ),
       );
-      Navigator.push(context, MaterialPageRoute(
+      Navigator.pushReplacement(context, MaterialPageRoute(
         builder: (BuildContext context) {
           return DisplayDairyDetailsPage(
             itinid: widget.itinid,
@@ -529,13 +529,20 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                 setState(() {
                   isLoading = true;
                 });
-                if (comments.text.isEmpty &&
-                    formattedDate == null &&
-                    base64ImageUrls == null) {
+                if (comments.text.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text(
                         'Please fill all the fields',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
+                } else if (formattedDate == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'Please Select the Date',
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -566,23 +573,6 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                           borderRadius: BorderRadius.circular(15),
                         ),
                       ),
-                      // child: const Row(
-                      //   mainAxisSize: MainAxisSize.min,
-                      //   mainAxisAlignment: MainAxisAlignment.center,
-                      //   crossAxisAlignment: CrossAxisAlignment.center,
-                      //   children: [
-                      //     Text(
-                      //       'Save',
-                      //       textAlign: TextAlign.center,
-                      //       style: TextStyle(
-                      //         color: Colors.white,
-                      //         fontSize: 20,
-                      //         fontFamily: 'Satoshi',
-                      //         fontWeight: FontWeight.w700,
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
                     ),
                     isLoading == true
                         ? const CircularProgressIndicator(

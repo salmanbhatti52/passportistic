@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -6,7 +8,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
-import 'package:scanguard/Profile/viewProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Models/coverDesignModels.dart';
 import '../Models/getGenderList.dart';
@@ -388,23 +389,22 @@ class _EditProfileState extends State<EditProfile> {
                     );
                   }
 
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) =>
-                        const ProgressDialog(), // Show the custom dialog
-                  );
+                  // showDialog(
+                  //   context: context,
+                  //   barrierDismissible: false,
+                  //   builder: (context) =>
+                  //       const ProgressDialog(), // Show the custom dialog
+                  // );
                   await updateProfile();
-                  Navigator.pop(context);
 
                   // Close the dialog after update
 
                   if (updateProfileModels.status == "success") {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (BuildContext context) {
-                          return ViewProfile(
+                          return EditProfile(
                             userId: userID,
                           );
                         },

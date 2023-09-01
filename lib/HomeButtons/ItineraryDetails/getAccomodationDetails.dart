@@ -396,61 +396,63 @@ class _AccomodationDetailsPageState extends State<AccomodationDetailsPage> {
                                     ),
                                   ],
                                 ),
-                                Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text(
-                                      "Breakfast",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
+                                Container(
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text(
+                                        "Breakfast",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                       ),
-                                    ),
-                                    // ---
-                                    Text(
-                                      accommodationsForPage[
-                                                  index % itemsPerPage]
-                                              .accomodationBreakfast ??
-                                          '',
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
+                                      // ---
+                                      Text(
+                                        accommodationsForPage[
+                                                    index % itemsPerPage]
+                                                .accomodationBreakfast ??
+                                            '',
+                                        style: const TextStyle(
+                                          color: Color(0xFFF65734),
+                                          fontSize: 18,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w900,
+                                        ),
                                       ),
-                                    ),
-                                    // ---
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                    ),
-                                    const Text(
-                                      'Nights',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
+                                      // ---
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
                                       ),
-                                    ),
-                                    // ---
-                                    Text(
-                                      accommodationsForPage[
-                                                  index % itemsPerPage]
-                                              .accomodationNights ??
-                                          '',
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
+                                      const Text(
+                                        'Nights',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                      // ---
+                                      Text(
+                                        accommodationsForPage[
+                                                    index % itemsPerPage]
+                                                .accomodationNights ??
+                                            '',
+                                        style: const TextStyle(
+                                          color: Color(0xFFF65734),
+                                          fontSize: 18,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
 
                                 // ---

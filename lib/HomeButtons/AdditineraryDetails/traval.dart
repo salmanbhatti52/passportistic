@@ -117,6 +117,22 @@ class _TravelDetailsState extends State<TravelDetails> {
   }
 
   @override
+  void dispose() {
+    travelMode.dispose();
+    departureCity.dispose();
+    departureDate.dispose();
+    departureTime.dispose();
+    operator.dispose();
+    tripDetails.dispose();
+    arrivalCity.dispose();
+    arrivalDate.dispose();
+    arrivalTime.dispose();
+    travelTime.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -787,9 +803,6 @@ class _TravelDetailsState extends State<TravelDetails> {
           ),
           GestureDetector(
             onTap: () async {
-              setState(() {
-                isLoading = true;
-              });
               if (operator.text.isEmpty &&
                   arrivalTime.text.isEmpty &&
                   arrivalDate.text.isEmpty &&
@@ -827,11 +840,10 @@ class _TravelDetailsState extends State<TravelDetails> {
                 print(_selectedTransportMode);
                 print(widget.itinid);
                 if (travalDetailsModels.status == "success") {
-                  Navigator.push(context, MaterialPageRoute(
+                  Navigator.pushReplacement(context, MaterialPageRoute(
                     builder: (BuildContext context) {
                       return AccommodationDetails(
-                        itinid: widget.itinid, itinname: widget.itinname
-                      );
+                          itinid: widget.itinid, itinname: widget.itinname);
                     },
                   ));
                 } else if (travalDetailsModels.status != "success") {
@@ -852,9 +864,6 @@ class _TravelDetailsState extends State<TravelDetails> {
                     ),
                   );
                 }
-                setState(() {
-                  isLoading = false;
-                });
               }
             },
             child: Padding(
