@@ -68,9 +68,12 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
       }
       print("Desired Itinerary ID: $desiredItineraryId");
 
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+
       print('itineraryAddModels status: ${iteneraryGetModels.status}');
     }
   }
@@ -203,7 +206,6 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
                             setState(() {
                               _slecteditinerary = newValue;
                               print("Selected Itinerary: $_slecteditinerary");
-                              
 
                               for (var itinerary
                                   in iteneraryGetModels.data ?? []) {
@@ -292,9 +294,8 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
                     Navigator.push(context, MaterialPageRoute(
                       builder: (BuildContext context) {
                         return TravelDetails(
-                          itinid: _slecteditinerary!,
-                          itinname: _selectedItineraryName!
-                        );
+                            itinid: _slecteditinerary!,
+                            itinname: _selectedItineraryName!);
                       },
                     ));
                   }
@@ -354,10 +355,8 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
                     Navigator.push(context, MaterialPageRoute(
                       builder: (BuildContext context) {
                         return AccommodationDetails(
-                          itinid: _slecteditinerary!,
-                           itinname: _selectedItineraryName!
-
-                        );
+                            itinid: _slecteditinerary!,
+                            itinname: _selectedItineraryName!);
                       },
                     ));
                   }
@@ -419,9 +418,8 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
                     Navigator.push(context, MaterialPageRoute(
                       builder: (BuildContext context) {
                         return ActivitiesDetails(
-                          itinid: _slecteditinerary!,
-                           itinname: _selectedItineraryName!
-                        );
+                            itinid: _slecteditinerary!,
+                            itinname: _selectedItineraryName!);
                       },
                     ));
                   }
@@ -483,9 +481,8 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
                     Navigator.push(context, MaterialPageRoute(
                       builder: (BuildContext context) {
                         return DisplayDiary(
-                          itinid: _slecteditinerary!,
-                           itinname: _selectedItineraryName
-                        );
+                            itinid: _slecteditinerary!,
+                            itinname: _selectedItineraryName);
                       },
                     ));
                   }

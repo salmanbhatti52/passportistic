@@ -52,9 +52,12 @@ class _AccomodationDetailsPageState extends State<AccomodationDetailsPage> {
       print("SuucessFull");
       getAccomodationsDetailsModels =
           getAccomodationsDetailsModelsFromJson(responseString);
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+
       print(
           'AaccommodationModelsDetailsModels status: ${getAccomodationsDetailsModels.status}');
     } else {
@@ -245,161 +248,166 @@ class _AccomodationDetailsPageState extends State<AccomodationDetailsPage> {
                         ],
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(16.0),
                         child: SingleChildScrollView(
                           scrollDirection: Axis.vertical,
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  // crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    const Text(
-                                      "City",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
+                                Container(
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "City",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      accommodationsForPage[
-                                                  index % itemsPerPage]
-                                              .accomodationName ??
-                                          '',
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                    ),
-                                    // ---
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                    ),
-                                    const Text(
-                                      'Accommodation',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    // ---
-                                    Text(
-                                      accommodationsForPage[
-                                                  index % itemsPerPage]
-                                              .accomodationName ??
-                                          '',
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                    ),
-                                    // ---
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                    ),
-                                    const Text(
-                                      'Type',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    // ---
-                                    Text(
-                                      accommodationsForPage[
-                                                  index % itemsPerPage]
-                                              .accomodationType ??
-                                          '',
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                    ),
-                                    // ---
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                    ),
-                                    const Text(
-                                      'Check Out',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    // ---
-                                    Text(
-                                      DateFormat('dd MMM yyyy').format(
+                                      Text(
                                         accommodationsForPage[
                                                     index % itemsPerPage]
-                                                .accomodationCheckoutDate ??
-                                            DateTime.now(),
+                                                .accomodationName ??
+                                            '',
+                                        style: const TextStyle(
+                                          color: Color(0xFFF65734),
+                                          fontSize: 18,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w900,
+                                        ),
                                       ),
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
+                                      // ---
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
                                       ),
-                                    ),
+                                      const Text(
+                                        'Accommodation',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      // ---
+                                      Text(
+                                        accommodationsForPage[
+                                                    index % itemsPerPage]
+                                                .accomodationName ??
+                                            '',
+                                        style: const TextStyle(
+                                          color: Color(0xFFF65734),
+                                          fontSize: 18,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                                      // ---
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
+                                      ),
+                                      const Text(
+                                        'Type',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      // ---
+                                      Text(
+                                        accommodationsForPage[
+                                                    index % itemsPerPage]
+                                                .accomodationType ??
+                                            '',
+                                        style: const TextStyle(
+                                          color: Color(0xFFF65734),
+                                          fontSize: 18,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                                      // ---
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
+                                      ),
+                                      const Text(
+                                        'Check Out',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      // ---
+                                      Text(
+                                        DateFormat('dd MMM yyyy').format(
+                                          accommodationsForPage[
+                                                      index % itemsPerPage]
+                                                  .accomodationCheckoutDate ??
+                                              DateTime.now(),
+                                        ),
+                                        style: const TextStyle(
+                                          color: Color(0xFFF65734),
+                                          fontSize: 18,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
 
-                                    // ---
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                    ),
-                                    const Text(
-                                      'Check In',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
+                                      // ---
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
                                       ),
-                                    ),
-                                    // ---
-                                    Text(
-                                      DateFormat('dd MMM yyyy').format(
-                                        accommodationsForPage[
-                                                    index % itemsPerPage]
-                                                .accomodationCheckinDate ??
-                                            DateTime.now(),
+                                      const Text(
+                                        'Check In',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                       ),
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
+                                      // ---
+                                      Text(
+                                        DateFormat('dd MMM yyyy').format(
+                                          accommodationsForPage[
+                                                      index % itemsPerPage]
+                                                  .accomodationCheckinDate ??
+                                              DateTime.now(),
+                                        ),
+                                        style: const TextStyle(
+                                          color: Color(0xFFF65734),
+                                          fontSize: 18,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w900,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                                 Container(
                                   child: Column(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       const Text(
                                         "Breakfast",
@@ -427,7 +435,7 @@ class _AccomodationDetailsPageState extends State<AccomodationDetailsPage> {
                                       SizedBox(
                                         height:
                                             MediaQuery.of(context).size.height *
-                                                0.02,
+                                                0.09,
                                       ),
                                       const Text(
                                         'Nights',

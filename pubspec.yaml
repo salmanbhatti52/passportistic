@@ -50,6 +50,7 @@ dependencies:
   csc_picker: ^0.2.7
   photo_view: ^0.14.0
   is_first_run: ^1.0.0
+  fluttertoast: ^8.2.2
 
   
 dev_dependencies:

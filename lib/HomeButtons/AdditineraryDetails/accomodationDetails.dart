@@ -644,8 +644,7 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
               Navigator.push(context, MaterialPageRoute(
                 builder: (BuildContext context) {
                   return AccomodationDetailsPage(
-                    itinid: widget.itinid,
-                  );
+                      itinid: widget.itinid, itinname: widget.itinname);
                 },
               ));
             },

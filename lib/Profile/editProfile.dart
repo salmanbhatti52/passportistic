@@ -496,14 +496,17 @@ class _EditProfileState extends State<EditProfile> {
                 height: 10,
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10),
+                padding: const EdgeInsets.only(
+                  left: 10,
+                  right: 10,
+                ),
                 child: Container(
                   height: 48,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15.0),
                   ),
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(5.0),
                   child: Align(
                     alignment: Alignment.center,
                     child: Row(
@@ -548,7 +551,7 @@ class _EditProfileState extends State<EditProfile> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15.0),
                   ),
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(5.0),
                   child: Align(
                     alignment: Alignment.center,
                     child: Row(
@@ -658,7 +661,7 @@ class _EditProfileState extends State<EditProfile> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15.0),
                   ),
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(5.0),
                   child: Align(
                     alignment: Alignment.center,
                     child: Row(
@@ -741,7 +744,7 @@ class _EditProfileState extends State<EditProfile> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15.0),
                   ),
-                  padding: const EdgeInsets.all(3.0),
+                  padding: const EdgeInsets.all(5.0),
                   child: Align(
                     alignment: Alignment.center,
                     child: Row(

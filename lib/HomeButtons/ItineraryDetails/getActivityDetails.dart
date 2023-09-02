@@ -236,215 +236,226 @@ class _AcitvityDetailsPageState extends State<AcitvityDetailsPage> {
                         ],
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(16.0),
                         child: SingleChildScrollView(
                           scrollDirection: Axis.vertical,
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  // crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    const Text(
-                                      "Day",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.4,
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "Day",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      activityForPage[index % itemsPerPage]
-                                              .dayNumber ??
-                                          '',
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                    ),
-                                    // ---
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                    ),
-                                    const Text(
-                                      'Activity',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    // ---
-                                    Text(
-                                      activityForPage[index % itemsPerPage]
-                                              .activity ??
-                                          '',
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                    ),
-                                    // ---
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                    ),
-                                    const Text(
-                                      'Comments',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    // ---
-                                    Text(
-                                      activityForPage[index % itemsPerPage]
-                                              .comments ??
-                                          '',
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                    ),
-                                    // ---
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                    ),
-                                    const Text(
-                                      'Breakfast',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    // ---
-                                    Text(
-                                      activityForPage[index % itemsPerPage]
-                                              .breakfast ??
-                                          '',
-                                      // DateFormat('dd MMM yyyy').format(
-                                      //   activityForPage[
-                                      //               index % itemsPerPage]
-                                      //           .accomodationCheckoutDate ??
-                                      //       DateTime.now(),
-                                      // ),
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                    ),
-
-                                    // ---
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                    ),
-                                    const Text(
-                                      'Dinner',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    // ---
-                                    Text(
-                                      activityForPage[index % itemsPerPage]
-                                              .dinner ??
-                                          '',
-                                      // DateFormat('dd MMM yyyy').format(
-                                      //   activityForPage[
-                                      //               index % itemsPerPage]
-                                      //           .accomodationCheckinDate ??
-                                      //       DateTime.now(),
-                                      // ),
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text(
-                                      "Local Date",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    // ---
-                                    Text(
-                                      DateFormat('dd MMM yyyy').format(
+                                      Text(
                                         activityForPage[index % itemsPerPage]
-                                                .activityDate ??
-                                            DateTime.now(),
+                                                .dayNumber ??
+                                            '',
+                                        style: const TextStyle(
+                                          color: Color(0xFFF65734),
+                                          fontSize: 18,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w900,
+                                        ),
                                       ),
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
+                                      // ---
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
                                       ),
-                                    ),
-                                    // ---
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                    ),
-                                    const Text(
-                                      'Lunch',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w700,
+                                      const Text(
+                                        'Activity',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                       ),
-                                    ),
-                                    // ---
-                                    Text(
-                                      activityForPage[index % itemsPerPage]
-                                              .lunch ??
-                                          '',
-                                      style: const TextStyle(
-                                        color: Color(0xFFF65734),
-                                        fontSize: 18,
-                                        fontFamily: 'Satoshi',
-                                        fontWeight: FontWeight.w900,
+                                      // ---
+                                      Text(
+                                        activityForPage[index % itemsPerPage]
+                                                .activity ??
+                                            '',
+                                        style: const TextStyle(
+                                          color: Color(0xFFF65734),
+                                          fontSize: 18,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w900,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                      // ---
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
+                                      ),
+                                      const Text(
+                                        'Comments',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      // ---
+                                      Container(
+                                        child: Text(
+                                          activityForPage[index % itemsPerPage]
+                                                  .comments ??
+                                              '',
+                                          style: const TextStyle(
+                                            color: Color(0xFFF65734),
+                                            fontSize: 18,
+                                            fontFamily: 'Satoshi',
+                                            fontWeight: FontWeight.w900,
+                                          ),
+                                        ),
+                                      ),
+                                      // ---
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
+                                      ),
+                                      const Text(
+                                        'Breakfast',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      // ---
+                                      Text(
+                                        activityForPage[index % itemsPerPage]
+                                                .breakfast ??
+                                            '',
+                                        // DateFormat('dd MMM yyyy').format(
+                                        //   activityForPage[
+                                        //               index % itemsPerPage]
+                                        //           .accomodationCheckoutDate ??
+                                        //       DateTime.now(),
+                                        // ),
+                                        style: const TextStyle(
+                                          color: Color(0xFFF65734),
+                                          fontSize: 18,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+
+                                      // ---
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
+                                      ),
+                                      const Text(
+                                        'Dinner',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      // ---
+                                      Text(
+                                        activityForPage[index % itemsPerPage]
+                                                .dinner ??
+                                            '',
+                                        // DateFormat('dd MMM yyyy').format(
+                                        //   activityForPage[
+                                        //               index % itemsPerPage]
+                                        //           .accomodationCheckinDate ??
+                                        //       DateTime.now(),
+                                        // ),
+                                        style: const TextStyle(
+                                          color: Color(0xFFF65734),
+                                          fontSize: 18,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "Local Date",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      // ---
+                                      Text(
+                                        DateFormat('dd MMM yyyy').format(
+                                          activityForPage[index % itemsPerPage]
+                                                  .activityDate ??
+                                              DateTime.now(),
+                                        ),
+                                        style: const TextStyle(
+                                          color: Color(0xFFF65734),
+                                          fontSize: 18,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                                      // ---
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
+                                      ),
+                                      const Text(
+                                        'Lunch',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      // ---
+                                      Text(
+                                        activityForPage[index % itemsPerPage]
+                                                .lunch ??
+                                            '',
+                                        style: const TextStyle(
+                                          color: Color(0xFFF65734),
+                                          fontSize: 18,
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
 
                                 // ---
