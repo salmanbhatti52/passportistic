@@ -69,6 +69,8 @@ class _EditProfileState extends State<EditProfile> {
           _flag.text = getProfileModels.data?.nationality ?? '';
           _slectedGenderId = getProfileModels.data?.genderId ?? "";
           selectedOption = getProfileModels.data?.passportDesignId ?? "";
+
+          // Load the passport image when the page is initially loaded
         }
 
         setState(() {
@@ -197,7 +199,8 @@ class _EditProfileState extends State<EditProfile> {
 
   CoverDesignDataModel coverDesignDataModel = CoverDesignDataModel();
   SelectedCoverDesign selectedCoverDesign = SelectedCoverDesign();
-  coverDesign() async {
+
+  Future<void> coverDesign() async {
     String apiUrl = "$baseUrl/get_cover_design";
     print("api: $apiUrl");
 
@@ -219,11 +222,22 @@ class _EditProfileState extends State<EditProfile> {
     if (response.statusCode == 200) {
       print("Successful");
       print("Cover Design Data: $responseString");
+
       setState(() {
         coverDesignDataModel = coverDesignDataModelFromJson(responseString);
         isLoading = false;
       });
+
       print("Cover Design Data Length: ${coverDesignDataModel.data?.length}");
+
+      // Now, set the selectedCoverImage based on the initial data
+      if (coverDesignDataModel.data != null && selectedOption != null) {
+        selectedCoverImage = coverDesignDataModel.data
+            ?.firstWhereOrNull(
+              (data) => data.passportDesignId == selectedOption,
+            )
+            ?.passportFrontCover;
+      }
     }
   }
 

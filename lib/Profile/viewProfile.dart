@@ -60,7 +60,8 @@ class _ViewProfileState extends State<ViewProfile> {
 
   CoverDesignDataModel coverDesignDataModel = CoverDesignDataModel();
 
-//  List<Map<String, dynamic>> coverDesignData = [];
+  String selectedPassportCountry = ""; // Variable to store the passport country
+
   coverDesign() async {
     prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
@@ -96,7 +97,11 @@ class _ViewProfileState extends State<ViewProfile> {
               setState(() {
                 selectedOption =
                     coverDesignDataModel.data![i].passportFrontCover;
+                selectedPassportCountry = coverDesignDataModel
+                    .data![i].passportCountry
+                    .toString(); // Store the passport country
                 print("selectedOptionCoverDeign $selectedOption");
+                print("selectedPassportCountry $selectedPassportCountry");
               });
             }
           }
@@ -531,6 +536,13 @@ class _ViewProfileState extends State<ViewProfile> {
                             color: Color(0xFF525252)),
                       ),
                       const Spacer(),
+                      Text(
+                        selectedPassportCountry,
+                        style: const TextStyle(
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF000000)),
+                      ),
                     ],
                   ),
                 ),
