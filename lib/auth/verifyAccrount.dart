@@ -8,7 +8,8 @@ import 'package:scanguard/auth/signUpNextPage.dart';
 class VerifyAccountPage extends StatefulWidget {
   final String? userId;
   final String? otp;
-  const VerifyAccountPage({super.key, this.userId, this.otp});
+  final String? email;
+  const VerifyAccountPage({super.key, this.userId, this.otp, this.email});
 
   @override
   State<VerifyAccountPage> createState() => _VerifyAccountPageState();
@@ -31,7 +32,7 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
     return Scaffold(
       appBar: AppBar(
         forceMaterialTransparency: true,
-        title: Text(""),
+        title: const Text(""),
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
@@ -39,9 +40,21 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
         child: Column(children: [
           Center(
             child: SvgPicture.asset(
-              "assets/slogo.svg",
-              height: 107,
+              "assets/log1.svg",
+              height: 70,
+              width: 219,
+              color: const Color(0xFFF65734),
             ),
+          ),
+          const Text(
+            'PassportTastic',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: Color(0xFF565656),
+                fontSize: 31,
+                fontFamily: 'Satoshi',
+                fontWeight: FontWeight.w800,
+                letterSpacing: 0.5),
           ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.05,
@@ -51,7 +64,7 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
               "assets/Verify.svg",
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Text(
@@ -61,7 +74,7 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
               fontFamily: "Satoshi",
               fontSize: 16,
               fontWeight: FontWeight.w300,
-              color: Color(0xFF222222).withOpacity(0.5),
+              color: const Color(0xFF222222).withOpacity(0.5),
             ),
           ),
           SizedBox(
@@ -71,7 +84,7 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
               padding:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
               child: PinCodeTextField(
-                textStyle: TextStyle(
+                textStyle: const TextStyle(
                   color: Color(0xFFA7A9B7),
                   fontSize: 16,
                 ),
@@ -172,6 +185,7 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
                                 builder: (BuildContext context) {
                                   return SignupNextPage(
                                     userId: "${widget.userId}",
+                                    email: "${widget.email}",
                                   );
                                 },
                               ));
@@ -200,17 +214,17 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
                         height: 48,
                         width: MediaQuery.of(context).size.width * 0.94,
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
+                          gradient: const LinearGradient(
                             colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
                             begin: Alignment.bottomCenter,
                             end: Alignment.topCenter,
                           ),
                           borderRadius: BorderRadius.circular(15),
                         ),
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text(
+                            Text(
                               "Verify",
                               style: TextStyle(
                                   color: Colors.white,
@@ -225,7 +239,7 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
                   ],
                 ),
                 if (isLoading) // Show the circular progress indicator if isLoading is true
-                  Center(
+                  const Center(
                     child: CircularProgressIndicator(),
                   ),
               ],

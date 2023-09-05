@@ -1,8 +1,11 @@
 import 'package:country_picker/country_picker.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:group_radio_button/group_radio_button.dart';
 import 'package:intl/intl.dart';
+
+import '../Home/stampPage.dart';
 
 class ArrivalDetails extends StatefulWidget {
   const ArrivalDetails({super.key});
@@ -201,17 +204,7 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
           //     ),
           //   ],
           // ),
-          const SizedBox(
-            height: 10,
-          ),
-          const Text(
-            "You have insufficient stamps to stamp your passport,\nplease click here to purchase another package",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w400,
-                color: Color(0xFFF65734)),
-          ),
+
           const SizedBox(
             height: 10,
           ),
@@ -230,11 +223,11 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 8),
+            padding: const EdgeInsets.only(left: 8, right: 1),
             child: Text(
-              "Welcome to Your Destination, Unlock the Wonders Awaiting Your Arrival",
+              "Complete the following to get the Arrival Stamp of your own choosing.  If you are not happy with your choices, please make alternative selections",
               style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 13,
                   fontWeight: FontWeight.w400,
                   color: const Color(0xFF141111).withOpacity(0.5)),
             ),
@@ -892,6 +885,56 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                     height: 10,
                   ),
                 ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Text(
+                "You have insufficient stamps to stamp your passport",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                    color: Color(0xFFF65734)),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              RichText(
+                text: TextSpan(
+                  text: "please",
+                  style: const TextStyle(
+                      fontFamily: "Satoshi",
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                      color: Color(0xFFF65734)),
+                  children: [
+                    TextSpan(
+                      text: " click here ",
+                      style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFFF65734),
+                          decoration: TextDecoration.underline),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (BuildContext context) {
+                              return const StampPage();
+                            },
+                          ));
+                        },
+                    ),
+                    const TextSpan(
+                      text: "to purchase another package.",
+                      style: TextStyle(
+                          fontFamily: "Satoshi",
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xFFF65734)),
+                    )
+                  ],
+                ),
               ),
             ],
           )

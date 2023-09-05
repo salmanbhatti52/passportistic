@@ -104,17 +104,46 @@ class _SignInPageState extends State<SignInPage> {
           ),
           Center(
             child: SvgPicture.asset(
-              "assets/slogo.svg",
-              height: 107,
+              "assets/log1.svg",
+              height: 70,
+              width: 219,
+              color: const Color(0xFFF65734),
             ),
           ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.08,
+          const Text(
+            'PassportTastic',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: Color(0xFF565656),
+                fontSize: 31,
+                fontFamily: 'Satoshi',
+                fontWeight: FontWeight.w800,
+                letterSpacing: 0.5),
           ),
-          Center(
-            child: SvgPicture.asset(
-              "assets/welcome.svg",
-              height: 58,
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.04,
+          ),
+          const Text(
+            'Welcome',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Color(0xFFF65734),
+              fontSize: 24,
+              fontFamily: 'Satoshi',
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const Opacity(
+            opacity: 0.40,
+            child: Text(
+              'Sign In to get started',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Color(0xFF141010),
+                fontSize: 16,
+                fontFamily: 'Satoshi',
+                fontWeight: FontWeight.w400,
+              ),
             ),
           ),
           SizedBox(
@@ -318,7 +347,7 @@ class _SignInPageState extends State<SignInPage> {
                           loginUserModels.data?.passportHolderId ?? "";
                       await prefs?.setString('userID', userID);
 
-                      print("Sign in userID${userID}");
+                      print("Sign in userID$userID");
                       Navigator.push(
                         context,
                         MaterialPageRoute(

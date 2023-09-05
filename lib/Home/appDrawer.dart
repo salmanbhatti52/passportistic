@@ -8,6 +8,7 @@ import '../AppDrawerButtons/gPayApay.dart';
 import '../AppDrawerButtons/privaacy.dart';
 import '../AppDrawerButtons/terms.dart';
 import '../auth/signIn.dart';
+import 'mainScreenHome.dart';
 
 class AppDrawer extends StatefulWidget {
   const AppDrawer({super.key});
@@ -26,7 +27,7 @@ class _AppDrawerState extends State<AppDrawer> {
           child: Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Color(0xFF00AEFF),
               image: DecorationImage(
                 image: AssetImage("assets/bg.png"),
@@ -41,7 +42,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        SizedBox(
+                        const SizedBox(
                           height: 50,
                         ),
                         SvgPicture.asset(
@@ -60,7 +61,7 @@ class _AppDrawerState extends State<AppDrawer> {
                         "assets/home1.svg",
                         color: Colors.black,
                       ),
-                      title: Text(
+                      title: const Text(
                         'Home',
                         style: TextStyle(
                           color: Colors.black,
@@ -70,8 +71,13 @@ class _AppDrawerState extends State<AppDrawer> {
                         ),
                       ),
                       onTap: () {
-                        Scaffold.of(context)
-                            .openEndDrawer(); // Close the drawer using openEndDrawer()
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  const MainScreen()),
+                        );
+                        // Close the drawer using openEndDrawer()
                         // Do something
                       },
                     );
@@ -82,7 +88,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     "assets/bn.svg",
                     color: Colors.black,
                   ),
-                  title: Text(
+                  title: const Text(
                     'Notifications',
                     style: TextStyle(
                       color: Colors.black,
@@ -102,7 +108,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     "assets/info.svg",
                     color: Colors.black,
                   ),
-                  title: Text(
+                  title: const Text(
                     'About',
                     style: TextStyle(
                       color: Colors.black,
@@ -114,7 +120,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(
                       builder: (BuildContext context) {
-                        return AboutUs();
+                        return const AboutUs();
                       },
                     ));
                     // Close the drawer using openEndDrawer()
@@ -126,7 +132,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     "assets/at.svg",
                     color: Colors.black,
                   ),
-                  title: Text(
+                  title: const Text(
                     'Contact Us',
                     style: TextStyle(
                       color: Colors.black,
@@ -138,7 +144,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(
                       builder: (BuildContext context) {
-                        return ContactUs();
+                        return const ContactUs();
                       },
                     ));
                     // Close the drawer using openEndDrawer()
@@ -150,7 +156,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     "assets/payment.svg",
                     color: Colors.black,
                   ),
-                  title: Text(
+                  title: const Text(
                     'Payment',
                     style: TextStyle(
                       color: Colors.black,
@@ -162,7 +168,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(
                       builder: (BuildContext context) {
-                        return GpayAPay();
+                        return const GpayAPay();
                       },
                     ));
                     // Close the drawer using openEndDrawer()
@@ -174,7 +180,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     "assets/star.svg",
                     color: Colors.black,
                   ),
-                  title: Text(
+                  title: const Text(
                     'Rate Our App',
                     style: TextStyle(
                       color: Colors.black,
@@ -194,7 +200,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     "assets/fqa.svg",
                     color: Colors.black,
                   ),
-                  title: Text(
+                  title: const Text(
                     "FQA's",
                     style: TextStyle(
                       color: Colors.black,
@@ -214,7 +220,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     "assets/terms.svg",
                     color: Colors.black,
                   ),
-                  title: Text(
+                  title: const Text(
                     'Terms & Conditions',
                     style: TextStyle(
                       color: Colors.black,
@@ -226,7 +232,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(
                       builder: (BuildContext context) {
-                        return TermsConditions();
+                        return const TermsConditions();
                       },
                     ));
                     // Close the drawer using openEndDrawer()
@@ -239,7 +245,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     "assets/pp.svg",
                     color: Colors.black,
                   ),
-                  title: Text(
+                  title: const Text(
                     'Privacy Policy',
                     style: TextStyle(
                       color: Colors.black,
@@ -251,7 +257,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(
                       builder: (BuildContext context) {
-                        return PrivacyPolicy();
+                        return const PrivacyPolicy();
                       },
                     ));
                     // Close the drawer using openEndDrawer()
@@ -263,7 +269,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     "assets/logOut.svg",
                     color: Colors.black,
                   ),
-                  title: Text(
+                  title: const Text(
                     'Log Out',
                     style: TextStyle(
                       color: Colors.black,
@@ -275,7 +281,8 @@ class _AppDrawerState extends State<AppDrawer> {
                   onTap: () {
                     removeDataFormSharedPreferences();
                     Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (context) => SignInPage()),
+                      MaterialPageRoute(
+                          builder: (context) => const SignInPage()),
                       (Route<dynamic> route) => false,
                     );
                     // Close the drawer using openEndDrawer()

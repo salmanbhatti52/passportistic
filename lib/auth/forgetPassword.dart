@@ -79,9 +79,21 @@ class _ForgetPasswordState extends State<ForgetPassword> {
           child: Column(children: [
             Center(
               child: SvgPicture.asset(
-                "assets/slogo.svg",
-                height: 107,
+                "assets/log1.svg",
+                height: 70,
+                width: 219,
+                color: const Color(0xFFF65734),
               ),
+            ),
+            const Text(
+              'PassportTastic',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Color(0xFF565656),
+                  fontSize: 31,
+                  fontFamily: 'Satoshi',
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.5),
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.08,

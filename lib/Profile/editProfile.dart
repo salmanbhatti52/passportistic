@@ -149,10 +149,11 @@ class _EditProfileState extends State<EditProfile> {
       print("SuucessFull");
       print("in 200 getGenderListModels list");
       getGenderListModels = getGenderListModelsFromJson(responseString);
-      setState(() {
-        isLoading = false;
-      });
-
+      if (!mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
       print('getGenderListModels status: ${getGenderListModels.status}');
     }
   }
@@ -634,20 +635,24 @@ class _EditProfileState extends State<EditProfile> {
                                 print(" _slectedGenderId $_slectedGenderId");
                               });
                             },
-                            items:
-                                (getGenderListModels.data ?? []).map((gender) {
-                              return DropdownMenuItem<String>(
-                                value: gender.genderId,
-                                child: Text(
-                                  gender.gender ?? '',
-                                  style: const TextStyle(
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xFF525252),
-                                  ),
-                                ),
-                              );
-                            }).toList(),
+                            items: (getGenderListModels.data ?? []).isEmpty
+                                ? null // Set items to null when there's no data
+                                : (getGenderListModels.data ?? [])
+                                    .map((gender) {
+                                    final genderId = gender.genderId ??
+                                        ''; // Handle null value
+                                    return DropdownMenuItem<String>(
+                                      value: genderId,
+                                      child: Text(
+                                        gender.gender ?? '',
+                                        style: const TextStyle(
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: Color(0xFF525252),
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
                             decoration: const InputDecoration(
                               border: InputBorder.none,
                               hintText: 'Gender',

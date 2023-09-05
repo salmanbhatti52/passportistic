@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:http/http.dart' as http;
 
+import '../AppDrawerButtons/terms.dart';
 import '../Models/signUpModels.dart';
 
 String baseUrl = "https://portal.passporttastic.com/api";
@@ -114,18 +115,48 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
           Center(
             child: SvgPicture.asset(
-              "assets/slogo.svg",
-              height: 107,
+              "assets/log1.svg",
+              height: 70,
+              width: 219,
+              color: const Color(0xFFF65734),
             ),
+          ),
+          const Text(
+            'PassportTastic',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: Color(0xFF565656),
+                fontSize: 31,
+                fontFamily: 'Satoshi',
+                fontWeight: FontWeight.w800,
+                letterSpacing: 0.5),
           ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.04,
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 15, right: 15),
-            child: Center(
-              child: SvgPicture.asset(
-                "assets/createAcc.svg",
+          const Padding(
+            padding: EdgeInsets.only(left: 15, right: 15),
+            child: Text(
+              'Create Your Account',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Color(0xFFF65734),
+                fontSize: 24,
+                fontFamily: 'Satoshi',
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          const Opacity(
+            opacity: 0.40,
+            child: Text(
+              'Let’s get those valuable memories all in one place’',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Color(0xFF141010),
+                fontSize: 16,
+                fontFamily: 'Satoshi',
+                fontWeight: FontWeight.w400,
               ),
             ),
           ),
@@ -352,11 +383,11 @@ class _SignUpPageState extends State<SignUpPage> {
                             decoration: TextDecoration.underline),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            // Navigator.push(context, MaterialPageRoute(
-                            //   builder: (BuildContext context) {
-                            //     return SignUpPage();
-                            //   },
-                            // ));
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (BuildContext context) {
+                                return const TermsConditions();
+                              },
+                            ));
                           },
                       ),
                       const TextSpan(
@@ -409,6 +440,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 userId: signUpModels.data?.passportHolderId
                                     .toString(),
                                 otp: signUpModels.data!.verifyCode,
+                                email: email.text
                               );
                             },
                           ),

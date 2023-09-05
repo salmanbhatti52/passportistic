@@ -191,91 +191,107 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
               //   ),
               // ),
 
-              Row(
-                children: [
-                  const SizedBox(
-                    width: 40,
-                  ),
-                  Expanded(
-                    child: ButtonTheme(
-                      alignedDropdown: true,
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButtonFormField<String>(
-                          value: _slecteditinerary,
-                          onChanged: (newValue) {
-                            setState(() {
-                              _slecteditinerary = newValue;
-                              print("Selected Itinerary: $_slecteditinerary");
+              Padding(
+                padding: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.width * 0.112,
+                ),
+                child: Center(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: ButtonTheme(
+                          alignedDropdown: true,
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButtonFormField<String>(
+                              value: _slecteditinerary,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _slecteditinerary = newValue;
+                                  print(
+                                      "Selected Itinerary: $_slecteditinerary");
 
-                              for (var itinerary
-                                  in iteneraryGetModels.data ?? []) {
-                                if (itinerary.travelLtineraryId == newValue) {
-                                  _selectedItineraryName =
-                                      itinerary.travelLtineraryName ?? '';
-                                  break; // Exit loop once the name is found
-                                }
-                              }
+                                  for (var itinerary
+                                      in iteneraryGetModels.data ?? []) {
+                                    if (itinerary.travelLtineraryId ==
+                                        newValue) {
+                                      _selectedItineraryName =
+                                          itinerary.travelLtineraryName ?? '';
+                                      break; // Exit loop once the name is found
+                                    }
+                                  }
 
-                              print("_selectedItineraryId: $_slecteditinerary");
-                              print(
-                                  "_selectedItineraryName: $_selectedItineraryName");
-                            });
-                          },
-                          items: iteneraryGetModels.data?.map((itineraryid) {
-                                return DropdownMenuItem<String>(
-                                  value: itineraryid.travelLtineraryId,
-                                  child: Text(
-                                      itineraryid.travelLtineraryName ?? ''),
-                                );
-                              }).toList() ??
-                              [],
-
-                          focusNode: _focusNode1,
-                          style: const TextStyle(
-                            color: Color(0xFF525252),
-                            fontSize: 22,
-                            fontFamily: 'Satoshi',
-                            fontWeight: FontWeight.w900,
-                          ),
-                          // cursorColor: const Color(0xFF000000),
-                          // keyboardType: TextInputType.name,
-                          decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.only(left: 70),
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                            ),
-                            hintText: "Select Itinerary",
-                            hintStyle: TextStyle(
-                              color: Color(0xFF525252),
-                              fontSize: 24,
-                              fontFamily: 'Satoshi',
-                              fontWeight: FontWeight.w900,
+                                  print(
+                                      "_selectedItineraryId: $_slecteditinerary");
+                                  print(
+                                      "_selectedItineraryName: $_selectedItineraryName");
+                                });
+                              },
+                              items:
+                                  iteneraryGetModels.data?.map((itineraryid) {
+                                        return DropdownMenuItem<String>(
+                                          value: itineraryid.travelLtineraryId,
+                                          child: Text(
+                                              itineraryid.travelLtineraryName ??
+                                                  ''),
+                                        );
+                                      }).toList() ??
+                                      [],
+                              focusNode: _focusNode1,
+                              style: const TextStyle(
+                                color: Color(0xFF525252),
+                                fontSize: 20,
+                                fontFamily: 'Satoshi',
+                                fontWeight: FontWeight.w900,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors
+                                    .white, // Set the background color here
+                                contentPadding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                border: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Colors.white), // Border color
+                                  borderRadius: BorderRadius.circular(
+                                      10.0), // Border radius
+                                ),
+                                hintText: "Select Itinerary",
+                                hintStyle: const TextStyle(
+                                  color: Color(0xFF525252),
+                                  fontSize: 20,
+                                  fontFamily: 'Satoshi',
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (BuildContext context) {
+                              return const AdditeneraryNext();
+                            },
+                          ));
+                        },
+                        icon: const Icon(
+                          Icons.edit,
+                          color: Color(0xFF004665),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                    ],
                   ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (BuildContext context) {
-                            return const AdditeneraryNext();
-                          },
-                        ));
-                      },
-                      icon: const Icon(
-                        Icons.edit,
-                        color: Color(0xFF004665),
-                      )),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                ],
+                ),
               ),
+
               const SizedBox(
                 height: 50,
               ),
@@ -301,7 +317,8 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
                   }
                 },
                 child: Container(
-                  width: 294,
+                  width: MediaQuery.of(context).size.width *
+                      0.8, // You can adjust the factor as needed
                   height: 60,
                   decoration: ShapeDecoration(
                     color: Colors.white,
@@ -362,7 +379,8 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
                   }
                 },
                 child: Container(
-                  width: 294,
+                  width: MediaQuery.of(context).size.width *
+                      0.8, // You can adjust the factor as needed
                   height: 60,
                   decoration: ShapeDecoration(
                     color: Colors.white,
@@ -425,7 +443,8 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
                   }
                 },
                 child: Container(
-                  width: 294,
+                  width: MediaQuery.of(context).size.width *
+                      0.8, // You can adjust the factor as needed
                   height: 60,
                   decoration: ShapeDecoration(
                     color: Colors.white,
@@ -488,7 +507,8 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
                   }
                 },
                 child: Container(
-                  width: 294,
+                  width: MediaQuery.of(context).size.width *
+                      0.8, // You can adjust the factor as needed
                   height: 60,
                   decoration: ShapeDecoration(
                     color: Colors.white,
@@ -512,7 +532,7 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
                       // crossAxisAlignment: CrossAxisAlignment.sp,
                       children: [
                         const Text(
-                          'Display Itinerary',
+                          'Travel Diary',
                           style: TextStyle(
                             color: Color(0xFF525252),
                             fontSize: 16,

@@ -27,11 +27,10 @@ class _AddItinerayState extends State<AddItineray> {
   ItinerayAddModels itineraryAddModels = ItinerayAddModels();
   String desiredItineraryId = "";
 
-  
   itinerayAdd() async {
     // try {
 
-   prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
     String apiUrl = "$baseUrl/add_itinerary";
     print("api: $apiUrl");
@@ -142,10 +141,10 @@ class _AddItinerayState extends State<AddItineray> {
             child: Row(
               children: [
                 Text(
-                  'Itinerary and Diary \nMaintenance',
+                  'Itinerary and Diary Maintenance',
                   style: TextStyle(
                     color: Color(0xFFF65734),
-                    fontSize: 24,
+                    fontSize: 21,
                     fontFamily: 'Satoshi',
                     fontWeight: FontWeight.w700,
                   ),
@@ -161,7 +160,7 @@ class _AddItinerayState extends State<AddItineray> {
                   'Add Itinerary',
                   style: TextStyle(
                     color: Color(0xFF141010),
-                    fontSize: 16,
+                    fontSize: 20,
                     fontFamily: 'Satoshi',
                     fontWeight: FontWeight.w400,
                   ),
@@ -233,171 +232,196 @@ class _AddItinerayState extends State<AddItineray> {
               ),
             ],
           ),
-          Column(
-            children: [
-              const SizedBox(
-                height: 10,
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Column(children: [
+              Row(
                 children: [
-                  const Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(top: 8, left: 15, bottom: 8),
-                        child: Text(
-                          'Departure Date',
-                          style: TextStyle(
-                            color: Color(0xFF141010),
-                            fontSize: 16,
-                            fontFamily: 'Satoshi',
-                            fontWeight: FontWeight.w400,
+                  SizedBox(
+                    width: 170,
+
+                    // decoration: const BoxDecoration(color: Colors.red),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(left: 3.5),
+                          child: Text(
+                            'Departure Date',
+                            style: TextStyle(
+                              color: Color(0xFF141010),
+                              fontSize: 16,
+                              fontFamily: 'Satoshi',
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 60,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'Return Date',
-                          style: TextStyle(
-                            color: Color(0xFF141010),
-                            fontSize: 16,
-                            fontFamily: 'Satoshi',
-                            fontWeight: FontWeight.w400,
-                          ),
+                        const SizedBox(
+                          height: 5,
                         ),
-                      ),
-                    ],
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                focusNode: _focusNode2,
+                                controller: _Enddate,
+                                readOnly: true, // Prevent manual text input
+                                onTap: () {
+                                  // Open the date picker when the field is tapped
+                                  showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2000),
+                                    lastDate: DateTime(2100),
+                                  ).then((selectedDate) {
+                                    if (selectedDate != null) {
+                                      // Handle the selected date
+                                      setState(() {
+                                        _Enddate.text = DateFormat('yyyy-MM-dd')
+                                            .format(selectedDate);
+                                        // Date.text = DateFormat.yMd().format(selectedDate);
+                                      });
+                                    }
+                                  });
+                                },
+                                decoration: InputDecoration(
+                                  prefixIcon: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SvgPicture.asset(
+                                      "assets/date.svg",
+                                      color: isFocused2
+                                          ? const Color(0xFFF65734)
+                                          : const Color(0xFFE0E0E5),
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        color: Color(0xFFF65734)),
+                                    borderRadius: BorderRadius.circular(12.0),
+                                  ),
+                                  hintText: "Select Date",
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: const BorderSide(
+                                        color: Color(0xFFF3F3F3)),
+                                  ),
+                                  hintStyle: const TextStyle(
+                                    color: Color(0xFFA7A9B7),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w300,
+                                    fontFamily: "Outfit",
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
-                  Row(
-                    children: [
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: TextFormField(
-                          focusNode: _focusNode6,
-                          controller: _Startdate,
-                          readOnly: true, // Prevent manual text input
-                          onTap: () {
-                            // Open the date picker when the field is tapped
-                            showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime(2100),
-                            ).then((selectedDate) {
-                              if (selectedDate != null) {
-                                // Handle the selected date
-                                setState(() {
-                                  _Startdate.text = DateFormat('yyyy-MM-dd')
-                                      .format(selectedDate);
-                                  // Date.text = DateFormat.yMd().format(selectedDate);
-                                });
-                              }
-                            });
-                          },
-                          decoration: InputDecoration(
-                            prefixIcon: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SvgPicture.asset(
-                                "assets/date.svg",
-                                color: isFocused6
-                                    ? const Color(0xFFF65734)
-                                    : const Color(0xFFE0E0E5),
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  const BorderSide(color: Color(0xFFF65734)),
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            hintText: "Select Date",
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide:
-                                  const BorderSide(color: Color(0xFFF3F3F3)),
-                            ),
-                            hintStyle: const TextStyle(
-                              color: Color(0xFFA7A9B7),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  SizedBox(
+                    width: 170,
+
+                    // decoration: const BoxDecoration(color: Colors.red),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(left: 3.5),
+                          child: Text(
+                            'Return Date',
+                            style: TextStyle(
+                              color: Color(0xFF141010),
                               fontSize: 16,
-                              fontWeight: FontWeight.w300,
-                              fontFamily: "Outfit",
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              fontFamily: 'Satoshi',
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: TextFormField(
-                          focusNode: _focusNode6,
-                          controller: _Enddate,
-                          readOnly: true, // Prevent manual text input
-                          onTap: () {
-                            // Open the date picker when the field is tapped
-                            showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime(2100),
-                            ).then((selectedDate) {
-                              if (selectedDate != null) {
-                                // Handle the selected date
-                                setState(() {
-                                  _Enddate.text = DateFormat('yyyy-MM-dd')
-                                      .format(selectedDate);
-                                  // Date.text = DateFormat.yMd().format(selectedDate);
-                                });
-                              }
-                            });
-                          },
-                          decoration: InputDecoration(
-                            prefixIcon: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SvgPicture.asset(
-                                "assets/date.svg",
-                                color: isFocused6
-                                    ? const Color(0xFFF65734)
-                                    : const Color(0xFFE0E0E5),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          children: [
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Expanded(
+                              child: TextFormField(
+                                focusNode: _focusNode6,
+                                controller: _Startdate,
+                                readOnly: true, // Prevent manual text input
+                                onTap: () {
+                                  // Open the date picker when the field is tapped
+                                  showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2000),
+                                    lastDate: DateTime(2100),
+                                  ).then((selectedDate) {
+                                    if (selectedDate != null) {
+                                      // Handle the selected date
+                                      setState(() {
+                                        _Startdate.text =
+                                            DateFormat('yyyy-MM-dd')
+                                                .format(selectedDate);
+                                        // Date.text = DateFormat.yMd().format(selectedDate);
+                                      });
+                                    }
+                                  });
+                                },
+                                decoration: InputDecoration(
+                                  prefixIcon: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SvgPicture.asset(
+                                      "assets/date.svg",
+                                      color: isFocused6
+                                          ? const Color(0xFFF65734)
+                                          : const Color(0xFFE0E0E5),
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        color: Color(0xFFF65734)),
+                                    borderRadius: BorderRadius.circular(12.0),
+                                  ),
+                                  hintText: "Select Date",
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: const BorderSide(
+                                        color: Color(0xFFF3F3F3)),
+                                  ),
+                                  hintStyle: const TextStyle(
+                                    color: Color(0xFFA7A9B7),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w300,
+                                    fontFamily: "Outfit",
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
                               ),
                             ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  const BorderSide(color: Color(0xFFF65734)),
-                              borderRadius: BorderRadius.circular(12.0),
+                            const SizedBox(
+                              width: 5,
                             ),
-                            hintText: "Select Date",
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide:
-                                  const BorderSide(color: Color(0xFFF3F3F3)),
-                            ),
-                            hintStyle: const TextStyle(
-                              color: Color(0xFFA7A9B7),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w300,
-                              fontFamily: "Outfit",
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                    ],
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ],
-              ),
-              const SizedBox(
-                height: 50,
-              ),
-            ],
+              )
+            ]),
           ),
           const SizedBox(
             height: 10,
@@ -420,20 +444,19 @@ class _AddItinerayState extends State<AddItineray> {
                 } else {
                   await itinerayAdd();
                   if (itineraryAddModels.status == "success") {
-                    // Navigator.push(context, MaterialPageRoute(
-                    //   builder: (BuildContext context) {
-                    //     return AdditeneraryNext(
-                    //       // itinId: "${itineraryAddModels.data[''].travelLtineraryId}",
-                    //       userId: widget.userId,
-                    //       additinerarywidget: addItineray.text,
-                    //       startDate: _Startdate.text,
-                    //       endDate: _Enddate.text,
-                    //     );
-                    //   },
-                    // ));
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (BuildContext context) {
+                        return ItineraryTwo(
+                          // itinId: "${itineraryAddModels.data[''].travelLtineraryId}",
+                          itinid: desiredItineraryId,
+                          additinerarywidget: addItineray.text,
+                        );
+                      },
+                    ));
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('Data is Saved Successfully'),
+                        content: Text('Itinerary is Saved Successfully'),
+                        backgroundColor: Color(0xFFF65734),
                       ),
                     );
                   } else {
@@ -489,7 +512,7 @@ class _AddItinerayState extends State<AddItineray> {
                               AlwaysStoppedAnimation<Color>(Colors.white),
                         )
                       : const Text(
-                          "Save",
+                          "Save and Continue",
                           style: TextStyle(
                               color: Colors.white,
                               fontFamily: "Satoshi",
@@ -500,8 +523,20 @@ class _AddItinerayState extends State<AddItineray> {
               ),
             ),
           ),
-          const SizedBox(
-            height: 10,
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.03,
+          ),
+          const Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Text(
+              "Or select an existing Itinerary or Travel Diary",
+              style: TextStyle(
+                color: Color(0xFFF65734),
+                fontSize: 20,
+                fontFamily: 'Satoshi',
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -537,7 +572,7 @@ class _AddItinerayState extends State<AddItineray> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'Continue to Itineray',
+                      'Travel Diary',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,

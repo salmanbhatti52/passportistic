@@ -69,10 +69,22 @@ class _OnboardState extends State<Onboard> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SvgPicture.asset(
-                          "assets/Logo.svg",
-                          width: MediaQuery.of(context).size.width * 0.277,
-                          height: 111,
+                        Center(
+                          child: SvgPicture.asset(
+                            "assets/log1.svg",
+                            height: 55,
+                            width: 219,
+                          ),
+                        ),
+                        const Text(
+                          'PassportTastic',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 40,
+                            fontFamily: 'Satoshi',
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
                         SizedBox(
                             height: MediaQuery.of(context).size.height * 0.09),

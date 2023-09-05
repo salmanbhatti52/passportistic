@@ -1,10 +1,12 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:csc_picker/csc_picker.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:group_radio_button/group_radio_button.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import '../Home/stampPage.dart';
 import '../Models/departureModels.dart';
 import '../Models/shaplistModels.dart';
 import '../Models/transportListModels.dart';
@@ -193,20 +195,20 @@ class _DepatureDetailsState extends State<DepatureDetails> {
     final response = await http.post(Uri.parse(apiUrl), headers: {
       'Accept': 'application/json',
     }, body: {
-   "stamps_country":"Pakistan",
-   "passport_holder_id":"32",
-   "stamps_city":"Lahore",
-   "transport_mode_id":"3",
-   "stamp_shape_id": "4",
-   "stamps_color_id":"5",
-   "stamps_date" : "2022-12-12",
-   "stamps_offset_rotation": "-5",
-   "stamps_offset_vertical":"5",
-   "stamps_offset_horizental":"8",
-   "stamps_page_number" : "48",
-   "stamps_time": "13:45:34",
-   "stamps_position_number":"12",
-   "stamps_arrive_depart": "Depart"
+      "stamps_country": "Pakistan",
+      "passport_holder_id": "32",
+      "stamps_city": "Lahore",
+      "transport_mode_id": "3",
+      "stamp_shape_id": "4",
+      "stamps_color_id": "5",
+      "stamps_date": "2022-12-12",
+      "stamps_offset_rotation": "-5",
+      "stamps_offset_vertical": "5",
+      "stamps_offset_horizental": "8",
+      "stamps_page_number": "48",
+      "stamps_time": "13:45:34",
+      "stamps_position_number": "12",
+      "stamps_arrive_depart": "Depart"
     });
     final responseString = response.body;
     print("responsedepartureModel: $responseString");
@@ -271,9 +273,11 @@ class _DepatureDetailsState extends State<DepatureDetails> {
     if (response.statusCode == 200) {
       print("SuccessFull");
       shapeListModels = shapeListModelsFromJson(responseString);
-      setState(() {
-        isLoading = false;
-      });
+      if (!mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
       print('shapeListModels status: ${shapeListModels.status}');
     }
   }
@@ -414,17 +418,6 @@ class _DepatureDetailsState extends State<DepatureDetails> {
           const SizedBox(
             height: 10,
           ),
-          const Text(
-            "You have insufficient stamps to stamp your passport,\nplease click here to purchase another package",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w400,
-                color: Color(0xFFF65734)),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
           const Padding(
             padding: EdgeInsets.only(left: 8),
             child: Row(
@@ -440,11 +433,11 @@ class _DepatureDetailsState extends State<DepatureDetails> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 8),
+            padding: const EdgeInsets.only(left: 8, right: 1),
             child: Text(
-              "Smooth Departures Await, Your Guide to Stress-Free Journeys",
+              "Complete the following to get the Departure Stamp of your own choosing.  If you are not happy with your choices, please make alternative selections",
               style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 13,
                   fontWeight: FontWeight.w400,
                   color: const Color(0xFF141111).withOpacity(0.5)),
             ),
@@ -571,7 +564,7 @@ class _DepatureDetailsState extends State<DepatureDetails> {
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     // labelText: 'Email',
-                    hintText: "Write City Name",
+                    hintText: "Enter City Name",
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: const BorderSide(
@@ -710,7 +703,7 @@ class _DepatureDetailsState extends State<DepatureDetails> {
             child: Row(
               children: [
                 Text(
-                  'Stamp Colour ',
+                  'Select Stamp Color',
                   style: TextStyle(
                     color: Color(0xFF141010),
                     fontSize: 16,
@@ -1097,7 +1090,7 @@ class _DepatureDetailsState extends State<DepatureDetails> {
                 children: [
                   GestureDetector(
                     onTap: () async {
-                     // await departure();
+                      // await departure();
                       // Navigator.push(context, MaterialPageRoute(
                       //   builder: (BuildContext context) {
                       //     return MainScreen();
@@ -1134,6 +1127,56 @@ class _DepatureDetailsState extends State<DepatureDetails> {
                     height: 10,
                   ),
                 ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Text(
+                "You have insufficient stamps to stamp your passport",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                    color: Color(0xFFF65734)),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              RichText(
+                text: TextSpan(
+                  text: "please",
+                  style: const TextStyle(
+                      fontFamily: "Satoshi",
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                      color: Color(0xFFF65734)),
+                  children: [
+                    TextSpan(
+                      text: " click here ",
+                      style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFFF65734),
+                          decoration: TextDecoration.underline),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (BuildContext context) {
+                              return const StampPage();
+                            },
+                          ));
+                        },
+                    ),
+                    const TextSpan(
+                      text: "to purchase another package.",
+                      style: TextStyle(
+                          fontFamily: "Satoshi",
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xFFF65734)),
+                    )
+                  ],
+                ),
               ),
             ],
           )

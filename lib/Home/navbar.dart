@@ -28,8 +28,8 @@ class _NavBarState extends State<NavBar> {
       ),
       const DirayPage(),
       const StampPage(),
-       ProfilePage(
-          userId: widget.userId,
+      ProfilePage(
+        userId: widget.userId,
       ),
     ];
   }
@@ -87,7 +87,7 @@ class _NavBarState extends State<NavBar> {
                 BottomNavigationBarItem(
                   icon: SvgPicture.asset('assets/stamp1.svg'),
                   activeIcon: SvgPicture.asset('assets/stamp2.svg'),
-                  label: 'Stamp',
+                  label: 'Shop',
                 ),
                 BottomNavigationBarItem(
                   icon: SvgPicture.asset('assets/account1.svg'),

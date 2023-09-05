@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../HomeButtons/addItinerary.dart';
 import '../HomeButtons/arrivalDetails.dart';
 import '../HomeButtons/depature.dart';
-import '../HomeButtons/passport.dart';
+import '../HomeButtons/PassportSection/passport.dart';
 import '../Models/getProfileModels.dart';
 import '../auth/signUpNextPage.dart';
 import '../auth/signUpPage.dart';
@@ -500,7 +500,7 @@ class _HomePageState extends State<HomePage> {
                                           left: 16,
                                           top: 25,
                                           child: Text(
-                                            'Purchase Stamps',
+                                            'Shop',
                                             style: TextStyle(
                                               color: Color(0xFFF65734),
                                               fontSize: 16,

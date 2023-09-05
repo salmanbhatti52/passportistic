@@ -2,6 +2,7 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:scanguard/auth/signUpNextPage.dart';
 import 'package:scanguard/auth/signUpPage.dart';
 import 'package:http/http.dart' as http;
@@ -152,6 +153,7 @@ class _SignupDetailsState extends State<SignupDetails> {
     super.initState();
     getGenderList();
     getCurrency();
+    email.text = "${widget.email}";
     _focusNode1.addListener(_onFocusChange);
     _focusNode2.addListener(_onFocusChange);
     _focusNode3.addListener(_onFocusChange);
@@ -305,7 +307,7 @@ class _SignupDetailsState extends State<SignupDetails> {
                     borderRadius: BorderRadius.circular(15.0),
                   ),
                   // labelText: 'Email',
-                  hintText: "Middel Name",
+                  hintText: "Middle Name",
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: const BorderSide(
@@ -447,30 +449,81 @@ class _SignupDetailsState extends State<SignupDetails> {
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.02,
         ),
+        // Row(
+        //   children: [
+        //     const SizedBox(
+        //       width: 10,
+        //     ),
+        //     Expanded(
+        //       child: TextFormField(
+        //         validator: validatePhoneNumber,
+        //         focusNode: _focusNode5,
+        //         style: const TextStyle(color: Color(0xFF000000), fontSize: 16),
+        //         cursorColor: const Color(0xFF000000),
+        //         controller: phone,
+        //         keyboardType: TextInputType.number,
+        //         decoration: InputDecoration(
+        //           prefixIcon: Padding(
+        //             padding: const EdgeInsets.all(8.0),
+        //             child: SvgPicture.asset(
+        //               'assets/phone.svg',
+        //               color: isFocused5
+        //                   ? const Color(0xFFF65734)
+        //                   : const Color(0xFFE0E0E5),
+        //             ),
+        //           ),
+
+        //           focusedBorder: OutlineInputBorder(
+        //             borderSide: const BorderSide(color: Color(0xFFF65734)),
+        //             borderRadius: BorderRadius.circular(15.0),
+        //           ),
+        //           // labelText: 'Email',
+        //           hintText: "Phone Number",
+        //           enabledBorder: OutlineInputBorder(
+        //             borderRadius: BorderRadius.circular(15),
+        //             borderSide: const BorderSide(
+        //                 color: Color(0xFFF3F3F3)), // change border color
+        //           ),
+        //           labelStyle: const TextStyle(),
+        //           hintStyle: const TextStyle(
+        //               color: Color(0xFFA7A9B7),
+        //               fontSize: 16,
+        //               fontWeight: FontWeight.w300,
+        //               fontFamily: "Satoshi"),
+        //           border: OutlineInputBorder(
+        //               borderRadius: BorderRadius.circular(15)),
+        //         ),
+        //       ),
+        //     ),
+        //     const SizedBox(
+        //       width: 10,
+        //     ),
+        //   ],
+        // ),
         Row(
           children: [
             const SizedBox(
               width: 10,
             ),
             Expanded(
-              child: TextFormField(
-                validator: validatePhoneNumber,
+              child: IntlPhoneField(
                 focusNode: _focusNode5,
-                style: const TextStyle(color: Color(0xFF000000), fontSize: 16),
+                dropdownIcon: Icon(
+                  Icons.arrow_drop_down_outlined,
+                  color: isFocused5
+                      ? const Color(0xFFF65734)
+                      : const Color(0xFFE0E0E5),
+                ),
+
+                dropdownTextStyle: const TextStyle(color: Color(0xFF000000)),
                 cursorColor: const Color(0xFF000000),
                 controller: phone,
-                keyboardType: TextInputType.number,
+                style: const TextStyle(color: Color(0xFF000000), fontSize: 16),
                 decoration: InputDecoration(
-                  prefixIcon: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SvgPicture.asset(
-                      'assets/phone.svg',
-                      color: isFocused5
-                          ? const Color(0xFFF65734)
-                          : const Color(0xFFE0E0E5),
-                    ),
+                  prefixStyle: const TextStyle(
+                    color: Color(0xFFF3F3F3),
                   ),
-
+                  labelStyle: const TextStyle(color: Colors.white),
                   focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Color(0xFFF65734)),
                     borderRadius: BorderRadius.circular(15.0),
@@ -482,7 +535,7 @@ class _SignupDetailsState extends State<SignupDetails> {
                     borderSide: const BorderSide(
                         color: Color(0xFFF3F3F3)), // change border color
                   ),
-                  labelStyle: const TextStyle(),
+
                   hintStyle: const TextStyle(
                       color: Color(0xFFA7A9B7),
                       fontSize: 16,
@@ -491,6 +544,13 @@ class _SignupDetailsState extends State<SignupDetails> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15)),
                 ),
+                initialCountryCode:
+                    'US', // You can set your initial country code (will be set as +91 for India)
+                onChanged: (phone) {
+                  // Prints "+911234567890"
+                  phoneNumber = phone.completeNumber;
+                  print(phoneNumber);
+                },
               ),
             ),
             const SizedBox(
@@ -498,9 +558,9 @@ class _SignupDetailsState extends State<SignupDetails> {
             ),
           ],
         ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.02,
-        ),
+        // SizedBox(
+        //   height: MediaQuery.of(context).size.height * 0.02,
+        // ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: DropdownButtonFormField<String>(
