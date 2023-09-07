@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -126,6 +127,17 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
           const SizedBox(
             height: 20,
           ),
+          Center(
+            child: SvgPicture.asset(
+              "assets/log1.svg",
+              height: 70.h,
+              width: 219.w,
+              color: const Color(0xFFF65734),
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
           const Center(
             child: Text(
               'Accomodation',
@@ -221,7 +233,7 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     // labelText: 'Email',
-                    hintText: "CheckI In Date",
+                    hintText: "Check In Date",
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: const BorderSide(
@@ -667,7 +679,7 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'View Itinerary',
+                      'View Accommodation Schedule',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Color(0xFFFF8D74),

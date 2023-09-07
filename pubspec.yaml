@@ -52,6 +52,7 @@ dependencies:
   is_first_run: ^1.0.0
   fluttertoast: ^8.2.2
   intl_phone_field: ^3.2.0
+  flutter_screenutil: ^5.9.0
 
   
 dev_dependencies:

@@ -1,9 +1,12 @@
 import 'dart:async';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:scanguard/auth/signUpNextPage.dart';
+import 'package:scanguard/auth/signUpPage.dart';
+import '../Models/accoutVerifyModels.dart';
 
 class VerifyAccountPage extends StatefulWidget {
   final String? userId;
@@ -26,6 +29,36 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
   //   verifyOtp == "";
   //   super.dispose();
   // }
+  AccountVerifyModel accountVerifyModel = AccountVerifyModel();
+  verifyAccount() async {
+    // try {
+
+    String apiUrl = "$baseUrl/account_verify";
+    print("api: $apiUrl");
+    print("email: ${widget.email}");
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "email": "${widget.email}",
+      "otp": "${widget.otp}"
+    });
+    final responseString = response.body;
+    print("responseaccountVerifyModelApi: $responseString");
+    print("status Code accountVerifyModel: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print("in 200 accountVerifyModel");
+      print("SuucessFull");
+      accountVerifyModel = accountVerifyModelFromJson(responseString);
+      setState(() {
+        isLoading = false;
+      });
+      print('accountVerifyModel status: ${accountVerifyModel.status}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -181,14 +214,28 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
                           });
                           try {
                             if (widget.otp == verifyOtp.text) {
-                              Navigator.push(context, MaterialPageRoute(
-                                builder: (BuildContext context) {
-                                  return SignupNextPage(
-                                    userId: "${widget.userId}",
-                                    email: "${widget.email}",
-                                  );
-                                },
-                              ));
+                              await verifyAccount();
+                              if (accountVerifyModel.status == "success") {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content: Text("Account Verified!"),
+                                  backgroundColor: Colors.green,
+                                ));
+                                Navigator.push(context, MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                    return SignupNextPage(
+                                      userId: "${widget.userId}",
+                                      email: "${widget.email}",
+                                    );
+                                  },
+                                ));
+                              } else {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content: Text("Wrong Otp"),
+                                  backgroundColor: Colors.red,
+                                ));
+                              }
                             } else if (widget.otp != verifyOtp.text) {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(const SnackBar(
@@ -210,30 +257,34 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
                           }
                         }
                       },
-                      child: Container(
-                        height: 48,
-                        width: MediaQuery.of(context).size.width * 0.94,
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                          ),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Verify",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: "Satoshi",
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700),
+                      child: Stack(
+                        children: [
+                          Container(
+                            height: 48.h,
+                            width: 340.w,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                              ),
+                              borderRadius: BorderRadius.circular(15),
                             ),
-                          ],
-                        ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Verify",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: "Satoshi",
+                                      fontSize: 20.sp,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

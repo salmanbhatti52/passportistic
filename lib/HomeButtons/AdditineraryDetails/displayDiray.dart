@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -275,6 +276,18 @@ class _DisplayDiaryState extends State<DisplayDiary> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            const SizedBox(
+              height: 10,
+            ),
+            Center(
+              child: SvgPicture.asset(
+                "assets/log1.svg",
+                height: 70.h,
+                width: 219.w,
+                color: const Color(0xFFF65734),
+              ),
+            ),
+
             Center(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),

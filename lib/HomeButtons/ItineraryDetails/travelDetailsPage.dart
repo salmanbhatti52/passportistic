@@ -8,6 +8,7 @@ import '../../Models/transportModeNamesModels.dart';
 import '../../auth/signUpNextPage.dart';
 import '../../auth/signUpPage.dart';
 import '../../main.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TravelDetailsPage extends StatefulWidget {
   final String? itinid;
@@ -163,9 +164,9 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
           ),
           title: Text(
             "${widget.itinname}",
-            style: const TextStyle(
-              color: Color(0xFF525252),
-              fontSize: 24,
+            style: TextStyle(
+              color: const Color(0xFF525252),
+              fontSize: 24.sp,
               fontFamily: 'Satoshi',
               fontWeight: FontWeight.w900,
             ),
@@ -181,17 +182,28 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
         body: Column(
           children: [
             const SizedBox(height: 20),
-            const Text(
+            Center(
+              child: SvgPicture.asset(
+                "assets/log1.svg",
+                height: 70.h,
+                width: 219.w,
+                color: const Color(0xFFF65734),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Text(
               'Travel Details',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Color(0xFFF65734),
-                fontSize: 24,
+                color: const Color(0xFFF65734),
+                fontSize: 24.sp,
                 fontFamily: 'Satoshi',
                 fontWeight: FontWeight.w700,
               ),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02.h),
             Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -243,23 +255,29 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                   final travelForPage = getTravelDetailsModels.data
                           ?.sublist(startIndex, endIndex) ??
                       [];
+
                   return Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Container(
-                      width: 250,
+                      width: 150,
+                      height: 400.h,
                       decoration: ShapeDecoration(
                         color: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
+                          side: const BorderSide(
+                            color: Color(0xFFF65634), // Border color
+                            width: 2, // Border width
+                          ),
                         ),
-                        shadows: const [
-                          BoxShadow(
-                            color: Color(0x0F312E23),
-                            blurRadius: 16,
-                            offset: Offset(0, 8),
-                            spreadRadius: 0,
-                          )
-                        ],
+                        // shadows: const [
+                        //   BoxShadow(
+                        //     color: Color(0x0F312E23),
+                        //     blurRadius: 16,
+                        //     offset: Offset(0, 8),
+                        //     spreadRadius: 0,
+                        //   )
+                        // ],
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(18.0),
@@ -576,22 +594,6 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                     shape: OvalBorder(),
                   ),
                   child: Center(child: SvgPicture.asset("assets/share1.svg")),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                Container(
-                  width: 72,
-                  height: 72,
-                  decoration: const ShapeDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment(0.00, -1.00),
-                      end: Alignment(0, 1),
-                      colors: [Color(0xFFFF8D74), Color(0xFFF65634)],
-                    ),
-                    shape: OvalBorder(),
-                  ),
-                  child: Center(child: SvgPicture.asset("assets/import.svg")),
                 ),
                 const SizedBox(
                   width: 20,

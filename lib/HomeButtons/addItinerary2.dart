@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -130,9 +131,11 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
           )
         ],
       ),
-      body: Column(children: [
-        Expanded(
-          child: Container(
+      body: SingleChildScrollView(
+        child: Column(children: [
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
             clipBehavior: Clip.antiAlias,
             decoration: ShapeDecoration(
               gradient: const LinearGradient(
@@ -148,49 +151,17 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
               const SizedBox(
                 height: 20,
               ),
-
-              // GestureDetector(
-              //   onTap: () {
-              //     DropdownButtonFormField<String>(
-              //       value: _selectedItinerary,
-              //       onChanged: (newValue) {
-              //         setState(() {
-              //           _selectedItinerary = newValue!;
-              //           print("Selected Itinerary: $_selectedItinerary");
-              //         });
-              //       },
-              //       items: iteneraryGetModels.data?.map((gender) {
-              //             return DropdownMenuItem<String>(
-              //               value: gender.travelLtineraryId,
-              //               child: GestureDetector(
-              //                 onTap: () {
-              //                   setState(() {
-              //                     _selectedItinerary =
-              //                         gender.travelLtineraryId!;
-              //                     print(
-              //                         "Selected Itinerary: $_selectedItinerary");
-              //                   });
-              //                 },
-              //                 child: Text(gender.travelLtineraryName ?? ''),
-              //               ),
-              //             );
-              //           }).toList() ??
-              //           [],
-              //     );
-              //   },
-              //   child: Text(
-              //     _selectedItinerary != ''
-              //         ? _selectedItinerary
-              //         : 'Select an itinerary', // Display the selected itinerary or a placeholder
-              //     style: const TextStyle(
-              //       color: Color(0xFF525252),
-              //       fontSize: 24,
-              //       fontFamily: 'Satoshi',
-              //       fontWeight: FontWeight.w900,
-              //     ),
-              //   ),
-              // ),
-
+              Center(
+                child: SvgPicture.asset(
+                  "assets/log1.svg",
+                  height: 70.h,
+                  width: 219.w,
+                  color: const Color(0xFFF65734),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
               Padding(
                 padding: EdgeInsets.only(
                   left: MediaQuery.of(context).size.width * 0.112,
@@ -291,7 +262,6 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
                   ),
                 ),
               ),
-
               const SizedBox(
                 height: 50,
               ),
@@ -547,9 +517,9 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
                 ),
               ),
             ]),
-          ),
-        )
-      ]),
+          )
+        ]),
+      ),
     );
   }
 }

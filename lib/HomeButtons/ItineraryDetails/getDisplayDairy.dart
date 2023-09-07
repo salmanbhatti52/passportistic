@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -156,6 +157,17 @@ class _DisplayDairyDetailsPageState extends State<DisplayDairyDetailsPage> {
         body: Column(
           children: [
             const SizedBox(height: 20),
+            Center(
+              child: SvgPicture.asset(
+                "assets/log1.svg",
+                height: 70.h,
+                width: 219.w,
+                color: const Color(0xFFF65734),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
             const Text(
               "Travel Dairy",
               textAlign: TextAlign.center,
@@ -330,23 +342,7 @@ class _DisplayDairyDetailsPageState extends State<DisplayDairyDetailsPage> {
                     shape: OvalBorder(),
                   ),
                   child: Center(child: SvgPicture.asset("assets/share1.svg")),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                Container(
-                  width: 72,
-                  height: 72,
-                  decoration: const ShapeDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment(0.00, -1.00),
-                      end: Alignment(0, 1),
-                      colors: [Color(0xFFFF8D74), Color(0xFFF65634)],
-                    ),
-                    shape: OvalBorder(),
-                  ),
-                  child: Center(child: SvgPicture.asset("assets/import.svg")),
-                ),
+                ),  
                 const SizedBox(
                   width: 20,
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:scanguard/HomeButtons/ItineraryDetails/travelDetailsPage.dart';
@@ -65,6 +66,9 @@ class _TravelDetailsState extends State<TravelDetails> {
 
   TravalDetailsModels travalDetailsModels = TravalDetailsModels();
   String? _selectedTransportMode;
+  String? formattedApiDepartTime;
+  String? formattedApiArrivalTime;
+  String? formattedTravelTime;
 
   itinerayAdd() async {
     // try {
@@ -87,7 +91,7 @@ class _TravelDetailsState extends State<TravelDetails> {
       "day_no": dayno.text,
       "trip_details": tripDetails.text,
       "departure_date": departureDate.text,
-      "departure_time": departureTime.text,
+      "departure_time": formattedApiDepartTime.toString(),
       "travel_time": travelTime.text,
       "arrive_city": arrivalCity.text,
       "arrive_time": arrivalTime.text,
@@ -168,6 +172,17 @@ class _TravelDetailsState extends State<TravelDetails> {
       ),
       body: SingleChildScrollView(
         child: Column(children: [
+          const SizedBox(
+            height: 20,
+          ),
+          Center(
+            child: SvgPicture.asset(
+              "assets/log1.svg",
+              height: 70.h,
+              width: 219.w,
+              color: const Color(0xFFF65734),
+            ),
+          ),
           const SizedBox(
             height: 20,
           ),
@@ -340,7 +355,7 @@ class _TravelDetailsState extends State<TravelDetails> {
                   cursorColor: const Color(0xFF000000),
                   controller: departureDate,
                   keyboardType: TextInputType.name,
-                  readOnly: true, // Prevent manual text input
+                  // Prevent manual text input
                   onTap: () {
                     // Open the date picker when the field is tapped
                     showDatePicker(
@@ -402,18 +417,23 @@ class _TravelDetailsState extends State<TravelDetails> {
                   cursorColor: const Color(0xFF000000),
                   controller: departureTime,
                   keyboardType: TextInputType.name,
-                  readOnly: true,
                   onTap: () {
                     showTimePicker(
+                      initialEntryMode: TimePickerEntryMode.inputOnly,
                       context: context,
                       initialTime: TimeOfDay.now(),
                     ).then((selectedTime) {
                       if (selectedTime != null) {
                         // Handle the selected time
+                        final formattedDisplayTime = selectedTime
+                            .format(context); // Display in AM/PM format
+                        formattedApiDepartTime =
+                            '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}:00'; // 24-hour format for API
+
                         setState(() {
-                          final formattedTime =
-                              '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}:00';
-                          departureTime.text = formattedTime;
+                          departureTime.text = formattedDisplayTime;
+                          print(formattedDisplayTime);
+                          print(formattedApiDepartTime);
                         });
                       }
                     });
@@ -510,7 +530,7 @@ class _TravelDetailsState extends State<TravelDetails> {
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     // labelText: 'Email',
-                    hintText: "Trip Details",
+                    hintText: "Flight No",
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: const BorderSide(
@@ -590,7 +610,7 @@ class _TravelDetailsState extends State<TravelDetails> {
                   cursorColor: const Color(0xFF000000),
                   controller: arrivalDate,
                   keyboardType: TextInputType.name,
-                  readOnly: true, // Prevent manual text input
+                  // Prevent manual text input
                   onTap: () {
                     // Open the date picker when the field is tapped
                     showDatePicker(
@@ -652,21 +672,41 @@ class _TravelDetailsState extends State<TravelDetails> {
                   cursorColor: const Color(0xFF000000),
                   controller: arrivalTime,
                   keyboardType: TextInputType.name,
-                  readOnly: true,
                   onTap: () {
                     showTimePicker(
+                      initialEntryMode: TimePickerEntryMode.inputOnly,
                       context: context,
                       initialTime: TimeOfDay.now(),
                     ).then((selectedTime) {
                       if (selectedTime != null) {
                         // Handle the selected time
+                        final formattedDisplayTime = selectedTime
+                            .format(context); // Display in AM/PM format
+                        formattedApiDepartTime =
+                            '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}:00'; // 24-hour format for API
+
                         setState(() {
-                          final formattedTime =
-                              '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}:00';
-                          arrivalTime.text = formattedTime;
+                          arrivalTime.text = formattedDisplayTime;
+                          print(formattedDisplayTime);
+                          print(formattedApiArrivalTime);
                         });
                       }
                     });
+
+                    // Parse the departure and arrival times
+                    // final departureParts = formattedApiDepartTime!.split(':');
+                    // final arrivalParts = formattedApiArrivalTime!.split(':');
+                    // final departureHour = int.parse(departureParts[0]);
+                    // final departureMinute = int.parse(departureParts[1]);
+                    // final arrivalHour = int.parse(arrivalParts[0]);
+                    // final arrivalMinute = int.parse(arrivalParts[1]);
+                    // final totalMinutes = (arrivalHour * 60 + arrivalMinute) -
+                    //     (departureHour * 60 + departureMinute);
+                    // final calculatedHours =
+                    //     (totalMinutes ~/ 60).toString().padLeft(2, '0');
+                    // final calculatedMinutes =
+                    //     (totalMinutes % 60).toString().padLeft(2, '0');
+                    // formattedTravelTime = '$calculatedHours:$calculatedMinutes';
                   },
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
@@ -711,8 +751,10 @@ class _TravelDetailsState extends State<TravelDetails> {
                   cursorColor: const Color(0xFF000000),
                   controller: travelTime,
                   keyboardType: TextInputType.name,
-                  readOnly: true,
                   onTap: () {
+                    // setState(() {
+                    //   travelTime.text = formattedTravelTime!;
+                    // });
                     showTimePicker(
                       context: context,
                       initialTime: TimeOfDay.now(),

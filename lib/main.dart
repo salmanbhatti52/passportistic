@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:scanguard/Home/mainScreenHome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,13 +31,21 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF00AEFF)),
-        useMaterial3: true,
-      ),
-      home: const SplashScreen(),
+    return ScreenUtilInit(
+      designSize: const Size(360, 690),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      child: Builder(builder: (BuildContext context) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            colorScheme:
+                ColorScheme.fromSeed(seedColor: const Color(0xFF00AEFF)),
+            useMaterial3: true,
+          ),
+          home: const SplashScreen(),
+        );
+      }),
     );
   }
 }
@@ -120,16 +129,16 @@ class _SplashScreenState extends State<SplashScreen> {
               Center(
                 child: SvgPicture.asset(
                   "assets/log1.svg",
-                  height: 55,
-                  width: 219,
+                  height: 55.h,
+                  width: 219.w,
                 ),
               ),
-              const Text(
+              Text(
                 'PassportTastic',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 40,
+                  fontSize: 40.sp,
                   fontFamily: 'Satoshi',
                   fontWeight: FontWeight.w800,
                 ),

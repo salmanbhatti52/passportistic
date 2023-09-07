@@ -5,6 +5,7 @@ import 'package:scanguard/auth/signUpPage.dart';
 import 'package:http/http.dart' as http;
 import '../Models/forgetpassportModel.dart';
 import 'otpPage.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ForgetPassword extends StatefulWidget {
   const ForgetPassword({super.key});
@@ -80,37 +81,53 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             Center(
               child: SvgPicture.asset(
                 "assets/log1.svg",
-                height: 70,
-                width: 219,
+                height: 70.h,
+                width: 219.w,
                 color: const Color(0xFFF65734),
               ),
             ),
-            const Text(
+            Text(
               'PassportTastic',
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: Color(0xFF565656),
-                  fontSize: 31,
+                  color: const Color(0xFF565656),
+                  fontSize: 31.sp,
                   fontFamily: 'Satoshi',
                   fontWeight: FontWeight.w800,
                   letterSpacing: 0.5),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.08,
+              height: MediaQuery.of(context).size.height * 0.04.h,
             ),
             Center(
-              child: SvgPicture.asset(
-                "assets/password.svg",
+              child: Text(
+                'Lost your password?',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: const Color(0xFF141010),
+                  fontSize: 24.sp,
+                  fontFamily: 'Satoshi',
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.04,
+              height: MediaQuery.of(context).size.height * 0.02.h,
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Center(
-                child: SvgPicture.asset(
-                  "assets/otp.svg",
+            SizedBox(
+              width: 330,
+              child: Opacity(
+                opacity: 0.50,
+                child: Text(
+                  'Please enter your registered email. You will get 4-digit OTP code to reset password.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: const Color(0xFF222222),
+                    fontSize: 16.sp,
+                    fontFamily: 'Satoshi',
+                    fontWeight: FontWeight.w300,
+                    height: 1.50,
+                  ),
                 ),
               ),
             ),
@@ -125,16 +142,18 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                 Expanded(
                   child: TextFormField(
                     focusNode: _focusNode,
-                    style:
-                        const TextStyle(color: Color(0xFF000000), fontSize: 16),
+                    style: TextStyle(
+                        color: const Color(0xFF000000), fontSize: 16.sp),
                     cursorColor: const Color(0xFF000000),
                     controller: email,
                     keyboardType: TextInputType.name,
                     decoration: InputDecoration(
                       prefixIcon: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(8.0).r,
                         child: SvgPicture.asset(
                           'assets/sms.svg',
+                          height: 24.h,
+                          width: 24.w,
                           color: isFocused
                               ? const Color(0xFFF65734)
                               : const Color(0xFFE0E0E5),
@@ -153,13 +172,13 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                             color: Color(0xFFF3F3F3)), // change border color
                       ),
                       labelStyle: const TextStyle(),
-                      hintStyle: const TextStyle(
-                          color: Color(0xFFA7A9B7),
-                          fontSize: 16,
+                      hintStyle: TextStyle(
+                          color: const Color(0xFFA7A9B7),
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.w300,
                           fontFamily: "Satoshi"),
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15)),
+                          borderRadius: BorderRadius.circular(15).w),
                     ),
                     validator: (value) {
                       if (value!.trim().isEmpty) {
@@ -248,8 +267,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                       alignment: Alignment.center,
                       children: [
                         Container(
-                          height: 48,
-                          width: MediaQuery.of(context).size.width * 0.94,
+                          height: 48.h,
+                          width: MediaQuery.of(context).size.width * 0.95.w,
                           decoration: BoxDecoration(
                             gradient: const LinearGradient(
                               colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
@@ -264,12 +283,12 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                 valueColor:
                                     AlwaysStoppedAnimation<Color>(Colors.white),
                               )
-                            : const Text(
+                            : Text(
                                 "Send Code",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontFamily: "Satoshi",
-                                    fontSize: 20,
+                                    fontSize: 20.sp,
                                     fontWeight: FontWeight.w700),
                               ),
                       ],

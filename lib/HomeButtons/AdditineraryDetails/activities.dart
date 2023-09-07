@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -119,6 +120,17 @@ class _ActivitiesDetailsState extends State<ActivitiesDetails> {
       ),
       body: SingleChildScrollView(
         child: Column(children: [
+          const SizedBox(
+            height: 20,
+          ),
+          Center(
+            child: SvgPicture.asset(
+              "assets/log1.svg",
+              height: 70.h,
+              width: 219.w,
+              color: const Color(0xFFF65734),
+            ),
+          ),
           const SizedBox(
             height: 20,
           ),

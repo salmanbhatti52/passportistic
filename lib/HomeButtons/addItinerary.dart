@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
@@ -136,6 +137,14 @@ class _AddItinerayState extends State<AddItineray> {
       ),
       body: SingleChildScrollView(
         child: Column(children: [
+          Center(
+            child: SvgPicture.asset(
+              "assets/log1.svg",
+              height: 70.h,
+              width: 219.w,
+              color: const Color(0xFFF65734),
+            ),
+          ),
           const Padding(
             padding: EdgeInsets.only(top: 10, left: 15),
             child: Row(
@@ -233,12 +242,12 @@ class _AddItinerayState extends State<AddItineray> {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.all(5.0),
+            padding: const EdgeInsets.all(5.0).r,
             child: Column(children: [
               Row(
                 children: [
                   SizedBox(
-                    width: 170,
+                    width: 170.w,
 
                     // decoration: const BoxDecoration(color: Colors.red),
                     child: Column(
@@ -327,9 +336,7 @@ class _AddItinerayState extends State<AddItineray> {
                     width: 5,
                   ),
                   SizedBox(
-                    width: 170,
-
-                    // decoration: const BoxDecoration(color: Colors.red),
+                    width: 170.w,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -410,9 +417,6 @@ class _AddItinerayState extends State<AddItineray> {
                                   ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(
-                              width: 5,
                             ),
                           ],
                         )
