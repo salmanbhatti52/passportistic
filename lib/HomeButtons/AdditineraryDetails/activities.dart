@@ -123,11 +123,11 @@ class _ActivitiesDetailsState extends State<ActivitiesDetails> {
           const SizedBox(
             height: 20,
           ),
-          Center(
+           Center(
             child: SvgPicture.asset(
               "assets/log1.svg",
-              height: 70.h,
-              width: 219.w,
+              height: 35.h,
+              width: 108.w,
               color: const Color(0xFFF65734),
             ),
           ),

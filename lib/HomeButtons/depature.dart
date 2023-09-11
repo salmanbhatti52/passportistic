@@ -415,6 +415,14 @@ class _DepatureDetailsState extends State<DepatureDetails> {
       ),
       body: SingleChildScrollView(
         child: Column(children: [
+          Center(
+            child: SvgPicture.asset(
+              "assets/log1.svg",
+              height: 35,
+              width: 108,
+              color: const Color(0xFFF65734),
+            ),
+          ),
           const SizedBox(
             height: 10,
           ),

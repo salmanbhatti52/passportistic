@@ -124,53 +124,51 @@ class _DisplayDiaryState extends State<DisplayDiary> {
   dirayDetails() async {
     prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
-    try {
-      String apiUrl = "$baseUrl/add_travel_diary";
-      print("api: $apiUrl");
+    String apiUrl = "$baseUrl/add_travel_diary";
+    print("api: $apiUrl");
 
-      setState(() {
-        isLoading = true;
-      });
+    setState(() {
+      isLoading = true;
+    });
 
-      // Convert base64EncodedImageList to JSON array format
-      String imagesJson = jsonEncode(base64ImageUrls);
-      String imageUrlString = base64ImageUrls.join(",");
+    // Convert base64EncodedImageList to JSON array format
+    String imagesJson = jsonEncode(base64ImageUrls);
+    String imageUrlString = base64ImageUrls.join(",");
 
-      final response = await http.post(Uri.parse(apiUrl),
-          headers: {
-            'Accept': 'application/json',
-          },
-          body: jsonEncode({
-            "travel_ltinerary_id": "${widget.itinid}",
-            "travel_diary_date": formattedDate,
-            "travel_diary_entry": comments.text,
-            "tavel_diary_picture_images": [
-              imageUrlString
-            ] // Add the images JSON array
-          }));
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "travel_ltinerary_id": "${widget.itinid}",
+      "travel_diary_date": formattedDate,
+      "travel_diary_entry": comments.text,
+      "tavel_diary_picture_images": imagesJson
+      // Add the images JSON array
+    });
 
-      final responseString = response.body;
-      print("response_travalDetailsModels: $responseString");
-      print("status Code travalDetailsModels: ${response.statusCode}");
+    final responseString = response.body;
+    print("response_travalDetailsModels: $responseString");
+    print("status Code travalDetailsModels: ${response.statusCode}");
 
-      if (response.statusCode == 200) {
-        print("in 200 itineraryAddModels");
-        print("SuucessFull");
-        dirayDetailsModels = dirayDetailsModelsFromJson(responseString);
-        setState(() {
-          isLoading = false;
-        });
-        print('dirayDetailsModels status: ${dirayDetailsModels.status}');
-      }
-    } catch (e) {
-      print('Failed to make API request: $e');
+    if (response.statusCode == 200) {
+      print("in 200 itineraryAddModels");
+      print("SuucessFull");
+      dirayDetailsModels = dirayDetailsModelsFromJson(responseString);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Successfully Added',
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
       setState(() {
         isLoading = false;
       });
+      print('dirayDetailsModels status: ${dirayDetailsModels.status}');
     }
   }
 
-  fucntion() async {
+  function() async {
     var headersList = {'Accept': '*/*', 'Content-Type': 'application/json'};
     var url =
         Uri.parse('https://portal.passporttastic.com/api/add_travel_diary');
@@ -199,14 +197,14 @@ class _DisplayDiaryState extends State<DisplayDiary> {
           ),
         ),
       );
-      Navigator.pushReplacement(context, MaterialPageRoute(
-        builder: (BuildContext context) {
-          return DisplayDairyDetailsPage(
-            itinid: widget.itinid,
-            itinname: widget.itinname,
-          );
-        },
-      ));
+      // Navigator.pushReplacement(context, MaterialPageRoute(
+      //   builder: (BuildContext context) {
+      //     return DisplayDairyDetailsPage(
+      //       itinid: widget.itinid,
+      //       itinname: widget.itinname,
+      //     );
+      //   },
+      // ));
       print(resBody);
     } else if (res.statusCode == 404) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -230,16 +228,16 @@ class _DisplayDiaryState extends State<DisplayDiary> {
     }
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    List<String> base64Images = selectedImages
-        .map((image) =>
-            image != null ? base64.encode(image.readAsBytesSync()) : "")
-        .toList();
-  }
-
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   List<String> base64Images = selectedImages
+  //       .map((image) =>
+  //           image != null ? base64.encode(image.readAsBytesSync()) : "")
+  //       .toList();
+  // }
+  bool isButtonTapped = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -282,8 +280,8 @@ class _DisplayDiaryState extends State<DisplayDiary> {
             Center(
               child: SvgPicture.asset(
                 "assets/log1.svg",
-                height: 70.h,
-                width: 219.w,
+                height: 35.h,
+                width: 108.w,
                 color: const Color(0xFFF65734),
               ),
             ),
@@ -539,33 +537,45 @@ class _DisplayDiaryState extends State<DisplayDiary> {
 
             GestureDetector(
               onTap: () async {
+                if (isLoading) {
+                  return; // Prevent multiple taps while loading
+                }
+
                 setState(() {
                   isLoading = true;
                 });
-                if (comments.text.isEmpty) {
+
+                if (comments.text.isEmpty || formattedDate == null) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text(
-                        'Please fill all the fields',
+                        'Please fill all the fields and select a date',
                         textAlign: TextAlign.center,
                       ),
                     ),
                   );
-                } else if (formattedDate == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'Please Select the Date',
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  );
+                  setState(() {
+                    isLoading = false;
+                  });
                 } else {
-                  await fucntion();
+                  try {
+                    await dirayDetails();
+                  } catch (e) {
+                    print('API call error: $e');
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'API Call Failed',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    );
+                  } finally {
+                    setState(() {
+                      isLoading = false;
+                    });
+                  }
                 }
-                setState(() {
-                  isLoading = false;
-                });
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -587,7 +597,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                         ),
                       ),
                     ),
-                    isLoading == true
+                    isLoading
                         ? const CircularProgressIndicator(
                             valueColor:
                                 AlwaysStoppedAnimation<Color>(Colors.white),
@@ -595,15 +605,17 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                         : const Text(
                             "Save",
                             style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: "Satoshi",
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700),
+                              color: Colors.white,
+                              fontFamily: "Satoshi",
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                   ],
                 ),
               ),
             ),
+
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: GestureDetector(

@@ -17,8 +17,13 @@ import '../auth/signUpPage.dart';
 import '../main.dart';
 
 class ProfilePage extends StatefulWidget {
+  // final GetProfileModels profileData;
   final String? userId;
-  const ProfilePage({super.key, this.userId});
+  const ProfilePage({
+    super.key,
+    this.userId, 
+    // required this.profileData,
+  });
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -375,7 +380,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return ViewProfile(userId: "${widget.userId}");
+                      return ViewProfile(
+                        userId: "${widget.userId}",
+                      );
                     },
                   ));
                 },

@@ -183,13 +183,13 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
           children: [
             const SizedBox(height: 20),
             Center(
-              child: SvgPicture.asset(
-                "assets/log1.svg",
-                height: 70.h,
-                width: 219.w,
-                color: const Color(0xFFF65734),
-              ),
+            child: SvgPicture.asset(
+              "assets/log1.svg",
+              height: 35.h,
+              width: 108.w,
+              color: const Color(0xFFF65734),
             ),
+          ),
             const SizedBox(
               height: 20,
             ),

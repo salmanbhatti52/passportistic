@@ -160,8 +160,8 @@ class _DisplayDairyDetailsPageState extends State<DisplayDairyDetailsPage> {
             Center(
               child: SvgPicture.asset(
                 "assets/log1.svg",
-                height: 70.h,
-                width: 219.w,
+                height: 35.h,
+                width: 108.w,
                 color: const Color(0xFFF65734),
               ),
             ),
@@ -227,13 +227,13 @@ class _DisplayDairyDetailsPageState extends State<DisplayDairyDetailsPage> {
                 itemCount: getDisplayDairyModels.data?.length ?? 0,
                 onPageChanged: _onPageChanged,
                 itemBuilder: (context, index) {
-                  final data = getDisplayDairyModels.data;
-
-                  if (index >= (data?.length ?? 0)) {
+                  if (index < 0 ||
+                      index >= (getDisplayDairyModels.data?.length ?? 0)) {
                     return const SizedBox(); // Return an empty container if index is out of range
                   }
+                  final data = getDisplayDairyModels.data;
 
-                  final travelDiary = data![index];
+                  final travelDiary = getDisplayDairyModels.data![index];
                   final travelDiaryPictures = travelDiary.travelDiaryPicture;
 
                   return Padding(
@@ -262,7 +262,7 @@ class _DisplayDairyDetailsPageState extends State<DisplayDairyDetailsPage> {
                             child: Center(
                               child: Text(
                                 DateFormat('EEEE dd')
-                                    .format(data[index].travelDiaryDate!),
+                                    .format(data![index].travelDiaryDate!),
                                 style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -342,7 +342,7 @@ class _DisplayDairyDetailsPageState extends State<DisplayDairyDetailsPage> {
                     shape: OvalBorder(),
                   ),
                   child: Center(child: SvgPicture.asset("assets/share1.svg")),
-                ),  
+                ),
                 const SizedBox(
                   width: 20,
                 ),

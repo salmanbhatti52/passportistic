@@ -140,8 +140,8 @@ class _AddItinerayState extends State<AddItineray> {
           Center(
             child: SvgPicture.asset(
               "assets/log1.svg",
-              height: 70.h,
-              width: 219.w,
+              height: 35.h,
+              width: 108.w,
               color: const Color(0xFFF65734),
             ),
           ),

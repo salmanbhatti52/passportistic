@@ -17,7 +17,8 @@ import 'editProfile.dart';
 
 class ViewProfile extends StatefulWidget {
   final String? userId;
-  const ViewProfile({super.key, this.userId});
+  final GetProfileModels? profileData;
+  const ViewProfile({super.key, this.userId, this.profileData});
 
   @override
   State<ViewProfile> createState() => _ViewProfileState();

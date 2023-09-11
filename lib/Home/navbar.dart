@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../Models/getProfileModels.dart';
 import 'dirayPage.dart';
 import 'homePage.dart';
 import '../Profile/profilePage.dart';
@@ -22,6 +23,7 @@ class _NavBarState extends State<NavBar> {
   @override
   void initState() {
     super.initState();
+    
     screens = [
       HomePage(
         userId: widget.userId,
@@ -29,7 +31,9 @@ class _NavBarState extends State<NavBar> {
       const DirayPage(),
       const StampPage(),
       ProfilePage(
-        userId: widget.userId,
+        userId: widget.userId, 
+
+        
       ),
     ];
   }

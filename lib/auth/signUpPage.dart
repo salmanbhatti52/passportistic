@@ -150,7 +150,7 @@ class _SignUpPageState extends State<SignUpPage> {
           const Opacity(
             opacity: 0.40,
             child: Text(
-              'Let’s get those valuable memories all in one place’',
+              'Let’s get those valuable memories all in one place',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Color(0xFF141010),
@@ -437,11 +437,10 @@ class _SignUpPageState extends State<SignUpPage> {
                           MaterialPageRoute(
                             builder: (BuildContext context) {
                               return VerifyAccountPage(
-                                userId: signUpModels.data?.passportHolderId
-                                    .toString(),
-                                otp: signUpModels.data!.verifyCode,
-                                email: email.text
-                              );
+                                  userId: signUpModels.data?.passportHolderId
+                                      .toString(),
+                                  otp: signUpModels.data!.verifyCode,
+                                  email: email.text);
                             },
                           ),
                         );

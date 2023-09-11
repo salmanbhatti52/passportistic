@@ -1,6 +1,7 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:group_radio_button/group_radio_button.dart';
 import 'package:intl/intl.dart';
@@ -204,7 +205,14 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
           //     ),
           //   ],
           // ),
-
+          Center(
+            child: SvgPicture.asset(
+              "assets/log1.svg",
+              height: 35.h,
+              width: 108.w,
+              color: const Color(0xFFF65734),
+            ),
+          ),
           const SizedBox(
             height: 10,
           ),
