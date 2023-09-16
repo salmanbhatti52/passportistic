@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final signUpDetailsModel = signUpDetailsModelFromJson(jsonString);
-
 import 'dart:convert';
 
 SignUpDetailsModel signUpDetailsModelFromJson(String str) =>
@@ -12,32 +8,28 @@ String signUpDetailsModelToJson(SignUpDetailsModel data) =>
 
 class SignUpDetailsModel {
   String? status;
-  String? message;
   Data? data;
 
   SignUpDetailsModel({
     this.status,
-    this.message,
     this.data,
   });
 
   factory SignUpDetailsModel.fromJson(Map<String, dynamic> json) =>
       SignUpDetailsModel(
         status: json["status"],
-        message: json["message"],
         data: Data.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
-        "message": message,
         "data": data!.toJson(),
       };
 }
 
 class Data {
   String? passportHolderId;
-  String? oneSignalId;
+  dynamic oneSignalId;
   String? passportDesignId;
   String? fullName;
   String? username;
@@ -45,12 +37,13 @@ class Data {
   String? password;
   String? accountType;
   String? profilePicture;
-  String? socialAccType;
-  String? googleAccessToken;
+  dynamic socialAccType;
+  dynamic googleAccessToken;
   dynamic facebookId;
-  dynamic dateAdded;
+  DateTime? dateAdded;
   String? status;
   String? verifyCode;
+  String? passportNumber;
   String? notifications;
   String? beSeen;
   String? firstName;
@@ -62,7 +55,7 @@ class Data {
   DateTime? dob;
   String? numberOfPages;
   dynamic currencyId;
-  String? passportStampsHeld;
+  dynamic passportStampsHeld;
   String? isCancelled;
 
   Data({
@@ -81,6 +74,7 @@ class Data {
     this.dateAdded,
     this.status,
     this.verifyCode,
+    this.passportNumber,
     this.notifications,
     this.beSeen,
     this.firstName,
@@ -109,9 +103,10 @@ class Data {
         socialAccType: json["social_acc_type"],
         googleAccessToken: json["google_access_token"],
         facebookId: json["facebook_id"],
-        dateAdded: json["date_added"],
+        dateAdded: DateTime.parse(json["date_added"]),
         status: json["status"],
         verifyCode: json["verify_code"],
+        passportNumber: json["passport_number"],
         notifications: json["notifications"],
         beSeen: json["be_seen"],
         firstName: json["first_name"],
@@ -140,9 +135,10 @@ class Data {
         "social_acc_type": socialAccType,
         "google_access_token": googleAccessToken,
         "facebook_id": facebookId,
-        "date_added": dateAdded,
+        "date_added": dateAdded!.toIso8601String(),
         "status": status,
         "verify_code": verifyCode,
+        "passport_number": passportNumber,
         "notifications": notifications,
         "be_seen": beSeen,
         "first_name": firstName,

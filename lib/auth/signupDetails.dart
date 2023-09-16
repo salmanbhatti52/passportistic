@@ -1,5 +1,6 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -37,6 +38,8 @@ class _SignupDetailsState extends State<SignupDetails> {
   String? _selectedcurrency;
   String? _slectedGenderId;
 
+  String? apiDateFormat;
+
   signUpUser() async {
     // try {
 
@@ -56,9 +59,9 @@ class _SignupDetailsState extends State<SignupDetails> {
       "last_name": lastname.text,
       "nationality": _selectedCountry?.displayNameNoCountryCode.toString(),
       "gender_id": _slectedGenderId.toString(),
-      "dob": dob.text,
+      "dob": apiDateFormat.toString(),
       "number_of_pages": selectedPageText,
-      "currency_id": _selectedcurrency,
+      "currency_id": _selectedcurrency.toString(),
       "phone_number": phone.text.toString(),
     });
     final responseString = response.body;
@@ -214,6 +217,18 @@ class _SignupDetailsState extends State<SignupDetails> {
       ),
       body: SingleChildScrollView(
           child: Column(children: [
+        Center(
+          child: SvgPicture.asset(
+            "assets/log1.svg",
+            height: 35.h,
+            width: 108.w,
+            color: const Color(0xFFF65734),
+          ),
+        ),
+
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.01.h,
+        ),
         const Center(
             child: Text(
           "Enter Details",
@@ -635,7 +650,6 @@ class _SignupDetailsState extends State<SignupDetails> {
             Expanded(
               child: TextFormField(
                 focusNode: _focusNode7,
-                readOnly: true,
                 decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Color(0xFFF65734)),
@@ -757,8 +771,11 @@ class _SignupDetailsState extends State<SignupDetails> {
                     if (selectedDate != null) {
                       // Handle the selected date
                       setState(() {
+                        apiDateFormat =
+                            DateFormat('yyyyMMdd').format(selectedDate);
                         dob.text =
-                            DateFormat('yyyy-MM-dd').format(selectedDate);
+                            DateFormat('MM/dd/yyyy').format(selectedDate);
+                        // textFieldDateFormat = DateFormat('MM/dd/yyyy').format(selectedDate);
                         // Date.text = DateFormat.yMd().format(selectedDate);
                       });
                     }

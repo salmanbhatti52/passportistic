@@ -1,49 +1,47 @@
 // To parse this JSON data, do
 //
-//     final iteneraryGetModels = iteneraryGetModelsFromJson(jsonString);
+//     final updateItineraryModels = updateItineraryModelsFromJson(jsonString);
 
 import 'dart:convert';
 
-IteneraryGetModels iteneraryGetModelsFromJson(String str) =>
-    IteneraryGetModels.fromJson(json.decode(str));
+UpdateItineraryModels updateItineraryModelsFromJson(String str) =>
+    UpdateItineraryModels.fromJson(json.decode(str));
 
-String iteneraryGetModelsToJson(IteneraryGetModels data) =>
+String updateItineraryModelsToJson(UpdateItineraryModels data) =>
     json.encode(data.toJson());
 
-class IteneraryGetModels {
+class UpdateItineraryModels {
   String? status;
-  List<Datum>? data;
+  Data? data;
 
-  IteneraryGetModels({
+  UpdateItineraryModels({
     this.status,
     this.data,
   });
 
-  factory IteneraryGetModels.fromJson(Map<String, dynamic> json) =>
-      IteneraryGetModels(
+  factory UpdateItineraryModels.fromJson(Map<String, dynamic> json) =>
+      UpdateItineraryModels(
         status: json["status"],
-        data: json["data"] != null
-            ? List<Datum>.from(json["data"].map((x) => Datum.fromJson(x)))
-            : null,
+        data: Data.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
-        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
+        "data": data!.toJson(),
       };
 }
 
-class Datum {
+class Data {
   String? travelLtineraryId;
   String? passportHolderId;
   String? travelLtineraryName;
   DateTime? travelLtineraryDepartDate;
   DateTime? travelLtineraryArriveDate;
-  IsCancelled? isCancelled;
-  Status? status;
+  String? isCancelled;
+  String? status;
   DateTime? dateAdded;
 
-  Datum({
+  Data({
     this.travelLtineraryId,
     this.passportHolderId,
     this.travelLtineraryName,
@@ -54,7 +52,7 @@ class Datum {
     this.dateAdded,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
         travelLtineraryId: json["travel_ltinerary_id"],
         passportHolderId: json["passport_holder_id"],
         travelLtineraryName: json["travel_ltinerary_name"],
@@ -62,8 +60,8 @@ class Datum {
             DateTime.parse(json["travel_ltinerary_depart_date"]),
         travelLtineraryArriveDate:
             DateTime.parse(json["travel_ltinerary_arrive_date"]),
-        isCancelled: isCancelledValues.map[json["is_cancelled"]],
-        status: statusValues.map[json["status"]],
+        isCancelled: json["is_cancelled"],
+        status: json["status"],
         dateAdded: DateTime.parse(json["date_added"]),
       );
 
@@ -75,28 +73,8 @@ class Datum {
             "${travelLtineraryDepartDate!.year.toString().padLeft(4, '0')}-${travelLtineraryDepartDate!.month.toString().padLeft(2, '0')}-${travelLtineraryDepartDate!.day.toString().padLeft(2, '0')}",
         "travel_ltinerary_arrive_date":
             "${travelLtineraryArriveDate!.year.toString().padLeft(4, '0')}-${travelLtineraryArriveDate!.month.toString().padLeft(2, '0')}-${travelLtineraryArriveDate!.day.toString().padLeft(2, '0')}",
-        "is_cancelled": isCancelledValues.reverse[isCancelled],
-        "status": statusValues.reverse[status],
+        "is_cancelled": isCancelled,
+        "status": status,
         "date_added": dateAdded!.toIso8601String(),
       };
-}
-
-enum IsCancelled { FALSE }
-
-final isCancelledValues = EnumValues({"False": IsCancelled.FALSE});
-
-enum Status { ACTIVE }
-
-final statusValues = EnumValues({"Active": Status.ACTIVE});
-
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
 }

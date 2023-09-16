@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -41,7 +42,9 @@ class _TravelDetailsState extends State<TravelDetails> {
     prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
     String apiUrl = "$baseUrl/get_transport_mode";
-    print("api: $apiUrl");
+    if (kDebugMode) {
+      print("api: $apiUrl");
+    }
     setState(() {
       isLoading = true;
     });
@@ -83,7 +86,7 @@ class _TravelDetailsState extends State<TravelDetails> {
     });
     final response = await http.post(Uri.parse(apiUrl), headers: {
       'Accept': 'application/json',
-    }, body: {
+    }, body: {        
       "travel_ltinerary_id": widget.itinid,
       "passport_holder_id": "$userID",
       "departure_city": departureCity.text,

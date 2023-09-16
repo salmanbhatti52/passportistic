@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Models/coverDesignModels.dart';
@@ -9,8 +7,6 @@ import '../../Models/getProfileModels.dart';
 import '../../auth/signUpNextPage.dart';
 import '../../auth/signUpPage.dart';
 import '../../main.dart';
-
-
 
 class FrontCover extends StatefulWidget {
   const FrontCover({super.key});
@@ -53,7 +49,9 @@ class _FrontCoverState extends State<FrontCover> {
       if (getProfileModels.data != null) {
         await coverDesign();
 
-        setState(() {});
+        if (!mounted) {
+          setState(() {});
+        }
       } else {
         // Handle the case when user profile data is null
         print("User profile data is null");
@@ -96,6 +94,7 @@ class _FrontCoverState extends State<FrontCover> {
     if (response.statusCode == 200) {
       print("Successful");
       print("Cover Design Data: $responseString");
+
       setState(() {
         coverDesignDataModel = coverDesignDataModelFromJson(responseString);
         if (coverDesignDataModel.data != null) {
@@ -123,6 +122,7 @@ class _FrontCoverState extends State<FrontCover> {
 
         isLoading = false;
       });
+
       print("Cover Design Data Length: ${coverDesignDataModel.data?.length}");
     }
   }

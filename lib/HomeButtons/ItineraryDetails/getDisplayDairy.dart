@@ -238,80 +238,84 @@ class _DisplayDairyDetailsPageState extends State<DisplayDairyDetailsPage> {
 
                   return Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: Container(
+                    child: SizedBox(
                       width: 250,
-                      decoration: ShapeDecoration(
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        shadows: const [
-                          BoxShadow(
-                            color: Color(0x0F312E23),
-                            blurRadius: 16,
-                            offset: Offset(0, 8),
-                            spreadRadius: 0,
-                          )
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Center(
-                              child: Text(
-                                DateFormat('EEEE dd')
-                                    .format(data![index].travelDiaryDate!),
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Center(
-                              child: Text(
-                                travelDiary.travelDiaryEntry ?? '',
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                          ),
-                          if (travelDiaryPictures?.isNotEmpty ?? false)
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: travelDiaryPictures!.map((picture) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            FullScreenImageGallery(
-                                          images: [
-                                            "https://portal.passporttastic.com/public/${picture.tavelDiaryPictureImage!}"
-                                            // Add more image URLs if needed
-                                          ],
-                                          initialIndex:
-                                              0, // Index of the initially displayed image
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  child: Image.network(
-                                    "https://portal.passporttastic.com/public/${picture.tavelDiaryPictureImage!}",
-                                    width: 100,
-                                    height: 100,
-                                    fit: BoxFit.cover,
+                      // decoration: ShapeDecoration(
+                      //   color: Colors.white,
+                      //   shape: RoundedRectangleBorder(
+                      //     borderRadius: BorderRadius.circular(16),
+                      //   ),
+                      //   shadows: const [
+                      //     BoxShadow(
+                      //       color: Color(0x0F312E23),
+                      //       blurRadius: 16,
+                      //       offset: Offset(0, 8),
+                      //       spreadRadius: 0,
+                      //     )
+                      //   ],
+                      // ),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Center(
+                                child: Text(
+                                  DateFormat('EEEE dd')
+                                      .format(data![index].travelDiaryDate!),
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                );
-                              }).toList(),
+                                ),
+                              ),
                             ),
-                        ],
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Center(
+                                child: Text(
+                                  travelDiary.travelDiaryEntry ?? '',
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            if (travelDiaryPictures?.isNotEmpty ?? false)
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: travelDiaryPictures!.map((picture) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              FullScreenImageGallery(
+                                            images: [
+                                              "https://portal.passporttastic.com/public/${picture.tavelDiaryPictureImage!}"
+                                              // Add more image URLs if needed
+                                            ],
+                                            initialIndex:
+                                                0, // Index of the initially displayed image
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Image.network(
+                                      "https://portal.passporttastic.com/public/${picture.tavelDiaryPictureImage!}",
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                          ],
+                        ),
                       ),
                     ),
                   );

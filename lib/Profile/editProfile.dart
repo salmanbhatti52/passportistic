@@ -67,11 +67,14 @@ class _EditProfileState extends State<EditProfile> {
               getProfileModels.data?.phoneNumber ?? '';
           _dob.text = getProfileModels.data?.dob ?? '';
           _flag.text = getProfileModels.data?.nationality ?? '';
-          _slectedGenderId = getProfileModels.data?.genderId ?? "";
-          selectedOption = getProfileModels.data?.passportDesignId ?? "";
+          _slectedGenderId = getProfileModels.data?.genderId ?? "11";
+          getProfileModels.data?.passportDesignId != null
+              ? selectedOption = getProfileModels.data?.passportDesignId
+              : "";
 
           // Load the passport image when the page is initially loaded
         }
+        print("");
 
         setState(() {
           isLoading = false;
@@ -638,9 +641,13 @@ class _EditProfileState extends State<EditProfile> {
                             items: (getGenderListModels.data ?? []).isEmpty
                                 ? null // Set items to null when there's no data
                                 : (getGenderListModels.data ?? [])
-                                    .map((gender) {
+                                    .asMap()
+                                    .entries
+                                    .map((entry) {
+                                    final gender = entry.value;
+                                    final index = entry.key;
                                     final genderId = gender.genderId ??
-                                        ''; // Handle null value
+                                        'Male_$index'; // Handle null or duplicate values
                                     return DropdownMenuItem<String>(
                                       value: genderId,
                                       child: Text(

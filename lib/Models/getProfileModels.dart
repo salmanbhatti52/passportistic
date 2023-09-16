@@ -22,7 +22,7 @@ class GetProfileModels {
   factory GetProfileModels.fromJson(Map<String, dynamic> json) =>
       GetProfileModels(
         status: json["status"],
-        data: json["data"] != null ? Data.fromJson(json["data"]) : null,
+        data: Data.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -33,7 +33,7 @@ class GetProfileModels {
 
 class Data {
   String? passportHolderId;
-  String? oneSignalId;
+  dynamic oneSignalId;
   String? passportDesignId;
   String? fullName;
   String? username;
@@ -41,19 +41,20 @@ class Data {
   String? password;
   String? accountType;
   String? profilePicture;
-  String? socialAccType;
-  String? googleAccessToken;
+  dynamic socialAccType;
+  dynamic googleAccessToken;
   dynamic facebookId;
-  dynamic dateAdded;
+  String? dateAdded;
   String? status;
   String? verifyCode;
+  dynamic passportNumber;
   String? notifications;
   String? beSeen;
   String? firstName;
   String? middleName;
   String? lastName;
   String? phoneNumber;
-  dynamic genderId;
+  String? genderId;
   String? nationality;
   String? dob;
   String? numberOfPages;
@@ -77,6 +78,7 @@ class Data {
     this.dateAdded,
     this.status,
     this.verifyCode,
+    this.passportNumber,
     this.notifications,
     this.beSeen,
     this.firstName,
@@ -108,6 +110,7 @@ class Data {
         dateAdded: json["date_added"],
         status: json["status"],
         verifyCode: json["verify_code"],
+        passportNumber: json["passport_number"],
         notifications: json["notifications"],
         beSeen: json["be_seen"],
         firstName: json["first_name"],
@@ -139,6 +142,7 @@ class Data {
         "date_added": dateAdded,
         "status": status,
         "verify_code": verifyCode,
+        "passport_number": passportNumber,
         "notifications": notifications,
         "be_seen": beSeen,
         "first_name": firstName,

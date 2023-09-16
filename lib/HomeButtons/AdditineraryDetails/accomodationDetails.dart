@@ -29,10 +29,13 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
   TextEditingController checkOuTDate = TextEditingController();
   TextEditingController nights = TextEditingController();
   TextEditingController breakfasTIncluded = TextEditingController();
+  TextEditingController checkinTime = TextEditingController();
+  TextEditingController checkOutTime = TextEditingController();
 
   AccommodationModels accommodationModels = AccommodationModels();
   String? _selectedTransportMode;
-
+  String? formattedApiCheckOutTime;
+  String? formattedApiCheckInTime;
   accommodationDetails() async {
     // try {
 
@@ -57,7 +60,9 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
       "accomodation_checkin_date": checkInDate.text,
       "accomodation_nights": nights.text,
       "accomodation_breakfast": breakfasTIncluded.text,
-      "accomodation_checkout_date": checkOuTDate.text
+      "accomodation_checkout_date": checkOuTDate.text,
+      "accomodation_checkin_time": "$formattedApiCheckInTime",
+      "accomodation_checkout_time": "$formattedApiCheckOutTime",
     });
     final responseString = response.body;
     print("response_travalDetailsModels: $responseString");
@@ -268,6 +273,70 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                   style:
                       const TextStyle(color: Color(0xFF000000), fontSize: 16),
                   cursorColor: const Color(0xFF000000),
+                  controller: checkinTime,
+                  keyboardType: TextInputType.name,
+                  onTap: () {
+                    showTimePicker(
+                      initialEntryMode: TimePickerEntryMode.inputOnly,
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    ).then((selectedTime) {
+                      if (selectedTime != null) {
+                        // Handle the selected time
+                        final formattedDisplayTime = selectedTime
+                            .format(context); // Display in AM/PM format
+                        formattedApiCheckInTime =
+                            '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}:00'; // 24-hour format for API
+
+                        setState(() {
+                          checkinTime.text = formattedDisplayTime;
+                          print(formattedDisplayTime);
+                          print(formattedApiCheckInTime);
+                        });
+                      }
+                    });
+                  },
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Color(0xFFF65734)),
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    // labelText: 'Email',
+                    hintText: "Check in Time",
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: const BorderSide(
+                          color: Color(0xFFF3F3F3)), // change border color
+                    ),
+                    labelStyle: const TextStyle(),
+                    hintStyle: const TextStyle(
+                        color: Color(0xFFA7A9B7),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w300,
+                        fontFamily: "Satoshi"),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+            ],
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.02,
+          ),
+          Row(
+            children: [
+              const SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: TextFormField(
+                  style:
+                      const TextStyle(color: Color(0xFF000000), fontSize: 16),
+                  cursorColor: const Color(0xFF000000),
                   controller: establishmentName,
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
@@ -425,6 +494,70 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                     ),
                     // labelText: 'Email',
                     hintText: "Check out Date",
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: const BorderSide(
+                          color: Color(0xFFF3F3F3)), // change border color
+                    ),
+                    labelStyle: const TextStyle(),
+                    hintStyle: const TextStyle(
+                        color: Color(0xFFA7A9B7),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w300,
+                        fontFamily: "Satoshi"),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+            ],
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.02,
+          ),
+          Row(
+            children: [
+              const SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: TextFormField(
+                  style:
+                      const TextStyle(color: Color(0xFF000000), fontSize: 16),
+                  cursorColor: const Color(0xFF000000),
+                  controller: checkOutTime,
+                  keyboardType: TextInputType.name,
+                  onTap: () {
+                    showTimePicker(
+                      initialEntryMode: TimePickerEntryMode.inputOnly,
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    ).then((selectedTime) {
+                      if (selectedTime != null) {
+                        // Handle the selected time
+                        final formattedDisplayTime = selectedTime
+                            .format(context); // Display in AM/PM format
+                        formattedApiCheckOutTime =
+                            '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}:00'; // 24-hour format for API
+
+                        setState(() {
+                          checkOutTime.text = formattedDisplayTime;
+                          print(formattedDisplayTime);
+                          print(formattedApiCheckOutTime);
+                        });
+                      }
+                    });
+                  },
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Color(0xFFF65734)),
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    // labelText: 'Email',
+                    hintText: "Check out Time",
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: const BorderSide(

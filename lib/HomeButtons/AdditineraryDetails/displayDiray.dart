@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -151,6 +152,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
 
     if (response.statusCode == 200) {
       print("in 200 itineraryAddModels");
+      log(response.body);
       print("SuucessFull");
       dirayDetailsModels = dirayDetailsModelsFromJson(responseString);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -197,14 +199,14 @@ class _DisplayDiaryState extends State<DisplayDiary> {
           ),
         ),
       );
-      // Navigator.pushReplacement(context, MaterialPageRoute(
-      //   builder: (BuildContext context) {
-      //     return DisplayDairyDetailsPage(
-      //       itinid: widget.itinid,
-      //       itinname: widget.itinname,
-      //     );
-      //   },
-      // ));
+      Navigator.pushReplacement(context, MaterialPageRoute(
+        builder: (BuildContext context) {
+          return DisplayDiary(
+            itinid: widget.itinid,
+            itinname: widget.itinname,
+          );
+        },
+      ));
       print(resBody);
     } else if (res.statusCode == 404) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -230,7 +232,6 @@ class _DisplayDiaryState extends State<DisplayDiary> {
 
   // @override
   // void initState() {
-  //   // TODO: implement initState
   //   super.initState();
   //   List<String> base64Images = selectedImages
   //       .map((image) =>
@@ -362,19 +363,19 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    maxLines: null,
+                    maxLines: 7,
                     style:
                         const TextStyle(color: Color(0xFF000000), fontSize: 16),
                     cursorColor: const Color(0xFF000000),
                     controller: comments,
-                    keyboardType: TextInputType.name,
+                    keyboardType: TextInputType.multiline,
                     decoration: InputDecoration(
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SvgPicture.asset(
-                          "assets/edit1.svg",
-                        ),
-                      ),
+                      // prefixIcon: Padding(
+                      //   padding: const EdgeInsets.all(8.0),
+                      //   child: SvgPicture.asset(
+                      //     "assets/edit1.svg",
+                      //   ),
+                      // ),
                       focusedBorder: OutlineInputBorder(
                         borderSide: const BorderSide(color: Color(0xFFF65734)),
                         borderRadius: BorderRadius.circular(15.0),
@@ -522,11 +523,11 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                         width: 100,
                         height: 100,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(20),
                           color: Colors.grey[200],
                         ),
-                        child: const Center(
-                          child: Icon(Icons.add),
+                        child: Center(
+                          child: SvgPicture.asset("assets/addP.svg"),
                         ),
                       ),
                     ),
@@ -559,7 +560,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                   });
                 } else {
                   try {
-                    await dirayDetails();
+                    await function();
                   } catch (e) {
                     print('API call error: $e');
                     ScaffoldMessenger.of(context).showSnackBar(

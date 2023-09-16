@@ -531,7 +531,7 @@ class _AddItinerayState extends State<AddItineray> {
             height: MediaQuery.of(context).size.height * 0.03,
           ),
           const Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.only(left: 15, right: 10, top: 20),
             child: Text(
               "Or select an existing Itinerary or Travel Diary",
               style: TextStyle(

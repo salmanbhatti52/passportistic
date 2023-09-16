@@ -92,7 +92,6 @@ class _itineraryviewState extends State<itineraryview> {
 
   @override
   Widget build(BuildContext context) {
-    bool isFocused1 = _focusNode1.hasFocus;
 
     return Scaffold(
       appBar: AppBar(

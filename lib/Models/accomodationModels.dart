@@ -25,9 +25,7 @@ class AccommodationModels {
       AccommodationModels(
         status: json["status"],
         message: json["message"],
-        data: json["data"] != null
-            ? List<Datum>.from(json["data"].map((x) => Datum.fromJson(x)))
-            : null,
+        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -46,11 +44,13 @@ class Datum {
   String? accomodationType;
   String? accomodationAddress;
   DateTime? accomodationCheckinDate;
+  dynamic accomodationCheckoutTime;
+  dynamic accomodationCheckinTime;
   DateTime? accomodationCheckoutDate;
   String? accomodationNights;
   String? accomodationBreakfast;
-  String? isCancelled;
-  String? status;
+  IsCancelled? isCancelled;
+  Status? status;
   DateTime? dateAdded;
 
   Datum({
@@ -62,6 +62,8 @@ class Datum {
     this.accomodationType,
     this.accomodationAddress,
     this.accomodationCheckinDate,
+    this.accomodationCheckoutTime,
+    this.accomodationCheckinTime,
     this.accomodationCheckoutDate,
     this.accomodationNights,
     this.accomodationBreakfast,
@@ -81,12 +83,14 @@ class Datum {
         accomodationAddress: json["accomodation_address"],
         accomodationCheckinDate:
             DateTime.parse(json["accomodation_checkin_date"]),
+        accomodationCheckoutTime: json["accomodation_checkout_time"],
+        accomodationCheckinTime: json["accomodation_checkin_time"],
         accomodationCheckoutDate:
             DateTime.parse(json["accomodation_checkout_date"]),
         accomodationNights: json["accomodation_nights"],
         accomodationBreakfast: json["accomodation_breakfast"],
-        isCancelled: json["is_cancelled"],
-        status: json["status"],
+        isCancelled: isCancelledValues.map[json["is_cancelled"]],
+        status: statusValues.map[json["status"]],
         dateAdded: DateTime.parse(json["date_added"]),
       );
 
@@ -101,12 +105,34 @@ class Datum {
         "accomodation_address": accomodationAddress,
         "accomodation_checkin_date":
             "${accomodationCheckinDate!.year.toString().padLeft(4, '0')}-${accomodationCheckinDate!.month.toString().padLeft(2, '0')}-${accomodationCheckinDate!.day.toString().padLeft(2, '0')}",
+        "accomodation_checkout_time": accomodationCheckoutTime,
+        "accomodation_checkin_time": accomodationCheckinTime,
         "accomodation_checkout_date":
             "${accomodationCheckoutDate!.year.toString().padLeft(4, '0')}-${accomodationCheckoutDate!.month.toString().padLeft(2, '0')}-${accomodationCheckoutDate!.day.toString().padLeft(2, '0')}",
         "accomodation_nights": accomodationNights,
         "accomodation_breakfast": accomodationBreakfast,
-        "is_cancelled": isCancelled,
-        "status": status,
+        "is_cancelled": isCancelledValues.reverse[isCancelled],
+        "status": statusValues.reverse[status],
         "date_added": dateAdded!.toIso8601String(),
       };
+}
+
+enum IsCancelled { FALSE }
+
+final isCancelledValues = EnumValues({"False": IsCancelled.FALSE});
+
+enum Status { ACTIVE }
+
+final statusValues = EnumValues({"Active": Status.ACTIVE});
+
+class EnumValues<T> {
+  Map<String, T> map;
+  late Map<T, String> reverseMap;
+
+  EnumValues(this.map);
+
+  Map<T, String> get reverse {
+    reverseMap = map.map((k, v) => MapEntry(v, k));
+    return reverseMap;
+  }
 }
