@@ -4,26 +4,27 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import '../../Models/addItineraryModels.dart';
 import '../../Models/getAccomodationDetailsModels.dart';
 import '../../Models/getDisplayDairyModels.dart';
+import '../../Models/itineraryGetModels.dart';
 import '../../auth/signUpNextPage.dart';
 import '../../auth/signUpPage.dart';
 import '../../main.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
-class DisplayDairyDetailsPage extends StatefulWidget {
+class TravelDairySecondPage extends StatefulWidget {
   final String? itinid;
   final String? itinname;
-  const DisplayDairyDetailsPage({Key, key, this.itinid, this.itinname})
+  const TravelDairySecondPage({Key, key, this.itinid, this.itinname})
       : super(key: key);
 
   @override
-  State<DisplayDairyDetailsPage> createState() =>
-      _DisplayDairyDetailsPageState();
+  State<TravelDairySecondPage> createState() => _TravelDairySecondPageState();
 }
 
-class _DisplayDairyDetailsPageState extends State<DisplayDairyDetailsPage> {
+class _TravelDairySecondPageState extends State<TravelDairySecondPage> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
@@ -46,7 +47,7 @@ class _DisplayDairyDetailsPageState extends State<DisplayDairyDetailsPage> {
     final response = await http.post(Uri.parse(apiUrl), headers: {
       'Accept': 'application/json',
     }, body: {
-      "travel_ltinerary_id": "${widget.itinid}",
+      "travel_ltinerary_id": "$_slecteditinerary",
       // "passport_holder_id": "$userID",
     });
     final responseString = response.body;
@@ -81,6 +82,57 @@ class _DisplayDairyDetailsPageState extends State<DisplayDairyDetailsPage> {
     }
   }
 
+  String? selectedItinerary;
+  String? _slecteditinerary;
+  String desiredItineraryId = "";
+  String? _selectedItineraryName;
+  final FocusNode _focusNode1 = FocusNode();
+
+  IteneraryGetModels iteneraryGetModels = IteneraryGetModels();
+  ItinerayAddModels itineraryAddModels = ItinerayAddModels();
+
+  itinerayGet() async {
+    prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
+    // try {
+
+    String apiUrl = "$baseUrl/get_itinerary";
+    print("api: $apiUrl");
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "passport_holder_id": "$userID",
+    });
+    final responseString = response.body;
+    print("responseitineraryAddModelsi: $responseString");
+    print("status Code itineraryAddModels: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print("in 200 itineraryAddModels");
+      print("SuucessFull");
+      iteneraryGetModels = iteneraryGetModelsFromJson(responseString);
+      String desiredItineraryName = "$_slecteditinerary";
+
+      if (itineraryAddModels.data != null) {
+        for (var itinerary in itineraryAddModels.data!) {
+          if (itinerary.travelLtineraryName == desiredItineraryName) {
+            desiredItineraryId = itinerary.travelLtineraryId!;
+            break; // Found the desired itinerary, exit the loop
+          }
+        }
+      }
+      print("Desired Itinerary ID: $desiredItineraryId");
+
+      setState(() {
+        isLoading = false;
+      });
+      print('itineraryAddModels status: ${iteneraryGetModels.status}');
+    }
+  }
+
   int itemsPerPage = 1;
 
   @override
@@ -107,11 +159,11 @@ class _DisplayDairyDetailsPageState extends State<DisplayDairyDetailsPage> {
   initState() {
     // TODO: implement initState
     super.initState();
-
     userID = prefs?.getString('userID');
     print("${widget.itinid}");
     displayDairyDetails();
     print("$userID");
+    itinerayGet();
   }
 
   @override
@@ -138,13 +190,12 @@ class _DisplayDairyDetailsPageState extends State<DisplayDairyDetailsPage> {
               ),
             ),
           ),
-          title: Text(
-            "${widget.itinname}",
-            style: const TextStyle(
-              color: Color(0xFF525252),
-              fontSize: 24,
-              fontFamily: 'Satoshi',
-              fontWeight: FontWeight.w900,
+          title: Center(
+            child: SvgPicture.asset(
+              "assets/log1.svg",
+              height: 35.h,
+              width: 108.w,
+              color: const Color(0xFFF65734),
             ),
           ),
           centerTitle: true,
@@ -157,15 +208,89 @@ class _DisplayDairyDetailsPageState extends State<DisplayDairyDetailsPage> {
         ),
         body: Column(
           children: [
-            const SizedBox(height: 20),
-            Center(
-              child: SvgPicture.asset(
-                "assets/log1.svg",
-                height: 35.h,
-                width: 108.w,
-                color: const Color(0xFFF65734),
+            Padding(
+              padding: EdgeInsets.only(
+                left: MediaQuery.of(context).size.width * 0.112,
+                right: MediaQuery.of(context).size.width * 0.112,
+              ),
+              child: Center(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ButtonTheme(
+                        alignedDropdown: true,
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButtonFormField<String>(
+                            value: _slecteditinerary,
+                            onChanged: (newValue) async {
+                              await displayDairyDetails();
+                              setState(() {
+                                _slecteditinerary = newValue;
+                                print("Selected Itinerary: $_slecteditinerary");
+
+                                for (var itinerary
+                                    in iteneraryGetModels.data ?? []) {
+                                  if (itinerary.travelLtineraryId == newValue) {
+                                    _selectedItineraryName =
+                                        itinerary.travelLtineraryName ?? '';
+                                    break; // Exit loop once the name is found
+                                  }
+                                }
+
+                                print(
+                                    "_selectedItineraryId: $_slecteditinerary");
+                                print(
+                                    "_selectedItineraryName: $_selectedItineraryName");
+                              });
+                            },
+                            items: iteneraryGetModels.data?.map((itineraryid) {
+                                  return DropdownMenuItem<String>(
+                                    value: itineraryid.travelLtineraryId,
+                                    child: Text(
+                                        itineraryid.travelLtineraryName ?? ''),
+                                  );
+                                }).toList() ??
+                                [],
+                            focusNode: _focusNode1,
+                            style: const TextStyle(
+                              color: Color(0xFF525252),
+                              fontSize: 20,
+                              fontFamily: 'Satoshi',
+                              fontWeight: FontWeight.w900,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor:
+                                  Colors.white, // Set the background color here
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors.white), // Border color
+                                borderRadius: BorderRadius.circular(
+                                    10.0), // Border radius
+                              ),
+                              hintText: "Select Itinerary",
+                              hintStyle: const TextStyle(
+                                color: Color(0xFF525252),
+                                fontSize: 20,
+                                fontFamily: 'Satoshi',
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
               ),
             ),
+            const SizedBox(height: 20),
             const SizedBox(
               height: 20,
             ),
@@ -240,7 +365,7 @@ class _DisplayDairyDetailsPageState extends State<DisplayDairyDetailsPage> {
                   return Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Container(
-                      width: 150,
+                      width: 250,
                       height: 400.h,
                       decoration: ShapeDecoration(
                         color: Colors.white,
@@ -290,11 +415,11 @@ class _DisplayDairyDetailsPageState extends State<DisplayDairyDetailsPage> {
                               ),
                             ),
                             if (travelDiaryPictures?.isNotEmpty ?? false)
-                            travelDiaryPictures !=null?  Row(
+                              Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: travelDiaryPictures!.map((picture) {
-                                  return  GestureDetector(
+                                  return GestureDetector(
                                     onTap: () {
                                       Navigator.push(
                                         context,
@@ -319,7 +444,7 @@ class _DisplayDairyDetailsPageState extends State<DisplayDairyDetailsPage> {
                                     ),
                                   );
                                 }).toList(),
-                              ): SizedBox(),
+                              ),
                           ],
                         ),
                       ),

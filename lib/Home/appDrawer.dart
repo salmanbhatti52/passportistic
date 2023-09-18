@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../AppDrawerButtons/aboutUs.dart';
 import '../AppDrawerButtons/contact.dart';
-import '../AppDrawerButtons/gPayApay.dart';
+import '../AppDrawerButtons/faq.dart';
 import '../AppDrawerButtons/privaacy.dart';
 import '../AppDrawerButtons/terms.dart';
 import '../auth/signIn.dart';
@@ -83,26 +83,26 @@ class _AppDrawerState extends State<AppDrawer> {
                     );
                   },
                 ),
-                ListTile(
-                  leading: SvgPicture.asset(
-                    "assets/bn.svg",
-                    color: Colors.black,
-                  ),
-                  title: const Text(
-                    'Notifications',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontFamily: 'Satoshi',
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  onTap: () {
-                    Scaffold.of(context)
-                        .openEndDrawer(); // Close the drawer using openEndDrawer()
-                    // Do something
-                  },
-                ),
+                // ListTile(
+                //   leading: SvgPicture.asset(
+                //     "assets/bn.svg",
+                //     color: Colors.black,
+                //   ),
+                //   title: const Text(
+                //     'Notifications',
+                //     style: TextStyle(
+                //       color: Colors.black,
+                //       fontSize: 20,
+                //       fontFamily: 'Satoshi',
+                //       fontWeight: FontWeight.w500,
+                //     ),
+                //   ),
+                //   onTap: () {
+                //     Scaffold.of(context)
+                //         .openEndDrawer(); // Close the drawer using openEndDrawer()
+                //     // Do something
+                //   },
+                // ),
                 ListTile(
                   leading: SvgPicture.asset(
                     "assets/info.svg",
@@ -151,50 +151,50 @@ class _AppDrawerState extends State<AppDrawer> {
                     // Do something
                   },
                 ),
-                ListTile(
-                  leading: SvgPicture.asset(
-                    "assets/payment.svg",
-                    color: Colors.black,
-                  ),
-                  title: const Text(
-                    'Payment',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontFamily: 'Satoshi',
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (BuildContext context) {
-                        return const GpayAPay();
-                      },
-                    ));
-                    // Close the drawer using openEndDrawer()
-                    // Do something
-                  },
-                ),
-                ListTile(
-                  leading: SvgPicture.asset(
-                    "assets/star.svg",
-                    color: Colors.black,
-                  ),
-                  title: const Text(
-                    'Rate Our App',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontFamily: 'Satoshi',
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  onTap: () {
-                    Scaffold.of(context)
-                        .openEndDrawer(); // Close the drawer using openEndDrawer()
-                    // Do something
-                  },
-                ),
+                // ListTile(
+                //   leading: SvgPicture.asset(
+                //     "assets/payment.svg",
+                //     color: Colors.black,
+                //   ),
+                //   title: const Text(
+                //     'Payment',
+                //     style: TextStyle(
+                //       color: Colors.black,
+                //       fontSize: 20,
+                //       fontFamily: 'Satoshi',
+                //       fontWeight: FontWeight.w500,
+                //     ),
+                //   ),
+                //   onTap: () {
+                //     Navigator.push(context, MaterialPageRoute(
+                //       builder: (BuildContext context) {
+                //         return const GpayAPay();
+                //       },
+                //     ));
+                //     // Close the drawer using openEndDrawer()
+                //     // Do something
+                //   },
+                // ),
+                // ListTile(
+                //   leading: SvgPicture.asset(
+                //     "assets/star.svg",
+                //     color: Colors.black,
+                //   ),
+                //   title: const Text(
+                //     'Rate Our App',
+                //     style: TextStyle(
+                //       color: Colors.black,
+                //       fontSize: 20,
+                //       fontFamily: 'Satoshi',
+                //       fontWeight: FontWeight.w500,
+                //     ),
+                //   ),
+                //   onTap: () {
+                //     Scaffold.of(context)
+                //         .openEndDrawer(); // Close the drawer using openEndDrawer()
+                //     // Do something
+                //   },
+                // ),
                 ListTile(
                   leading: SvgPicture.asset(
                     "assets/fqa.svg",
@@ -210,8 +210,12 @@ class _AppDrawerState extends State<AppDrawer> {
                     ),
                   ),
                   onTap: () {
-                    Scaffold.of(context)
-                        .openEndDrawer(); // Close the drawer using openEndDrawer()
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (BuildContext context) {
+                        return const FAQ();
+                      },
+                    ));
+                    // Close the drawer using openEndDrawer()
                     // Do something
                   },
                 ),

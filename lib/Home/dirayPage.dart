@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:scanguard/Home/appDrawer.dart';
 
+import '../HomeButtons/TravelDairy2Page/travelDairyView.dart';
 import '../HomeButtons/VeiwItinerary2Page/viewDetails.dart';
-import '../HomeButtons/addItinerary2.dart';
-import '../HomeButtons/AdditineraryDetails/displayDiray.dart';
 
 class DirayPage extends StatefulWidget {
   const DirayPage({super.key});
@@ -141,7 +140,7 @@ class _DirayPageState extends State<DirayPage> {
             onTap: () {
               Navigator.push(context, MaterialPageRoute(
                 builder: (BuildContext context) {
-                  return const DisplayDiary(
+                  return const TravelDairySecondPage(
                       //userId: widget.userId,
                       // itinid: desiredItineraryId,
                       // additinerarywidget: addItineray.text,

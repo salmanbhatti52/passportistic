@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart' as http;
+import '../Models/systemSettingModels.dart';
+import '../auth/signUpNextPage.dart';
+import '../auth/signUpPage.dart';
 
 class AboutUs extends StatefulWidget {
   const AboutUs({super.key});
@@ -8,6 +14,62 @@ class AboutUs extends StatefulWidget {
 }
 
 class _AboutUsState extends State<AboutUs> {
+  SystemSettingsModels systemSettingsModels = SystemSettingsModels();
+  getSettingData() async {
+    String apiUrl = "$baseUrl/system_settings";
+    print("api: $apiUrl");
+
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.get(
+      Uri.parse(apiUrl),
+      headers: {
+        'Accept': 'application/json',
+      },
+    );
+    if (!mounted) {
+      return; // Check again if the widget is still mounted after the HTTP request
+    }
+    final responseString = response.body;
+    print("faqModels Response: $responseString");
+    print("status Code faqModels: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      // After getting the user's profile data
+      print("in 200 faqModels");
+      print("SuucessFull");
+      systemSettingsModels = systemSettingsModelsFromJson(responseString);
+      if (systemSettingsModels.data != null) {
+        if (!mounted) {
+          setState(() {});
+        }
+      } else {
+        // Handle the case when user profile data is null
+        print("User profile data is null");
+      }
+      if (!mounted) {
+        return; // Check once more if the widget is still mounted before updating the state
+      }
+      setState(() {
+        isLoading = false;
+      });
+    } else {
+      print("in else faqModels");
+      print("faqs status False");
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSettingData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,25 +95,59 @@ class _AboutUsState extends State<AboutUs> {
               child: const Icon(Icons.arrow_back_ios)),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SizedBox(
-              width: 350,
-              child: Text(
-                "Welcome to Passporttastic, your premier air travel agency for all your flight needs! We are dedicated to providing you with the best and most convenient air travel experiences, ensuring that your journey is smooth, comfortable, and unforgettable.\n\nAt Passporttastic, we understand that planning and booking air travel can be a daunting task. That's why our team of expert travel consultants is here to assist you every step of the way. Whether you're flying for business or pleasure, our knowledgeable professionals will go above and beyond to tailor your travel arrangements to suit your preferences, budget, and schedule.\n\nWith access to a vast network of domestic and international airlines, we offer a wide range of flight options to destinations across the globe. From quick weekend getaways to extensive worldwide adventures, we have you covered. Our commitment to excellence means that we carefully select our airline partners to ensure the highest standards of safety, reliability, and customer service.\n\nBooking your flights with Passporttastic is a breeze. Our user-friendly online platform allows you to effortlessly search, compare, and book flights at your convenience. If you prefer personalized assistance, our dedicated customer support team is just a phone call away. We take pride in providing prompt, friendly, and efficient service, ensuring that all your inquiries and requests are handled with utmost care.\n\nAs a customer-centric company, your satisfaction is our top priority. We strive to exceed your expectations by offering competitive prices, flexible itineraries, and value-added services. Whether you're a frequent flyer or embarking on your first air travel adventure, we believe in building long-term relationships with our clients, earning their trust and loyalty through exceptional service.\n\nAt Passporttastic, we go beyond just booking flights. We understand that air travel is part of a larger travel experience. That's why we offer a range of additional services to enhance your journey. From airport transfers and hotel accommodations to travel insurance and visa assistance, we take care of the finer details, allowing you to focus on creating cherished memories.\n\nChoose Passporttastic as your trusted air travel partner, and let us elevate your travel experience to new heights. Sit back, relax, and let us take care of all your flight arrangements. With our expertise, passion for travel, and unwavering commitment to customer satisfaction, we guarantee that your journey with us will be truly exceptional.\n\nFly with confidence. Fly with Passporttastic.",
-                textAlign: TextAlign.justify,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14,
-                  fontFamily: 'Satoshi',
-                  fontWeight: FontWeight.w400,
+      // Inside the build method
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(
+                color: Color(0xFFF65734),
+              ),
+            )
+          : systemSettingsModels.data != null &&
+                  systemSettingsModels.data!.isNotEmpty
+              ? Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: _buildAboutUsText(systemSettingsModels.data!),
+                )
+              : const Center(
+                  child: Text("No data available."),
                 ),
+    );
+  }
+
+  Widget _buildAboutUsText(List<Datum> data) {
+    // Find the item with "type" equal to "about_us"
+    final aboutUsItem = data.firstWhere(
+      (item) => item.type == "about_us",
+      orElse: () => Datum(
+          description:
+              "About us data not found."), // Default value if not found
+    );
+
+    return Container(
+      padding: const EdgeInsets.all(1.0),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Center(
+              child: SvgPicture.asset(
+                "assets/log1.svg",
+                height: 35.h,
+                width: 108.w,
+                color: const Color(0xFFF65734),
               ),
             ),
-          )
-        ]),
+            const SizedBox(height: 8.0),
+            Text(
+              aboutUsItem.description ??
+                  "About us data not found.", // Display the description
+              style: const TextStyle(
+                fontSize: 16.0,
+              ),
+              textAlign: TextAlign.justify, // Justify the text
+            ),
+          ],
+        ),
       ),
     );
   }

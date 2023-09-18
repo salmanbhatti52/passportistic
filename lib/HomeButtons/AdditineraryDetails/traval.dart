@@ -86,7 +86,7 @@ class _TravelDetailsState extends State<TravelDetails> {
     });
     final response = await http.post(Uri.parse(apiUrl), headers: {
       'Accept': 'application/json',
-    }, body: {        
+    }, body: {
       "travel_ltinerary_id": widget.itinid,
       "passport_holder_id": "$userID",
       "departure_city": departureCity.text,
@@ -95,11 +95,12 @@ class _TravelDetailsState extends State<TravelDetails> {
       "trip_details": tripDetails.text,
       "departure_date": departureDate.text,
       "departure_time": formattedApiDepartTime.toString(),
-      "travel_time": travelTime.text,
+      "travel_time": formattedTravelTime,
       "arrive_city": arrivalCity.text,
-      "arrive_time": arrivalTime.text,
+      "arrive_time": formattedApiArrivalTime,
       "arrive_date": arrivalDate.text,
-      "operator": operator.text
+      "operator": operator.text,
+      "layover_time": layOver.text,
     });
     final responseString = response.body;
     print("response_travalDetailsModels: $responseString");
@@ -685,7 +686,7 @@ class _TravelDetailsState extends State<TravelDetails> {
                         // Handle the selected time
                         final formattedDisplayTime = selectedTime
                             .format(context); // Display in AM/PM format
-                        formattedApiDepartTime =
+                        formattedApiArrivalTime =
                             '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}:00'; // 24-hour format for API
 
                         setState(() {
@@ -697,19 +698,6 @@ class _TravelDetailsState extends State<TravelDetails> {
                     });
 
                     // Parse the departure and arrival times
-                    // final departureParts = formattedApiDepartTime!.split(':');
-                    // final arrivalParts = formattedApiArrivalTime!.split(':');
-                    // final departureHour = int.parse(departureParts[0]);
-                    // final departureMinute = int.parse(departureParts[1]);
-                    // final arrivalHour = int.parse(arrivalParts[0]);
-                    // final arrivalMinute = int.parse(arrivalParts[1]);
-                    // final totalMinutes = (arrivalHour * 60 + arrivalMinute) -
-                    //     (departureHour * 60 + departureMinute);
-                    // final calculatedHours =
-                    //     (totalMinutes ~/ 60).toString().padLeft(2, '0');
-                    // final calculatedMinutes =
-                    //     (totalMinutes % 60).toString().padLeft(2, '0');
-                    // formattedTravelTime = '$calculatedHours:$calculatedMinutes';
                   },
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
@@ -739,67 +727,67 @@ class _TravelDetailsState extends State<TravelDetails> {
               ),
             ],
           ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.02,
-          ),
-          Row(
-            children: [
-              const SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: TextFormField(
-                  style:
-                      const TextStyle(color: Color(0xFF000000), fontSize: 16),
-                  cursorColor: const Color(0xFF000000),
-                  controller: travelTime,
-                  keyboardType: TextInputType.name,
-                  onTap: () {
-                    // setState(() {
-                    //   travelTime.text = formattedTravelTime!;
-                    // });
-                    showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.now(),
-                    ).then((selectedTime) {
-                      if (selectedTime != null) {
-                        // Handle the selected time
-                        setState(() {
-                          final formattedTime =
-                              '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}:00';
-                          travelTime.text = formattedTime;
-                        });
-                      }
-                    });
-                  },
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xFFF65734)),
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    // labelText: 'Email',
-                    hintText: "Travel Time",
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: const BorderSide(
-                          color: Color(0xFFF3F3F3)), // change border color
-                    ),
-                    labelStyle: const TextStyle(),
-                    hintStyle: const TextStyle(
-                        color: Color(0xFFA7A9B7),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w300,
-                        fontFamily: "Satoshi"),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-            ],
-          ),
+          // SizedBox(
+          //   height: MediaQuery.of(context).size.height * 0.02,
+          // ),
+          // Row(
+          //   children: [
+          //     const SizedBox(
+          //       width: 10,
+          //     ),
+          //     Expanded(
+          //       child: TextFormField(
+          //         style:
+          //             const TextStyle(color: Color(0xFF000000), fontSize: 16),
+          //         cursorColor: const Color(0xFF000000),
+          //         controller: travelTime,
+          //         keyboardType: TextInputType.name,
+          //         onTap: () {
+          //           // setState(() {
+          //           //   travelTime.text = formattedTravelTime!;
+          //           // });
+          //           showTimePicker(
+          //             context: context,
+          //             initialTime: TimeOfDay.now(),
+          //           ).then((selectedTime) {
+          //             if (selectedTime != null) {
+          //               // Handle the selected time
+          //               setState(() {
+          //                 final formattedTime =
+          //                     '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}:00';
+          //                 travelTime.text = formattedTime;
+          //               });
+          //             }
+          //           });
+          //         },
+          //         decoration: InputDecoration(
+          //           focusedBorder: OutlineInputBorder(
+          //             borderSide: const BorderSide(color: Color(0xFFF65734)),
+          //             borderRadius: BorderRadius.circular(15.0),
+          //           ),
+          //           // labelText: 'Email',
+          //           hintText: "Travel Time",
+          //           enabledBorder: OutlineInputBorder(
+          //             borderRadius: BorderRadius.circular(15),
+          //             borderSide: const BorderSide(
+          //                 color: Color(0xFFF3F3F3)), // change border color
+          //           ),
+          //           labelStyle: const TextStyle(),
+          //           hintStyle: const TextStyle(
+          //               color: Color(0xFFA7A9B7),
+          //               fontSize: 16,
+          //               fontWeight: FontWeight.w300,
+          //               fontFamily: "Satoshi"),
+          //           border: OutlineInputBorder(
+          //               borderRadius: BorderRadius.circular(15)),
+          //         ),
+          //       ),
+          //     ),
+          //     const SizedBox(
+          //       width: 10,
+          //     ),
+          //   ],
+          // ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.02,
           ),
@@ -881,6 +869,25 @@ class _TravelDetailsState extends State<TravelDetails> {
                   ),
                 );
               } else {
+                print(" formattedApiDepartTime: $formattedApiDepartTime");
+                print("formattedApiArrivalTime : $formattedApiArrivalTime");
+                if (formattedApiDepartTime != null &&
+                    formattedApiArrivalTime != null) {
+                  final departureParts = formattedApiDepartTime!.split(':');
+                  final arrivalParts = formattedApiArrivalTime!.split(':');
+                  final departureHour = int.parse(departureParts[0]);
+                  final departureMinute = int.parse(departureParts[1]);
+                  final arrivalHour = int.parse(arrivalParts[0]);
+                  final arrivalMinute = int.parse(arrivalParts[1]);
+                  final totalMinutes = (arrivalHour * 60 + arrivalMinute) -
+                      (departureHour * 60 + departureMinute);
+                  final calculatedHours =
+                      (totalMinutes ~/ 60).toString().padLeft(2, '0');
+                  final calculatedMinutes =
+                      (totalMinutes % 60).toString().padLeft(2, '0');
+                  formattedTravelTime = '$calculatedHours:hr';
+                }
+                print("formattedTravelTime  $formattedTravelTime");
                 await itinerayAdd();
                 print(_selectedTransportMode);
                 print(widget.itinid);

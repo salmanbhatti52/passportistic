@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:http/http.dart' as http;
+import '../../Models/UpdateTravelDairyModels.dart';
 import '../../Models/diaryDetailsModels.dart';
 import '../../auth/signUpNextPage.dart';
 import '../../auth/signUpPage.dart';
@@ -61,6 +62,19 @@ class _DisplayDiaryState extends State<DisplayDiary> {
   }
 
   List<String> base64ImageUrls = [];
+  Future<void> convertImageToBase64(String imageUrl) async {
+    final response = await http.get(Uri.parse(imageUrl));
+
+    if (response.statusCode == 200) {
+      final List<int> imageBytes = response.bodyBytes;
+      final String base64 = base64Encode(imageBytes);
+      print("$imageUrl : $base64");
+
+      setState(() {
+        base64ImageUrls.add(base64);
+      });
+    }
+  }
 
   Future pickImageGallery1() async {
     try {
@@ -230,6 +244,66 @@ class _DisplayDiaryState extends State<DisplayDiary> {
     }
   }
 
+  UpdateTravelDiaryModels updateTravelDiaryModels = UpdateTravelDiaryModels();
+  updateTravelDairy() async {
+    prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
+    String apiUrl = "$baseUrl/get_travel_diary_by_date";
+    print("api: $apiUrl");
+
+    setState(() {
+      isLoading = true;
+    });
+
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "travel_ltinerary_id": "${widget.itinid}",
+      "travel_diary_date": "$formattedDate"
+    });
+
+    final responseString = response.body;
+    print("response_travalDetailsModels: $responseString");
+    print("status Code travalDetailsModels: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print("in 200 itineraryAddModels");
+      log(response.body);
+      print("SuucessFull");
+      updateTravelDiaryModels = updateTravelDiaryModelsFromJson(responseString);
+      if (updateTravelDiaryModels.data != null) {
+        comments.text = updateTravelDiaryModels.data?.travelDiaryEntry ?? '';
+
+        const baseUrl =
+            'https://portal.passporttastic.com/public'; // Add your base URL here
+
+        final images = updateTravelDiaryModels.data?.travelDiaryPicture;
+        if (images != null) {
+          for (var picture in images) {
+            final imageUrl = picture.tavelDiaryPictureImage;
+            if (imageUrl != null) {
+              final completeImageUrl = '$baseUrl$imageUrl';
+              await convertImageToBase64(completeImageUrl);
+            }
+          }
+        }
+      }
+
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(
+      //     content: Text(
+      //       'Successfully Updated',
+      //       textAlign: TextAlign.center,
+      //     ),
+      //   ),
+      // );
+      setState(() {
+        isLoading = false;
+      });
+      print('dirayDetailsModels status: ${updateTravelDiaryModels.status}');
+    }
+  }
+
   // @override
   // void initState() {
   //   super.initState();
@@ -337,7 +411,8 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                   selectedDayPredicate: (day) {
                     return isSameDay(_selectedDay, day);
                   },
-                  onDaySelected: (selectedDay, focusedDay) {
+                  onDaySelected: (selectedDay, focusedDay) async {
+                    await updateTravelDairy();
                     setState(() {
                       _selectedDay = selectedDay;
                       _focusedDay = selectedDay;
@@ -483,34 +558,50 @@ class _DisplayDiaryState extends State<DisplayDiary> {
             //     ),
             //   ],
             // ),
-
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  for (File? image in selectedImages)
+                  for (String base64ImageUrl in base64ImageUrls)
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.grey[200],
-                        ),
-                        child: image != null
-                            ? Image.file(
-                                image,
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: double.infinity,
-                              )
-                            : GestureDetector(
-                                onTap: () {
-                                  pickImageGallery1();
-                                },
-                                child: SvgPicture.asset("assets/addP.svg"),
+                      child: Stack(
+                        children: [
+                          Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.grey[200],
+                            ),
+                            child: Image.memory(
+                              base64Decode(base64ImageUrl),
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: double.infinity,
+                            ),
+                          ),
+                          // Add a delete button to remove the image.
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: GestureDetector(
+                              onTap: () {
+                                // Implement logic to delete the image.
+                                setState(() {
+                                  base64ImageUrls.remove(base64ImageUrl);
+                                });
+                              },
+                              child: const Icon(
+                                Icons.delete,
+                                color: Colors.red,
                               ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   Padding(
@@ -584,7 +675,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                   alignment: Alignment.center,
                   children: [
                     Container(
-                      width: 350,
+                      width: 330,
                       height: 51,
                       clipBehavior: Clip.antiAlias,
                       decoration: ShapeDecoration(
@@ -889,9 +980,6 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   buildSocialIcon(iconData: Icons.facebook),
-                                  buildSocialIcon(
-                                      iconData: Icons.picture_in_picture_sharp),
-                                  buildSocialIcon(iconData: Icons.whatshot),
                                   buildSocialIcon(iconData: Icons.link),
                                 ],
                               ),
@@ -1013,7 +1101,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
       child: Icon(
         iconData,
         size: 40,
-        color: Colors.black,
+        color: Colors.blue,
       ),
     );
   }

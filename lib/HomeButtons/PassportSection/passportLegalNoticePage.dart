@@ -74,9 +74,9 @@ class _PassportLegalNoticePageState extends State<PassportLegalNoticePage> {
                         left: 0,
                         top: 50.85,
                         child: Container(
-                          width: 416.02,
-                          height: 194.14,
-                          padding: const EdgeInsets.only(bottom: 4.14),
+                          width: 420.02,
+                          height: 200.14,
+                          padding: const EdgeInsets.only(bottom: 2.14),
                           clipBehavior: Clip.antiAlias,
                           decoration: const BoxDecoration(),
                           child: const Row(
@@ -110,12 +110,14 @@ class _PassportLegalNoticePageState extends State<PassportLegalNoticePage> {
                                       ),
                                       TextSpan(
                                         text:
-                                            'STAMP YOUR PASSPORT AT THE EARLIEST POSSIBLE TIME AS CLOSE TO THE TIME OF DEPARTURE OR ARRIVAL AS DELAYS WITH SERVICES MAY HAVE AN IMPACT ON DATES.\n SHOULD YOU ELECT TO USE THE ITINERARY FEATURE IN THIS APP, THEN YOU MAY WISH TO ENSURE THAT DEPARTURE AND ARRIVAL DATES OF STAMPS IS THE SAME AS IN YOUR ITINERARY.  THEY HAVE DELIBERATELY BEEN UNLINKED DUE TO POSSIBLE DELAYS IN SERVICES.  YOUR ITINERARY IS WHAT YOU PLANNED.  THE STAMPS ARE INDICATIVE AS TO WHAT ACTUALLY HAPPENED.\nYOU MAY SHARE YOUR TRAVEL DIARY WITH FRIENDS AND FAMILY, BUT DO TAKE CARE ABOUT EXPOSING TOO MUCH INFORMATION ON SOCIAL MEDIA AS THIEVES MAY TAKE ADVANTAGE OF YOUR INFORMATION.\n',
+                                            'STAMP YOUR PASSPORT AT THE EARLIEST POSSIBLE TIME AS CLOSE TO THE TIME OF DEPARTURE OR ARRIVAL AS DELAYS WITH SERVICES MAY HAVE AN IMPACT ON DATES.\nSHOULD YOU ELECT TO USE THE ITINERARY FEATURE IN THIS APP, THEN YOU MAY WISH TO ENSURE THAT DEPARTURE AND ARRIVAL DATES OF STAMPS IS THE SAME AS IN YOUR ITINERARY.  THEY HAVE DELIBERATELY BEEN UNLINKED DUE TO POSSIBLE DELAYS IN SERVICES.  YOUR ITINERARY IS WHAT YOU PLANNED.  THE STAMPS ARE INDICATIVE AS TO WHAT ACTUALLY HAPPENED.\nYOU MAY SHARE YOUR TRAVEL DIARY WITH FRIENDS AND FAMILY, BUT DO TAKE CARE ABOUT EXPOSING TOO MUCH INFORMATION ON SOCIAL MEDIA AS THIEVES MAY TAKE ADVANTAGE OF YOUR INFORMATION.\n',
                                         style: TextStyle(
                                           color: Color(0xFF141010),
                                           fontSize: 9.24,
                                           fontFamily: 'OCR-B 10 BT',
                                           fontWeight: FontWeight.w400,
+                                          letterSpacing: 0.37,
+                                          wordSpacing: -0.37,
                                         ),
                                       ),
                                       TextSpan(

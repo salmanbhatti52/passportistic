@@ -138,6 +138,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
     print("$userID");
   }
 
+  String hoursText = '';
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
@@ -183,13 +184,13 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
           children: [
             const SizedBox(height: 20),
             Center(
-            child: SvgPicture.asset(
-              "assets/log1.svg",
-              height: 35.h,
-              width: 108.w,
-              color: const Color(0xFFF65734),
+              child: SvgPicture.asset(
+                "assets/log1.svg",
+                height: 35.h,
+                width: 108.w,
+                color: const Color(0xFFF65734),
+              ),
             ),
-          ),
             const SizedBox(
               height: 20,
             ),
@@ -255,6 +256,14 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                   final travelForPage = getTravelDetailsModels.data
                           ?.sublist(startIndex, endIndex) ??
                       [];
+                  final tripTravelTime =
+                      travelForPage[index % itemsPerPage].tripTravelTime ?? '';
+                  final hoursRegExp = RegExp(r'(\d+) hours');
+                  final match = hoursRegExp.firstMatch(tripTravelTime);
+
+                  if (match != null) {
+                    hoursText = match.group(1) ?? ''; // Get the captured hours
+                  }
 
                   return Padding(
                     padding: const EdgeInsets.all(10.0),
@@ -383,9 +392,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                       ),
                                       // ---
                                       Text(
-                                        travelForPage[index % itemsPerPage]
-                                                .tripTravelTime ??
-                                            '',
+                                        "$hoursText hour",
                                         style: const TextStyle(
                                           color: Color(0xFFF65734),
                                           fontSize: 18,

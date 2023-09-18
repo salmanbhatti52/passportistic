@@ -551,6 +551,11 @@ class _EditProfileState extends State<EditProfile> {
                               fontWeight: FontWeight.w500,
                               color: Color(0xFF525252),
                             ),
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(
+                                  12), // Limit to 11 characters
+                              // You can also add other formatters if needed
+                            ],
                           ),
                         ),
                       ],

@@ -234,7 +234,7 @@ class _passportPageState extends State<passportPage> {
                         width: 416.07,
                         child: getProfileModels.data != null
                             ? Text(
-                                "S<${getProfileModels.data!.firstName}<<${getProfileModels.data!.middleName} ${getProfileModels.data!.lastName}<<<<<<<<<<<<<<<<<<<<<<<<<<<\nPA1234567<<$currencyName<<$dobadded<<$dateAdded<<${getProfileModels.data!.numberOfPages}<<<",
+                                "S<${getProfileModels.data!.firstName}<<${getProfileModels.data!.middleName} ${getProfileModels.data!.lastName}<<<<<<<<<<<<<<<<<<<<<<<<<<<\n${getProfileModels.data!.passportNumber ?? "PA123456"}<<${currencyName ?? ""}<<$dobadded<<$dateAdded<<${getProfileModels.data!.numberOfPages}<<<",
                                 // 'S<AUDBURKE<<GARY<JOHN JOE<<<<<<<<<<<<<<<<<<<\nPA1234567<<AUD<<19590526<<20230601<<48<<<<<<',
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(
@@ -362,7 +362,7 @@ class _passportPageState extends State<passportPage> {
                               ),
                               clipBehavior: Clip.antiAlias,
                               decoration: const BoxDecoration(),
-                              child: const Row(
+                              child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -374,17 +374,19 @@ class _passportPageState extends State<passportPage> {
                                         Positioned(
                                           left: -0,
                                           top: 11.02,
-                                          child: Text(
-                                            'PA1234567',
-                                            style: TextStyle(
-                                              color: Color(0xFF141010),
-                                              fontSize: 13.87,
-                                              fontFamily: 'OCR-B 10 BT',
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
+                                          child: getProfileModels.data != null
+                                              ? Text(
+                                                  "${getProfileModels.data!.passportNumber ?? "PA123456"}",
+                                                  style: const TextStyle(
+                                                    color: Color(0xFF141010),
+                                                    fontSize: 13.87,
+                                                    fontFamily: 'OCR-B 10 BT',
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                )
+                                              : const Text(""),
                                         ),
-                                        Positioned(
+                                        const Positioned(
                                           left: 0,
                                           top: 0,
                                           child: Text(
@@ -422,7 +424,7 @@ class _passportPageState extends State<passportPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
-                                'Name/Nom',
+                                'Name',
                                 style: TextStyle(
                                   color: Color(0xFF50A0FF),
                                   fontSize: 9.25,
@@ -482,7 +484,7 @@ class _passportPageState extends State<passportPage> {
                                           left: 0,
                                           top: 0,
                                           child: Text(
-                                            'Nationality/Nationalite ',
+                                            'Nationality',
                                             style: TextStyle(
                                               color: Color(0xFF50A0FF),
                                               fontSize: 9.25,
@@ -541,7 +543,7 @@ class _passportPageState extends State<passportPage> {
                                             left: 0,
                                             top: 0,
                                             child: Text(
-                                              'Date of Birth/Date de naissance ',
+                                              'Date of Birth',
                                               style: TextStyle(
                                                 color: Color(0xFF50A0FF),
                                                 fontSize: 9.25,
@@ -605,7 +607,7 @@ class _passportPageState extends State<passportPage> {
                                           left: 0,
                                           top: 0,
                                           child: Text(
-                                            'Sex/Sexe',
+                                            'Sex',
                                             style: TextStyle(
                                               color: Color(0xFF50A0FF),
                                               fontSize: 9.25,
@@ -663,7 +665,7 @@ class _passportPageState extends State<passportPage> {
                                           left: 0,
                                           top: 0,
                                           child: Text(
-                                            'Date of Issue/Date d’emission',
+                                            'Date of Issue',
                                             style: TextStyle(
                                               color: Color(0xFF50A0FF),
                                               fontSize: 9.25,
