@@ -124,7 +124,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
         });
       }
     } catch (e) {
-      print('Failed to pick image: $e');
+      print('Failed to pick  From image: $e');
     }
   }
 
