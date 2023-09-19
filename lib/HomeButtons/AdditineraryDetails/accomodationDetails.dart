@@ -36,6 +36,7 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
   String? _selectedTransportMode;
   String? formattedApiCheckOutTime;
   String? formattedApiCheckInTime;
+  int numberOfNights = 0;
   accommodationDetails() async {
     // try {
 
@@ -58,7 +59,7 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
       "accomodation_address": Address.text,
       "accomodation_type": typeoFAccommodation.text,
       "accomodation_checkin_date": checkInDate.text,
-      "accomodation_nights": nights.text,
+      "accomodation_nights": numberOfNights.toString(),
       "accomodation_breakfast": breakfasTIncluded.text,
       "accomodation_checkout_date": checkOuTDate.text,
       "accomodation_checkin_time": "$formattedApiCheckInTime",
@@ -213,13 +214,13 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                   cursorColor: const Color(0xFF000000),
                   controller: checkInDate,
                   keyboardType: TextInputType.name,
-                  readOnly: true, // Prevent manual text input
                   onTap: () {
                     // Open the date picker when the field is tapped
                     showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
+                      firstDate: DateTime
+                          .now(), // Set the first selectable date to the current date
                       lastDate: DateTime(2100),
                     ).then((selectedDate) {
                       if (selectedDate != null) {
@@ -227,7 +228,6 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                         setState(() {
                           checkInDate.text =
                               DateFormat('yyyy-MM-dd').format(selectedDate);
-                          // Date.text = DateFormat.yMd().format(selectedDate);
                         });
                       }
                     });
@@ -468,24 +468,34 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                   cursorColor: const Color(0xFF000000),
                   controller: checkOuTDate,
                   keyboardType: TextInputType.name,
-                  readOnly: true, // Prevent manual text input
-                  onTap: () {
+                  // Prevent manual text input
+                  onTap: () async {
                     // Open the date picker when the field is tapped
-                    showDatePicker(
+                    final selectedDate = await showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
+                      firstDate: DateTime.now(),
                       lastDate: DateTime(2100),
-                    ).then((selectedDate) {
-                      if (selectedDate != null) {
-                        // Handle the selected date
-                        setState(() {
-                          checkOuTDate.text =
-                              DateFormat('yyyy-MM-dd').format(selectedDate);
-                          // Date.text = DateFormat.yMd().format(selectedDate);
-                        });
-                      }
-                    });
+                    );
+
+                    if (selectedDate != null) {
+                      final checkIn = DateTime.parse(checkInDate.text);
+                      final checkOut = selectedDate;
+
+                      // Calculate the duration between check-in and check-out
+
+                      final duration = checkOut.difference(checkIn);
+
+                      // Calculate the number of nights (round up to the nearest day)
+                      numberOfNights = duration.inDays;
+                      print("numberOfNights $numberOfNights");
+
+                      // Handle the selected date and update checkOutDate.text
+                      setState(() {
+                        checkOuTDate.text =
+                            DateFormat('yyyy-MM-dd').format(checkOut);
+                      });
+                    }
                   },
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
@@ -592,49 +602,6 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                   style:
                       const TextStyle(color: Color(0xFF000000), fontSize: 16),
                   cursorColor: const Color(0xFF000000),
-                  controller: nights,
-                  keyboardType: TextInputType.name,
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xFFF65734)),
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    // labelText: 'Email',
-                    hintText: "Nights",
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: const BorderSide(
-                          color: Color(0xFFF3F3F3)), // change border color
-                    ),
-                    labelStyle: const TextStyle(),
-                    hintStyle: const TextStyle(
-                        color: Color(0xFFA7A9B7),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w300,
-                        fontFamily: "Satoshi"),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-            ],
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.02,
-          ),
-          Row(
-            children: [
-              const SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: TextFormField(
-                  style:
-                      const TextStyle(color: Color(0xFF000000), fontSize: 16),
-                  cursorColor: const Color(0xFF000000),
                   controller: breakfasTIncluded,
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
@@ -670,9 +637,6 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
           ),
           GestureDetector(
             onTap: () async {
-              // setState(() {
-              // isLoading = true;
-              // });
               if (checkInDate.text.isEmpty &&
                   checkOuTDate.text.isEmpty &&
                   Address.text.isEmpty &&
@@ -680,7 +644,9 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                   typeoFAccommodation.text.isEmpty &&
                   nights.text.isEmpty &&
                   breakfasTIncluded.text.isEmpty &&
-                  city.text.isEmpty) {
+                  city.text.isEmpty &&
+                  checkinTime.text.isEmpty &&
+                  checkOutTime.text.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text(
@@ -710,6 +676,7 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                     SnackBar(
                       content: Text(
                         accommodationModels.message.toString(),
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   );
@@ -718,14 +685,12 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                     const SnackBar(
                       content: Text(
                         'Something went wrong',
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   );
                 }
               }
-              // setState(() {
-              // isLoading = false;
-              // });
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -782,7 +747,7 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
             ),
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.02,
+            height: MediaQuery.of(context).size.height * 0.01,
           ),
           GestureDetector(
             onTap: () {
@@ -825,7 +790,10 @@ class _AccommodationDetailsState extends State<AccommodationDetails> {
                 ),
               ),
             ),
-          )
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.02,
+          ),
         ]),
       ),
     );

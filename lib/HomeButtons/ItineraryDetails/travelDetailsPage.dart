@@ -1,10 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../Models/getProfileModels.dart';
 import '../../Models/getTravelDetailsModels.dart';
-import '../../Models/transportModeNamesModels.dart';
+import '../../Models/transportListModels.dart';
+import '../../Models/travalDetailsModels.dart';
 import '../../auth/signUpNextPage.dart';
 import '../../auth/signUpPage.dart';
 import '../../main.dart';
@@ -24,7 +27,8 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
   GetTravelDetailsModels getTravelDetailsModels = GetTravelDetailsModels();
-  List<Datum>? travelDetailsData = [];
+  Map<String, String> transportModeNamesMap = {};
+
   int travelDetailsPerPage = 1;
   travelDetails() async {
     prefs = await SharedPreferences.getInstance();
@@ -47,17 +51,25 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
       print("in 200 itineraryAddModels");
       print("SuucessFull");
       getTravelDetailsModels = getTravelDetailsModelsFromJson(responseString);
-      travelDetailsData = getTravelDetailsModels.data;
 
-      if (travelDetailsData != null) {
-        // Loop through the travel details data and call transportModeNames for each item
-        for (var travelDetail in travelDetailsData!) {
-          transportModeId =
-              getTravelDetailsModels.data![0].transportModeId ?? '';
-          await transportModeNames(transportModeId.toString());
-          print("transportModeId $transportModeId");
-        }
-      }
+      String? modeName = getTransportModeName(
+          getTravelDetailsModels.data![0].transportModeId ?? '');
+      String? modeId = getTravelDetailsModels.data![0].transportModeId ?? '';
+
+      print("Transport Mode Name: $modeName");
+      print(modeId);
+
+      // travelDetailsData = getTravelDetailsModels.data;
+
+      // if (travelDetailsData != null) {
+      //   // Loop through the travel details data and call transportModeNames for each item
+      //   for (var travelDetail in travelDetailsData!) {
+      //     transportModeId =
+      //         getTravelDetailsModels.data![0].transportModeId ?? '';
+      //     await transportModeNames(transportModeId.toString());
+      //     print("transportModeId $transportModeId");
+      //   }
+      // }
       //  transportModeNames(getTravelDetailsModels.data?.length ?? '');
       setState(() {
         isLoading = false;
@@ -67,44 +79,97 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
     }
   }
 
-  String? transportModeId;
-
-  TransportModeNamesModels transportModeNamesModels =
-      TransportModeNamesModels();
-
-  transportModeNames(String transportModeId) async {
+  GetProfileModels getProfileModels = GetProfileModels();
+  TravalDetailsModels travalDetailsModels = TravalDetailsModels();
+  TransportListModels transportListModels = TransportListModels();
+  mdoeofTransport() async {
+    // try {
     prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
-    String apiUrl = "$baseUrl/get_transport_mode_itinerary";
-    print("api: $apiUrl");
+    String apiUrl = "$baseUrl/get_transport_mode";
+    if (kDebugMode) {
+      print("api: $apiUrl");
+    }
     setState(() {
       isLoading = true;
     });
-    // String transportModeId =
-    //     travelForPage[index % itemsPerPage].transportModeId ?? '';
-
     final response = await http.post(Uri.parse(apiUrl), headers: {
       'Accept': 'application/json',
     }, body: {
-      "transport_mode_id": transportModeId
+      "passport_holder_id": "$userID"
     });
     final responseString = response.body;
-    print("responseModels: $responseString");
-    print(
-        "status Code transportModeNamesModels DetailsModels: ${response.statusCode}");
+    print("responseModeTransportModel: $responseString");
+    print("status Code responseModeTransportModel: ${response.statusCode}");
+    print("in 200 responseModeTransportModel");
     if (response.statusCode == 200) {
-      print("in 200 itineraryAddModels");
-      print("SuucessFull");
-      transportModeNamesModels =
-          transportModeNamesModelsFromJson(responseString);
-      print('Mode name: ${transportModeNamesModels.data?.modeName}');
+      print("SuccessFull");
+      transportListModels = transportListModelsFromJson(responseString);
+      if (transportListModels.data != null) {
+        for (var i = 0; i < transportListModels.data!.length; i++) {
+          String? modeId = transportListModels.data![i].transportModeId;
+          String modeName = transportListModels.data![i].modeName ?? '';
+
+          if (modeId != null) {
+            // Populate the map with modeId as the key and modeName as the value
+            transportModeNamesMap[modeId] = modeName;
+          } else {
+            // Handle the case where either modeId or modeName is null, if needed.
+          }
+        }
+      }
+
       setState(() {
         isLoading = false;
       });
-      print(
-          'transportModeNamesModels status: ${transportModeNamesModels.status}');
+      print('responseModeTransportModel status: ${transportListModels.status}');
     }
   }
+
+  String? getTransportModeName(String transportModeId) {
+    return transportModeNamesMap[transportModeId];
+  }
+
+  String? selectedTransportModeName;
+
+  // String? transportModeId;
+
+  // TransportModeNamesModels transportModeNamesModels =
+  //     TransportModeNamesModels();
+
+  // transportModeNames() async {
+  //   prefs = await SharedPreferences.getInstance();
+  //   userID = prefs?.getString('userID');
+  //   String apiUrl = "$baseUrl/get_transport_mode_itinerary";
+  //   print("api: $apiUrl");
+  //   setState(() {
+  //     isLoading = true;
+  //   });
+  //   // String transportModeId =
+  //   //     travelForPage[index % itemsPerPage].transportModeId ?? '';
+
+  //   final response = await http.post(Uri.parse(apiUrl), headers: {
+  //     'Accept': 'application/json',
+  //   }, body: {
+  //     "transport_mode_id":
+  //   });
+  //   final responseString = response.body;
+  //   print("responseModels: $responseString");
+  //   print(
+  //       "status Code transportModeNamesModels DetailsModels: ${response.statusCode}");
+  //   if (response.statusCode == 200) {
+  //     print("in 200 itineraryAddModels");
+  //     print("SuucessFull");
+  //     transportModeNamesModels =
+  //         transportModeNamesModelsFromJson(responseString);
+  //     print('Mode name: ${transportModeNamesModels.data?.modeName}');
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //     print(
+  //         'transportModeNamesModels status: ${transportModeNamesModels.status}');
+  //   }
+  // }
 
   int itemsPerPage = 1;
 
@@ -135,6 +200,8 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
     userID = prefs?.getString('userID');
     print("${widget.itinid}");
     travelDetails();
+    mdoeofTransport();
+
     print("$userID");
   }
 
@@ -338,9 +405,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                       ),
                                       // ---
                                       Text(
-                                        transportModeNamesModels
-                                                .data?.modeName ??
-                                            '',
+                                        selectedTransportModeName ?? '',
                                         style: const TextStyle(
                                           color: Color(0xFFF65734),
                                           fontSize: 18,

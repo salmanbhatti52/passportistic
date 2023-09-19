@@ -365,7 +365,8 @@ class _TravelDetailsState extends State<TravelDetails> {
                     showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
+                     firstDate: DateTime
+                          .now(),
                       lastDate: DateTime(2100),
                     ).then((selectedDate) {
                       if (selectedDate != null) {
@@ -620,7 +621,8 @@ class _TravelDetailsState extends State<TravelDetails> {
                     showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
+                     firstDate: DateTime
+                          .now(),
                       lastDate: DateTime(2100),
                     ).then((selectedDate) {
                       if (selectedDate != null) {

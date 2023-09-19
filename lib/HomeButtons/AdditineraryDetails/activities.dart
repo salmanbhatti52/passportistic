@@ -123,7 +123,7 @@ class _ActivitiesDetailsState extends State<ActivitiesDetails> {
           const SizedBox(
             height: 20,
           ),
-           Center(
+          Center(
             child: SvgPicture.asset(
               "assets/log1.svg",
               height: 35.h,
@@ -204,13 +204,13 @@ class _ActivitiesDetailsState extends State<ActivitiesDetails> {
                   cursorColor: const Color(0xFF000000),
                   controller: activityDate,
                   keyboardType: TextInputType.name,
-                  readOnly: true, // Prevent manual text input
+                  // Prevent manual text input
                   onTap: () {
                     // Open the date picker when the field is tapped
                     showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
+                      firstDate: DateTime.now(),
                       lastDate: DateTime(2100),
                     ).then((selectedDate) {
                       if (selectedDate != null) {
@@ -613,7 +613,7 @@ class _ActivitiesDetailsState extends State<ActivitiesDetails> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'View Itinerary',
+                      'View Planned Activities',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Color(0xFFFF8D74),

@@ -72,58 +72,6 @@ class _ViewPassportState extends State<ViewPassport> {
     });
   }
 
-  // String? selectedOption;
-
-  // CoverDesignDataModel coverDesignDataModel = CoverDesignDataModel();
-
-  // coverDesign() async {
-  //   prefs = await SharedPreferences.getInstance();
-  //   userID = prefs?.getString('userID');
-  //   String apiUrl = "$baseUrl/get_cover_design";
-  //   print("api: $apiUrl");
-
-  //   setState(() {
-  //     isLoading = true;
-  //   });
-
-  //   final response = await http.post(Uri.parse(apiUrl), headers: {
-  //     'Accept': 'application/json',
-  //   }, body: {
-  //     "passport_holder_id": "$userID",
-  //   });
-
-  //   final responseString = response.body;
-  //   print("responseCoverDesignApi: $responseString");
-  //   print("status Code CoverDesign: ${response.statusCode}");
-  //   print("in 200 signIn");
-
-  //   if (response.statusCode == 200) {
-  //     print("Successful");
-  //     print("Cover Design Data: $responseString");
-  //     setState(() {
-  //       coverDesignDataModel = coverDesignDataModelFromJson(responseString);
-  //       if (coverDesignDataModel.data != null) {
-  //         for (int i = 0; i < coverDesignDataModel.data!.length; i++) {
-  //           if (coverDesignDataModel.data![i].passportDesignId ==
-  //               getProfileModels.data!.passportDesignId) {
-  //             print(
-  //                 "cover image ID: ${coverDesignDataModel.data![i].passportFrontCover}");
-  //             setState(() {
-  //               selectedOption =
-  //                   coverDesignDataModel.data![i].passportFrontCover;
-
-  //               print("selectedOptionCoverDeign $selectedOption");
-  //               // print("selectedPassportCountry $selectedPassportCountry");
-  //             });
-  //           }
-  //         }
-  //       }
-  //       isLoading = false;
-  //     });
-  //     print("Cover Design Data Length: ${coverDesignDataModel.data?.length}");
-  //   }
-  // }
-
   List<passportPage> passportPages = [];
   @override
   void initState() {

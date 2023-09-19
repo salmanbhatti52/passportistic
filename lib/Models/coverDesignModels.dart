@@ -4,75 +4,102 @@
 
 import 'dart:convert';
 
-CoverDesignDataModel coverDesignDataModelFromJson(String str) =>
-    CoverDesignDataModel.fromJson(json.decode(str));
+CoverDesignDataModel coverDesignDataModelFromJson(String str) => CoverDesignDataModel.fromJson(json.decode(str));
 
-String coverDesignDataModelToJson(CoverDesignDataModel data) =>
-    json.encode(data.toJson());
+String coverDesignDataModelToJson(CoverDesignDataModel data) => json.encode(data.toJson());
 
 class CoverDesignDataModel {
-  String? status;
-  List<Datum>? data;
+    String? status;
+    List<Datum>? data;
 
-  CoverDesignDataModel({
-    this.status,
-    this.data,
-  });
+    CoverDesignDataModel({
+        this.status,
+        this.data,
+    });
 
-  factory CoverDesignDataModel.fromJson(Map<String, dynamic> json) =>
-      CoverDesignDataModel(
+    factory CoverDesignDataModel.fromJson(Map<String, dynamic> json) => CoverDesignDataModel(
         status: json["status"],
-        data: json["data"] != null
-            ? List<Datum>.from(json["data"].map((x) => Datum.fromJson(x)))
-            : null,
-      );
+        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+    );
 
-  Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toJson() => {
         "status": status,
         "data": List<dynamic>.from(data!.map((x) => x.toJson())),
-      };
+    };
 }
 
 class Datum {
-  String? passportDesignId;
-  String? passportCountry;
-  String? passportFrontCover;
-  String? passportDataDesign;
-  String? passportLegalDesign;
-  DateTime? dateAdded;
-  String? isCancalled;
-  String? actions;
+    String? passportDesignId;
+    String? passportCountry;
+    String? legalNotice;
+    String? passportFrontCover;
+    String? passportDataDesign;
+    String? passportLegalDesign;
+    DateTime? dateAdded;
+    IsCancalled? isCancalled;
+    Status? status;
 
-  Datum({
-    this.passportDesignId,
-    this.passportCountry,
-    this.passportFrontCover,
-    this.passportDataDesign,
-    this.passportLegalDesign,
-    this.dateAdded,
-    this.isCancalled,
-    this.actions,
-  });
+    Datum({
+        this.passportDesignId,
+        this.passportCountry,
+        this.legalNotice,
+        this.passportFrontCover,
+        this.passportDataDesign,
+        this.passportLegalDesign,
+        this.dateAdded,
+        this.isCancalled,
+        this.status,
+    });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+    factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         passportDesignId: json["passport_design_id"],
         passportCountry: json["passport_country"],
+        legalNotice: json["legal_notice"],
         passportFrontCover: json["passport_front_cover"],
         passportDataDesign: json["passport_data_design"],
         passportLegalDesign: json["passport_legal_design"],
         dateAdded: DateTime.parse(json["date_added"]),
-        isCancalled: json["is_cancalled"],
-        actions: json["actions"],
-      );
+        isCancalled: isCancalledValues.map[json["is_cancalled"]],
+        status: statusValues.map[json["status"]],
+    );
 
-  Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toJson() => {
         "passport_design_id": passportDesignId,
         "passport_country": passportCountry,
+        "legal_notice": legalNotice,
         "passport_front_cover": passportFrontCover,
         "passport_data_design": passportDataDesign,
         "passport_legal_design": passportLegalDesign,
         "date_added": dateAdded!.toIso8601String(),
-        "is_cancalled": isCancalled,
-        "actions": actions,
-      };
+        "is_cancalled": isCancalledValues.reverse[isCancalled],
+        "status": statusValues.reverse[status],
+    };
+}
+
+enum IsCancalled {
+    FALSE
+}
+
+final isCancalledValues = EnumValues({
+    "False": IsCancalled.FALSE
+});
+
+enum Status {
+    ACTIVE
+}
+
+final statusValues = EnumValues({
+    "Active": Status.ACTIVE
+});
+
+class EnumValues<T> {
+    Map<String, T> map;
+    late Map<T, String> reverseMap;
+
+    EnumValues(this.map);
+
+    Map<T, String> get reverse {
+        reverseMap = map.map((k, v) => MapEntry(v, k));
+        return reverseMap;
+    }
 }

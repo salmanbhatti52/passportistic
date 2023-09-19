@@ -285,7 +285,7 @@ class _AccomodationDetailsPageState extends State<AccomodationDetailsPage> {
                                       Text(
                                         accommodationsForPage[
                                                     index % itemsPerPage]
-                                                .accomodationName ??
+                                                .accomodationCity ??
                                             '',
                                         style: const TextStyle(
                                           color: Color(0xFFF65734),

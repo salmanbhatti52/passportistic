@@ -92,6 +92,9 @@ class _AddItinerayState extends State<AddItineray> {
   @override
   void dispose() {
     _focusNode1.removeListener(_onFocusChange);
+    addItineray.dispose();
+    _Startdate.dispose();
+    _Enddate.dispose();
 
     _focusNode2.removeListener(_onFocusChange);
     _focusNode6.removeListener(_onFocusChange);
