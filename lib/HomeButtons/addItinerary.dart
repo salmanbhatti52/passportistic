@@ -284,7 +284,7 @@ class _AddItinerayState extends State<AddItineray> {
                                   showDatePicker(
                                     context: context,
                                     initialDate: DateTime.now(),
-                                    firstDate: DateTime(2000),
+                                    firstDate: DateTime.now(),
                                     lastDate: DateTime(2100),
                                   ).then((selectedDate) {
                                     if (selectedDate != null) {
@@ -374,7 +374,7 @@ class _AddItinerayState extends State<AddItineray> {
                                   showDatePicker(
                                     context: context,
                                     initialDate: DateTime.now(),
-                                    firstDate: DateTime(2000),
+                                    firstDate: DateTime.now(),
                                     lastDate: DateTime(2100),
                                   ).then((selectedDate) {
                                     if (selectedDate != null) {

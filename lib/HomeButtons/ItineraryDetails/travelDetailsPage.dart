@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../Models/getProfileModels.dart';
 import '../../Models/getTravelDetailsModels.dart';
 import '../../Models/transportListModels.dart';
+import '../../Models/transportModeNamesModels.dart';
 import '../../Models/travalDetailsModels.dart';
 import '../../auth/signUpNextPage.dart';
 import '../../auth/signUpPage.dart';
@@ -16,7 +17,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class TravelDetailsPage extends StatefulWidget {
   final String? itinid;
   final String? itinname;
-  const TravelDetailsPage({Key, key, this.itinid, this.itinname})
+  final String? trasnportId;
+  const TravelDetailsPage(
+      {Key, key, this.itinid, this.itinname, this.trasnportId})
       : super(key: key);
 
   @override
@@ -52,12 +55,11 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
       print("SuucessFull");
       getTravelDetailsModels = getTravelDetailsModelsFromJson(responseString);
 
-      String? modeName = getTransportModeName(
-          getTravelDetailsModels.data![0].transportModeId ?? '');
-      String? modeId = getTravelDetailsModels.data![0].transportModeId ?? '';
+      // String? modeName = getTransportModeName(
+      //     getTravelDetailsModels.data![0].transportModeId ?? '');
+      // String? modeId = getTravelDetailsModels.data![0].transportModeId ?? '';
 
-      print("Transport Mode Name: $modeName");
-      print(modeId);
+      // print("Transport Mode Id for Zain: $modeId");
 
       // travelDetailsData = getTravelDetailsModels.data;
 
@@ -105,10 +107,12 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
     if (response.statusCode == 200) {
       print("SuccessFull");
       transportListModels = transportListModelsFromJson(responseString);
+
       if (transportListModels.data != null) {
         for (var i = 0; i < transportListModels.data!.length; i++) {
           String? modeId = transportListModels.data![i].transportModeId;
           String modeName = transportListModels.data![i].modeName ?? '';
+          print("Transport Mode Id: $modeId");
 
           if (modeId != null) {
             // Populate the map with modeId as the key and modeName as the value
@@ -132,54 +136,58 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
 
   String? selectedTransportModeName;
 
-  // String? transportModeId;
+  String? transportModeId;
 
-  // TransportModeNamesModels transportModeNamesModels =
-  //     TransportModeNamesModels();
+  TransportModeNamesModels transportModeNamesModels =
+      TransportModeNamesModels();
+  bool isLoading1 = false;
+  transportModeNames() async {
+    prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
+    String apiUrl = "$baseUrl/get_transport_mode_itinerary";
+    print("api: $apiUrl");
+    print("travelMode $travelMode");
+    setState(() {
+      isLoading1 = true;
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "transport_mode_id": "$travelMode",
+    });
+    final responseString = response.body;
+    print("responseModels: $responseString");
+    print(
+        "status Code transportModeNamesModels DetailsModels: ${response.statusCode}");
+    if (response.statusCode == 200) {
+      print("in 200 itineraryAddModels");
+      print("SuucessFull");
+      transportModeNamesModels =
+          transportModeNamesModelsFromJson(responseString);
+      if (transportModeNamesModels.data != null) {
+        print('Mode name: ${transportModeNamesModels.data?.modeName}');
+        selectedTransportModeName = transportModeNamesModels.data?.modeName;
+        print("selectedTransportModeName $selectedTransportModeName");
+      }
 
-  // transportModeNames() async {
-  //   prefs = await SharedPreferences.getInstance();
-  //   userID = prefs?.getString('userID');
-  //   String apiUrl = "$baseUrl/get_transport_mode_itinerary";
-  //   print("api: $apiUrl");
-  //   setState(() {
-  //     isLoading = true;
-  //   });
-  //   // String transportModeId =
-  //   //     travelForPage[index % itemsPerPage].transportModeId ?? '';
-
-  //   final response = await http.post(Uri.parse(apiUrl), headers: {
-  //     'Accept': 'application/json',
-  //   }, body: {
-  //     "transport_mode_id":
-  //   });
-  //   final responseString = response.body;
-  //   print("responseModels: $responseString");
-  //   print(
-  //       "status Code transportModeNamesModels DetailsModels: ${response.statusCode}");
-  //   if (response.statusCode == 200) {
-  //     print("in 200 itineraryAddModels");
-  //     print("SuucessFull");
-  //     transportModeNamesModels =
-  //         transportModeNamesModelsFromJson(responseString);
-  //     print('Mode name: ${transportModeNamesModels.data?.modeName}');
-  //     setState(() {
-  //       isLoading = false;
-  //     });
-  //     print(
-  //         'transportModeNamesModels status: ${transportModeNamesModels.status}');
-  //   }
-  // }
+      setState(() {
+        isLoading1 = false;
+      });
+      print(
+          'transportModeNamesModels status: ${transportModeNamesModels.status}');
+    }
+  }
 
   int itemsPerPage = 1;
-
+  String? travelMode;
   @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
   }
 
-  void _onPageChanged(int index) {
+  Future<void> _onPageChanged(int index) async {
+    await transportModeNames();
     setState(() {
       _currentPage = index;
     });
@@ -204,6 +212,27 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
 
     print("$userID");
   }
+
+  Widget buildTransportModeWidget() {
+    if (selectedTransportModeName == null) {
+      // Show a loading indicator while data is being fetched
+      return const CircularProgressIndicator();
+    } else {
+      // Show the transport mode name when available
+      return Text(
+        selectedTransportModeName.toString(),
+        style: const TextStyle(
+          color: Color(0xFFF65734),
+          fontSize: 18,
+          fontFamily: 'Satoshi',
+          fontWeight: FontWeight.w900,
+        ),
+      );
+    }
+  }
+
+// In your build method or wherever you want to display the widget:
+// buildTransportModeWidget(),
 
   String hoursText = '';
   @override
@@ -327,7 +356,13 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                       travelForPage[index % itemsPerPage].tripTravelTime ?? '';
                   final hoursRegExp = RegExp(r'(\d+) hours');
                   final match = hoursRegExp.firstMatch(tripTravelTime);
+                  travelMode =
+                      travelForPage[index % itemsPerPage].transportModeId ?? '';
+                  print("travelMode in Pageview $travelMode");
 
+                  if (travelMode != null) {
+                    // transportModeNames();
+                  }
                   if (match != null) {
                     hoursText = match.group(1) ?? ''; // Get the captured hours
                   }
@@ -404,14 +439,9 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                         ),
                                       ),
                                       // ---
-                                      Text(
-                                        selectedTransportModeName ?? '',
-                                        style: const TextStyle(
-                                          color: Color(0xFFF65734),
-                                          fontSize: 18,
-                                          fontFamily: 'Satoshi',
-                                          fontWeight: FontWeight.w900,
-                                        ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 2),
+                                        child: buildTransportModeWidget(),
                                       ),
                                       // ---
                                       SizedBox(
@@ -420,7 +450,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                                 0.02,
                                       ),
                                       const Text(
-                                        'Trip Details',
+                                        'Flight Number',
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 16,

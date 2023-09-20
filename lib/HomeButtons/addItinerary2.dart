@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Models/addItineraryModels.dart';
@@ -29,6 +30,11 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
   String? _slecteditinerary;
   String desiredItineraryId = "";
   String? _selectedItineraryName;
+  String? startDate;
+  String? endDate;
+  String? formattedStartDate;
+  String? formattedEndDate;
+
   final FocusNode _focusNode1 = FocusNode();
 
   IteneraryGetModels iteneraryGetModels = IteneraryGetModels();
@@ -37,18 +43,19 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
   itinerayGet() async {
     prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
-    // try {
 
     String apiUrl = "$baseUrl/get_itinerary";
     print("api: $apiUrl");
     setState(() {
       isLoading = true;
     });
+
     final response = await http.post(Uri.parse(apiUrl), headers: {
       'Accept': 'application/json',
     }, body: {
       "passport_holder_id": "$userID",
     });
+
     final responseString = response.body;
     print("responseitineraryAddModelsi: $responseString");
     print("status Code itineraryAddModels: ${response.statusCode}");
@@ -59,15 +66,24 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
       iteneraryGetModels = iteneraryGetModelsFromJson(responseString);
       String desiredItineraryName = "$_slecteditinerary";
 
-      if (itineraryAddModels.data != null) {
-        for (var itinerary in itineraryAddModels.data!) {
+      if (iteneraryGetModels.data != null) {
+        for (var itinerary in iteneraryGetModels.data!) {
           if (itinerary.travelLtineraryName == desiredItineraryName) {
             desiredItineraryId = itinerary.travelLtineraryId!;
+
+            // Get start and end dates here
+            startDate = itinerary.travelLtineraryDepartDate.toString();
+            endDate = itinerary.travelLtineraryArriveDate.toString();
+            print("Start Date: $startDate");
+            print("End Date: $endDate");
             break; // Found the desired itinerary, exit the loop
           }
         }
       }
+
       print("Desired Itinerary ID: $desiredItineraryId");
+      print("Start Date: $startDate");
+      print("End Date: $endDate");
 
       if (mounted) {
         setState(() {
@@ -75,7 +91,7 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
         });
       }
 
-      print('itineraryAddModels status: ${iteneraryGetModels.status}');
+      print('itineraryGetModels status: ${iteneraryGetModels.status}');
     }
   }
 
@@ -187,6 +203,47 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
                                         newValue) {
                                       _selectedItineraryName =
                                           itinerary.travelLtineraryName ?? '';
+                                      startDate = itinerary
+                                          .travelLtineraryDepartDate
+                                          .toString();
+                                      endDate = itinerary
+                                          .travelLtineraryArriveDate
+                                          .toString();
+                                      // Assuming startDate and endDate are in the format "yyyy-MM-dd HH:mm:ss.000"
+                                      DateTime parsedStartDate =
+                                          DateTime.parse(startDate.toString());
+                                      DateTime parsedEndDate =
+                                          DateTime.parse(endDate.toString());
+
+// Formatting the dates as needed
+                                      formattedStartDate =
+                                          DateFormat('yyyy, MM, dd')
+                                              .format(parsedStartDate);
+                                      formattedEndDate =
+                                          DateFormat('yyyy, MM, dd')
+                                              .format(parsedEndDate);
+
+// Now you can use formattedStartDate and formattedEndDate in your code
+                                      // firstDay:
+                                      // DateTime.utc(
+                                      //     int.parse(
+                                      //         formattedStartDate.split(',')[0]),
+                                      //     int.parse(
+                                      //         formattedStartDate.split(',')[1]),
+                                      //     int.parse(formattedStartDate
+                                      //         .split(',')[2]));
+                                      // lastDay:
+                                      // DateTime.utc(
+                                      //     int.parse(
+                                      //         formattedEndDate.split(',')[0]),
+                                      //     int.parse(
+                                      //         formattedEndDate.split(',')[1]),
+                                      //     int.parse(
+                                      //         formattedEndDate.split(',')[2]));
+
+                                      print(formattedStartDate);
+                                      print(formattedEndDate);
+
                                       break; // Exit loop once the name is found
                                     }
                                   }
@@ -195,6 +252,10 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
                                       "_selectedItineraryId: $_slecteditinerary");
                                   print(
                                       "_selectedItineraryName: $_selectedItineraryName");
+                                  print("StartDate: $startDate");
+                                  print("EndDate: $endDate");
+                                  print(formattedStartDate);
+                                  print(formattedEndDate);
                                 });
                               },
                               items:
@@ -471,7 +532,9 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
                       builder: (BuildContext context) {
                         return DisplayDiary(
                             itinid: _slecteditinerary!,
-                            itinname: _selectedItineraryName);
+                            itinname: _selectedItineraryName,
+                            startDate: formattedStartDate,
+                            endDate: formattedEndDate);
                       },
                     ));
                   }

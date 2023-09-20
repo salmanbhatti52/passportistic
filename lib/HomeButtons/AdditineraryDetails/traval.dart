@@ -35,7 +35,7 @@ class _TravelDetailsState extends State<TravelDetails> {
   TextEditingController travelTime = TextEditingController();
   TextEditingController layOver = TextEditingController();
   TextEditingController dayno = TextEditingController();
-
+  bool isLoading2 = false;
   TransportListModels transportListModels = TransportListModels();
   mdoeofTransport() async {
     // try {
@@ -46,7 +46,7 @@ class _TravelDetailsState extends State<TravelDetails> {
       print("api: $apiUrl");
     }
     setState(() {
-      isLoading = true;
+      isLoading2 = true;
     });
     final response = await http.post(Uri.parse(apiUrl), headers: {
       'Accept': 'application/json',
@@ -61,7 +61,7 @@ class _TravelDetailsState extends State<TravelDetails> {
       print("SuccessFull");
       transportListModels = transportListModelsFromJson(responseString);
       setState(() {
-        isLoading = false;
+        isLoading2 = false;
       });
       print('responseModeTransportModel status: ${transportListModels.status}');
     }
@@ -365,8 +365,7 @@ class _TravelDetailsState extends State<TravelDetails> {
                     showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
-                     firstDate: DateTime
-                          .now(),
+                      firstDate: DateTime.now(),
                       lastDate: DateTime(2100),
                     ).then((selectedDate) {
                       if (selectedDate != null) {
@@ -621,8 +620,7 @@ class _TravelDetailsState extends State<TravelDetails> {
                     showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
-                     firstDate: DateTime
-                          .now(),
+                      firstDate: DateTime.now(),
                       lastDate: DateTime(2100),
                     ).then((selectedDate) {
                       if (selectedDate != null) {
@@ -982,7 +980,9 @@ class _TravelDetailsState extends State<TravelDetails> {
               Navigator.push(context, MaterialPageRoute(
                 builder: (BuildContext context) {
                   return TravelDetailsPage(
-                      itinid: widget.itinid, itinname: widget.itinname);
+                      itinid: widget.itinid,
+                      itinname: widget.itinname,
+                      trasnportId: _selectedTransportMode);
                 },
               ));
             },

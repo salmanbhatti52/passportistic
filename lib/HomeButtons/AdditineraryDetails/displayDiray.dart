@@ -20,7 +20,10 @@ import '../ItineraryDetails/getDisplayDairy.dart';
 class DisplayDiary extends StatefulWidget {
   final String? itinid;
   final String? itinname;
-  const DisplayDiary({super.key, this.itinid, this.itinname});
+  final String? startDate;
+  final String? endDate;
+  const DisplayDiary(
+      {super.key, this.itinid, this.itinname, this.startDate, this.endDate});
   @override
   _DisplayDiaryState createState() => _DisplayDiaryState();
 }
@@ -130,9 +133,9 @@ class _DisplayDiaryState extends State<DisplayDiary> {
 
   TextEditingController comments = TextEditingController();
 
-  DateTime? _selectedDay;
+  DateTime _selectedDay = DateTime.now(); // Initialize with a default value
   CalendarFormat _calendarFormat = CalendarFormat.week;
-  DateTime _focusedDay = DateTime.now();
+  DateTime _focusedDay = DateTime.now(); // Initialize with a default value
 
   DirayDetailsModels dirayDetailsModels = DirayDetailsModels();
 
@@ -155,6 +158,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
     }, body: {
       "travel_ltinerary_id": "${widget.itinid}",
       "travel_diary_date": formattedDate,
+      "travel_diary_id": "65",
       "travel_diary_entry": comments.text,
       "tavel_diary_picture_images": imagesJson
       // Add the images JSON array
@@ -194,6 +198,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
       "travel_ltinerary_id": "${widget.itinid}",
       "travel_diary_date": formattedDate,
       "travel_diary_entry": comments.text,
+      "travel_diary_id": "65",
       "tavel_diary_picture_images": base64ImageUrls
     };
 
@@ -245,6 +250,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
   }
 
   UpdateTravelDiaryModels updateTravelDiaryModels = UpdateTravelDiaryModels();
+  bool isLoading2 = false;
   updateTravelDairy() async {
     prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
@@ -271,11 +277,20 @@ class _DisplayDiaryState extends State<DisplayDiary> {
       log(response.body);
       print("SuucessFull");
       updateTravelDiaryModels = updateTravelDiaryModelsFromJson(responseString);
-      if (updateTravelDiaryModels.data != null) {
-        comments.text = updateTravelDiaryModels.data?.travelDiaryEntry ?? '';
 
-        const baseUrl =
-            'https://portal.passporttastic.com/public'; // Add your base URL here
+      // Check if data exists
+      if (updateTravelDiaryModels.data != null) {
+        // Clear the list and the text
+        base64ImageUrls.clear();
+        comments.text = "";
+
+        comments.text = updateTravelDiaryModels.data?.travelDiaryEntry ?? '';
+        print(
+            "updateTravelDiaryModels.data?.travelDiaryId: ${updateTravelDiaryModels.data?.travelDiaryId}");
+        itinerryyid = updateTravelDiaryModels.data?.travelDiaryId ?? "";
+        print("itinerryyid $itinerryyid");
+
+        const baseUrl = 'https://portal.passporttastic.com/public';
 
         final images = updateTravelDiaryModels.data?.travelDiaryPicture;
         if (images != null) {
@@ -288,19 +303,74 @@ class _DisplayDiaryState extends State<DisplayDiary> {
           }
         }
       }
+      if (updateTravelDiaryModels.data == null) {
+        itinerryyid = "";
+      }
 
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   const SnackBar(
-      //     content: Text(
-      //       'Successfully Updated',
-      //       textAlign: TextAlign.center,
-      //     ),
-      //   ),
-      // );
       setState(() {
         isLoading = false;
       });
       print('dirayDetailsModels status: ${updateTravelDiaryModels.status}');
+    }
+  }
+
+  String? itinerryyid;
+  int? year;
+  int? month;
+  int? day;
+
+  DateTime? parsedStartDate;
+  DateTime? parsedEndDate;
+  DateTime? firstDay;
+  DateTime? lastDay;
+
+  @override
+  void initState() {
+    super.initState();
+    // Parse the startDate and endDate strings when the widget is initialized
+    String? startDate = widget.startDate;
+    String? endDate = widget.endDate;
+    print('firstDay: $firstDay');
+    print('lastDay: $lastDay');
+
+    if (startDate != null) {
+      // Split the start date string by commas and spaces
+      List<String> startDateParts = startDate.split(', ');
+      if (startDateParts.length == 3) {
+        int year = int.tryParse(startDateParts[0]) ?? 0;
+        int month = int.tryParse(startDateParts[1]) ?? 1;
+        int day = int.tryParse(startDateParts[2]) ?? 1;
+        parsedStartDate = DateTime.utc(year, month, day);
+      }
+    }
+
+    if (endDate != null) {
+      // Split the end date string by commas and spaces
+      List<String> endDateParts = endDate.split(', ');
+      if (endDateParts.length == 3) {
+        int year = int.tryParse(endDateParts[0]) ?? 0;
+        int month = int.tryParse(endDateParts[1]) ?? 1;
+        int day = int.tryParse(endDateParts[2]) ?? 1;
+        parsedEndDate = DateTime.utc(year, month, day);
+      }
+    }
+
+    if (parsedStartDate != null && parsedEndDate != null) {
+      // Use the parsed dates for firstDay and lastDay
+      firstDay = parsedStartDate;
+      lastDay = parsedEndDate;
+
+      // Print the parsed dates for verification
+      print('Parsed Start Date: $parsedStartDate');
+      print('Parsed End Date: $parsedEndDate');
+    }
+    if (parsedEndDate != null &&
+        parsedStartDate != null &&
+        parsedEndDate!.isBefore(parsedStartDate!)) {
+      // Swap the dates
+      final temp = parsedStartDate;
+      parsedStartDate = parsedEndDate;
+      parsedEndDate = temp;
     }
   }
 
@@ -386,36 +456,54 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                       color: Color(0xFFF65734),
                     ),
                   ),
-                  // daysOfWeekStyle: DaysOfWeekStyle(
-                  //     weekdayStyle: TextStyle(
-                  //         letterSpacing: 0.4, color: Color(0xFFE0E0E5))),
                   calendarStyle: const CalendarStyle(
                     todayTextStyle: TextStyle(color: Colors.black),
                     selectedDecoration: BoxDecoration(
-                        color: Color(0xFFF65734),
-                        shape: BoxShape.rectangle // Color of the selected day
-                        // borderRadius: BorderRadius.circular(
-                        //     10), // Adjust the border radius as needed
-                        ),
+                      color: Color(0xFFF65734),
+                      shape: BoxShape.rectangle, // Color of the selected day
+                    ),
                     todayDecoration: BoxDecoration(
-                        color: Colors.transparent,
-                        shape: BoxShape.rectangle // Color of the selected day
-// Color of the today day
-                        ),
+                      color: Colors.transparent,
+                      shape: BoxShape.rectangle, // Color of the today day
+                    ),
                   ),
+                  //                   firstDay: parsedStartDate ?? DateTime.now(),
+                  // lastDay: parsedEndDate ?? DateTime.now(),
+                  // firstDay: DateTime.utc(
+                  //   parsedStartDate!.year,
+                  //   parsedStartDate!.month,
+                  //   parsedStartDate!.day,
+                  // ),
+                  // lastDay: DateTime.utc(
+                  //   parsedEndDate!.year,
+                  //   parsedEndDate!.month,
+                  //   parsedEndDate!.day,
+                  // ),
+                  firstDay: parsedStartDate ?? DateTime.now(),
+                  lastDay: parsedEndDate ?? DateTime.now(),
+                  focusedDay: (_focusedDay
+                              .isBefore(parsedStartDate ?? DateTime.now()) ??
+                          false)
+                      ? parsedStartDate ?? DateTime.now()
+                      : (_focusedDay.isAfter(parsedEndDate ?? DateTime.now()) ??
+                              false
+                          ? parsedEndDate ?? DateTime.now()
+                          : _focusedDay ?? DateTime.now()),
 
-                  firstDay: DateTime.utc(2010, 10, 16),
-                  lastDay: DateTime.utc(2030, 3, 14),
-                  focusedDay: _focusedDay,
                   calendarFormat: _calendarFormat,
                   selectedDayPredicate: (day) {
                     return isSameDay(_selectedDay, day);
                   },
                   onDaySelected: (selectedDay, focusedDay) async {
-                    await updateTravelDairy();
                     setState(() {
                       _selectedDay = selectedDay;
-                      _focusedDay = selectedDay;
+                      _focusedDay =
+                          focusedDay.isBefore(firstDay ?? DateTime.now())
+                              ? firstDay ?? DateTime.now()
+                              : focusedDay.isAfter(lastDay ?? DateTime.now())
+                                  ? lastDay ?? DateTime.now()
+                                  : focusedDay;
+
                       _calendarFormat = CalendarFormat.week;
 
                       // Format the selected date without the time and ".000Z" part
@@ -423,14 +511,20 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                           DateFormat('yyyy-MM-dd').format(selectedDay);
                       print(formattedDate);
                     });
+                    await updateTravelDairy();
                   },
-
                   onPageChanged: (focusedDay) {
-                    _focusedDay = focusedDay;
+                    _focusedDay =
+                        focusedDay.isBefore(firstDay ?? DateTime.now())
+                            ? firstDay ?? DateTime.now()
+                            : focusedDay.isAfter(lastDay ?? DateTime.now())
+                                ? lastDay ?? DateTime.now()
+                                : focusedDay;
                   },
                 ),
               ),
             ),
+
             Row(
               children: [
                 const SizedBox(

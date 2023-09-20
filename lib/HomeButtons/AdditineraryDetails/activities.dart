@@ -9,6 +9,7 @@ import '../../auth/signUpNextPage.dart';
 import '../../auth/signUpPage.dart';
 import '../../main.dart';
 import '../ItineraryDetails/getActivityDetails.dart';
+import '../addItinerary2.dart';
 import 'displayDiray.dart';
 
 class ActivitiesDetails extends StatefulWidget {
@@ -28,10 +29,13 @@ class _ActivitiesDetailsState extends State<ActivitiesDetails> {
   TextEditingController breakfast = TextEditingController();
   TextEditingController lunch = TextEditingController();
   TextEditingController dinner = TextEditingController();
+
   TextEditingController breakfasTIncluded = TextEditingController();
+  TextEditingController formattedTextFieldTime = TextEditingController();
 
   ActivityDetailsModels activityDetailsModels = ActivityDetailsModels();
 
+  String? formattedApiActivityTime;
   activityDetails() async {
     // try {
     prefs = await SharedPreferences.getInstance();
@@ -53,7 +57,8 @@ class _ActivitiesDetailsState extends State<ActivitiesDetails> {
       "breakfast": breakfast.text,
       "lunch": lunch.text,
       "dinner": dinner.text,
-      "activity_date": activityDate.text
+      "activity_date": activityDate.text,
+      "activity_time": "$formattedApiActivityTime"
     });
     final responseString = response.body;
     print("response_travalDetailsModels: $responseString");
@@ -230,6 +235,70 @@ class _ActivitiesDetailsState extends State<ActivitiesDetails> {
                     ),
                     // labelText: 'Email',
                     hintText: "Activity Date",
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: const BorderSide(
+                          color: Color(0xFFF3F3F3)), // change border color
+                    ),
+                    labelStyle: const TextStyle(),
+                    hintStyle: const TextStyle(
+                        color: Color(0xFFA7A9B7),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w300,
+                        fontFamily: "Satoshi"),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+            ],
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.02,
+          ),
+          Row(
+            children: [
+              const SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: TextFormField(
+                  style:
+                      const TextStyle(color: Color(0xFF000000), fontSize: 16),
+                  cursorColor: const Color(0xFF000000),
+                  controller: formattedTextFieldTime,
+                  keyboardType: TextInputType.name,
+                  onTap: () {
+                    showTimePicker(
+                      initialEntryMode: TimePickerEntryMode.inputOnly,
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    ).then((selectedTime) {
+                      if (selectedTime != null) {
+                        // Handle the selected time
+                        final formattedDisplayTime = selectedTime
+                            .format(context); // Display in AM/PM format
+                        formattedApiActivityTime =
+                            '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}:00'; // 24-hour format for API
+
+                        setState(() {
+                          formattedTextFieldTime.text = formattedDisplayTime;
+                          print(formattedDisplayTime);
+                          print(formattedTextFieldTime);
+                        });
+                      }
+                    });
+                  },
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Color(0xFFF65734)),
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    // labelText: 'Email',
+                    hintText: "Activity Time",
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: const BorderSide(
@@ -475,9 +544,7 @@ class _ActivitiesDetailsState extends State<ActivitiesDetails> {
               if (activityDate.text.isEmpty &&
                   activity.text.isEmpty &&
                   comments.text.isEmpty &&
-                  breakfast.text.isEmpty &&
-                  lunch.text.isEmpty &&
-                  dinner.text.isEmpty) {
+                  dayNum.text.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text(
@@ -502,8 +569,8 @@ class _ActivitiesDetailsState extends State<ActivitiesDetails> {
                   );
                   Navigator.pushReplacement(context, MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return DisplayDiary(
-                          itinid: widget.itinid, itinname: widget.itinname);
+                      return ItineraryTwo(
+                          );
                     },
                   ));
                 } else if (activityDetailsModels.status != "success") {
@@ -571,7 +638,7 @@ class _ActivitiesDetailsState extends State<ActivitiesDetails> {
                               AlwaysStoppedAnimation<Color>(Colors.white),
                         )
                       : const Text(
-                          "Save and Continue",
+                          "Save",
                           style: TextStyle(
                               color: Colors.white,
                               fontFamily: "Satoshi",

@@ -1,4 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+
+import '../../Models/coverDesignModels.dart';
+import '../../Models/getProfileModels.dart';
+import '../../auth/signUpNextPage.dart';
+import '../../auth/signUpPage.dart';
+import '../../main.dart';
 
 class PassportLegalNoticePage extends StatefulWidget {
   const PassportLegalNoticePage({super.key});
@@ -9,6 +17,126 @@ class PassportLegalNoticePage extends StatefulWidget {
 }
 
 class _PassportLegalNoticePageState extends State<PassportLegalNoticePage> {
+// Your existing code...
+  GetProfileModels getProfileModels = GetProfileModels();
+  getUserProfile() async {
+    prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
+    String apiUrl = "$baseUrl/get_profile";
+    print("api: $apiUrl");
+    if (!mounted) {
+      return; // Check if the widget is still mounted
+    }
+    setState(() {
+      isLoading = true;
+      print("SharedPred UserId $userID");
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "passport_holder_id": " $userID"
+    });
+    if (!mounted) {
+      return; // Check again if the widget is still mounted after the HTTP request
+    }
+    final responseString = response.body;
+    print("getProfileModels Response: $responseString");
+    print("status Code getProfileModels: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      // After getting the user's profile data
+      print("in 200 getProfileModels");
+      print("SuucessFull");
+      getProfileModels = getProfileModelsFromJson(responseString);
+      if (getProfileModels.data != null) {
+        await coverDesign();
+
+        if (!mounted) {
+          setState(() {});
+        }
+      } else {
+        // Handle the case when user profile data is null
+        print("User profile data is null");
+      }
+      if (!mounted) {
+        return; // Check once more if the widget is still mounted before updating the state
+      }
+      setState(() {
+        isLoading = false;
+      });
+      print('getProfileModels status: ${getProfileModels.status}');
+    }
+  }
+
+  String? selectedOption;
+  CoverDesignDataModel coverDesignDataModel = CoverDesignDataModel();
+
+  String selectedPassportCountry = ""; // Variable to store the passport country
+
+  coverDesign() async {
+    prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
+    String apiUrl = "$baseUrl/get_cover_design";
+    print("api: $apiUrl");
+
+    setState(() {
+      isLoading = true;
+    });
+
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "passport_holder_id": "$userID",
+    });
+
+    final responseString = response.body;
+    print("responseCoverDesignApi: $responseString");
+    print("status Code CoverDesign: ${response.statusCode}");
+    print("in 200 signIn");
+
+    if (response.statusCode == 200) {
+      print("Successful");
+      print("Cover Design Data: $responseString");
+
+      setState(() {
+        coverDesignDataModel = coverDesignDataModelFromJson(responseString);
+
+        if (coverDesignDataModel.data != null &&
+            getProfileModels.data != null) {
+          for (int i = 0; i < coverDesignDataModel.data!.length; i++) {
+            if (coverDesignDataModel.data![i].passportDesignId ==
+                getProfileModels.data!.passportDesignId) {
+              print(
+                  "cover image ID: ${coverDesignDataModel.data![i].passportFrontCover}");
+
+              print(" ${coverDesignDataModel.data![i].legalNotice}");
+              setState(() {
+                selectedOption =
+                    coverDesignDataModel.data![i].passportFrontCover;
+                selectedPassportCountry = coverDesignDataModel
+                    .data![i].passportCountry
+                    .toString(); // Store the passport country
+                legalnotice = coverDesignDataModel.data![i].legalNotice;
+                print("selectedOptionCoverDeign $selectedOption");
+                print("selectedPassportCountry $selectedPassportCountry");
+              });
+            }
+          }
+        }
+        isLoading = false;
+      });
+
+      print("Cover Design Data Length: ${coverDesignDataModel.data?.length}");
+    }
+  }
+
+  String? legalnotice;
+  @override
+  void initState() {
+    super.initState();
+    getUserProfile();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -31,116 +159,61 @@ class _PassportLegalNoticePageState extends State<PassportLegalNoticePage> {
               borderRadius: BorderRadius.circular(17.33),
             ),
           ),
-          child: Row(
+          child: Column(
             mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(
-                child: SizedBox(
-                  height: double.infinity,
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        left: 0,
-                        top: 0,
-                        child: Container(
-                          width: 416.02,
-                          height: 36.98,
-                          padding:
-                              const EdgeInsets.only(top: 7.51, bottom: 7.47),
-                          clipBehavior: Clip.antiAlias,
-                          decoration: const BoxDecoration(),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Legal notices',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Color(0xFF50A0FF),
-                                  fontSize: 16.18,
-                                  fontFamily: 'Open Sans',
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        left: 0,
-                        top: 50.85,
-                        child: Container(
-                          width: 420.02,
-                          height: 200.14,
-                          padding: const EdgeInsets.only(bottom: 2.14),
-                          clipBehavior: Clip.antiAlias,
-                          decoration: const BoxDecoration(),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: 416.02,
-                                child: Text.rich(
-                                  TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text:
-                                            'THIS DOCUMENT IS A SOUVENIR ONLY.  IT HAS NOT BEEN ISSUED UNDER ANY LAWS OF ANY COUNTRY.  IT HAS NO VALUE, OTHER THAN TO ITS HOLDER AS A MEMENTO OF THEIR TRAVELS, REAL OR OTHERW\n\n',
-                                        style: TextStyle(
-                                          color: Color(0xFF141010),
-                                          fontSize: 9.24,
-                                          fontFamily: 'OCR-B 10 BT',
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text: 'TIPS FOR USE:-\n\n',
-                                        style: TextStyle(
-                                          color: Color(0xFF50A0FF),
-                                          fontSize: 9.24,
-                                          fontFamily: 'OCR-B 10 BT',
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text:
-                                            'STAMP YOUR PASSPORT AT THE EARLIEST POSSIBLE TIME AS CLOSE TO THE TIME OF DEPARTURE OR ARRIVAL AS DELAYS WITH SERVICES MAY HAVE AN IMPACT ON DATES.\nSHOULD YOU ELECT TO USE THE ITINERARY FEATURE IN THIS APP, THEN YOU MAY WISH TO ENSURE THAT DEPARTURE AND ARRIVAL DATES OF STAMPS IS THE SAME AS IN YOUR ITINERARY.  THEY HAVE DELIBERATELY BEEN UNLINKED DUE TO POSSIBLE DELAYS IN SERVICES.  YOUR ITINERARY IS WHAT YOU PLANNED.  THE STAMPS ARE INDICATIVE AS TO WHAT ACTUALLY HAPPENED.\nYOU MAY SHARE YOUR TRAVEL DIARY WITH FRIENDS AND FAMILY, BUT DO TAKE CARE ABOUT EXPOSING TOO MUCH INFORMATION ON SOCIAL MEDIA AS THIEVES MAY TAKE ADVANTAGE OF YOUR INFORMATION.\n',
-                                        style: TextStyle(
-                                          color: Color(0xFF141010),
-                                          fontSize: 9.24,
-                                          fontFamily: 'OCR-B 10 BT',
-                                          fontWeight: FontWeight.w400,
-                                          letterSpacing: 0.37,
-                                          wordSpacing: -0.37,
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text: '\nSAFE TRAVELS',
-                                        style: TextStyle(
-                                          color: Color(0xFF141010),
-                                          fontSize: 9.24,
-                                          fontFamily: 'OCR-B 10 BT',
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  textAlign: TextAlign.justify,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+              Container(
+                width: 416.02,
+                height: 36.98,
+                padding: const EdgeInsets.only(top: 7.51, bottom: 7.47),
+                clipBehavior: Clip.antiAlias,
+                decoration: const BoxDecoration(),
+                child: const Center(
+                  child: Text(
+                    'Legal notices',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Color(0xFF50A0FF),
+                      fontSize: 16.18,
+                      fontFamily: 'Open Sans',
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
+              ),
+              Stack(
+                children: [
+                  Container(
+                    width: 420.02,
+                    height: 200.14,
+                    padding: const EdgeInsets.only(bottom: 2.14),
+                    clipBehavior: Clip.antiAlias,
+                    decoration: const BoxDecoration(),
+                    child: legalnotice != null
+                        ? Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: legalnotice!.toUpperCase() ??
+                                      '', // Set the legal notice text here
+                                  style: const TextStyle(
+                                    color: Color(0xFF141010),
+                                    fontSize: 9.24,
+                                    fontFamily: 'OCR-B 10 BT',
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            textAlign: TextAlign.justify,
+                          )
+                        : const Text(""),
+                  ),
+                  if (isLoading) // Show circular progress indicator when isLoading is true
+                    const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                ],
               ),
             ],
           ),
