@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -45,10 +46,22 @@ class _AppDrawerState extends State<AppDrawer> {
                         const SizedBox(
                           height: 50,
                         ),
-                        SvgPicture.asset(
-                          "assets/Logo.svg",
-                          width: 80,
-                          height: 80,
+                        Center(
+                          child: SvgPicture.asset(
+                            "assets/log1.svg",
+                            height: 35.h,
+                            width: 120.w,
+                          ),
+                        ),
+                        Text(
+                          'PassportTastic',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: const Color(0xFF565656),
+                              fontSize: 31.sp,
+                              fontFamily: 'Satoshi',
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 0.5),
                         ),
                       ],
                     ),

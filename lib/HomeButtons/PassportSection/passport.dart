@@ -121,10 +121,10 @@ class _ViewPassportState extends State<ViewPassport> {
                   return const FrontCover();
                 } else if (index == 1) {
                   // Display the passport page on the second page
-                  return const PassportLegalNoticePage();
+                  return const passportPage();
                 } else if (index == 2) {
                   // Display blank pages for the remaining pages
-                  return const passportPage();
+                  return const PassportLegalNoticePage();
                 } else {
                   return const BlankPage();
                 }

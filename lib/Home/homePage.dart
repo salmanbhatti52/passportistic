@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:scanguard/Home/stampPage.dart';
 import 'package:http/http.dart' as http;
@@ -173,6 +174,13 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     );
                                   }),
+                                  Center(
+                                    child: SvgPicture.asset(
+                                      "assets/log1.svg",
+                                      height: 35.h,
+                                      width: 108.w,
+                                    ),
+                                  ),
                                   GestureDetector(
                                     onTap: () {
                                       // Navigator.pushNamed(context, '/notification');

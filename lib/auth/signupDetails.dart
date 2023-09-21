@@ -248,6 +248,7 @@ class _SignupDetailsState extends State<SignupDetails> {
             ),
             Expanded(
               child: TextFormField(
+                textCapitalization: TextCapitalization.words,
                 focusNode: _focusNode1,
                 style: const TextStyle(color: Color(0xFF000000), fontSize: 16),
                 cursorColor: const Color(0xFF000000),
@@ -301,6 +302,7 @@ class _SignupDetailsState extends State<SignupDetails> {
             ),
             Expanded(
               child: TextFormField(
+                textCapitalization: TextCapitalization.words,
                 focusNode: _focusNode2,
                 style: const TextStyle(color: Color(0xFF000000), fontSize: 16),
                 cursorColor: const Color(0xFF000000),
@@ -354,6 +356,7 @@ class _SignupDetailsState extends State<SignupDetails> {
             ),
             Expanded(
               child: TextFormField(
+                textCapitalization: TextCapitalization.words,
                 focusNode: _focusNode3,
                 style: const TextStyle(color: Color(0xFF000000), fontSize: 16),
                 cursorColor: const Color(0xFF000000),
@@ -804,21 +807,23 @@ class _SignupDetailsState extends State<SignupDetails> {
                     onTap: () {
                       // Open the date picker when the icon is clicked
                       showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2100),
-                      ).then((selectedDate) {
-                        if (selectedDate != null) {
-                          // Handle the selected date
-                          setState(() {
-                            // Date.text =
-                            // DateFormat.yMd().format(selectedDate);
-                            dob.text =
-                                DateFormat('yyyy-MM-dd').format(selectedDate);
-                          });
-                        }
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(1950),
+                    lastDate: DateTime(2100),
+                  ).then((selectedDate) {
+                    if (selectedDate != null) {
+                      // Handle the selected date
+                      setState(() {
+                        apiDateFormat =
+                            DateFormat('yyyyMMdd').format(selectedDate);
+                        dob.text =
+                            DateFormat('MM/dd/yyyy').format(selectedDate);
+                        // textFieldDateFormat = DateFormat('MM/dd/yyyy').format(selectedDate);
+                        // Date.text = DateFormat.yMd().format(selectedDate);
                       });
+                    }
+                  });
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(7),
