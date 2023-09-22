@@ -6,7 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:group_radio_button/group_radio_button.dart';
 import 'package:intl/intl.dart';
 
-import '../Home/stampPage.dart';
+import '../Home/shop.dart';
 
 class ArrivalDetails extends StatefulWidget {
   const ArrivalDetails({super.key});

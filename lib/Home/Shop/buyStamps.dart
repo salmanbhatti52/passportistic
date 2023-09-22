@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 
-import 'appDrawer.dart';
-
-class StampPage extends StatefulWidget {
-  const StampPage({Key? key}) : super(key: key);
+class BuyStamps extends StatefulWidget {
+  const BuyStamps({super.key});
 
   @override
-  _StampPageState createState() => _StampPageState();
+  State<BuyStamps> createState() => _BuyStampsState();
 }
 
-class _StampPageState extends State<StampPage> {
+class _BuyStampsState extends State<BuyStamps> {
   List<String> stamps = [
     "Stamp 1",
     "Stamp 2",
@@ -22,62 +18,10 @@ class _StampPageState extends State<StampPage> {
     "Stamp 7",
     "Stamp 8",
   ];
-
   @override
   Widget build(BuildContext context) {
-    final screenWidth = ScreenUtil().screenWidth;
-    int crossAxisCount;
-
-    // Determine the appropriate crossAxisCount based on screen width
-    if (screenWidth <= 320) {
-      crossAxisCount = 2;
-    } else if (screenWidth <= 640) {
-      crossAxisCount = 3;
-    } else if (screenWidth <= 960) {
-      crossAxisCount = 4;
-    } else {
-      crossAxisCount = 5;
-    }
     return Scaffold(
-      drawer: const AppDrawer(),
-      appBar: AppBar(
-        forceMaterialTransparency: true,
-        centerTitle: true,
-        title: const Text(
-          'Purchase Stamps',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Color(0xFFF65734),
-            fontSize: 24,
-            fontFamily: 'Satoshi',
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        leading: Builder(builder: (context) {
-          return GestureDetector(
-            onTap: () {
-              Scaffold.of(context).openDrawer();
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SvgPicture.asset(
-                "assets/menu.svg",
-                // fit: BoxFit.scaleDown,
-              ),
-            ),
-          );
-        }),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: SvgPicture.asset(
-              "assets/notification.svg",
-              // fit: BoxFit.scaleDown,
-            ),
-          ),
-        ],
-      ),
-      body: Padding(
+            body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: GridView.builder(
           shrinkWrap: true,

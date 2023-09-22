@@ -6,7 +6,7 @@ import '../Models/getProfileModels.dart';
 import 'dirayPage.dart';
 import 'homePage.dart';
 import '../Profile/profilePage.dart';
-import 'stampPage.dart';
+import 'shop.dart';
 
 class NavBar extends StatefulWidget {
   final String? userId;
