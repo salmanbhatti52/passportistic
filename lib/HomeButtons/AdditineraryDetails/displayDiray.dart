@@ -198,7 +198,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
       "travel_ltinerary_id": "${widget.itinid}",
       "travel_diary_date": formattedDate,
       "travel_diary_entry": comments.text,
-      "travel_diary_id": "65",
+      "travel_diary_id": itinerryyid,
       "tavel_diary_picture_images": base64ImageUrls
     };
 
@@ -249,7 +249,11 @@ class _DisplayDiaryState extends State<DisplayDiary> {
     }
   }
 
+
+
   UpdateTravelDiaryModels updateTravelDiaryModels = UpdateTravelDiaryModels();
+  
+
   bool isLoading2 = false;
   updateTravelDairy() async {
     prefs = await SharedPreferences.getInstance();
@@ -482,13 +486,11 @@ class _DisplayDiaryState extends State<DisplayDiary> {
                   firstDay: parsedStartDate ?? DateTime.now(),
                   lastDay: parsedEndDate ?? DateTime.now(),
                   focusedDay: (_focusedDay
-                              .isBefore(parsedStartDate ?? DateTime.now()) ??
-                          false)
+                          .isBefore(parsedStartDate ?? DateTime.now()))
                       ? parsedStartDate ?? DateTime.now()
-                      : (_focusedDay.isAfter(parsedEndDate ?? DateTime.now()) ??
-                              false
+                      : (_focusedDay.isAfter(parsedEndDate ?? DateTime.now()))
                           ? parsedEndDate ?? DateTime.now()
-                          : _focusedDay ?? DateTime.now()),
+                          : _focusedDay ?? DateTime.now(),
 
                   calendarFormat: _calendarFormat,
                   selectedDayPredicate: (day) {

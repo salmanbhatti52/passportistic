@@ -72,6 +72,13 @@ class _ViewPassportState extends State<ViewPassport> {
     });
   }
 
+  final List<String> stampImages = [
+    'https://images.pexels.com/photos/3839651/pexels-photo-3839651.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    'https://images.pexels.com/photos/3839651/pexels-photo-3839651.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    'https://images.pexels.com/photos/3839651/pexels-photo-3839651.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    // Add more images here
+  ];
+
   List<passportPage> passportPages = [];
   @override
   void initState() {
@@ -126,12 +133,16 @@ class _ViewPassportState extends State<ViewPassport> {
                   // Display blank pages for the remaining pages
                   return const PassportLegalNoticePage();
                 } else {
-                  return const BlankPage();
+                  return BlankPage(
+                    stampImages: stampImages,
+                    initialPage: 3, // Set the initial page index as needed
+                  );
                 }
               },
               onPageChanged: (index) {
                 setState(() {
                   currentPage = index;
+                  print("index $index");
                 });
               },
             ),

@@ -607,7 +607,7 @@ class _passportPageState extends State<passportPage> {
                                           left: 0,
                                           top: 0,
                                           child: Text(
-                                            'Sex',
+                                            'Gender',
                                             style: TextStyle(
                                               color: Color(0xFF50A0FF),
                                               fontSize: 9.25,

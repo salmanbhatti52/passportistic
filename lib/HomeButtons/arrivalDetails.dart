@@ -1,12 +1,25 @@
-import 'package:country_picker/country_picker.dart';
+import 'dart:convert';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:group_radio_button/group_radio_button.dart';
 import 'package:intl/intl.dart';
-
+import 'package:scanguard/Models/getStampImageModel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 import '../Home/shop.dart';
+import '../Models/arrivalDetailsModels.dart';
+import '../Models/getColorListModels.dart';
+import '../Models/getCountryListModels.dart';
+import '../Models/getStampShapeListModels.dart';
+import '../Models/transportListModels.dart';
+import '../auth/signUpNextPage.dart';
+import '../auth/signUpPage.dart';
+import '../main.dart';
+import 'PassportSection/passport.dart';
 
 class ArrivalDetails extends StatefulWidget {
   const ArrivalDetails({super.key});
@@ -16,8 +29,267 @@ class ArrivalDetails extends StatefulWidget {
 }
 
 class _ArrivalDetailsState extends State<ArrivalDetails> {
+  ArrivalDetailsModels arrivalDetailsModels = ArrivalDetailsModels();
+
+  TextEditingController cityname = TextEditingController();
   TextEditingController time = TextEditingController();
   TextEditingController date = TextEditingController();
+
+  GetStampShapeListModels getStampShapeListModels = GetStampShapeListModels();
+
+  shapeList() async {
+    // try {
+    prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
+    String apiUrl = "$baseUrl/get_stamp_shape";
+    print("api: $apiUrl");
+
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "passport_holder_id": "$userID",
+    });
+    final responseString = response.body;
+    print("response_getStampShapeListModels: $responseString");
+    print("status Code getStampShapeListModels: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print("in 200 getStampShapeListModels");
+      print("SuucessFull");
+      getStampShapeListModels = getStampShapeListModelsFromJson(responseString);
+      setState(() {
+        isLoading = false;
+      });
+      print(
+          'getStampShapeListModels status: ${getStampShapeListModels.status}');
+    }
+  }
+
+  TransportListModels transportListModels = TransportListModels();
+  mdoeofTransport() async {
+    // try {
+    prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
+    String apiUrl = "$baseUrl/get_transport_mode";
+    print("api: $apiUrl");
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "passport_holder_id": userID,
+    });
+    final responseString = response.body;
+    print("responseModeTransportModel: $responseString");
+    print("status Code responseModeTransportModel: ${response.statusCode}");
+    print("in 200 responseModeTransportModel");
+    if (response.statusCode == 200) {
+      print("SuccessFull");
+      transportListModels = transportListModelsFromJson(responseString);
+      setState(() {
+        isLoading = false;
+      });
+      print('responseModeTransportModel status: ${transportListModels.status}');
+    }
+  }
+
+  GetCountryListModels getCountryListModels = GetCountryListModels();
+  getCountryList() async {
+    // try {
+    prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
+    String apiUrl = "$baseUrl/get_passport_design";
+    print("api: $apiUrl");
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "passport_holder_id": userID,
+    });
+    final responseString = response.body;
+    print("response getCountryListModels: $responseString");
+    print("status Code getCountryListModels: ${response.statusCode}");
+    print("in 200 getCountryListModels");
+    if (response.statusCode == 200) {
+      print("SuccessFull");
+      getCountryListModels = getCountryListModelsFromJson(responseString);
+      setState(() {
+        isLoading = false;
+      });
+      print('getCountryListModels status: ${getCountryListModels.status}');
+    }
+  }
+
+  GetColorListModels getColorListModels = GetColorListModels();
+  getColorList() async {
+    // try {
+    prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
+    String apiUrl = "$baseUrl/get_stamps_color";
+    print("api: $apiUrl");
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "passport_holder_id": userID,
+    });
+    final responseString = response.body;
+    print("response getColorListModels: $responseString");
+    print("status Code getColorListModels: ${response.statusCode}");
+    print("in 200 getColorListModels");
+    if (response.statusCode == 200) {
+      print("SuccessFull");
+      getColorListModels = getColorListModelsFromJson(responseString);
+      setState(() {
+        isLoading = false;
+      });
+      print('getColorListModels status: ${getColorListModels.status}');
+    }
+  }
+
+  GetStampImageModels getStampImageModel = GetStampImageModels();
+  getStampImage() async {
+    // try {
+    prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
+    String apiUrl = "$baseUrl/stamp_design";
+    print("api: $apiUrl");
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "passport_holder_id": userID,
+      "travel_type": "  Arrival",
+      "stamp_shape_name": _selectedStampShape,
+      "shapes_id": stampShapeId,
+      "country_name": _selectedCountry,
+      "city_name": cityname.text,
+      "arrival_date": date.text,
+      "transport_mode_id": _selectedTransportMode,
+      "stamps_color_id": _selectedColor
+    });
+    final responseString = response.body;
+    print("response getStampImageModel: $responseString");
+    print("status Code getStampImageModel: ${response.statusCode}");
+    print("in 200 getStampImageModel");
+    if (response.statusCode == 200) {
+      print("SuccessFull");
+      getStampImageModel = getStampImageModelsFromJson(responseString);
+      final stampImageData = getStampImageModel.data;
+
+      if (stampImageData != null && stampImageData.isNotEmpty) {
+        // Extract the stamp image URL from the first item in the data list
+        stampImageURL = stampImageData[0].stampShapeImage;
+        print(
+            "stampImageURL https://portal.passporttastic.com/public$stampImageURL");
+      }
+      await convertImageToBase64(
+          'https://portal.passporttastic.com/public$stampImageURL');
+      setState(() {
+        isLoading = false;
+      });
+      print('getStampImageModel status: ${getStampImageModel.status}');
+    }
+  }
+
+  Future<void> convertImageToBase64(String imageUrl) async {
+    final response = await http.get(Uri.parse(imageUrl));
+
+    if (response.statusCode == 200) {
+      final List<int> imageBytes = response.bodyBytes;
+      final String base64 = base64Encode(imageBytes);
+
+      setState(() {
+        base64Image = base64;
+        print("base64Image : $base64Image");
+      });
+    }
+  }
+
+  ColorFilter getColorFilter(Color color) {
+    return ColorFilter.mode(
+      color,
+      BlendMode.modulate,
+    );
+  }
+
+  Widget coloredImage(String imageUrl, Color color) {
+    return ColorFiltered(
+      colorFilter: getColorFilter(color),
+      child: Image.network(imageUrl),
+    );
+  }
+
+  final imageUrl =
+      'https://img.freepik.com/premium-vector/blank-rubber-stamps-grunge-style-vintage-postage-stamps_422344-3475.jpg?w=740';
+  arrivalDetails() async {
+    // try {
+    prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
+    String apiUrl = "$baseUrl/arrival_details";
+    print("api: $apiUrl");
+    prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "stamps_country": _selectedCountry,
+      "passport_holder_id": userID,
+      "stamps_city": cityname.text,
+      "transport_mode_id": _selectedTransportMode,
+      "stamp_shape_id": stampShapeId,
+      "stamps_color_id": _selectedColor,
+      "stamps_date": date.text,
+      "stamps_offset_rotation": "-5",
+      "stamps_offset_vertical": "5",
+      "stamps_offset_horizental": "8",
+      "stamps_page_number": "24",
+      "stamps_time": formatedTime,
+      "stamps_position_number": "12",
+      "stamps_arrive_depart": "Arrive",
+      "stamp_image": base64Image
+    });
+    final responseString = response.body;
+    print("response_arrivalDetailsModels: $responseString");
+    print("status Code arrivalDetailsModels: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print("in 200 arrivalDetailsModels");
+      print("SuucessFull");
+      arrivalDetailsModels = arrivalDetailsModelsFromJson(responseString);
+      setState(() {
+        isLoading = false;
+      });
+      print('arrivalDetailsModels status: ${arrivalDetailsModels.status}');
+    }
+  }
+
+  String? formatedTime;
+  String? _selectedTransportMode;
+  String? _selectedStampShape;
+  String? _selectedCountry;
+  String? _selectedColor;
+  String? _selectedShapeName;
+  String? _selectedShapeImage;
+  String? _selectedShapeWidth;
+  String? _selectedShapeHeight;
+  String? modeImage;
+  String? stampImageURL;
+  String? base64Image;
+  String? stampShapeId;
 
   final FocusNode _focusNode1 = FocusNode();
   final FocusNode _focusNode2 = FocusNode();
@@ -32,6 +304,10 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
   @override
   void initState() {
     super.initState();
+    shapeList();
+    mdoeofTransport();
+    getCountryList();
+    getColorList();
     _focusNode1.addListener(_onFocusChange);
     _focusNode2.addListener(_onFocusChange);
     _focusNode3.addListener(_onFocusChange);
@@ -64,15 +340,10 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
 
   @override
   Widget build(BuildContext context) {
-    bool isFocused1 = _focusNode1.hasFocus;
-    bool isFocused2 = _focusNode2.hasFocus;
-    bool isFocused3 = _focusNode3.hasFocus;
-    bool isFocused4 = _focusNode4.hasFocus;
     bool isFocused5 = _focusNode5.hasFocus;
     bool isFocused6 = _focusNode6.hasFocus;
-    bool isFocused7 = _focusNode7.hasFocus;
-    bool isFocused8 = _focusNode8.hasFocus;
-    bool isFocused9 = _focusNode8.hasFocus;
+
+    // final _selectedColor = Color(int.parse('0x$_selectedColorString'));
 
     return Scaffold(
       appBar: AppBar(
@@ -143,68 +414,6 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
       ),
       body: SingleChildScrollView(
         child: Column(children: [
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     Padding(
-          //       padding: const EdgeInsets.only(top: 30, left: 10),
-          //       child: GestureDetector(
-          //         onTap: () {
-          //           Navigator.pop(context);
-          //         },
-          //         child: SvgPicture.asset(
-          //           "assets/arrowBack1.svg",
-          //         ),
-          //       ),
-          //     ),
-          //     Padding(
-          //       padding: const EdgeInsets.only(top: 30, right: 10),
-          //       child: Padding(
-          //         padding: const EdgeInsets.all(8.0),
-          //         child: Column(
-          //           children: [
-          //             Row(
-          //               children: [
-          //                 SvgPicture.asset("assets/approval.svg"),
-          //                 SizedBox(
-          //                   width: 5,
-          //                 ),
-          //                 Column(
-          //                   mainAxisAlignment: MainAxisAlignment.start,
-          //                   crossAxisAlignment: CrossAxisAlignment.start,
-          //                   children: [
-          //                     Text("Stamp Credits"),
-          //                     SizedBox(
-          //                       width: 5,
-          //                     ),
-          //                     Text(
-          //                       "0",
-          //                       style: TextStyle(
-          //                           fontSize: 16,
-          //                           fontWeight: FontWeight.w400,
-          //                           color: Color(0xFF000000).withOpacity(0.5)),
-          //                     ),
-          //                   ],
-          //                 ),
-          //               ],
-          //             ),
-          //           ],
-          //         ),
-          //       ),
-          //     ),
-          //     Padding(
-          //       padding: const EdgeInsets.only(top: 30, right: 10),
-          //       child: GestureDetector(
-          //         onTap: () {
-          //           // Navigator.pushNamed(context, '/notification');
-          //         },
-          //         child: SvgPicture.asset(
-          //           "assets/notification.svg",
-          //         ),
-          //       ),
-          //     ),
-          //   ],
-          // ),
           Center(
             child: SvgPicture.asset(
               "assets/log1.svg",
@@ -243,103 +452,59 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
           const SizedBox(
             height: 10,
           ),
-          Row(
-            children: [
-              const SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: TextFormField(
-                  focusNode: _focusNode7,
-                  readOnly: true,
-                  decoration: InputDecoration(
-                    suffixIcon: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SvgPicture.asset("assets/arrowDown1.svg"),
-                          ),
-                        ]),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xFFF65734)),
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    hintText: "Select Country",
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: const BorderSide(
-                        color: Color(0xFFF3F3F3),
-                      ),
-                    ),
-                    hintStyle: const TextStyle(
-                      color: Color(0xFFA7A9B7),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w300,
-                      fontFamily: "Satoshi",
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                  onTap: () {
-                    showCountryPicker(
-                      context: context,
-                      countryListTheme: CountryListThemeData(
-                        flagSize: 25,
-                        backgroundColor: Colors.white,
-                        textStyle: const TextStyle(
-                            fontSize: 16, color: Colors.blueGrey),
-                        bottomSheetHeight: 500,
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20.0),
-                          topRight: Radius.circular(20.0),
-                        ),
-                        inputDecoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                const BorderSide(color: Color(0xFFF65734)),
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                          // labelText: 'Email',
-                          hintText: "Country Name",
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide: const BorderSide(
-                                color:
-                                    Color(0xFFF3F3F3)), // change border color
-                          ),
-                          labelStyle: const TextStyle(),
-                          hintStyle: const TextStyle(
-                              color: Color(0xFFA7A9B7),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w300,
-                              fontFamily: "Satoshi"),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                        ),
-                      ),
-                      onSelect: (Country country) {
-                        setState(() {
-                          _selectedCountry = country;
-                          print(
-                              'Selected country: ${country.displayNameNoCountryCode}');
-                        });
-                      },
+          Padding(
+            padding:
+                const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+            child: DropdownButtonFormField<String>(
+              iconDisabledColor: Colors.transparent,
+              iconEnabledColor: Colors.transparent,
+              value: _selectedCountry,
+              onChanged: (newValue) {
+                setState(() {
+                  _selectedCountry = newValue;
+                  print(_selectedCountry);
+                });
+              },
+              items: getCountryListModels.data?.map((country) {
+                    return DropdownMenuItem<String>(
+                      value: country.passportCountry.toString(),
+                      child: Text(country.passportCountry ?? ''),
                     );
-                  },
-                  controller: TextEditingController(
-                    text: _selectedCountry != null
-                        ? _selectedCountry?.displayNameNoCountryCode
-                        : '',
+                  }).toList() ??
+                  [],
+              decoration: InputDecoration(
+                suffixIcon: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SvgPicture.asset("assets/arrowDown1.svg"),
+                    ),
+                  ],
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Color(0xFFF65734)),
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                hintText: "Select Country",
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                    color: Color(0xFFF3F3F3),
                   ),
                 ),
+                hintStyle: const TextStyle(
+                  color: Color(0xFFA7A9B7),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w300,
+                  fontFamily: "Satoshi",
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
               ),
-              const SizedBox(
-                width: 10,
-              ),
-            ],
+            ),
           ),
           const SizedBox(
             height: 10,
@@ -351,6 +516,7 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
               ),
               Expanded(
                 child: TextFormField(
+                  controller: cityname,
                   style:
                       const TextStyle(color: Color(0xFF000000), fontSize: 16),
                   cursorColor: const Color(0xFF000000),
@@ -388,217 +554,74 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
           const SizedBox(
             height: 10,
           ),
-          Row(
-            children: [
-              const SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: TextFormField(
-                  style:
-                      const TextStyle(color: Color(0xFF000000), fontSize: 16),
-                  cursorColor: const Color(0xFF000000),
-                  keyboardType: TextInputType.name,
-                  decoration: InputDecoration(
-                    suffixIcon: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SvgPicture.asset("assets/arrowDown1.svg"),
-                          ),
-                        ]),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xFFF65734)),
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    // labelText: 'Email',
-                    hintText: "Select mode of transport",
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: const BorderSide(
-                        color: Color(0xFFF3F3F3),
-                      ),
-                    ),
-                    hintStyle: const TextStyle(
-                      color: Color(0xFFA7A9B7),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w300,
-                      fontFamily: "Satoshi",
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: [
-              const SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: TextFormField(
-                  focusNode: _focusNode3,
-                  style:
-                      const TextStyle(color: Color(0xFF000000), fontSize: 16),
-                  cursorColor: const Color(0xFF000000),
-                  keyboardType: TextInputType.name,
-                  decoration: InputDecoration(
-                    suffixIcon: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SvgPicture.asset("assets/arrowDown1.svg"),
-                          ),
-                        ]),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xFFF65734)),
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    // labelText: 'Email',
-                    hintText: "Select Stamp Shape",
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: const BorderSide(
-                        color: Color(0xFFF3F3F3),
-                      ),
-                    ),
-                    hintStyle: const TextStyle(
-                      color: Color(0xFFA7A9B7),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w300,
-                      fontFamily: "Satoshi",
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          const Padding(
-            padding: EdgeInsets.only(left: 12, top: 10),
-            child: Row(
-              children: [
-                Text(
-                  'Stamp Colour',
-                  style: TextStyle(
-                    color: Color(0xFF141010),
-                    fontSize: 16,
-                    fontFamily: 'Satoshi',
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: colors.map((color) {
-                      bool isSelected = selectedColor == color;
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            selectedColor = isSelected ? "" : color;
-                          });
-                        },
-                        child: Container(
-                          width: 48,
-                          height: 48,
-                          margin: const EdgeInsets.symmetric(horizontal: 8),
-                          decoration: BoxDecoration(
-                            color: getColor(color),
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              width: 2,
-                              color: isSelected
-                                  ? Colors.white
-                                  : Colors.transparent,
-                            ),
-                          ),
-                          child: isSelected
-                              ? const Center(
-                                  child: Icon(
-                                    Icons.check,
-                                    color: Colors.white,
-                                    size: 20,
-                                  ),
-                                )
-                              : const SizedBox(), // Hide the tick mark when not selected
-                        ),
-                      );
-                    }).toList(),
+            padding:
+                const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+            child: DropdownButtonFormField<String>(
+              iconDisabledColor: Colors.transparent,
+              iconEnabledColor: Colors.transparent,
+              value: _selectedTransportMode,
+              onChanged: (newValue) {
+                setState(() {
+                  _selectedTransportMode = newValue;
+                  // Find the selected transport mode based on its ID
+                  final selectedTransportMode =
+                      transportListModels.data?.firstWhere(
+                    (mode) => mode.transportModeId == newValue,
+                  );
+
+                  if (selectedTransportMode != null) {
+                    modeImage = selectedTransportMode.modeImage;
+                    // Print all of the data associated with the selected transport mode
+                    print(
+                        "Transport Mode ID: ${selectedTransportMode.transportModeId}");
+                    print("Mode Name: ${selectedTransportMode.modeName}");
+                    print("Mode Image: $modeImage");
+                  } else {
+                    // Handle the case when no matching transport mode is found
+                    print("No matching transport mode found.");
+                  }
+                });
+              },
+              items: transportListModels.data?.map((mode) {
+                    return DropdownMenuItem<String>(
+                      value: mode.transportModeId,
+                      child: Text(mode.modeName ?? ''),
+                    );
+                  }).toList() ??
+                  [],
+              decoration: InputDecoration(
+                suffixIcon: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SvgPicture.asset("assets/arrowDown1.svg"),
+                    ),
+                  ],
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Color(0xFFF65734)),
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                hintText: "Select mode of transport",
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                    color: Color(0xFFF3F3F3),
                   ),
                 ),
-                const SizedBox(height: 16),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Container(
-                    width: 122,
-                    height: 39,
-                    padding: const EdgeInsets.all(8),
-                    clipBehavior: Clip.antiAlias,
-                    decoration: ShapeDecoration(
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(
-                            width: 0.50, color: Color(0xFFE0E0E5)),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 24,
-                          height: 24,
-                          decoration: BoxDecoration(
-                            color: getColor(selectedColor),
-                            shape: BoxShape.rectangle,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          getColorHex(selectedColor),
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                hintStyle: const TextStyle(
+                  color: Color(0xFFA7A9B7),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w300,
+                  fontFamily: "Satoshi",
                 ),
-              ],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
             ),
           ),
           const SizedBox(
@@ -636,15 +659,19 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                         showTimePicker(
                           context: context,
                           initialTime: TimeOfDay.now(),
+                          initialEntryMode: TimePickerEntryMode.inputOnly,
                         ).then((selectedTime) {
                           if (selectedTime != null) {
                             // Handle the selected time
                             setState(() {
                               String formattedTime =
                                   selectedTime.format(context);
-                              time.text = DateFormat('hh:mm a').format(
+                              formatedTime =
+                                  '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}:00';
+                              time.text = DateFormat('hh:mm').format(
                                 DateFormat('hh:mm a').parse(formattedTime),
                               );
+                              print(formatedTime);
                             });
                           }
                         });
@@ -718,7 +745,7 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                         showDatePicker(
                           context: context,
                           initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
+                          firstDate: DateTime.now(),
                           lastDate: DateTime(2100),
                         ).then((selectedDate) {
                           if (selectedDate != null) {
@@ -770,7 +797,236 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
               const SizedBox(
                 height: 10,
               ),
-              Center(child: SvgPicture.asset("assets/iran.svg")),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 10, right: 10, top: 5, bottom: 5),
+                child: DropdownButtonFormField<String>(
+                  iconDisabledColor: Colors.transparent,
+                  iconEnabledColor: Colors.transparent,
+                  value: _selectedColor,
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedColor = newValue;
+                      print(_selectedColor);
+                    });
+                  },
+                  items: getColorListModels.data?.map((color) {
+                        return DropdownMenuItem<String>(
+                          value: color.stampsColorId.toString(),
+                          child: Text(color.stampsColor ?? ''),
+                        );
+                      }).toList() ??
+                      [],
+                  decoration: InputDecoration(
+                    suffixIcon: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SvgPicture.asset("assets/arrowDown1.svg"),
+                        ),
+                      ],
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Color(0xFFF65734)),
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    hintText: "Select Colors",
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: const BorderSide(
+                        color: Color(0xFFF3F3F3),
+                      ),
+                    ),
+                    hintStyle: const TextStyle(
+                      color: Color(0xFFA7A9B7),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w300,
+                      fontFamily: "Satoshi",
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 10, right: 10, top: 5, bottom: 5),
+                child: DropdownButtonFormField<String>(
+                  iconDisabledColor: Colors.transparent,
+                  iconEnabledColor: Colors.transparent,
+                  value: _selectedStampShape,
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedStampShape = newValue;
+                      // Find the selected shape based on its name
+                      final selectedShape =
+                          getStampShapeListModels.data?.firstWhere(
+                        (shape) => shape.shapeName == newValue,
+                      );
+
+                      if (selectedShape != null) {
+                        stampShapeId = selectedShape.shapesId;
+                        _selectedShapeName = selectedShape.shapeName;
+                        _selectedShapeImage = selectedShape.shapeImage;
+                        _selectedShapeWidth = selectedShape.width;
+                        _selectedShapeHeight = selectedShape.height;
+                        // Print all of the data associated with the selected shape
+                        print("Shape ID: ${selectedShape.shapesId}");
+                        print("Shape Name: $_selectedShapeName");
+                        print("Shape Image: $_selectedShapeImage");
+                        print("Width: $_selectedShapeWidth");
+                        print("Height: $_selectedShapeHeight");
+                      } else {
+                        // Handle the case when no matching shape is found
+                        print("No matching shape found.");
+                      }
+                    });
+                    getStampImage();
+                    if (getStampImageModel.status == "success") {
+                      Fluttertoast.showToast(
+                          msg: "Success", backgroundColor: Colors.green);
+                    } else {
+                      //snakbar in flutter
+                      Fluttertoast.showToast(
+                          msg: "Please Wait", backgroundColor: Colors.green);
+                    }
+                  },
+                  items: getStampShapeListModels.data?.map((shape) {
+                        return DropdownMenuItem<String>(
+                          value: shape.shapeName,
+                          child: Text(shape.shapeName ?? ''),
+                        );
+                      }).toList() ??
+                      [],
+                  decoration: InputDecoration(
+                    suffixIcon: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SvgPicture.asset("assets/arrowDown1.svg"),
+                        ),
+                      ],
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Color(0xFFF65734)),
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    hintText: "Select Stamp Shape",
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: const BorderSide(
+                        color: Color(0xFFF3F3F3),
+                      ),
+                    ),
+                    hintStyle: const TextStyle(
+                      color: Color(0xFFA7A9B7),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w300,
+                      fontFamily: "Satoshi",
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                ),
+              ),
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: Column(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     crossAxisAlignment: CrossAxisAlignment.center,
+              //     children: [
+              //       SingleChildScrollView(
+              //         scrollDirection: Axis.horizontal,
+              //         child: Row(
+              //           children: colors.map((color) {
+              //             bool isSelected = selectedColor == color;
+              //             return GestureDetector(
+              //               onTap: () {
+              //                 setState(() {
+              //                   selectedColor = isSelected ? "" : color;
+              //                 });
+              //               },
+              //               child: Container(
+              //                 width: 48,
+              //                 height: 48,
+              //                 margin: const EdgeInsets.symmetric(horizontal: 8),
+              //                 decoration: BoxDecoration(
+              //                   color: getColor(color),
+              //                   shape: BoxShape.circle,
+              //                   border: Border.all(
+              //                     width: 2,
+              //                     color: isSelected
+              //                         ? Colors.white
+              //                         : Colors.transparent,
+              //                   ),
+              //                 ),
+              //                 child: isSelected
+              //                     ? const Center(
+              //                         child: Icon(
+              //                           Icons.check,
+              //                           color: Colors.white,
+              //                           size: 20,
+              //                         ),
+              //                       )
+              //                     : const SizedBox(), // Hide the tick mark when not selected
+              //               ),
+              //             );
+              //           }).toList(),
+              //         ),
+              //       ),
+              //       const SizedBox(height: 16),
+              //       Padding(
+              //         padding: const EdgeInsets.only(left: 8),
+              //         child: Container(
+              //           width: 122,
+              //           height: 39,
+              //           padding: const EdgeInsets.all(8),
+              //           clipBehavior: Clip.antiAlias,
+              //           decoration: ShapeDecoration(
+              //             shape: RoundedRectangleBorder(
+              //               side: const BorderSide(
+              //                   width: 0.50, color: Color(0xFFE0E0E5)),
+              //               borderRadius: BorderRadius.circular(10),
+              //             ),
+              //           ),
+              //           child: Row(
+              //             mainAxisAlignment: MainAxisAlignment.center,
+              //             children: [
+              //               Container(
+              //                 width: 24,
+              //                 height: 24,
+              //                 decoration: BoxDecoration(
+              //                   color: getColor(selectedColor),
+              //                   shape: BoxShape.rectangle,
+              //                 ),
+              //               ),
+              //               const SizedBox(width: 8),
+              //               Text(
+              //                 getColorHex(selectedColor),
+              //                 style: const TextStyle(
+              //                   fontSize: 16,
+              //                   fontWeight: FontWeight.bold,
+              //                   color: Colors.black,
+              //                 ),
+              //               ),
+              //             ],
+              //           ),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              const SizedBox(height: 10),
+
               const Center(
                   child: Text(
                 "Arrival",
@@ -779,6 +1035,22 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                     fontWeight: FontWeight.w400,
                     color: Color(0xFF141111)),
               )),
+              Center(
+                child: stampImageURL != null
+                    ? Container(
+                        width: 250, // Set the desired width
+                        height: 200, // Set the desired height
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(
+                                'https://portal.passporttastic.com/public/$stampImageURL'),
+                            // Use BoxFit.cover to fit the complete image
+                          ),
+                        ),
+                      )
+                    : const Text("No stamp image available"),
+              ),
+
               const Row(
                 children: [
                   Padding(
@@ -857,36 +1129,89 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                 children: [
                   GestureDetector(
                     onTap: () async {
+                      //                      await showDialog<String>(context: context, builder:(BuildContext context){});
+
                       // Navigator.push(context, MaterialPageRoute(
                       //   builder: (BuildContext context) {
                       //     return MainScreen();
                       //   },
                       // ));
-                    },
-                    child: Container(
-                      height: 48,
-                      width: MediaQuery.of(context).size.width * 0.94,
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter,
-                        ),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Stamp My Passport",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: "Satoshi",
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700),
+                      if (stampShapeId == null && _selectedColor == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Please fill the all fields',
+                              textAlign: TextAlign.center,
+                            ),
                           ),
-                        ],
-                      ),
+                        );
+                      } else {
+                        await arrivalDetails();
+                        if (arrivalDetailsModels.status == "success") {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'SuccessFully Stamped your Passport',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              backgroundColor: Colors.greenAccent,
+                            ),
+                          );
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (BuildContext context) {
+                              return const ViewPassport();
+                            },
+                          ));
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Server Error!',
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          );
+                        }
+                      }
+                    },
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          height: 48,
+                          width: MediaQuery.of(context).size.width * 0.94,
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                            ),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Stamp My Passport",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: "Satoshi",
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        if (isLoading)
+                          const CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                      ],
                     ),
                   ),
                   const SizedBox(
@@ -986,10 +1311,9 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
   }
 
   List<String> colors = ["Black", "Red", "Yellow", "Blue", "Pink"];
-
+  Color selectedColor = Colors.blue;
   String selectedHexColor = "";
-  String selectedColor = "";
+  // String selectedColor = "";
 
   String _singleValue = "Text alignment right";
-  Country? _selectedCountry;
 }

@@ -50,7 +50,9 @@ class _FrontCoverState extends State<FrontCover> {
         await coverDesign();
 
         if (!mounted) {
-          setState(() {});
+          setState(() {
+            isLoading = false;
+          });
         }
       } else {
         // Handle the case when user profile data is null

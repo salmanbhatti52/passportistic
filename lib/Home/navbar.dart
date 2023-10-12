@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import '../Models/getProfileModels.dart';
 import 'dirayPage.dart';
 import 'homePage.dart';
 import '../Profile/profilePage.dart';

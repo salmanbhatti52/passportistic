@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -27,6 +29,8 @@ class _AccomodationDetailsPageState extends State<AccomodationDetailsPage> {
   int accommodationsPerPage = 1;
   GetAccomodationsDetailsModels getAccomodationsDetailsModels =
       GetAccomodationsDetailsModels();
+
+
   accommodationDetails() async {
     // try {
 
@@ -34,6 +38,7 @@ class _AccomodationDetailsPageState extends State<AccomodationDetailsPage> {
     userID = prefs?.getString('userID');
 
     String apiUrl = "$baseUrl/get_itinerary_accomodations";
+      //  print("api url $apiUrl");
     print("api: $apiUrl");
 
     setState(() {
@@ -58,6 +63,7 @@ class _AccomodationDetailsPageState extends State<AccomodationDetailsPage> {
           isLoading = false;
         });
       }
+      
 
       print(
           'AaccommodationModelsDetailsModels status: ${getAccomodationsDetailsModels.status}');
