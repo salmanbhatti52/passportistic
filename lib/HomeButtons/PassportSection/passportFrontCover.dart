@@ -142,6 +142,9 @@ class _FrontCoverState extends State<FrontCover> {
       return const Center(
         child: CircularProgressIndicator(
           color: Colors.white,
+          strokeWidth: 2,
+          backgroundColor: Color(0xFFF65734),
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
         ),
       );
     } else {

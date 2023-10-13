@@ -1,7 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:scanguard/HomeButtons/PassportSection/bloc/leagalnoticsBloc.dart';
 import 'package:scanguard/HomeButtons/PassportSection/passportFrontCover.dart';
 import 'package:scanguard/HomeButtons/PassportSection/passportLegalNoticePage.dart';
 import 'package:scanguard/HomeButtons/PassportSection/passportMainPage.dart';
@@ -131,7 +133,10 @@ class _ViewPassportState extends State<ViewPassport> {
                   return const passportPage();
                 } else if (index == 2) {
                   // Display blank pages for the remaining pages
-                  return const PassportLegalNoticePage();
+                  return BlocProvider(
+                    create: (context) => PassportLegalNoticePageCubit(),
+                    child: const PassportLegalNoticePage(),
+                  );
                 } else {
                   return BlankPage(
                     stampImages: stampImages,

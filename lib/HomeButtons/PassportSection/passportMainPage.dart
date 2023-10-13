@@ -187,6 +187,9 @@ class _passportPageState extends State<passportPage> {
       return const Center(
           child: CircularProgressIndicator(
         color: Colors.white,
+        strokeWidth: 2,
+        backgroundColor: Color(0xFFF65734),
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
       ));
     } else {
       return Padding(

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:group_radio_button/group_radio_button.dart';
 import 'package:intl/intl.dart';
+import 'package:scanguard/Models/getProfileModels.dart';
 import 'package:scanguard/Models/getStampImageModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -169,7 +171,7 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
       'Accept': 'application/json',
     }, body: {
       "passport_holder_id": userID,
-      "travel_type": "  Arrival",
+      "travel_type": "Departed",
       "stamp_shape_name": _selectedStampShape,
       "shapes_id": stampShapeId,
       "country_name": _selectedCountry,
@@ -214,6 +216,57 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
         print("base64Image : $base64Image");
       });
     }
+  }
+
+  GetProfileModels getProfileModels = GetProfileModels();
+  getUserProfile() async {
+    String apiUrl = "$baseUrl/get_profile";
+    print("api: $apiUrl");
+    prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "passport_holder_id": "$userID"
+    });
+    final responseString = response.body;
+    print("getProfileModels Response: $responseString");
+    print("status Code getProfileModels: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print("in 200 getProfileModels");
+      print("SuucessFull");
+      getProfileModels = getProfileModelsFromJson(responseString);
+      if (getProfileModels.data!.passportStampsHeld == "0") {
+        checkStamps();
+      }
+      setState(() {
+        isLoading = false;
+      });
+      print('getProfileModels status: ${getProfileModels.status}');
+    }
+  }
+
+  checkStamps() {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.warning,
+      animType: AnimType.rightSlide,
+      title: 'Stamps Ended',
+      desc: 'Click OK to go to the shop page.',
+      btnCancelOnPress: () {
+        Navigator.pop(context); // Close the dialog
+      },
+      btnOkOnPress: () {
+        Navigator.pop(context); // Close the dialog
+        // Navigate to the shop page (replace 'ShopPage' with your actual route)
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const StampPage()));
+      },
+    ).show();
   }
 
   ColorFilter getColorFilter(Color color) {
@@ -308,6 +361,7 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
     mdoeofTransport();
     getCountryList();
     getColorList();
+    getUserProfile();
     _focusNode1.addListener(_onFocusChange);
     _focusNode2.addListener(_onFocusChange);
     _focusNode3.addListener(_onFocusChange);
@@ -381,14 +435,16 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                           const SizedBox(
                             width: 5,
                           ),
-                          Text(
-                            "0",
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                color:
-                                    const Color(0xFF000000).withOpacity(0.5)),
-                          ),
+                          getProfileModels.data != null
+                              ? Text(
+                                  "${getProfileModels.data!.passportStampsHeld} ",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      color: const Color(0xFF000000)
+                                          .withOpacity(0.5)),
+                                )
+                              : const Text(""),
                         ],
                       ),
                     ],
@@ -1221,53 +1277,6 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
               ),
               const SizedBox(
                 height: 10,
-              ),
-              const Text(
-                "You have insufficient stamps to stamp your passport",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                    color: Color(0xFFF65734)),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              RichText(
-                text: TextSpan(
-                  text: "please",
-                  style: const TextStyle(
-                      fontFamily: "Satoshi",
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xFFF65734)),
-                  children: [
-                    TextSpan(
-                      text: " click here ",
-                      style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w800,
-                          color: Color(0xFFF65734),
-                          decoration: TextDecoration.underline),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Navigator.push(context, MaterialPageRoute(
-                            builder: (BuildContext context) {
-                              return const StampPage();
-                            },
-                          ));
-                        },
-                    ),
-                    const TextSpan(
-                      text: "to purchase another package.",
-                      style: TextStyle(
-                          fontFamily: "Satoshi",
-                          fontSize: 15,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xFFF65734)),
-                    )
-                  ],
-                ),
               ),
             ],
           )

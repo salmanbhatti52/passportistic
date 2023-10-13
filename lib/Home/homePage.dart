@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -64,6 +65,8 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -77,7 +80,10 @@ class _HomePageState extends State<HomePage> {
       return const Scaffold(
         body: Center(
           child: CircularProgressIndicator(
-            color: Color(0xFFF65734),
+            color: Colors.white,
+            strokeWidth: 2,
+            backgroundColor: Color(0xFFF65734),
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
           ),
         ),
       );
