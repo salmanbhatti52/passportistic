@@ -582,9 +582,6 @@ class _DepatureDetailsState extends State<DepatureDetails> {
               ),
               Expanded(
                 child: TextFormField(
-                  onTap: () {
-                    checkStamps();
-                  },
                   controller: cityname,
                   style:
                       const TextStyle(color: Color(0xFF000000), fontSize: 16),
