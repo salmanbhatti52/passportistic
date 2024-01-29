@@ -4,9 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:scanguard/auth/signIn.dart';
 import 'package:scanguard/auth/verifyAccrount.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:http/http.dart' as http;
-
 import '../AppDrawerButtons/terms.dart';
 import '../Models/signUpModels.dart';
 

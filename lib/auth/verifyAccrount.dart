@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -260,8 +259,8 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
                       child: Stack(
                         children: [
                           Container(
-                            height: 48.h,
-                            width: 340.w,
+                            height: 48,
+                            width: 340,
                             decoration: BoxDecoration(
                               gradient: const LinearGradient(
                                 colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
@@ -278,7 +277,7 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontFamily: "Satoshi",
-                                      fontSize: 20.sp,
+                                      fontSize: 20,
                                       fontWeight: FontWeight.w700),
                                 ),
                               ],

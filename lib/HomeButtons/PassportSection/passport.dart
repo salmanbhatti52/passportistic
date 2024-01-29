@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:scanguard/HomeButtons/PassportSection/bloc/frontCoverBloc.dart';
 import 'package:scanguard/HomeButtons/PassportSection/bloc/leagalnoticsBloc.dart';
 import 'package:scanguard/HomeButtons/PassportSection/passportFrontCover.dart';
 import 'package:scanguard/HomeButtons/PassportSection/passportLegalNoticePage.dart';
@@ -69,17 +70,10 @@ class _ViewPassportState extends State<ViewPassport> {
       totalPages =
           int.tryParse(getProfileModels.data!.numberOfPages ?? "0") ?? 0;
 
-      print(totalPages);
+      print("totalPages $totalPages");
       // If the parsing fails or the value is null, set totalPages to 0 as a default.
     });
   }
-
-  final List<String> stampImages = [
-    'https://images.pexels.com/photos/3839651/pexels-photo-3839651.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    'https://images.pexels.com/photos/3839651/pexels-photo-3839651.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    'https://images.pexels.com/photos/3839651/pexels-photo-3839651.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    // Add more images here
-  ];
 
   List<passportPage> passportPages = [];
   @override
@@ -87,6 +81,7 @@ class _ViewPassportState extends State<ViewPassport> {
     // TODO: implement initState
     super.initState();
     getUserProfile();
+    print("currentPageIndex $currentPageIndex");
   }
 
   @override
@@ -122,12 +117,15 @@ class _ViewPassportState extends State<ViewPassport> {
           Expanded(
             child: PageView.builder(
               controller: _pageController, // Assign the PageController
-              itemCount: totalPages,
+              itemCount: 4,
               itemBuilder: (context, index) {
                 // Conditionally render front cover, passport page, or blank page
                 if (index == 0) {
                   // Display the front cover on the first page
-                  return const FrontCover();
+                  return BlocProvider(
+                    create: (context) => PassportFrontCoverCubit(),
+                    child: const FrontCover(),
+                  );
                 } else if (index == 1) {
                   // Display the passport page on the second page
                   return const passportPage();
@@ -139,8 +137,9 @@ class _ViewPassportState extends State<ViewPassport> {
                   );
                 } else {
                   return BlankPage(
-                    stampImages: stampImages,
-                    initialPage: 3, // Set the initial page index as needed
+                    initialPage: 3,
+                    totalPages:
+                        totalPages, // Set the initial page index as needed
                   );
                 }
               },
@@ -166,7 +165,7 @@ class _ViewPassportState extends State<ViewPassport> {
             ),
             child: Column(children: [
               const SizedBox(
-                height: 10,
+                height: 2,
               ),
               const Text(
                 'View Pages',
@@ -179,7 +178,7 @@ class _ViewPassportState extends State<ViewPassport> {
                 ),
               ),
               const SizedBox(
-                height: 10,
+                height: 4,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -203,7 +202,7 @@ class _ViewPassportState extends State<ViewPassport> {
                     icon: SvgPicture.asset(
                       "assets/arrowRight.svg",
                       // color: currentPage < totalPages - 1
-                      //     ? Colors.transparent
+                      //     ? Colors.blue
                       //     : Colors.grey,
                     ),
                     onPressed: () {

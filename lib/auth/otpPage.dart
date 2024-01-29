@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
@@ -27,7 +25,6 @@ class _OtpPageState extends State<OtpPage> {
   //   _otp.dispose();
   //   super.dispose();
   // }
-
 
   @override
   Widget build(BuildContext context) {
@@ -61,15 +58,15 @@ class _OtpPageState extends State<OtpPage> {
                   letterSpacing: 0.5),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.04.h,
+              height: MediaQuery.of(context).size.height * 0.04,
             ),
-            Center(
+            const Center(
                 child: Text(
               'Enter 4-digit OTP code',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: const Color(0xFF141010),
-                fontSize: 24.sp,
+                color: Color(0xFF141010),
+                fontSize: 24,
                 fontFamily: 'Satoshi',
                 fontWeight: FontWeight.w700,
               ),
@@ -77,16 +74,16 @@ class _OtpPageState extends State<OtpPage> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.04,
             ),
-            SizedBox(
-              width: 330.w,
+            const SizedBox(
+              width: 330,
               child: Opacity(
                 opacity: 0.50,
                 child: Text(
                   'Please enter 4-digit OTP code here, after confirmation you can create new password.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: const Color(0xFF222222),
-                    fontSize: 16.sp,
+                    color: Color(0xFF222222),
+                    fontSize: 16,
                     fontFamily: 'Satoshi',
                     fontWeight: FontWeight.w300,
                     height: 1.50,
@@ -95,15 +92,15 @@ class _OtpPageState extends State<OtpPage> {
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.04.h,
+              height: MediaQuery.of(context).size.height * 0.04,
             ),
             Padding(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 45).r,
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 45),
                 child: PinCodeTextField(
-                  textStyle: TextStyle(
-                    color: const Color(0xFFA7A9B7),
-                    fontSize: 16.sp,
+                  textStyle: const TextStyle(
+                    color: Color(0xFFA7A9B7),
+                    fontSize: 16,
                   ),
                   appContext: context,
                   pastedTextStyle: TextStyle(
@@ -138,8 +135,8 @@ class _OtpPageState extends State<OtpPage> {
                     //activeColor: Colors.green.shade600,
 
                     borderRadius: BorderRadius.circular(12),
-                    fieldHeight: 52.w,
-                    fieldWidth: 52.w,
+                    fieldHeight: 52,
+                    fieldWidth: 52,
                   ),
 
                   cursorColor: Colors.black,
@@ -168,10 +165,10 @@ class _OtpPageState extends State<OtpPage> {
                   },
                 )),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.04.h,
+              height: MediaQuery.of(context).size.height * 0.04,
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 10).r,
+              padding: const EdgeInsets.only(bottom: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -179,41 +176,39 @@ class _OtpPageState extends State<OtpPage> {
                     onTap: () async {
                       if (_otp.text.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                             content: Text(
                               "Please enter OTP",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontFamily: "Satoshi",
-                                  fontSize: 20.sp,
+                                  fontSize: 20,
                                   fontWeight: FontWeight.w700),
                             ),
                           ),
                         );
                       } else if (_otp.text != widget.otp) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                             content: Text(
                               "Please enter correct OTP",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontFamily: "Satoshi",
-                                  fontSize: 20.sp,
+                                  fontSize: 20,
                                   fontWeight: FontWeight.w700),
                             ),
                           ),
                         );
                       } else {
-                      
-                       
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                             content: Text(
                               "OTP verified",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontFamily: "Satoshi",
-                                  fontSize: 18.sp,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.w400),
                             ),
                           ),
@@ -230,8 +225,8 @@ class _OtpPageState extends State<OtpPage> {
                       }
                     },
                     child: Container(
-                      height: 48.h,
-                      width: MediaQuery.of(context).size.width * 0.93.w,
+                      height: 48,
+                      width: MediaQuery.of(context).size.width * 0.93,
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
                           colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
@@ -240,7 +235,7 @@ class _OtpPageState extends State<OtpPage> {
                         ),
                         borderRadius: BorderRadius.circular(15),
                       ),
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
@@ -248,7 +243,7 @@ class _OtpPageState extends State<OtpPage> {
                             style: TextStyle(
                                 color: Colors.white,
                                 fontFamily: "Satoshi",
-                                fontSize: 20.sp,
+                                fontSize: 20,
                                 fontWeight: FontWeight.w700),
                           ),
                         ],

@@ -717,92 +717,6 @@ class _DepatureDetailsState extends State<DepatureDetails> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: TextFormField(
-                      focusNode: _focusNode5,
-                      controller: time,
-                      readOnly: true, // Prevent manual text input
-                      onTap: () {
-                        // Open the time picker when the field is tapped
-                        showTimePicker(
-                          context: context,
-                          initialTime: TimeOfDay.now(),
-                          initialEntryMode: TimePickerEntryMode.inputOnly,
-                        ).then((selectedTime) {
-                          if (selectedTime != null) {
-                            // Handle the selected time
-                            setState(() {
-                              String formattedTime =
-                                  selectedTime.format(context);
-                              formatedTime =
-                                  '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}:00';
-                              time.text = DateFormat('hh:mm a').format(
-                                DateFormat('hh:mm a').parse(formattedTime),
-                              );
-                              print(formatedTime);
-                            });
-                          }
-                        });
-                      },
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: Color(0xFFF65734)),
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        hintText: "Select Time",
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide:
-                              const BorderSide(color: Color(0xFFF3F3F3)),
-                        ),
-                        hintStyle: const TextStyle(
-                          color: Color(0xFFA7A9B7),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w300,
-                          fontFamily: "Outfit",
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        prefixIcon: GestureDetector(
-                          onTap: () {
-                            // Open the time picker when the icon is clicked
-                            showTimePicker(
-                              context: context,
-                              initialTime: TimeOfDay.now(),
-                            ).then((selectedTime) {
-                              if (selectedTime != null) {
-                                // Handle the selected time
-                                setState(() {
-                                  String formattedTime =
-                                      selectedTime.format(context);
-                                  time.text = DateFormat('hh:mm a').format(
-                                    DateFormat('hh:mm a').parse(formattedTime),
-                                  );
-                                });
-                              }
-                            });
-                          },
-                          child: Icon(
-                            Icons.access_time,
-                            color: isFocused5
-                                ? const Color(0xFFF65734)
-                                : const Color(0xFFE0E0E5),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                ],
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Row(
-                children: [
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: TextFormField(
                       focusNode: _focusNode6,
                       controller: date,
                       readOnly: true, // Prevent manual text input
@@ -853,6 +767,92 @@ class _DepatureDetailsState extends State<DepatureDetails> {
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: TextFormField(
+                      focusNode: _focusNode5,
+                      controller: time,
+                      // readOnly: true, // Prevent manual text input
+                      onTap: () {
+                        // Open the time picker when the field is tapped
+                        showTimePicker(
+                          context: context,
+                          initialTime: const TimeOfDay(hour: 00, minute: 00),
+                          initialEntryMode: TimePickerEntryMode.inputOnly,
+                        ).then((selectedTime) {
+                          if (selectedTime != null) {
+                            // Handle the selected time
+                            setState(() {
+                              String formattedTime =
+                                  selectedTime.format(context);
+                              formatedTime =
+                                  '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}:00';
+                              time.text = DateFormat('hh:mm a').format(
+                                DateFormat('hh:mm a').parse(formattedTime),
+                              );
+                              print(formatedTime);
+                            });
+                          }
+                        });
+                      },
+                      decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: Color(0xFFF65734)),
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        hintText: "Select Time",
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide:
+                              const BorderSide(color: Color(0xFFF3F3F3)),
+                        ),
+                        hintStyle: const TextStyle(
+                          color: Color(0xFFA7A9B7),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w300,
+                          fontFamily: "Outfit",
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        prefixIcon: GestureDetector(
+                          onTap: () {
+                            // Open the time picker when the icon is clicked
+                            // showTimePicker(
+                            //   context: context,
+                            //   initialTime: TimeOfDay.now(),
+                            // ).then((selectedTime) {
+                            //   if (selectedTime != null) {
+                            //     // Handle the selected time
+                            //     setState(() {
+                            //       String formattedTime =
+                            //           selectedTime.format(context);
+                            //       time.text = DateFormat('hh:mm a').format(
+                            //         DateFormat('hh:mm a').parse(formattedTime),
+                            //       );
+                            //     });
+                            //   }
+                            // });
+                          },
+                          child: Icon(
+                            Icons.access_time,
+                            color: isFocused5
+                                ? const Color(0xFFF65734)
+                                : const Color(0xFFE0E0E5),
+                          ),
                         ),
                       ),
                     ),

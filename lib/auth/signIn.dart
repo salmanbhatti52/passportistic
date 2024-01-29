@@ -2,7 +2,6 @@
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:scanguard/auth/signUpNextPage.dart';
 import 'package:scanguard/auth/signUpPage.dart';
@@ -106,17 +105,17 @@ class _SignInPageState extends State<SignInPage> {
           Center(
             child: SvgPicture.asset(
               "assets/log1.svg",
-              height: 70.h,
-              width: 219.w,
+              height: 70,
+              width: 219,
               color: const Color(0xFFF65734),
             ),
           ),
-          Text(
+          const Text(
             'PassportTastic',
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: const Color(0xFF565656),
-                fontSize: 31.sp,
+                color: Color(0xFF565656),
+                fontSize: 31,
                 fontFamily: 'Satoshi',
                 fontWeight: FontWeight.w800,
                 letterSpacing: 0.5),
@@ -124,31 +123,31 @@ class _SignInPageState extends State<SignInPage> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.04,
           ),
-          Text(
+          const Text(
             'Welcome',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: const Color(0xFFF65734),
-              fontSize: 24.sp,
+              color: Color(0xFFF65734),
+              fontSize: 24,
               fontFamily: 'Satoshi',
               fontWeight: FontWeight.w700,
             ),
           ),
-          Opacity(
+          const Opacity(
             opacity: 0.40,
             child: Text(
               'Sign In to get started',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: const Color(0xFF141010),
-                fontSize: 16.sp,
+                color: Color(0xFF141010),
+                fontSize: 16,
                 fontFamily: 'Satoshi',
                 fontWeight: FontWeight.w400,
               ),
             ),
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.08.h,
+            height: MediaQuery.of(context).size.height * 0.08,
           ),
           Row(
             children: [
@@ -158,18 +157,18 @@ class _SignInPageState extends State<SignInPage> {
               Expanded(
                 child: TextFormField(
                   focusNode: _focusNode1,
-                  style: TextStyle(
-                      color: const Color(0xFF000000), fontSize: 16.sp),
+                  style:
+                      const TextStyle(color: Color(0xFF000000), fontSize: 16),
                   cursorColor: const Color(0xFF000000),
                   controller: email,
                   // keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     prefixIcon: Padding(
-                      padding: const EdgeInsets.all(8.0).r,
+                      padding: const EdgeInsets.all(8.0),
                       child: SvgPicture.asset(
                         'assets/sms.svg',
-                        width: 24.h,
-                        height: 24.h,
+                        width: 24,
+                        height: 24,
                         color: isFocused1
                             ? const Color(0xFFF65734)
                             : const Color(0xFFE0E0E5),
@@ -178,19 +177,19 @@ class _SignInPageState extends State<SignInPage> {
 
                     focusedBorder: OutlineInputBorder(
                       borderSide: const BorderSide(color: Color(0xFFF65734)),
-                      borderRadius: BorderRadius.circular(15.0).w,
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
                     // labelText: 'Email',
                     hintText: "Enter Your Email",
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15).w,
+                      borderRadius: BorderRadius.circular(15),
                       borderSide: const BorderSide(
                           color: Color(0xFFF3F3F3)), // change border color
                     ),
 
-                    hintStyle: TextStyle(
-                        color: const Color(0xFFA7A9B7),
-                        fontSize: 16.sp,
+                    hintStyle: const TextStyle(
+                        color: Color(0xFFA7A9B7),
+                        fontSize: 16,
                         fontWeight: FontWeight.w300,
                         fontFamily: "Satoshi"),
                     border: OutlineInputBorder(
@@ -214,8 +213,8 @@ class _SignInPageState extends State<SignInPage> {
               ),
             ],
           ),
-          SizedBox(
-            height: 10.h,
+          const SizedBox(
+            height: 10,
           ),
           Row(
             children: [
@@ -226,18 +225,18 @@ class _SignInPageState extends State<SignInPage> {
                 child: TextFormField(
                   focusNode: _focusNode2,
                   obscureText: _obscureText,
-                  style: TextStyle(
-                      color: const Color(0xFF000000), fontSize: 16.sp),
+                  style:
+                      const TextStyle(color: Color(0xFF000000), fontSize: 16),
                   cursorColor: const Color(0xFF000000),
                   controller: password,
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
                     prefixIcon: Padding(
-                      padding: const EdgeInsets.all(8.0).r,
+                      padding: const EdgeInsets.all(8.0),
                       child: SvgPicture.asset(
                         'assets/lock.svg',
-                        width: 24.h,
-                        height: 24.h,
+                        width: 24,
+                        height: 24,
                         color: isFocused2
                             ? const Color(0xFFF65734)
                             : const Color(0xFFE0E0E5),
@@ -253,27 +252,27 @@ class _SignInPageState extends State<SignInPage> {
                             },
                             icon: SvgPicture.asset(
                               'assets/eye.svg',
-                              width: 24.h,
-                              height: 24.h,
+                              width: 24,
+                              height: 24,
                             ),
                           )
                         ]),
 
                     focusedBorder: OutlineInputBorder(
                       borderSide: const BorderSide(color: Color(0xFFF65734)),
-                      borderRadius: BorderRadius.circular(15.0).w,
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
                     // labelText: 'Email',
                     hintText: "Enter Your Password",
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15).w,
+                      borderRadius: BorderRadius.circular(15),
                       borderSide: const BorderSide(
                           color: Color(0xFFF3F3F3)), // change border color
                     ),
                     labelStyle: const TextStyle(),
-                    hintStyle: TextStyle(
-                        color: const Color(0xFFA7A9B7),
-                        fontSize: 16.sp,
+                    hintStyle: const TextStyle(
+                        color: Color(0xFFA7A9B7),
+                        fontSize: 16,
                         fontWeight: FontWeight.w300,
                         fontFamily: "Satoshi"),
                     border: OutlineInputBorder(
@@ -302,12 +301,12 @@ class _SignInPageState extends State<SignInPage> {
                         },
                       ));
                     },
-                    child: Text(
+                    child: const Text(
                       "Forget Password?",
                       style: TextStyle(
-                        fontSize: 14.sp,
+                        fontSize: 14,
                         fontWeight: FontWeight.w300,
-                        color: const Color(0xFFF65734),
+                        color: Color(0xFFF65734),
                         fontFamily: "Satoshi",
                       ),
                     ),
@@ -317,7 +316,7 @@ class _SignInPageState extends State<SignInPage> {
             ),
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.08.h,
+            height: MediaQuery.of(context).size.height * 0.08,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -371,8 +370,8 @@ class _SignInPageState extends State<SignInPage> {
                           backgroundColor: const Color(0xFFF65734),
                           content: Text(
                             loginUserModels.message.toString(),
-                            style: TextStyle(
-                              fontSize: 16.sp,
+                            style: const TextStyle(
+                              fontSize: 16,
                               fontWeight: FontWeight.w300,
                               fontFamily: "Satoshi",
                             ),
@@ -390,8 +389,8 @@ class _SignInPageState extends State<SignInPage> {
                   alignment: Alignment.center,
                   children: [
                     Container(
-                      height: 48.h,
-                      width: 340.w,
+                      height: 48,
+                      width: 340,
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
                           colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
@@ -406,12 +405,12 @@ class _SignInPageState extends State<SignInPage> {
                             valueColor:
                                 AlwaysStoppedAnimation<Color>(Colors.white),
                           )
-                        : Text(
+                        : const Text(
                             "Sign In",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontFamily: "Satoshi",
-                                fontSize: 20.sp,
+                                fontSize: 20,
                                 fontWeight: FontWeight.w700),
                           ),
                   ],
@@ -423,22 +422,22 @@ class _SignInPageState extends State<SignInPage> {
             height: MediaQuery.of(context).size.height * 0.08,
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0).w,
+            padding: const EdgeInsets.all(8.0),
             child: RichText(
               text: TextSpan(
                 text: "Doesn't have an account? ",
-                style: TextStyle(
-                  fontSize: 16.sp,
+                style: const TextStyle(
+                  fontSize: 16,
                   fontWeight: FontWeight.w400,
                   color: Colors.black,
                 ),
                 children: [
                   TextSpan(
                     text: "Sign Up",
-                    style: TextStyle(
-                      fontSize: 16.sp,
+                    style: const TextStyle(
+                      fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFFF65734),
+                      color: Color(0xFFF65734),
                     ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
@@ -453,8 +452,8 @@ class _SignInPageState extends State<SignInPage> {
               ),
             ),
           ),
-          SizedBox(
-            height: 5.h,
+          const SizedBox(
+            height: 5,
           )
         ]),
       ),

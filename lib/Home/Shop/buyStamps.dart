@@ -1,4 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:scanguard/Home/Shop/selectPayment.dart';
 
 import '../../Models/getStampShopModels.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -92,13 +95,27 @@ class _BuyStampsState extends State<BuyStamps> {
             ),
             itemBuilder: (BuildContext context, int index) {
               return GestureDetector(
-                onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => BuyStamps(),
-                  //   ),
-                  // );
+                onTap: () async {
+                  prefs = await SharedPreferences.getInstance();
+                  userID = prefs?.getString('userID');
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return SelectPaymentMethod(
+                        userId: userID.toString(),
+                        productId: getStampShopModels.data![index].stampsPacksId
+                            .toString(),
+                        productName: getStampShopModels
+                            .data![index].stampsPacksName
+                            .toString(),
+                        productPrice: getStampShopModels
+                            .data![index].stampsPacksPrice
+                            .toString(),
+                        productImage: getStampShopModels
+                            .data![index].stampsPacksImage
+                            .toString(),
+                      );
+                    },
+                  ));
                 },
                 child: Container(
                   width: 171,
@@ -150,7 +167,7 @@ class _BuyStampsState extends State<BuyStamps> {
                         "${getStampShopModels.data?[index].stampsPacksName}",
                         style: const TextStyle(
                           color: Colors.black,
-                          fontSize: 16,
+                          fontSize: 12,
                           fontFamily: 'Satoshi',
                           fontWeight: FontWeight.w700,
                         ),
@@ -178,18 +195,44 @@ class _BuyStampsState extends State<BuyStamps> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        child: const Row(
+                        child: Row(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(
-                              'Buy',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontFamily: 'Satoshi',
-                                fontWeight: FontWeight.w700,
+                            GestureDetector(
+                              onTap: () async {
+                                   prefs = await SharedPreferences.getInstance();
+                  userID = prefs?.getString('userID');
+                                Navigator.push(context, MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                    return SelectPaymentMethod(
+                                      userId: userID.toString(),
+                                      productId: getStampShopModels
+                                          .data![index].stampsPacksId
+                                          .toString(),
+                                      productName: getStampShopModels
+                                          .data![index].stampsPacksName
+                                          .toString(),
+                                      productPrice: getStampShopModels
+                                          .data![index].stampsPacksPrice
+                                          .toString(),
+                                      productImage: getStampShopModels
+                                          .data![index].stampsPacksImage
+                                          .toString(),
+                                      productType: "Stamps",    
+                                    );
+                                  },
+                                ));
+                              },
+                              child: const Text(
+                                'Buy',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontFamily: 'Satoshi',
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
                             ),
                           ],

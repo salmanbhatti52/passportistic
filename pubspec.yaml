@@ -46,7 +46,7 @@ dependencies:
   group_radio_button: ^1.3.0
   table_calendar: ^3.0.9
   printing: ^5.11.0
-  http: ^1.1.0
+  http: ^0.13.4
   csc_picker: ^0.2.7
   photo_view: ^0.14.0
   is_first_run: ^1.0.0
@@ -55,6 +55,8 @@ dependencies:
   flutter_screenutil: ^5.9.0
   flutter_bloc: ^8.1.3
   awesome_dialog: ^3.1.0
+  device_preview: ^1.1.0
+  flutter_stripe: 9.5.0+1
 
   
 dev_dependencies:

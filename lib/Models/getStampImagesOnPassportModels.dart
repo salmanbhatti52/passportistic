@@ -1,6 +1,6 @@
 // To parse this JSON data, do
 //
-//     final getStampImagesOnPassportModels = getStampImagesOnPassportModelsFromJson(jsonString);
+    // final getStampImagesOnPassportModels = getStampImagesOnPassportModelsFromJson(jsonString);
 
 import 'dart:convert';
 

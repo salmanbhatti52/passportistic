@@ -100,7 +100,7 @@ class _TravelDetailsState extends State<TravelDetails> {
       "arrive_time": formattedApiArrivalTime,
       "arrive_date": arrivalDate.text,
       "operator": operator.text,
-      "layover_time": layOver.text,
+      "layover_time": layOver.text ?? "",
     });
     final responseString = response.body;
     print("response_travalDetailsModels: $responseString");

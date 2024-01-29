@@ -6,14 +6,15 @@ import '../../auth/signUpNextPage.dart';
 import '../../auth/signUpPage.dart';
 import '../../main.dart';
 
-class BlankPage extends StatefulWidget {
-  final List<String> stampImages;
-  final int initialPage;
+int? currentPageIndex;
 
+class BlankPage extends StatefulWidget {
+  final int initialPage;
+  final int totalPages;
   const BlankPage({
     Key? key,
-    required this.stampImages,
     required this.initialPage,
+    required this.totalPages,
   }) : super(key: key);
 
   @override
@@ -64,7 +65,7 @@ class _BlankPageState extends State<BlankPage> {
     }
   }
 
-  final PageController _pageController = PageController(initialPage: 3);
+  final PageController _pageController = PageController(initialPage: 0);
   Alignment _getAlignment(int index) {
     if (index == 0) {
       return Alignment.topRight;
@@ -77,6 +78,8 @@ class _BlankPageState extends State<BlankPage> {
     }
   }
 
+  int currentPageIndex = 0;
+
   @override
   void initState() {
     super.initState();
@@ -85,72 +88,109 @@ class _BlankPageState extends State<BlankPage> {
 
   @override
   Widget build(BuildContext context) {
+    int totalStamps = getStampImagesOnPassportModels.data?.length ?? 0;
+    int totalPages = (totalStamps / imagesPerPage).ceil();
+    int remainingStamps = totalStamps % imagesPerPage;
     return PageView.builder(
       controller: _pageController,
-      itemCount: getStampImagesOnPassportModels.data?.isNotEmpty == true
-          ? (getStampImagesOnPassportModels.data!.length / imagesPerPage).ceil()
-          : 0,
+      itemCount: widget.totalPages + (remainingStamps > 0 ? 1 : 0),
+      onPageChanged: (index) {
+        setState(() {
+          currentPageIndex = index + 1; // Incrementing index by 1
+          print("currentPageIndex $currentPageIndex");
+        });
+      },
       itemBuilder: (context, pageIndex) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: 188,
-            decoration: const ShapeDecoration(
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
+        print("totalStamps $totalStamps");
+        print("totalPages $totalPages");
+        print("remainingStamps $remainingStamps");
+        // print("pageIndex $pageIndex");
+        return Container(
+          height: 199,
+          decoration: const ShapeDecoration(
+            color: Colors.transparent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30),
+                topRight: Radius.circular(30),
+                bottomLeft: Radius.circular(30),
+                bottomRight: Radius.circular(30),
+              ),
+            ),
+          ),
+          child: Column(
+            children: [
+              Visibility(
+                // visible: currentPageIndex == 1,
+                child: Center(
+                  child: Text(
+                    '(${currentPageIndex > widget.totalPages ? widget.totalPages : currentPageIndex}/${widget.totalPages})',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  top: 60, bottom: 60, left: 15, right: 15),
-              child: Stack(
-                children: List.generate(imagesPerPage, (index) {
-                  final imageIndex = pageIndex * imagesPerPage + index;
-                  if (getStampImagesOnPassportModels.data != null &&
-                      imageIndex <
-                          getStampImagesOnPassportModels.data!.length) {
-                    final stampImage = getStampImagesOnPassportModels
-                        .data![imageIndex].stampImage;
-
-                    return Positioned(
-                      right: (index == 0 || index == 2) ? 0 : null,
-                      left: (index == 1 || index == 3) ? 0 : null,
-                      top: (index == 0 || index == 1) ? 0 : null,
-                      bottom: (index == 2 || index == 3) ? 0 : null,
-                      child: RotatedBox(
-                        quarterTurns: 3,
-                        child: SizedBox(
-                          width: 150,
-                          height: 150,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(30),
-                            child: stampImage != null
-                                ? Image.network(
-                                    "https://portal.passporttastic.com/public/$stampImage",
-                                    width: 150,
-                                    height: 150,
-                                  )
-                                : Image.asset(
-                                    "assets/logo.png",
-                                    fit: BoxFit.contain,
-                                  ),
-                          ),
-                        ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  decoration: const ShapeDecoration(
+                    color: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30),
+                        bottomLeft: Radius.circular(30),
+                        bottomRight: Radius.circular(30),
                       ),
-                    );
-                  } else {
-                    return Container();
-                  }
-                }),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        top: 60, bottom: 60, left: 15, right: 15),
+                    child: Stack(
+                      children: List.generate(imagesPerPage, (index) {
+                        final imageIndex = pageIndex * imagesPerPage + index;
+                        if (getStampImagesOnPassportModels.data != null &&
+                            imageIndex <
+                                getStampImagesOnPassportModels.data!.length) {
+                          final stampImage = getStampImagesOnPassportModels
+                              .data![imageIndex].stampImage;
+
+                          return Positioned(
+                            right: (index == 2 || index == 0) ? 170 : null,
+                            left: (index == 3 || index == 1) ? 170 : null,
+                            top: (index == 1 || index == 0) ? 0 : null,
+                            bottom: (index == 3 || index == 2) ? 0 : null,
+                            child: RotatedBox(
+                              quarterTurns: 3,
+                              child: SizedBox(
+                                width: 140,
+                                height: 140,
+                                child: stampImage != null
+                                    ? Image.network(
+                                        "https://portal.passporttastic.com/public/$stampImage",
+                                        fit: BoxFit.fill,
+                                      )
+                                    : Image.asset(
+                                        "assets/logo.png",
+                                        fit: BoxFit.contain,
+                                      ),
+                              ),
+                            ),
+                          );
+                        } else {
+                          return Container();
+                        }
+                      }),
+                    ),
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
         );
       },

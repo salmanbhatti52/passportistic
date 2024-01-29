@@ -8,6 +8,7 @@ import '../AppDrawerButtons/contact.dart';
 import '../AppDrawerButtons/faq.dart';
 import '../AppDrawerButtons/privaacy.dart';
 import '../AppDrawerButtons/terms.dart';
+import '../AppDrawerButtons/tremiTest.dart';
 import '../auth/signIn.dart';
 import 'mainScreenHome.dart';
 
@@ -53,12 +54,12 @@ class _AppDrawerState extends State<AppDrawer> {
                             width: 120.w,
                           ),
                         ),
-                        Text(
+                        const Text(
                           'PassportTastic',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              color: const Color(0xFF565656),
-                              fontSize: 31.sp,
+                              color: Color(0xFF565656),
+                              fontSize: 31,
                               fontFamily: 'Satoshi',
                               fontWeight: FontWeight.w800,
                               letterSpacing: 0.5),
@@ -181,7 +182,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 //   onTap: () {
                 //     Navigator.push(context, MaterialPageRoute(
                 //       builder: (BuildContext context) {
-                //         return const GpayAPay();
+                //         return const TestPackage();
                 //       },
                 //     ));
                 //     // Close the drawer using openEndDrawer()

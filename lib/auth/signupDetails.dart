@@ -1,6 +1,6 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -220,14 +220,14 @@ class _SignupDetailsState extends State<SignupDetails> {
         Center(
           child: SvgPicture.asset(
             "assets/log1.svg",
-            height: 35.h,
-            width: 108.w,
+            height: 35,
+            width: 108,
             color: const Color(0xFFF65734),
           ),
         ),
 
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.01.h,
+          height: MediaQuery.of(context).size.height * 0.01,
         ),
         const Center(
             child: Text(
@@ -807,23 +807,23 @@ class _SignupDetailsState extends State<SignupDetails> {
                     onTap: () {
                       // Open the date picker when the icon is clicked
                       showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(1950),
-                    lastDate: DateTime(2100),
-                  ).then((selectedDate) {
-                    if (selectedDate != null) {
-                      // Handle the selected date
-                      setState(() {
-                        apiDateFormat =
-                            DateFormat('yyyyMMdd').format(selectedDate);
-                        dob.text =
-                            DateFormat('MM/dd/yyyy').format(selectedDate);
-                        // textFieldDateFormat = DateFormat('MM/dd/yyyy').format(selectedDate);
-                        // Date.text = DateFormat.yMd().format(selectedDate);
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(1950),
+                        lastDate: DateTime(2100),
+                      ).then((selectedDate) {
+                        if (selectedDate != null) {
+                          // Handle the selected date
+                          setState(() {
+                            apiDateFormat =
+                                DateFormat('yyyyMMdd').format(selectedDate);
+                            dob.text =
+                                DateFormat('MM/dd/yyyy').format(selectedDate);
+                            // textFieldDateFormat = DateFormat('MM/dd/yyyy').format(selectedDate);
+                            // Date.text = DateFormat.yMd().format(selectedDate);
+                          });
+                        }
                       });
-                    }
-                  });
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(7),

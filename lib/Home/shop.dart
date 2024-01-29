@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:scanguard/Home/mainScreenHome.dart';
 import 'Shop/buyPassportPages.dart';
 import 'Shop/buyStamps.dart';
 import 'appDrawer.dart';
@@ -48,13 +49,15 @@ class _StampPageState extends State<StampPage> {
           leading: Builder(builder: (context) {
             return GestureDetector(
               onTap: () {
-                Scaffold.of(context).openDrawer();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => const MainScreen()));
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SvgPicture.asset(
-                  "assets/menu.svg",
-                  // fit: BoxFit.scaleDown,
+                  "assets/arrowBack1.svg",
                 ),
               ),
             );
@@ -68,6 +71,7 @@ class _StampPageState extends State<StampPage> {
               ),
             ),
           ],
+          backgroundColor: const Color(0xFFF65734).withOpacity(0.90),
         ),
         body: Column(
           children: [

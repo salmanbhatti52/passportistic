@@ -65,8 +65,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-
-
   @override
   void initState() {
     // TODO: implement initState
@@ -138,11 +136,10 @@ class _HomePageState extends State<HomePage> {
 
         // backgroundColor: Color(0xFF00AEFF),
         body: Builder(builder: (context) {
-          return Column(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 6),
+          return SafeArea(
+            child: Column(
+              children: [
+                Expanded(
                   child: Container(
                       width: MediaQuery.of(context).size.width,
                       // height: MediaQuery.of(context).size.height,
@@ -621,8 +618,8 @@ class _HomePageState extends State<HomePage> {
                         ),
                       )),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         }),
       );

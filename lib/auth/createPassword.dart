@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:scanguard/auth/signIn.dart';
 import 'package:scanguard/auth/signUpNextPage.dart';
@@ -104,17 +103,17 @@ class _CreatePasswordState extends State<CreatePassword> {
           Center(
             child: SvgPicture.asset(
               "assets/log1.svg",
-              height: 70.h,
-              width: 219.w,
+              height: 70,
+              width: 219,
               color: const Color(0xFFF65734),
             ),
           ),
-          Text(
+          const Text(
             'PassportTastic',
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: const Color(0xFF565656),
-                fontSize: 31.sp,
+                color: Color(0xFF565656),
+                fontSize: 31,
                 fontFamily: 'Satoshi',
                 fontWeight: FontWeight.w800,
                 letterSpacing: 0.5),
@@ -122,26 +121,26 @@ class _CreatePasswordState extends State<CreatePassword> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.04,
           ),
-          Text(
+          const Text(
             'Create your new password',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: const Color(0xFF141010),
-              fontSize: 24.sp,
+              color: Color(0xFF141010),
+              fontSize: 24,
               fontFamily: 'Satoshi',
               fontWeight: FontWeight.w700,
             ),
           ),
-          SizedBox(
-            width: 330.w,
+          const SizedBox(
+            width: 330,
             child: Opacity(
               opacity: 0.50,
               child: Text(
                 'Please create your new password',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: const Color(0xFF222222),
-                  fontSize: 16.sp,
+                  color: Color(0xFF222222),
+                  fontSize: 16,
                   fontFamily: 'Satoshi',
                   fontWeight: FontWeight.w300,
                   height: 1.50,
@@ -161,8 +160,8 @@ class _CreatePasswordState extends State<CreatePassword> {
                 child: TextFormField(
                   focusNode: _focusNode1,
                   obscureText: _obscureText,
-                  style: TextStyle(
-                      color: const Color(0xFF000000), fontSize: 16.sp),
+                  style:
+                      const TextStyle(color: Color(0xFF000000), fontSize: 16),
                   cursorColor: const Color(0xFF000000),
                   controller: createPass,
                   keyboardType: TextInputType.name,
@@ -171,8 +170,8 @@ class _CreatePasswordState extends State<CreatePassword> {
                       padding: const EdgeInsets.all(8.0),
                       child: SvgPicture.asset(
                         'assets/lock.svg',
-                        width: 24.w,
-                        height: 24.h,
+                        width: 24,
+                        height: 24,
                         color: isFocused1
                             ? const Color(0xFFF65734)
                             : const Color(0xFFE0E0E5),
@@ -188,8 +187,8 @@ class _CreatePasswordState extends State<CreatePassword> {
                             },
                             icon: SvgPicture.asset(
                               'assets/eye.svg',
-                              width: 24.w,
-                              height: 24.h,
+                              width: 24,
+                              height: 24,
                             ),
                           )
                         ]),
@@ -206,9 +205,9 @@ class _CreatePasswordState extends State<CreatePassword> {
                           color: Color(0xFFF3F3F3)), // change border color
                     ),
                     labelStyle: const TextStyle(),
-                    hintStyle: TextStyle(
-                        color: const Color(0xFFA7A9B7),
-                        fontSize: 16.sp,
+                    hintStyle: const TextStyle(
+                        color: Color(0xFFA7A9B7),
+                        fontSize: 16,
                         fontWeight: FontWeight.w300,
                         fontFamily: "Satoshi"),
                     border: OutlineInputBorder(
@@ -233,8 +232,8 @@ class _CreatePasswordState extends State<CreatePassword> {
                 child: TextFormField(
                   focusNode: _focusNode2,
                   obscureText: _obscureText,
-                  style: TextStyle(
-                      color: const Color(0xFF000000), fontSize: 16.sp),
+                  style:
+                      const TextStyle(color: Color(0xFF000000), fontSize: 16),
                   cursorColor: const Color(0xFF000000),
                   controller: conPass,
                   keyboardType: TextInputType.name,
@@ -243,8 +242,8 @@ class _CreatePasswordState extends State<CreatePassword> {
                       padding: const EdgeInsets.all(8.0),
                       child: SvgPicture.asset(
                         'assets/lock.svg',
-                        width: 24.w,
-                        height: 24.h,
+                        width: 24,
+                        height: 24,
                         color: isFocused2
                             ? const Color(0xFFF65734)
                             : const Color(0xFFE0E0E5),
@@ -260,8 +259,8 @@ class _CreatePasswordState extends State<CreatePassword> {
                             },
                             icon: SvgPicture.asset(
                               'assets/eye.svg',
-                              width: 24.w,
-                              height: 24.h,
+                              width: 24,
+                              height: 24,
                             ),
                           )
                         ]),
@@ -278,9 +277,9 @@ class _CreatePasswordState extends State<CreatePassword> {
                           color: Color(0xFFF3F3F3)), // change border color
                     ),
                     labelStyle: const TextStyle(),
-                    hintStyle: TextStyle(
-                        color: const Color(0xFFA7A9B7),
-                        fontSize: 16.sp,
+                    hintStyle: const TextStyle(
+                        color: Color(0xFFA7A9B7),
+                        fontSize: 16,
                         fontWeight: FontWeight.w300,
                         fontFamily: "Satoshi"),
                     border: OutlineInputBorder(
@@ -343,8 +342,8 @@ class _CreatePasswordState extends State<CreatePassword> {
                     alignment: Alignment.center,
                     children: [
                       Container(
-                        height: 48.h,
-                        width: 340.w,
+                        height: 48,
+                        width: 340,
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
                             colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
@@ -359,12 +358,12 @@ class _CreatePasswordState extends State<CreatePassword> {
                               valueColor:
                                   AlwaysStoppedAnimation<Color>(Colors.white),
                             )
-                          : Text(
+                          : const Text(
                               "Reset Password",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontFamily: "Satoshi",
-                                  fontSize: 20.sp,
+                                  fontSize: 20,
                                   fontWeight: FontWeight.w700),
                             ),
                     ],

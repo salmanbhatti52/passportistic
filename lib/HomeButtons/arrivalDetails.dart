@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -157,6 +159,7 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
     }
   }
 
+  bool isLoading3 = false;
   GetStampImageModels getStampImageModel = GetStampImageModels();
   getStampImage() async {
     // try {
@@ -165,13 +168,13 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
     String apiUrl = "$baseUrl/stamp_design";
     print("api: $apiUrl");
     setState(() {
-      isLoading = true;
+      isLoading3 = true;
     });
     final response = await http.post(Uri.parse(apiUrl), headers: {
       'Accept': 'application/json',
     }, body: {
       "passport_holder_id": userID,
-      "travel_type": "Departed",
+      "travel_type": "Arrival",
       "stamp_shape_name": _selectedStampShape,
       "shapes_id": stampShapeId,
       "country_name": _selectedCountry,
@@ -198,7 +201,7 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
       await convertImageToBase64(
           'https://portal.passporttastic.com/public$stampImageURL');
       setState(() {
-        isLoading = false;
+        isLoading3 = false;
       });
       print('getStampImageModel status: ${getStampImageModel.status}');
     }
@@ -283,6 +286,7 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
     );
   }
 
+  bool isLoading2 = false;
   final imageUrl =
       'https://img.freepik.com/premium-vector/blank-rubber-stamps-grunge-style-vintage-postage-stamps_422344-3475.jpg?w=740';
   arrivalDetails() async {
@@ -293,8 +297,28 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
     print("api: $apiUrl");
     prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
+    print("""
+
+   "stamps_country": $_selectedCountry,
+      "passport_holder_id": $userID,
+      "stamps_city": ${cityname.text},
+      "transport_mode_id": $_selectedTransportMode,
+      "stamp_shape_id": $stampShapeId,
+      "stamps_color_id": $_selectedColor,
+      "stamps_date": ${date.text},
+      "stamps_offset_rotation": "-5",
+      "stamps_offset_vertical": "5",
+      "stamps_offset_horizental": "8",
+      "stamps_page_number": "24",
+      "stamps_time": $formatedTime,
+      "stamps_position_number": "12",
+      "stamps_arrive_depart": "Arrive",
+      "stamp_image": $base64Image
+
+
+""");
     setState(() {
-      isLoading = true;
+      isLoading2 = true;
     });
     final response = await http.post(Uri.parse(apiUrl), headers: {
       'Accept': 'application/json',
@@ -324,7 +348,7 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
       print("SuucessFull");
       arrivalDetailsModels = arrivalDetailsModelsFromJson(responseString);
       setState(() {
-        isLoading = false;
+        isLoading2 = false;
       });
       print('arrivalDetailsModels status: ${arrivalDetailsModels.status}');
     }
@@ -707,92 +731,6 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: TextFormField(
-                      focusNode: _focusNode5,
-                      controller: time,
-                      readOnly: true, // Prevent manual text input
-                      onTap: () {
-                        // Open the time picker when the field is tapped
-                        showTimePicker(
-                          context: context,
-                          initialTime: TimeOfDay.now(),
-                          initialEntryMode: TimePickerEntryMode.inputOnly,
-                        ).then((selectedTime) {
-                          if (selectedTime != null) {
-                            // Handle the selected time
-                            setState(() {
-                              String formattedTime =
-                                  selectedTime.format(context);
-                              formatedTime =
-                                  '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}:00';
-                              time.text = DateFormat('hh:mm').format(
-                                DateFormat('hh:mm a').parse(formattedTime),
-                              );
-                              print(formatedTime);
-                            });
-                          }
-                        });
-                      },
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: Color(0xFFF65734)),
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        hintText: "Select Time",
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide:
-                              const BorderSide(color: Color(0xFFF3F3F3)),
-                        ),
-                        hintStyle: const TextStyle(
-                          color: Color(0xFFA7A9B7),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w300,
-                          fontFamily: "Outfit",
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        prefixIcon: GestureDetector(
-                          onTap: () {
-                            // Open the time picker when the icon is clicked
-                            showTimePicker(
-                              context: context,
-                              initialTime: TimeOfDay.now(),
-                            ).then((selectedTime) {
-                              if (selectedTime != null) {
-                                // Handle the selected time
-                                setState(() {
-                                  String formattedTime =
-                                      selectedTime.format(context);
-                                  time.text = DateFormat('hh:mm a').format(
-                                    DateFormat('hh:mm a').parse(formattedTime),
-                                  );
-                                });
-                              }
-                            });
-                          },
-                          child: Icon(
-                            Icons.access_time,
-                            color: isFocused5
-                                ? const Color(0xFFF65734)
-                                : const Color(0xFFE0E0E5),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                ],
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Row(
-                children: [
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: TextFormField(
                       focusNode: _focusNode6,
                       controller: date,
                       readOnly: true, // Prevent manual text input
@@ -843,6 +781,92 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: TextFormField(
+                      focusNode: _focusNode5,
+                      controller: time,
+                      readOnly: true, // Prevent manual text input
+                      onTap: () {
+                        // Open the time picker when the field is tapped
+                        showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.now(),
+                          initialEntryMode: TimePickerEntryMode.inputOnly,
+                        ).then((selectedTime) {
+                          if (selectedTime != null) {
+                            // Handle the selected time
+                            setState(() {
+                              String formattedTime =
+                                  selectedTime.format(context);
+                              formatedTime =
+                                  '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}:00';
+                              time.text = DateFormat('hh:mm a').format(
+                                DateFormat('hh:mm a').parse(formattedTime),
+                              );
+                              print(formatedTime);
+                            });
+                          }
+                        });
+                      },
+                      decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: Color(0xFFF65734)),
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        hintText: "Select Time",
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide:
+                              const BorderSide(color: Color(0xFFF3F3F3)),
+                        ),
+                        hintStyle: const TextStyle(
+                          color: Color(0xFFA7A9B7),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w300,
+                          fontFamily: "Outfit",
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        prefixIcon: GestureDetector(
+                          onTap: () {
+                            // Open the time picker when the icon is clicked
+                            // showTimePicker(
+                            //   context: context,
+                            //   initialTime: TimeOfDay.now(),
+                            // ).then((selectedTime) {
+                            //   if (selectedTime != null) {
+                            //     // Handle the selected time
+                            //     setState(() {
+                            //       String formattedTime =
+                            //           selectedTime.format(context);
+                            //       time.text = DateFormat('hh:mm a').format(
+                            //         DateFormat('hh:mm a').parse(formattedTime),
+                            //       );
+                            //     });
+                            //   }
+                            // });
+                          },
+                          child: Icon(
+                            Icons.access_time,
+                            color: isFocused5
+                                ? const Color(0xFFF65734)
+                                : const Color(0xFFE0E0E5),
+                          ),
                         ),
                       ),
                     ),
@@ -948,7 +972,6 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                       Fluttertoast.showToast(
                           msg: "Success", backgroundColor: Colors.green);
                     } else {
-                      //snakbar in flutter
                       Fluttertoast.showToast(
                           msg: "Please Wait", backgroundColor: Colors.green);
                     }
@@ -1216,7 +1239,7 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                               backgroundColor: Colors.greenAccent,
                             ),
                           );
-                          Navigator.push(context, MaterialPageRoute(
+                          Navigator.pushReplacement(context, MaterialPageRoute(
                             builder: (BuildContext context) {
                               return const ViewPassport();
                             },
@@ -1262,7 +1285,7 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                             ],
                           ),
                         ),
-                        if (isLoading)
+                        if (isLoading2)
                           const CircularProgressIndicator(
                             valueColor:
                                 AlwaysStoppedAnimation<Color>(Colors.white),

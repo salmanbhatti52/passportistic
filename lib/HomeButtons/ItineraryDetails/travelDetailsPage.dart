@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -147,9 +149,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
     String apiUrl = "$baseUrl/get_transport_mode_itinerary";
     print("api: $apiUrl");
     print("travelMode $travelMode");
-    setState(() {
-      isLoading1 = true;
-    });
+
     final response = await http.post(Uri.parse(apiUrl), headers: {
       'Accept': 'application/json',
     }, body: {
@@ -169,10 +169,9 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
         selectedTransportModeName = transportModeNamesModels.data?.modeName;
         print("selectedTransportModeName $selectedTransportModeName");
       }
-
-      setState(() {
-        isLoading1 = false;
-      });
+      if (mounted) {
+        setState(() {});
+      }
       print(
           'transportModeNamesModels status: ${transportModeNamesModels.status}');
     }
@@ -180,11 +179,6 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
 
   int itemsPerPage = 1;
   String? travelMode;
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
 
   Future<void> _onPageChanged(int index) async {
     await transportModeNames();
@@ -209,16 +203,19 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
     print("${widget.itinid}");
     travelDetails();
     mdoeofTransport();
-
+    _startTimer();
     print("$userID");
   }
 
+  Future<void> travelModeFunction() async {
+    if (travelMode != null) {
+      await transportModeNames();
+    }
+  }
+
   Widget buildTransportModeWidget() {
-    if (selectedTransportModeName == null) {
+    if (selectedTransportModeName != null) {
       // Show a loading indicator while data is being fetched
-      return const CircularProgressIndicator();
-    } else {
-      // Show the transport mode name when available
       return Text(
         selectedTransportModeName.toString(),
         style: const TextStyle(
@@ -228,11 +225,54 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
           fontWeight: FontWeight.w900,
         ),
       );
+    } else {
+      // Show the transport mode name when available
+      return const CircularProgressIndicator.adaptive(
+        strokeWidth: 2,
+        backgroundColor: Color(0xFFF65734),
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+      );
     }
+  }
+
+  Timer? timer;
+
+  void cancelTimer() {
+    // Cancel the timer if it's active
+    timer?.cancel();
+  }
+
+  void onPageExit() {
+    // Cancel the timer to stop calling getMessageApi()
+    cancelTimer();
+  }
+
+  final StreamController<void> _streamController =
+      StreamController<void>.broadcast();
+  void _startTimer() {
+    const Duration updateInterval =
+        Duration(seconds: 2); // Adjust the interval as needed
+    timer = Timer.periodic(updateInterval, (Timer timer) {
+      _streamController.add(null);
+      transportModeNames();
+    });
+  }
+
+  void onPageEnter() {
+    // Start the timer to call getMessageApi() every 1 second
+    _startTimer();
   }
 
 // In your build method or wherever you want to display the widget:
 // buildTransportModeWidget(),
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+    print('Disposing widget');
+    timer?.cancel(); // Cancel the timer
+    timer = null;
+  }
 
   String hoursText = '';
   @override
@@ -252,7 +292,8 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () {
-                Navigator.pop(context);
+                Navigator.of(context).pop();
+                onPageExit();
               },
               child: SvgPicture.asset(
                 "assets/arrowBack1.svg",
@@ -356,13 +397,17 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                       travelForPage[index % itemsPerPage].tripTravelTime ?? '';
                   final hoursRegExp = RegExp(r'(\d+) hours');
                   final match = hoursRegExp.firstMatch(tripTravelTime);
+                  // travelModeFunction();
                   travelMode =
                       travelForPage[index % itemsPerPage].transportModeId ?? '';
                   print("travelMode in Pageview $travelMode");
 
-                  if (travelMode != null) {
-                    // transportModeNames();
-                  }
+                  // if (travelMode != null) {
+                  //   timer
+                  //       ?.cancel(); // Cancel the old timer before starting a new one
+                  //   timer = Timer.periodic(const Duration(seconds: 2),
+                  //       (Timer t) => transportModeNames());
+                  // }
                   if (match != null) {
                     hoursText = match.group(1) ?? ''; // Get the captured hours
                   }

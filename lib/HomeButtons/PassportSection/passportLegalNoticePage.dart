@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scanguard/HomeButtons/PassportSection/bloc/leagalnoticsBloc.dart';
 import '../../auth/signUpNextPage.dart';
+
 class PassportLegalNoticePage extends StatefulWidget {
   const PassportLegalNoticePage({super.key});
 
@@ -14,7 +15,6 @@ class _PassportLegalNoticePageState extends State<PassportLegalNoticePage> {
   @override
   void initState() {
     super.initState();
-    // Call the loadLegalNotice function when the widget is initialized
     context.read<PassportLegalNoticePageCubit>().loadLegalNotice();
   }
 
@@ -99,7 +99,8 @@ class _PassportLegalNoticePageState extends State<PassportLegalNoticePage> {
                             TextSpan(
                               children: [
                                 TextSpan(
-                                  text: legalnotice.toUpperCase(), // Set the legal notice text here
+                                  text: legalnotice
+                                      .toUpperCase(), // Set the legal notice text here
                                   style: const TextStyle(
                                     color: Color(0xFF141010),
                                     fontSize: 9.24,
@@ -113,7 +114,7 @@ class _PassportLegalNoticePageState extends State<PassportLegalNoticePage> {
                           )
                         : const Text(""),
                   ),
-                  if (isLoading) // Show circular progress indicator when isLoading is true
+                  if (isLoading)
                     const Center(
                       child: CircularProgressIndicator(),
                     ),
