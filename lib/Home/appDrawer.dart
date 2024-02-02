@@ -24,6 +24,7 @@ class _AppDrawerState extends State<AppDrawer> {
   Widget build(BuildContext context) {
     return Container(
       child: Drawer(
+        width: MediaQuery.of(context).size.width * 0.7,
         child: IconTheme(
           data: const IconThemeData(), // Change this to the desired color
           child: Container(
@@ -50,23 +51,29 @@ class _AppDrawerState extends State<AppDrawer> {
                         Center(
                           child: SvgPicture.asset(
                             "assets/log1.svg",
-                            height: 35.h,
-                            width: 120.w,
+                            height: 45,
+                            width: 120,
                           ),
                         ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.005,
+                        ),
                         const Text(
-                          'PassportTastic',
+                          'Passporttastic',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              color: Color(0xFF565656),
-                              fontSize: 31,
+                              color: Colors.black,
+                              fontSize: 28,
                               fontFamily: 'Satoshi',
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 0.5),
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0.3),
                         ),
                       ],
                     ),
                   ],
+                ),
+                const SizedBox(
+                  height: 30,
                 ), // Add your drawer header here
                 Builder(
                   builder: (context) {
@@ -79,9 +86,9 @@ class _AppDrawerState extends State<AppDrawer> {
                         'Home',
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 20,
+                          fontSize: 18,
                           fontFamily: 'Satoshi',
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                       onTap: () {
@@ -106,9 +113,9 @@ class _AppDrawerState extends State<AppDrawer> {
                 //     'Notifications',
                 //     style: TextStyle(
                 //       color: Colors.black,
-                //       fontSize: 20,
+                //       fontSize: 18,
                 //       fontFamily: 'Satoshi',
-                //       fontWeight: FontWeight.w500,
+                //       fontWeight: FontWeight.w400,
                 //     ),
                 //   ),
                 //   onTap: () {
@@ -126,9 +133,9 @@ class _AppDrawerState extends State<AppDrawer> {
                     'About',
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 20,
+                      fontSize: 18,
                       fontFamily: 'Satoshi',
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                   onTap: () {
@@ -150,9 +157,9 @@ class _AppDrawerState extends State<AppDrawer> {
                     'Contact Us',
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 20,
+                      fontSize: 18,
                       fontFamily: 'Satoshi',
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                   onTap: () {
@@ -174,9 +181,9 @@ class _AppDrawerState extends State<AppDrawer> {
                 //     'Payment',
                 //     style: TextStyle(
                 //       color: Colors.black,
-                //       fontSize: 20,
+                //       fontSize: 18,
                 //       fontFamily: 'Satoshi',
-                //       fontWeight: FontWeight.w500,
+                //       fontWeight: FontWeight.w400,
                 //     ),
                 //   ),
                 //   onTap: () {
@@ -198,9 +205,9 @@ class _AppDrawerState extends State<AppDrawer> {
                 //     'Rate Our App',
                 //     style: TextStyle(
                 //       color: Colors.black,
-                //       fontSize: 20,
+                //       fontSize: 18,
                 //       fontFamily: 'Satoshi',
-                //       fontWeight: FontWeight.w500,
+                //       fontWeight: FontWeight.w400,
                 //     ),
                 //   ),
                 //   onTap: () {
@@ -218,15 +225,39 @@ class _AppDrawerState extends State<AppDrawer> {
                     "FQA's",
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 20,
+                      fontSize: 18,
                       fontFamily: 'Satoshi',
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(
                       builder: (BuildContext context) {
                         return const FAQ();
+                      },
+                    ));
+                    // Close the drawer using openEndDrawer()
+                    // Do something
+                  },
+                ),
+                ListTile(
+                  leading: SvgPicture.asset(
+                    "assets/pp.svg",
+                    color: Colors.black,
+                  ),
+                  title: const Text(
+                    'Privacy Policy',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontFamily: 'Satoshi',
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (BuildContext context) {
+                        return const PrivacyPolicy();
                       },
                     ));
                     // Close the drawer using openEndDrawer()
@@ -242,9 +273,9 @@ class _AppDrawerState extends State<AppDrawer> {
                     'Terms & Conditions',
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 20,
+                      fontSize: 18,
                       fontFamily: 'Satoshi',
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                   onTap: () {
@@ -257,30 +288,8 @@ class _AppDrawerState extends State<AppDrawer> {
                     // Do something
                   },
                 ),
-
-                ListTile(
-                  leading: SvgPicture.asset(
-                    "assets/pp.svg",
-                    color: Colors.black,
-                  ),
-                  title: const Text(
-                    'Privacy Policy',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontFamily: 'Satoshi',
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (BuildContext context) {
-                        return const PrivacyPolicy();
-                      },
-                    ));
-                    // Close the drawer using openEndDrawer()
-                    // Do something
-                  },
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.15,
                 ),
                 ListTile(
                   leading: SvgPicture.asset(
@@ -291,20 +300,41 @@ class _AppDrawerState extends State<AppDrawer> {
                     'Log Out',
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 20,
+                      fontSize: 18,
                       fontFamily: 'Satoshi',
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                   onTap: () {
-                    removeDataFormSharedPreferences();
-                    Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder: (context) => const SignInPage()),
-                      (Route<dynamic> route) => false,
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Logout'),
+                          content:
+                              const Text('Are you sure you want to logout?'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text('No'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: const Text('Yes'),
+                              onPressed: () {
+                                removeDataFormSharedPreferences();
+                                Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) => const SignInPage()),
+                                  (Route<dynamic> route) => false,
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      },
                     );
-                    // Close the drawer using openEndDrawer()
-                    // Do something
                   },
                 ),
               ],

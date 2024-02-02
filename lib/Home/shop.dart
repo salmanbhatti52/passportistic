@@ -34,6 +34,7 @@ class _StampPageState extends State<StampPage> {
       child: Scaffold(
         drawer: const AppDrawer(),
         appBar: AppBar(
+          backgroundColor: Colors.white,
           forceMaterialTransparency: true,
           centerTitle: true,
           title: const Text(
@@ -71,7 +72,7 @@ class _StampPageState extends State<StampPage> {
               ),
             ),
           ],
-          backgroundColor: const Color(0xFFF65734).withOpacity(0.90),
+          // backgroundColor: const Color(0xFFF65734).withOpacity(0.90),
         ),
         body: Column(
           children: [

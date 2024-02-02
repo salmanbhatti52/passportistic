@@ -21,7 +21,7 @@ class ProfilePage extends StatefulWidget {
   final String? userId;
   const ProfilePage({
     super.key,
-    this.userId, 
+    this.userId,
     // required this.profileData,
   });
 
@@ -485,10 +485,33 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               GestureDetector(
                 onTap: () {
-                  removeDataFormSharedPreferences();
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => const SignInPage()),
-                    (Route<dynamic> route) => false,
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Logout'),
+                        content: const Text('Are you sure you want to logout?'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: const Text('No'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          TextButton(
+                            child: const Text('Yes'),
+                            onPressed: () {
+                              removeDataFormSharedPreferences();
+                              Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => const SignInPage()),
+                                (Route<dynamic> route) => false,
+                              );
+                            },
+                          ),
+                        ],
+                      );
+                    },
                   );
                 },
                 child: Container(

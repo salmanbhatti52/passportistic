@@ -44,6 +44,17 @@ class _NavBarState extends State<NavBar> {
 
   @override
   Widget build(BuildContext context) {
+    if (index == 0) {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        statusBarColor: Color(0xFFC6FFE7), // Set status bar color
+        statusBarIconBrightness: Brightness.dark, // Set status bar icon color
+      ));
+    } else {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        statusBarColor: Colors.white, // Set status bar color
+        statusBarIconBrightness: Brightness.dark, // Set status bar icon color
+      ));
+    }
     Color scaffoldColor = index == 0 ? const Color(0xFF00AEFF) : Colors.white;
     return WillPopScope(
       onWillPop: () async {

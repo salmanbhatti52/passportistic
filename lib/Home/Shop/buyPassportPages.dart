@@ -164,15 +164,25 @@ class _BuyPassportPagesState extends State<BuyPassportPages> {
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      Text(
-                        "\$${getOtherShopModels.data?[index].packagePrice}",
-                        style: const TextStyle(
-                          color: Color(0xFFF65734),
-                          fontSize: 20,
-                          fontFamily: 'Satoshi',
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
+                      getOtherShopModels.data?[index].packagePrice != null
+                          ? Text(
+                              "\$${getOtherShopModels.data?[index].packagePrice}",
+                              style: const TextStyle(
+                                color: Color(0xFFF65734),
+                                fontSize: 20,
+                                fontFamily: 'Satoshi',
+                                fontWeight: FontWeight.w900,
+                              ),
+                            )
+                          : const Text(
+                              "Out of Stock",
+                              style: TextStyle(
+                                color: Color(0xFFF65734),
+                                fontSize: 18,
+                                fontFamily: 'Satoshi',
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
                       Container(
                         width: 104,
                         padding: const EdgeInsets.symmetric(vertical: 8),

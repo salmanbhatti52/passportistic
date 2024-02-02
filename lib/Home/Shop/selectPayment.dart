@@ -272,20 +272,22 @@ class _SelectPaymentMethodState extends State<SelectPaymentMethod> {
                               ),
                               GestureDetector(
                                   onTap: () async {
-                                    prefs =
-                                        await SharedPreferences.getInstance();
-                                    userID = prefs?.getString('userID');
-                                    Navigator.pushReplacement(context,
-                                        MaterialPageRoute(
-                                      builder: (BuildContext context) {
-                                        return NavBar(
-                                          userId: "$userID",
-                                        );
-                                      },
-                                    ));
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                    // prefs =
+                                    //     await SharedPreferences.getInstance();
+                                    // userID = prefs?.getString('userID');
+                                    // Navigator.pushReplacement(context,
+                                    //     MaterialPageRoute(
+                                    //   builder: (BuildContext context) {
+                                    //     return NavBar(
+                                    //       userId: "$userID",
+                                    //     );
+                                    //   },
+                                    // ));
                                   },
-                                  child: mainButton("Go Back To Home",
-                                      appThemeColor, context)),
+                                  child: mainButton(
+                                      "Go Back", appThemeColor, context)),
                             ],
                           ),
                         ),
@@ -311,7 +313,7 @@ class _SelectPaymentMethodState extends State<SelectPaymentMethod> {
                   ),
               context: context);
         } else {
-          toastFailedMessage("Job Posting Failed", Colors.red);
+          toastFailedMessage("Purchasing Failed", Colors.red);
         }
         paymentIntent = null;
       }).onError((error, stackTrace) {
@@ -413,7 +415,8 @@ class _SelectPaymentMethodState extends State<SelectPaymentMethod> {
                     color: Colors.grey.withOpacity(0.2),
                     spreadRadius: 2,
                     blurRadius: 2,
-                    offset: const Offset(0, 3), // changes position of shadow
+                    offset: const Offset(0, 2),
+                    // changes position of shadow
                   ),
                 ],
               ),
