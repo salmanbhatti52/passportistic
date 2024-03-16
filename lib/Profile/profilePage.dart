@@ -253,19 +253,6 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             );
           }),
-          actions: [
-            GestureDetector(
-              onTap: () {
-                // Navigator.pushNamed(context, '/notification');
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SvgPicture.asset(
-                  "assets/notification.svg",
-                ),
-              ),
-            ),
-          ],
         ),
         body: Builder(builder: (context) {
           return SingleChildScrollView(

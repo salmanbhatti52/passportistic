@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:scanguard/AppDrawerButtons/heartwidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../AppDrawerButtons/aboutUs.dart';
@@ -104,26 +105,30 @@ class _AppDrawerState extends State<AppDrawer> {
                     );
                   },
                 ),
-                // ListTile(
-                //   leading: SvgPicture.asset(
-                //     "assets/bn.svg",
-                //     color: Colors.black,
-                //   ),
-                //   title: const Text(
-                //     'Notifications',
-                //     style: TextStyle(
-                //       color: Colors.black,
-                //       fontSize: 18,
-                //       fontFamily: 'Satoshi',
-                //       fontWeight: FontWeight.w400,
-                //     ),
-                //   ),
-                //   onTap: () {
-                //     Scaffold.of(context)
-                //         .openEndDrawer(); // Close the drawer using openEndDrawer()
-                //     // Do something
-                //   },
-                // ),
+                ListTile(
+                  leading: SvgPicture.asset(
+                    "assets/bn.svg",
+                    color: Colors.black,
+                  ),
+                  title: const Text(
+                    'Notifications',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontFamily: 'Satoshi',
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (BuildContext context) {
+                        return const HeartWidget();
+                      },
+                    ));
+                    // Close the drawer using openEndDrawer()
+                    // Do something
+                  },
+                ),
                 ListTile(
                   leading: SvgPicture.asset(
                     "assets/info.svg",

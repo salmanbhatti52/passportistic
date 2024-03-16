@@ -20,6 +20,7 @@ import '../Models/getColorListModels.dart';
 import '../Models/getCountryListModels.dart';
 import '../Models/getStampShapeListModels.dart';
 import '../Models/transportListModels.dart';
+import '../Models/validationModelAPI.dart';
 import '../auth/signUpNextPage.dart';
 import '../auth/signUpPage.dart';
 import '../main.dart';
@@ -243,33 +244,15 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
       print("in 200 getProfileModels");
       print("SuucessFull");
       getProfileModels = getProfileModelsFromJson(responseString);
-      if (getProfileModels.data!.passportStampsHeld == "0") {
-        checkStamps();
-      }
-      setState(() {
-        isLoading = false;
-      });
-      print('getProfileModels status: ${getProfileModels.status}');
-    }
-  }
 
-  checkStamps() {
-    AwesomeDialog(
-      context: context,
-      dialogType: DialogType.warning,
-      animType: AnimType.rightSlide,
-      title: 'Stamps Ended',
-      desc: 'Click OK to go to the shop page.',
-      btnCancelOnPress: () {
-        Navigator.pop(context); // Close the dialog
-      },
-      btnOkOnPress: () {
-        Navigator.pop(context); // Close the dialog
-        // Navigate to the shop page (replace 'ShopPage' with your actual route)
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const StampPage()));
-      },
-    ).show();
+      print('getProfileModels status: ${getProfileModels.status}');
+
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
   }
 
   ColorFilter getColorFilter(Color color) {
@@ -354,6 +337,82 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
     }
   }
 
+  bool load = false;
+  ValidationModelApi validationModelApi = ValidationModelApi();
+  validation() async {
+    setState(() {
+      load = true;
+    });
+    prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
+    var headersList = {
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+    var url =
+        Uri.parse('https://portal.passporttastic.com/api/getPackageDetails');
+
+    var body = {"passport_holder_id": "$userID"};
+
+    var req = http.Request('POST', url);
+    req.headers.addAll(headersList);
+    req.body = json.encode(body);
+
+    var res = await req.send();
+    final resBody = await res.stream.bytesToString();
+
+    if (res.statusCode == 200) {
+      validationModelApi = validationModelApiFromJson(resBody);
+      if (validationModelApi.data!.totalStamps == 0) {
+        checkStamps();
+      }
+      print(resBody);
+    } else {
+      print(res.reasonPhrase);
+      validationModelApi = validationModelApiFromJson(resBody);
+    }
+    setState(() {
+      load = false;
+    });
+  }
+
+  checkStamps() {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.warning,
+      animType: AnimType.rightSlide,
+      title: 'Stamps Ended',
+      desc: 'Click OK to go to the shop page.',
+      btnCancelOnPress: () {
+        Navigator.pop(context); // Close the dialog
+      },
+      btnOkOnPress: () {
+        Navigator.pop(context); // Close the dialog
+        // Navigate to the shop page (replace 'ShopPage' with your actual route)
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const StampPage()));
+      },
+    ).show();
+  }
+
+  checkPassPortPages() {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.warning,
+      animType: AnimType.rightSlide,
+      title: 'Passport Pages Ended',
+      desc: 'Click OK to go to the shop page.',
+      btnCancelOnPress: () {
+        Navigator.pop(context); // Close the dialog
+      },
+      btnOkOnPress: () {
+        Navigator.pop(context); // Close the dialog
+        // Navigate to the shop page (replace 'ShopPage' with your actual route)
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const StampPage()));
+      },
+    ).show();
+  }
+
   String? formatedTime;
   String? _selectedTransportMode;
   String? _selectedStampShape;
@@ -381,6 +440,7 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
   @override
   void initState() {
     super.initState();
+    validation();
     shapeList();
     mdoeofTransport();
     getCountryList();
@@ -420,892 +480,900 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
   Widget build(BuildContext context) {
     bool isFocused5 = _focusNode5.hasFocus;
     bool isFocused6 = _focusNode6.hasFocus;
-
-    // final _selectedColor = Color(int.parse('0x$_selectedColorString'));
-
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        forceMaterialTransparency: true,
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: SvgPicture.asset(
-            "assets/arrowBack1.svg",
-            fit: BoxFit.scaleDown,
+    if (load == true) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(
+            backgroundColor: Color(0xFFF65734),
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            strokeWidth: 2,
           ),
         ),
-        title: Column(children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 1, right: 10),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
+      );
+    } else {
+      // final _selectedColor = Color(int.parse('0x$_selectedColorString'));
+
+      return Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          forceMaterialTransparency: true,
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: SvgPicture.asset(
+              "assets/arrowBack1.svg",
+              fit: BoxFit.scaleDown,
+            ),
+          ),
+          title: Column(children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 1, right: 10),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        SvgPicture.asset("assets/approval.svg"),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text("Stamp Credits"),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            validationModelApi.data != null
+                                ? Text(
+                                    "${validationModelApi.data!.totalStamps} ",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                        color: const Color(0xFF000000)
+                                            .withOpacity(0.5)),
+                                  )
+                                : const Text(""),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ]),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(top: 1, right: 10),
+              child: GestureDetector(
+                onTap: () {
+                  // Navigator.pushNamed(context, '/notification');
+                },
+                child: SvgPicture.asset(
+                  "assets/notification.svg",
+                ),
+              ),
+            ),
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Column(children: [
+            Center(
+              child: SvgPicture.asset(
+                "assets/log1.svg",
+                height: 35.h,
+                width: 108.w,
+                color: const Color(0xFFF65734),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 8),
+              child: Row(
                 children: [
-                  Row(
+                  Text(
+                    "Arrival Details",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 24,
+                        color: Color(0xFFF65734)),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 1),
+              child: Text(
+                "Complete the following to get the Arrival Stamp of your own choosing.  If you are not happy with your choices, please make alternative selections",
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xFF141111).withOpacity(0.5)),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+              child: DropdownButtonFormField<String>(
+                iconDisabledColor: Colors.transparent,
+                iconEnabledColor: Colors.transparent,
+                value: _selectedCountry,
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedCountry = newValue;
+                    print(_selectedCountry);
+                  });
+                },
+                items: getCountryListModels.data?.map((country) {
+                      return DropdownMenuItem<String>(
+                        value: country.passportCountry.toString(),
+                        child: Text(country.passportCountry ?? ''),
+                      );
+                    }).toList() ??
+                    [],
+                decoration: InputDecoration(
+                  suffixIcon: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      SvgPicture.asset("assets/approval.svg"),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text("Stamp Credits"),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          getProfileModels.data != null
-                              ? Text(
-                                  "${getProfileModels.data!.passportStampsHeld} ",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      color: const Color(0xFF000000)
-                                          .withOpacity(0.5)),
-                                )
-                              : const Text(""),
-                        ],
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SvgPicture.asset("assets/arrowDown1.svg"),
                       ),
                     ],
                   ),
-                ],
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Color(0xFFF65734)),
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  hintText: "Select Country",
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: const BorderSide(
+                      color: Color(0xFFF3F3F3),
+                    ),
+                  ),
+                  hintStyle: const TextStyle(
+                    color: Color(0xFFA7A9B7),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w300,
+                    fontFamily: "Satoshi",
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                ),
               ),
             ),
-          ),
-        ]),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(top: 1, right: 10),
-            child: GestureDetector(
-              onTap: () {
-                // Navigator.pushNamed(context, '/notification');
-              },
-              child: SvgPicture.asset(
-                "assets/notification.svg",
-              ),
+            const SizedBox(
+              height: 10,
             ),
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(children: [
-          Center(
-            child: SvgPicture.asset(
-              "assets/log1.svg",
-              height: 35.h,
-              width: 108.w,
-              color: const Color(0xFFF65734),
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          const Padding(
-            padding: EdgeInsets.only(left: 8),
-            child: Row(
+            Row(
               children: [
-                Text(
-                  "Arrival Details",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 24,
-                      color: Color(0xFFF65734)),
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: TextFormField(
+                    controller: cityname,
+                    style:
+                        const TextStyle(color: Color(0xFF000000), fontSize: 16),
+                    cursorColor: const Color(0xFF000000),
+                    keyboardType: TextInputType.name,
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Color(0xFFF65734)),
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      // labelText: 'Email',
+                      hintText: "Write City Name",
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: const BorderSide(
+                          color: Color(0xFFF3F3F3),
+                        ),
+                      ),
+                      hintStyle: const TextStyle(
+                        color: Color(0xFFA7A9B7),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w300,
+                        fontFamily: "Satoshi",
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
                 ),
               ],
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8, right: 1),
-            child: Text(
-              "Complete the following to get the Arrival Stamp of your own choosing.  If you are not happy with your choices, please make alternative selections",
-              style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w400,
-                  color: const Color(0xFF141111).withOpacity(0.5)),
+            const SizedBox(
+              height: 10,
             ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Padding(
-            padding:
-                const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
-            child: DropdownButtonFormField<String>(
-              iconDisabledColor: Colors.transparent,
-              iconEnabledColor: Colors.transparent,
-              value: _selectedCountry,
-              onChanged: (newValue) {
-                setState(() {
-                  _selectedCountry = newValue;
-                  print(_selectedCountry);
-                });
-              },
-              items: getCountryListModels.data?.map((country) {
-                    return DropdownMenuItem<String>(
-                      value: country.passportCountry.toString(),
-                      child: Text(country.passportCountry ?? ''),
+            Padding(
+              padding:
+                  const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+              child: DropdownButtonFormField<String>(
+                iconDisabledColor: Colors.transparent,
+                iconEnabledColor: Colors.transparent,
+                value: _selectedTransportMode,
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedTransportMode = newValue;
+                    // Find the selected transport mode based on its ID
+                    final selectedTransportMode =
+                        transportListModels.data?.firstWhere(
+                      (mode) => mode.transportModeId == newValue,
                     );
-                  }).toList() ??
-                  [],
-              decoration: InputDecoration(
-                suffixIcon: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SvgPicture.asset("assets/arrowDown1.svg"),
-                    ),
-                  ],
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Color(0xFFF65734)),
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                hintText: "Select Country",
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: const BorderSide(
-                    color: Color(0xFFF3F3F3),
-                  ),
-                ),
-                hintStyle: const TextStyle(
-                  color: Color(0xFFA7A9B7),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w300,
-                  fontFamily: "Satoshi",
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: [
-              const SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: TextFormField(
-                  controller: cityname,
-                  style:
-                      const TextStyle(color: Color(0xFF000000), fontSize: 16),
-                  cursorColor: const Color(0xFF000000),
-                  keyboardType: TextInputType.name,
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xFFF65734)),
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    // labelText: 'Email',
-                    hintText: "Write City Name",
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: const BorderSide(
-                        color: Color(0xFFF3F3F3),
-                      ),
-                    ),
-                    hintStyle: const TextStyle(
-                      color: Color(0xFFA7A9B7),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w300,
-                      fontFamily: "Satoshi",
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Padding(
-            padding:
-                const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
-            child: DropdownButtonFormField<String>(
-              iconDisabledColor: Colors.transparent,
-              iconEnabledColor: Colors.transparent,
-              value: _selectedTransportMode,
-              onChanged: (newValue) {
-                setState(() {
-                  _selectedTransportMode = newValue;
-                  // Find the selected transport mode based on its ID
-                  final selectedTransportMode =
-                      transportListModels.data?.firstWhere(
-                    (mode) => mode.transportModeId == newValue,
-                  );
 
-                  if (selectedTransportMode != null) {
-                    modeImage = selectedTransportMode.modeImage;
-                    // Print all of the data associated with the selected transport mode
-                    print(
-                        "Transport Mode ID: ${selectedTransportMode.transportModeId}");
-                    print("Mode Name: ${selectedTransportMode.modeName}");
-                    print("Mode Image: $modeImage");
-                  } else {
-                    // Handle the case when no matching transport mode is found
-                    print("No matching transport mode found.");
-                  }
-                });
-              },
-              items: transportListModels.data?.map((mode) {
-                    return DropdownMenuItem<String>(
-                      value: mode.transportModeId,
-                      child: Text(mode.modeName ?? ''),
-                    );
-                  }).toList() ??
-                  [],
-              decoration: InputDecoration(
-                suffixIcon: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SvgPicture.asset("assets/arrowDown1.svg"),
-                    ),
-                  ],
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Color(0xFFF65734)),
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                hintText: "Select mode of transport",
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: const BorderSide(
-                    color: Color(0xFFF3F3F3),
-                  ),
-                ),
-                hintStyle: const TextStyle(
-                  color: Color(0xFFA7A9B7),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w300,
-                  fontFamily: "Satoshi",
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          const Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(left: 10),
-                child: Text(
-                  "Arrival Date and Time",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 16,
-                      color: Color(0xFF141111)),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Column(
-            children: [
-              Row(
-                children: [
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: TextFormField(
-                      focusNode: _focusNode6,
-                      controller: date,
-                      readOnly: true, // Prevent manual text input
-                      onTap: () {
-                        // Open the date picker when the field is tapped
-                        showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime.now(),
-                          lastDate: DateTime(2100),
-                        ).then((selectedDate) {
-                          if (selectedDate != null) {
-                            // Handle the selected date
-                            setState(() {
-                              date.text =
-                                  DateFormat('yyyy-MM-dd').format(selectedDate);
-                              // Date.text = DateFormat.yMd().format(selectedDate);
-                            });
-                          }
-                        });
-                      },
-                      decoration: InputDecoration(
-                        prefixIcon: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SvgPicture.asset(
-                            "assets/date.svg",
-                            color: isFocused6
-                                ? const Color(0xFFF65734)
-                                : const Color(0xFFE0E0E5),
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: Color(0xFFF65734)),
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        hintText: "Select Date",
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide:
-                              const BorderSide(color: Color(0xFFF3F3F3)),
-                        ),
-                        hintStyle: const TextStyle(
-                          color: Color(0xFFA7A9B7),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w300,
-                          fontFamily: "Outfit",
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: TextFormField(
-                      focusNode: _focusNode5,
-                      controller: time,
-                      readOnly: true, // Prevent manual text input
-                      onTap: () {
-                        // Open the time picker when the field is tapped
-                        showTimePicker(
-                          context: context,
-                          initialTime: TimeOfDay.now(),
-                          initialEntryMode: TimePickerEntryMode.inputOnly,
-                        ).then((selectedTime) {
-                          if (selectedTime != null) {
-                            // Handle the selected time
-                            setState(() {
-                              String formattedTime =
-                                  selectedTime.format(context);
-                              formatedTime =
-                                  '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}:00';
-                              time.text = DateFormat('hh:mm a').format(
-                                DateFormat('hh:mm a').parse(formattedTime),
-                              );
-                              print(formatedTime);
-                            });
-                          }
-                        });
-                      },
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: Color(0xFFF65734)),
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        hintText: "Select Time",
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide:
-                              const BorderSide(color: Color(0xFFF3F3F3)),
-                        ),
-                        hintStyle: const TextStyle(
-                          color: Color(0xFFA7A9B7),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w300,
-                          fontFamily: "Outfit",
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        prefixIcon: GestureDetector(
-                          onTap: () {
-                            // Open the time picker when the icon is clicked
-                            // showTimePicker(
-                            //   context: context,
-                            //   initialTime: TimeOfDay.now(),
-                            // ).then((selectedTime) {
-                            //   if (selectedTime != null) {
-                            //     // Handle the selected time
-                            //     setState(() {
-                            //       String formattedTime =
-                            //           selectedTime.format(context);
-                            //       time.text = DateFormat('hh:mm a').format(
-                            //         DateFormat('hh:mm a').parse(formattedTime),
-                            //       );
-                            //     });
-                            //   }
-                            // });
-                          },
-                          child: Icon(
-                            Icons.access_time,
-                            color: isFocused5
-                                ? const Color(0xFFF65734)
-                                : const Color(0xFFE0E0E5),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 10, right: 10, top: 5, bottom: 5),
-                child: DropdownButtonFormField<String>(
-                  iconDisabledColor: Colors.transparent,
-                  iconEnabledColor: Colors.transparent,
-                  value: _selectedColor,
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectedColor = newValue;
-                      print(_selectedColor);
-                    });
-                  },
-                  items: getColorListModels.data?.map((color) {
-                        return DropdownMenuItem<String>(
-                          value: color.stampsColorId.toString(),
-                          child: Text(color.stampsColor ?? ''),
-                        );
-                      }).toList() ??
-                      [],
-                  decoration: InputDecoration(
-                    suffixIcon: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SvgPicture.asset("assets/arrowDown1.svg"),
-                        ),
-                      ],
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xFFF65734)),
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    hintText: "Select Colors",
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: const BorderSide(
-                        color: Color(0xFFF3F3F3),
-                      ),
-                    ),
-                    hintStyle: const TextStyle(
-                      color: Color(0xFFA7A9B7),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w300,
-                      fontFamily: "Satoshi",
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 10, right: 10, top: 5, bottom: 5),
-                child: DropdownButtonFormField<String>(
-                  iconDisabledColor: Colors.transparent,
-                  iconEnabledColor: Colors.transparent,
-                  value: _selectedStampShape,
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectedStampShape = newValue;
-                      // Find the selected shape based on its name
-                      final selectedShape =
-                          getStampShapeListModels.data?.firstWhere(
-                        (shape) => shape.shapeName == newValue,
-                      );
-
-                      if (selectedShape != null) {
-                        stampShapeId = selectedShape.shapesId;
-                        _selectedShapeName = selectedShape.shapeName;
-                        _selectedShapeImage = selectedShape.shapeImage;
-                        _selectedShapeWidth = selectedShape.width;
-                        _selectedShapeHeight = selectedShape.height;
-                        // Print all of the data associated with the selected shape
-                        print("Shape ID: ${selectedShape.shapesId}");
-                        print("Shape Name: $_selectedShapeName");
-                        print("Shape Image: $_selectedShapeImage");
-                        print("Width: $_selectedShapeWidth");
-                        print("Height: $_selectedShapeHeight");
-                      } else {
-                        // Handle the case when no matching shape is found
-                        print("No matching shape found.");
-                      }
-                    });
-                    getStampImage();
-                    if (getStampImageModel.status == "success") {
-                      Fluttertoast.showToast(
-                          msg: "Success", backgroundColor: Colors.green);
+                    if (selectedTransportMode != null) {
+                      modeImage = selectedTransportMode.modeImage;
+                      // Print all of the data associated with the selected transport mode
+                      print(
+                          "Transport Mode ID: ${selectedTransportMode.transportModeId}");
+                      print("Mode Name: ${selectedTransportMode.modeName}");
+                      print("Mode Image: $modeImage");
                     } else {
-                      Fluttertoast.showToast(
-                          msg: "Please Wait", backgroundColor: Colors.green);
+                      // Handle the case when no matching transport mode is found
+                      print("No matching transport mode found.");
                     }
-                  },
-                  items: getStampShapeListModels.data?.map((shape) {
-                        return DropdownMenuItem<String>(
-                          value: shape.shapeName,
-                          child: Text(shape.shapeName ?? ''),
-                        );
-                      }).toList() ??
-                      [],
-                  decoration: InputDecoration(
-                    suffixIcon: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SvgPicture.asset("assets/arrowDown1.svg"),
-                        ),
-                      ],
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xFFF65734)),
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    hintText: "Select Stamp Shape",
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: const BorderSide(
-                        color: Color(0xFFF3F3F3),
+                  });
+                },
+                items: transportListModels.data?.map((mode) {
+                      return DropdownMenuItem<String>(
+                        value: mode.transportModeId,
+                        child: Text(mode.modeName ?? ''),
+                      );
+                    }).toList() ??
+                    [],
+                decoration: InputDecoration(
+                  suffixIcon: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SvgPicture.asset("assets/arrowDown1.svg"),
                       ),
+                    ],
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Color(0xFFF65734)),
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  hintText: "Select mode of transport",
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: const BorderSide(
+                      color: Color(0xFFF3F3F3),
                     ),
-                    hintStyle: const TextStyle(
-                      color: Color(0xFFA7A9B7),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w300,
-                      fontFamily: "Satoshi",
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
+                  ),
+                  hintStyle: const TextStyle(
+                    color: Color(0xFFA7A9B7),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w300,
+                    fontFamily: "Satoshi",
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
                   ),
                 ),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: Column(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     crossAxisAlignment: CrossAxisAlignment.center,
-              //     children: [
-              //       SingleChildScrollView(
-              //         scrollDirection: Axis.horizontal,
-              //         child: Row(
-              //           children: colors.map((color) {
-              //             bool isSelected = selectedColor == color;
-              //             return GestureDetector(
-              //               onTap: () {
-              //                 setState(() {
-              //                   selectedColor = isSelected ? "" : color;
-              //                 });
-              //               },
-              //               child: Container(
-              //                 width: 48,
-              //                 height: 48,
-              //                 margin: const EdgeInsets.symmetric(horizontal: 8),
-              //                 decoration: BoxDecoration(
-              //                   color: getColor(color),
-              //                   shape: BoxShape.circle,
-              //                   border: Border.all(
-              //                     width: 2,
-              //                     color: isSelected
-              //                         ? Colors.white
-              //                         : Colors.transparent,
-              //                   ),
-              //                 ),
-              //                 child: isSelected
-              //                     ? const Center(
-              //                         child: Icon(
-              //                           Icons.check,
-              //                           color: Colors.white,
-              //                           size: 20,
-              //                         ),
-              //                       )
-              //                     : const SizedBox(), // Hide the tick mark when not selected
-              //               ),
-              //             );
-              //           }).toList(),
-              //         ),
-              //       ),
-              //       const SizedBox(height: 16),
-              //       Padding(
-              //         padding: const EdgeInsets.only(left: 8),
-              //         child: Container(
-              //           width: 122,
-              //           height: 39,
-              //           padding: const EdgeInsets.all(8),
-              //           clipBehavior: Clip.antiAlias,
-              //           decoration: ShapeDecoration(
-              //             shape: RoundedRectangleBorder(
-              //               side: const BorderSide(
-              //                   width: 0.50, color: Color(0xFFE0E0E5)),
-              //               borderRadius: BorderRadius.circular(10),
-              //             ),
-              //           ),
-              //           child: Row(
-              //             mainAxisAlignment: MainAxisAlignment.center,
-              //             children: [
-              //               Container(
-              //                 width: 24,
-              //                 height: 24,
-              //                 decoration: BoxDecoration(
-              //                   color: getColor(selectedColor),
-              //                   shape: BoxShape.rectangle,
-              //                 ),
-              //               ),
-              //               const SizedBox(width: 8),
-              //               Text(
-              //                 getColorHex(selectedColor),
-              //                 style: const TextStyle(
-              //                   fontSize: 16,
-              //                   fontWeight: FontWeight.bold,
-              //                   color: Colors.black,
-              //                 ),
-              //               ),
-              //             ],
-              //           ),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              const SizedBox(height: 10),
-
-              const Center(
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            const Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: 10),
                   child: Text(
-                "Arrival",
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    color: Color(0xFF141111)),
-              )),
-              Center(
-                child: stampImageURL != null
-                    ? Container(
-                        width: 250, // Set the desired width
-                        height: 200, // Set the desired height
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(
-                                'https://portal.passporttastic.com/public/$stampImageURL'),
-                            // Use BoxFit.cover to fit the complete image
+                    "Arrival Date and Time",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16,
+                        color: Color(0xFF141111)),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Column(
+              children: [
+                Row(
+                  children: [
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: TextFormField(
+                        focusNode: _focusNode6,
+                        controller: date,
+                        readOnly: true, // Prevent manual text input
+                        onTap: () {
+                          // Open the date picker when the field is tapped
+                          showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime.now(),
+                            lastDate: DateTime(2100),
+                          ).then((selectedDate) {
+                            if (selectedDate != null) {
+                              // Handle the selected date
+                              setState(() {
+                                date.text = DateFormat('yyyy-MM-dd')
+                                    .format(selectedDate);
+                                // Date.text = DateFormat.yMd().format(selectedDate);
+                              });
+                            }
+                          });
+                        },
+                        decoration: InputDecoration(
+                          prefixIcon: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SvgPicture.asset(
+                              "assets/date.svg",
+                              color: isFocused6
+                                  ? const Color(0xFFF65734)
+                                  : const Color(0xFFE0E0E5),
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(color: Color(0xFFF65734)),
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                          hintText: "Select Date",
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide:
+                                const BorderSide(color: Color(0xFFF3F3F3)),
+                          ),
+                          hintStyle: const TextStyle(
+                            color: Color(0xFFA7A9B7),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w300,
+                            fontFamily: "Outfit",
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                      )
-                    : const Text("No stamp image available"),
-              ),
-
-              const Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 12),
-                    child: Text(
-                      "Select Stamp Location",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xFF141111)),
-                    ),
-                  )
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    RadioButton(
-                      description: "Randomly throughout passport",
-                      value: "1",
-                      groupValue: _singleValue,
-                      onChanged: (value) => setState(
-                        () => _singleValue = value ?? '',
                       ),
-                      activeColor: const Color(0xFFFF8D74),
-                      textStyle: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xFF141111)),
                     ),
-                    RadioButton(
-                      description: "Chronological order",
-                      value: "2",
-                      groupValue: _singleValue,
-                      onChanged: (value) => setState(
-                        () => _singleValue = value ?? '',
-                      ),
-                      activeColor: const Color(0xFFFF8D74),
-                      textStyle: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xFF141111)),
-                    ),
-                    RadioButton(
-                      description: "Position centrally",
-                      value: "3",
-                      groupValue: _singleValue,
-                      onChanged: (value) => setState(
-                        () => _singleValue = value ?? '',
-                      ),
-                      activeColor: const Color(0xFFFF8D74),
-                      textStyle: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xFF141111)),
-                    ),
-                    RadioButton(
-                      description: "Position randomly",
-                      value: "4",
-                      groupValue: _singleValue,
-                      onChanged: (value) => setState(
-                        () => _singleValue = value ?? '',
-                      ),
-                      activeColor: const Color(0xFFFF8D74),
-                      textStyle: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xFF141111)),
-                    ),
+                    const SizedBox(width: 10),
                   ],
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () async {
-                      //                      await showDialog<String>(context: context, builder:(BuildContext context){});
-
-                      // Navigator.push(context, MaterialPageRoute(
-                      //   builder: (BuildContext context) {
-                      //     return MainScreen();
-                      //   },
-                      // ));
-                      if (stampShapeId == null && _selectedColor == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              'Please fill the all fields',
-                              textAlign: TextAlign.center,
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: TextFormField(
+                        focusNode: _focusNode5,
+                        controller: time,
+                        readOnly: true, // Prevent manual text input
+                        onTap: () {
+                          // Open the time picker when the field is tapped
+                          showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.now(),
+                            initialEntryMode: TimePickerEntryMode.inputOnly,
+                          ).then((selectedTime) {
+                            if (selectedTime != null) {
+                              // Handle the selected time
+                              setState(() {
+                                String formattedTime =
+                                    selectedTime.format(context);
+                                formatedTime =
+                                    '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}:00';
+                                time.text = DateFormat('hh:mm a').format(
+                                  DateFormat('hh:mm a').parse(formattedTime),
+                                );
+                                print(formatedTime);
+                              });
+                            }
+                          });
+                        },
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(color: Color(0xFFF65734)),
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                          hintText: "Select Time",
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide:
+                                const BorderSide(color: Color(0xFFF3F3F3)),
+                          ),
+                          hintStyle: const TextStyle(
+                            color: Color(0xFFA7A9B7),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w300,
+                            fontFamily: "Outfit",
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          prefixIcon: GestureDetector(
+                            onTap: () {
+                              // Open the time picker when the icon is clicked
+                              // showTimePicker(
+                              //   context: context,
+                              //   initialTime: TimeOfDay.now(),
+                              // ).then((selectedTime) {
+                              //   if (selectedTime != null) {
+                              //     // Handle the selected time
+                              //     setState(() {
+                              //       String formattedTime =
+                              //           selectedTime.format(context);
+                              //       time.text = DateFormat('hh:mm a').format(
+                              //         DateFormat('hh:mm a').parse(formattedTime),
+                              //       );
+                              //     });
+                              //   }
+                              // });
+                            },
+                            child: Icon(
+                              Icons.access_time,
+                              color: isFocused5
+                                  ? const Color(0xFFF65734)
+                                  : const Color(0xFFE0E0E5),
                             ),
                           ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 10, right: 10, top: 5, bottom: 5),
+                  child: DropdownButtonFormField<String>(
+                    iconDisabledColor: Colors.transparent,
+                    iconEnabledColor: Colors.transparent,
+                    value: _selectedColor,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedColor = newValue;
+                        print(_selectedColor);
+                      });
+                    },
+                    items: getColorListModels.data?.map((color) {
+                          return DropdownMenuItem<String>(
+                            value: color.stampsColorId.toString(),
+                            child: Text(color.stampsColor ?? ''),
+                          );
+                        }).toList() ??
+                        [],
+                    decoration: InputDecoration(
+                      suffixIcon: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SvgPicture.asset("assets/arrowDown1.svg"),
+                          ),
+                        ],
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Color(0xFFF65734)),
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      hintText: "Select Colors",
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: const BorderSide(
+                          color: Color(0xFFF3F3F3),
+                        ),
+                      ),
+                      hintStyle: const TextStyle(
+                        color: Color(0xFFA7A9B7),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w300,
+                        fontFamily: "Satoshi",
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 10, right: 10, top: 5, bottom: 5),
+                  child: DropdownButtonFormField<String>(
+                    iconDisabledColor: Colors.transparent,
+                    iconEnabledColor: Colors.transparent,
+                    value: _selectedStampShape,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedStampShape = newValue;
+                        // Find the selected shape based on its name
+                        final selectedShape =
+                            getStampShapeListModels.data?.firstWhere(
+                          (shape) => shape.shapeName == newValue,
                         );
-                      } else {
-                        await arrivalDetails();
-                        if (arrivalDetailsModels.status == "success") {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'SuccessFully Stamped your Passport',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                              backgroundColor: Colors.greenAccent,
-                            ),
-                          );
-                          Navigator.pushReplacement(context, MaterialPageRoute(
-                            builder: (BuildContext context) {
-                              return const ViewPassport();
-                            },
-                          ));
+
+                        if (selectedShape != null) {
+                          stampShapeId = selectedShape.shapesId;
+                          _selectedShapeName = selectedShape.shapeName;
+                          _selectedShapeImage = selectedShape.shapeImage;
+                          _selectedShapeWidth = selectedShape.width;
+                          _selectedShapeHeight = selectedShape.height;
+                          // Print all of the data associated with the selected shape
+                          print("Shape ID: ${selectedShape.shapesId}");
+                          print("Shape Name: $_selectedShapeName");
+                          print("Shape Image: $_selectedShapeImage");
+                          print("Width: $_selectedShapeWidth");
+                          print("Height: $_selectedShapeHeight");
                         } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Server Error!',
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          );
+                          // Handle the case when no matching shape is found
+                          print("No matching shape found.");
                         }
+                      });
+                      getStampImage();
+                      if (getStampImageModel.status == "success") {
+                        Fluttertoast.showToast(
+                            msg: "Success", backgroundColor: Colors.green);
+                      } else {
+                        Fluttertoast.showToast(
+                            msg: "Please Wait", backgroundColor: Colors.green);
                       }
                     },
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Container(
-                          height: 48,
-                          width: MediaQuery.of(context).size.width * 0.94,
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
-                              begin: Alignment.bottomCenter,
-                              end: Alignment.topCenter,
-                            ),
-                            borderRadius: BorderRadius.circular(15),
+                    items: getStampShapeListModels.data?.map((shape) {
+                          return DropdownMenuItem<String>(
+                            value: shape.shapeName,
+                            child: Text(shape.shapeName ?? ''),
+                          );
+                        }).toList() ??
+                        [],
+                    decoration: InputDecoration(
+                      suffixIcon: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SvgPicture.asset("assets/arrowDown1.svg"),
                           ),
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Stamp My Passport",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: "Satoshi",
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ],
-                          ),
+                        ],
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Color(0xFFF65734)),
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      hintText: "Select Stamp Shape",
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: const BorderSide(
+                          color: Color(0xFFF3F3F3),
                         ),
-                        if (isLoading2)
-                          const CircularProgressIndicator(
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
-                          ),
-                      ],
+                      ),
+                      hintStyle: const TextStyle(
+                        color: Color(0xFFA7A9B7),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w300,
+                        fontFamily: "Satoshi",
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
+                ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Column(
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     crossAxisAlignment: CrossAxisAlignment.center,
+                //     children: [
+                //       SingleChildScrollView(
+                //         scrollDirection: Axis.horizontal,
+                //         child: Row(
+                //           children: colors.map((color) {
+                //             bool isSelected = selectedColor == color;
+                //             return GestureDetector(
+                //               onTap: () {
+                //                 setState(() {
+                //                   selectedColor = isSelected ? "" : color;
+                //                 });
+                //               },
+                //               child: Container(
+                //                 width: 48,
+                //                 height: 48,
+                //                 margin: const EdgeInsets.symmetric(horizontal: 8),
+                //                 decoration: BoxDecoration(
+                //                   color: getColor(color),
+                //                   shape: BoxShape.circle,
+                //                   border: Border.all(
+                //                     width: 2,
+                //                     color: isSelected
+                //                         ? Colors.white
+                //                         : Colors.transparent,
+                //                   ),
+                //                 ),
+                //                 child: isSelected
+                //                     ? const Center(
+                //                         child: Icon(
+                //                           Icons.check,
+                //                           color: Colors.white,
+                //                           size: 20,
+                //                         ),
+                //                       )
+                //                     : const SizedBox(), // Hide the tick mark when not selected
+                //               ),
+                //             );
+                //           }).toList(),
+                //         ),
+                //       ),
+                //       const SizedBox(height: 16),
+                //       Padding(
+                //         padding: const EdgeInsets.only(left: 8),
+                //         child: Container(
+                //           width: 122,
+                //           height: 39,
+                //           padding: const EdgeInsets.all(8),
+                //           clipBehavior: Clip.antiAlias,
+                //           decoration: ShapeDecoration(
+                //             shape: RoundedRectangleBorder(
+                //               side: const BorderSide(
+                //                   width: 0.50, color: Color(0xFFE0E0E5)),
+                //               borderRadius: BorderRadius.circular(10),
+                //             ),
+                //           ),
+                //           child: Row(
+                //             mainAxisAlignment: MainAxisAlignment.center,
+                //             children: [
+                //               Container(
+                //                 width: 24,
+                //                 height: 24,
+                //                 decoration: BoxDecoration(
+                //                   color: getColor(selectedColor),
+                //                   shape: BoxShape.rectangle,
+                //                 ),
+                //               ),
+                //               const SizedBox(width: 8),
+                //               Text(
+                //                 getColorHex(selectedColor),
+                //                 style: const TextStyle(
+                //                   fontSize: 16,
+                //                   fontWeight: FontWeight.bold,
+                //                   color: Colors.black,
+                //                 ),
+                //               ),
+                //             ],
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                const SizedBox(height: 10),
+
+                const Center(
+                    child: Text(
+                  "Arrival",
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: Color(0xFF141111)),
+                )),
+                Center(
+                  child: stampImageURL != null
+                      ? Container(
+                          width: 250, // Set the desired width
+                          height: 200, // Set the desired height
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                  'https://portal.passporttastic.com/public/$stampImageURL'),
+                              // Use BoxFit.cover to fit the complete image
+                            ),
+                          ),
+                        )
+                      : const Text("No stamp image available"),
+                ),
+
+                const Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 12),
+                      child: Text(
+                        "Select Stamp Location",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xFF141111)),
+                      ),
+                    )
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      RadioButton(
+                        description: "Randomly throughout passport",
+                        value: "1",
+                        groupValue: _singleValue,
+                        onChanged: (value) => setState(
+                          () => _singleValue = value ?? '',
+                        ),
+                        activeColor: const Color(0xFFFF8D74),
+                        textStyle: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xFF141111)),
+                      ),
+                      RadioButton(
+                        description: "Chronological order",
+                        value: "2",
+                        groupValue: _singleValue,
+                        onChanged: (value) => setState(
+                          () => _singleValue = value ?? '',
+                        ),
+                        activeColor: const Color(0xFFFF8D74),
+                        textStyle: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xFF141111)),
+                      ),
+                      RadioButton(
+                        description: "Position centrally",
+                        value: "3",
+                        groupValue: _singleValue,
+                        onChanged: (value) => setState(
+                          () => _singleValue = value ?? '',
+                        ),
+                        activeColor: const Color(0xFFFF8D74),
+                        textStyle: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xFF141111)),
+                      ),
+                      RadioButton(
+                        description: "Position randomly",
+                        value: "4",
+                        groupValue: _singleValue,
+                        onChanged: (value) => setState(
+                          () => _singleValue = value ?? '',
+                        ),
+                        activeColor: const Color(0xFFFF8D74),
+                        textStyle: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xFF141111)),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-            ],
-          )
-        ]),
-      ),
-    );
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        if (validationModelApi.data!.totalPages == 0) {
+                          checkPassPortPages();
+                        }
+                        if (stampShapeId == null && _selectedColor == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Please fill the all fields',
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          );
+                        } else {
+                          await arrivalDetails();
+                          if (arrivalDetailsModels.status == "success") {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  'SuccessFully Stamped your Passport',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                backgroundColor: Colors.greenAccent,
+                              ),
+                            );
+                            Navigator.pushReplacement(context,
+                                MaterialPageRoute(
+                              builder: (BuildContext context) {
+                                return const ViewPassport();
+                              },
+                            ));
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  'Server Error!',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            );
+                          }
+                        }
+                      },
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Container(
+                            height: 48,
+                            width: MediaQuery.of(context).size.width * 0.94,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFFF65734), Color(0xFFFF8D74)],
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Stamp My Passport",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: "Satoshi",
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          if (isLoading2)
+                            const CircularProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.white),
+                            ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+              ],
+            )
+          ]),
+        ),
+      );
+    }
   }
 
   Color getColor(String colorName) {

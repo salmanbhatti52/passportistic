@@ -57,10 +57,13 @@ class _TravelDairySecondPageState extends State<TravelDairySecondPage> {
       print("in 200 getDisplayDairyModels");
       print("SuucessFull");
       getDisplayDairyModels = getDisplayDairyModelsFromJson(responseString);
-      setState(() {
-        isLoading = false;
-      });
       print('getDisplayDairyModels status: ${getDisplayDairyModels.status}');
+
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     } else {
       // Show a dialog box if data is not available
       showDialog(

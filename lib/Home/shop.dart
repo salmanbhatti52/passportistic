@@ -63,15 +63,7 @@ class _StampPageState extends State<StampPage> {
               ),
             );
           }),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: SvgPicture.asset(
-                "assets/notification.svg",
-                // fit: BoxFit.scaleDown,
-              ),
-            ),
-          ],
+
           // backgroundColor: const Color(0xFFF65734).withOpacity(0.90),
         ),
         body: Column(

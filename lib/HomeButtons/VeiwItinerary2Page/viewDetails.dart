@@ -67,11 +67,12 @@ class _itineraryviewState extends State<itineraryview> {
         }
       }
       print("Desired Itinerary ID: $desiredItineraryId");
-
-      setState(() {
-        isLoading = false;
-      });
       print('itineraryAddModels status: ${iteneraryGetModels.status}');
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
