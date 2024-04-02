@@ -105,30 +105,30 @@ class _AppDrawerState extends State<AppDrawer> {
                     );
                   },
                 ),
-                ListTile(
-                  leading: SvgPicture.asset(
-                    "assets/bn.svg",
-                    color: Colors.black,
-                  ),
-                  title: const Text(
-                    'Notifications',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontFamily: 'Satoshi',
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (BuildContext context) {
-                        return const HeartWidget();
-                      },
-                    ));
-                    // Close the drawer using openEndDrawer()
-                    // Do something
-                  },
-                ),
+                // ListTile(
+                //   leading: SvgPicture.asset(
+                //     "assets/bn.svg",
+                //     color: Colors.black,
+                //   ),
+                //   title: const Text(
+                //     'Notifications',
+                //     style: TextStyle(
+                //       color: Colors.black,
+                //       fontSize: 18,
+                //       fontFamily: 'Satoshi',
+                //       fontWeight: FontWeight.w400,
+                //     ),
+                //   ),
+                //   onTap: () {
+                //     Navigator.push(context, MaterialPageRoute(
+                //       builder: (BuildContext context) {
+                //         return const HeartWidget();
+                //       },
+                //     ));
+                //     // Close the drawer using openEndDrawer()
+                //     // Do something
+                //   },
+                // ),
                 ListTile(
                   leading: SvgPicture.asset(
                     "assets/info.svg",
