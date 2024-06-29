@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 
 class HeartWidget extends StatefulWidget {
   const HeartWidget({Key? key}) : super(key: key);

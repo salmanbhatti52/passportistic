@@ -293,7 +293,7 @@ class _DisplayDairyDetailsPageState extends State<DisplayDairyDetailsPage> {
                             travelDiaryPictures !=null?  Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
-                                children: travelDiaryPictures!.map((picture) {
+                                children: travelDiaryPictures.map((picture) {
                                   return  GestureDetector(
                                     onTap: () {
                                       Navigator.push(
@@ -319,7 +319,7 @@ class _DisplayDairyDetailsPageState extends State<DisplayDairyDetailsPage> {
                                     ),
                                   );
                                 }).toList(),
-                              ): SizedBox(),
+                              ): const SizedBox(),
                           ],
                         ),
                       ),

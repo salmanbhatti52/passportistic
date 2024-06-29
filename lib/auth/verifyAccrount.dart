@@ -100,7 +100,7 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
             height: 10,
           ),
           Text(
-            "Please enter 4-digit code that has been sent to \nyour email “Devteam@akodes.com” for account \nverification.",
+            "Please enter 4-digit code that has been sent to \nyour email “${widget.email}” for account \nverification.",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: "Satoshi",
@@ -269,7 +269,7 @@ class _VerifyAccountPageState extends State<VerifyAccountPage> {
                               ),
                               borderRadius: BorderRadius.circular(15),
                             ),
-                            child: Row(
+                            child: const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(

@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -56,8 +57,8 @@ class _passportPageState extends State<passportPage> {
       }
 
       print('getProfileModels status: ${getProfileModels.status}');
-      getCurrency();
-      genderid();
+      await getCurrency();
+      await genderid();
       String mrzDate = getProfileModels.data!.dateAdded!;
       String mrDate = getProfileModels.data!.dob!;
       int year = int.parse(mrzDate.substring(0, 2));
@@ -82,7 +83,7 @@ class _passportPageState extends State<passportPage> {
 
   CurrencyModel currencyModel = CurrencyModel();
 
-  getCurrency() async {
+  Future<void> getCurrency() async {
     String apiUrl = "$baseUrl/get_currency_list";
     print("api: $apiUrl");
     prefs = await SharedPreferences.getInstance();
@@ -103,28 +104,33 @@ class _passportPageState extends State<passportPage> {
     if (response.statusCode == 200) {
       print("SuucessFull");
       print("in 200 Currency list");
-      currencyModel = currencyModelFromJson(responseString);
-      setState(() {
-        isLoading = false;
-      });
-      print('currecnyModel status: ${currencyModel.status}');
+      currencyModel = currencyModelFromJson(response.body);
       if (currencyModel.data != null && getProfileModels.data != null) {
-        for (int i = 0; i < currencyModel.data!.length; i++) {
-          if (currencyModel.data![i].currencyId ==
-              getProfileModels.data!.currencyId) {
-            print("currencyID: ${currencyModel.data![i].currencyId}");
-            setState(() {
+        if (currencyModel.data!.isNotEmpty) {
+          for (int i = 0; i < currencyModel.data!.length; i++) {
+            print("Checking currencyId: ${currencyModel.data![i].currencyId}");
+            if (currencyModel.data![i].currencyId ==
+                getProfileModels.data!.currencyId) {
+              print(
+                  "Match found for currencyId: ${currencyModel.data![i].currencyId}");
               currencyName = currencyModel.data![i].currencyCode;
-              // selectedPassportCountry = coverDesignDataModel
-              //     .data![i].passportCountry
-              //     .toString(); // Store the passport country
               print("currencyName $currencyName");
-              // print("selectedPassportCountry $selectedPassportCountry");
-            });
+            }
           }
+        } else {
+          debugPrint("currencyModel.data is empty");
         }
+      } else {
+        debugPrint("currencyModel.data or getProfileModels.data is null");
       }
+
+      print('currecnyModel status: ${currencyModel.status}');
+    } else {
+      print('Failed to load currency data');
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   GetGenderListModels getGenderListModels = GetGenderListModels();

@@ -215,7 +215,7 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
                                       DateTime parsedEndDate =
                                           DateTime.parse(endDate.toString());
 
-// Formatting the dates as needed
+                                        // Formatting the dates as needed
                                       formattedStartDate =
                                           DateFormat('yyyy, MM, dd')
                                               .format(parsedStartDate);
@@ -223,7 +223,7 @@ class _ItineraryTwoState extends State<ItineraryTwo> {
                                           DateFormat('yyyy, MM, dd')
                                               .format(parsedEndDate);
 
-// Now you can use formattedStartDate and formattedEndDate in your code
+                                              // Now you can use formattedStartDate and formattedEndDate in your code
                                       // firstDay:
                                       // DateTime.utc(
                                       //     int.parse(

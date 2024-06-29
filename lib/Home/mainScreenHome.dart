@@ -1,10 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import '../Models/getProfileModels.dart';
-import '../auth/signUpNextPage.dart';
-import '../auth/signUpPage.dart';
-import '../main.dart';
 import 'navbar.dart';
 
 class MainScreen extends StatefulWidget {

@@ -32,7 +32,7 @@ class _GpayAPayState extends State<GpayAPay> {
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Color(0xFF00AEFF),
             image: DecorationImage(
               image: AssetImage("assets/bg.png"),
@@ -42,7 +42,7 @@ class _GpayAPayState extends State<GpayAPay> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Row(
@@ -59,7 +59,7 @@ class _GpayAPayState extends State<GpayAPay> {
                       ),
                     ),
                   ),
-                  Text(
+                  const Text(
                     'Payment',
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -69,7 +69,7 @@ class _GpayAPayState extends State<GpayAPay> {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  Text(
+                  const Text(
                     '       ',
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -81,10 +81,10 @@ class _GpayAPayState extends State<GpayAPay> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
-              Text(
+              const Text(
                 'Make a Payment',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -94,10 +94,10 @@ class _GpayAPayState extends State<GpayAPay> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
-              Text(
+              const Text(
                 '\$6.60',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -107,7 +107,7 @@ class _GpayAPayState extends State<GpayAPay> {
                   fontWeight: FontWeight.w900,
                 ),
               ),
-              Text(
+              const Text(
                 'Total to pay',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -118,17 +118,17 @@ class _GpayAPayState extends State<GpayAPay> {
                 ),
               ),
               //  Spacer(),
-              SizedBox(
+              const SizedBox(
                 height: 150,
               ),
               Expanded(
                 child: ClipRRect(
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(30),
                       topRight: Radius.circular(40)),
                   child: Container(
                     width: MediaQuery.of(context).size.width,
-                    decoration: ShapeDecoration(
+                    decoration: const ShapeDecoration(
                       color: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
@@ -139,18 +139,18 @@ class _GpayAPayState extends State<GpayAPay> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             height: 60,
                           ),
                           Row(
                             children: [
-                              SizedBox(width: 10),
+                              const SizedBox(width: 10),
                               GestureDetector(
                                 onTap: selectContainer1,
                                 child: buildContainer(
                                     "assets/aPay.svg", isClicked1),
                               ),
-                              SizedBox(width: 20),
+                              const SizedBox(width: 20),
                               GestureDetector(
                                 onTap: selectContainer2,
                                 child: buildContainer(
@@ -158,7 +158,7 @@ class _GpayAPayState extends State<GpayAPay> {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           // Spacer(),
@@ -171,7 +171,7 @@ class _GpayAPayState extends State<GpayAPay> {
                                 height: 48,
                                 clipBehavior: Clip.antiAlias,
                                 decoration: ShapeDecoration(
-                                  gradient: LinearGradient(
+                                  gradient: const LinearGradient(
                                     begin: Alignment(0.00, -1.00),
                                     end: Alignment(0, 1),
                                     colors: [
@@ -183,7 +183,7 @@ class _GpayAPayState extends State<GpayAPay> {
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                 ),
-                                child: Row(
+                                child: const Row(
                                   mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -226,12 +226,12 @@ class _GpayAPayState extends State<GpayAPay> {
             ? Colors.white
             : Colors.white, // Updated to use white when not clicked
         shape: RoundedRectangleBorder(
-          side: BorderSide(width: 0.75, color: Colors.orange),
+          side: const BorderSide(width: 0.75, color: Colors.orange),
           borderRadius: BorderRadius.circular(15),
         ),
         shadows: isClicked
             ? [
-                BoxShadow(
+                const BoxShadow(
                   color: Color(0x26FF8D74),
                   blurRadius: 8,
                   offset: Offset(0, 4),
@@ -248,7 +248,7 @@ class _GpayAPayState extends State<GpayAPay> {
             child: Container(
               child: Stack(
                 children: [
-                  Text(
+                  const Text(
                     'Pay with',
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -269,7 +269,7 @@ class _GpayAPayState extends State<GpayAPay> {
           Positioned(
             left: 147,
             top: 8,
-            child: Container(
+            child: SizedBox(
               width: 16,
               height: 16,
               child: Stack(
@@ -282,7 +282,7 @@ class _GpayAPayState extends State<GpayAPay> {
                       height: 16,
                       decoration: ShapeDecoration(
                         gradient: isClicked
-                            ? LinearGradient(
+                            ? const LinearGradient(
                                 begin: Alignment(0.00, -1.00),
                                 end: Alignment(0, 1),
                                 colors: [
@@ -291,12 +291,12 @@ class _GpayAPayState extends State<GpayAPay> {
                                 ],
                               )
                             : null,
-                        shape: OvalBorder(),
+                        shape: const OvalBorder(),
                       ),
                     ),
                   ),
                   if (isClicked)
-                    Center(
+                    const Center(
                       child: Icon(
                         Icons.check,
                         color: Colors.white,

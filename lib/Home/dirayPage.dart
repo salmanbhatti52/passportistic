@@ -50,9 +50,11 @@ class _DirayPageState extends State<DirayPage> {
       print(res.reasonPhrase);
       validationModelApi = validationModelApiFromJson(resBody);
     }
-    setState(() {
-      load = false;
-    });
+    if (mounted) {
+      setState(() {
+        load = false;
+      });
+    }
   }
 
   checkValidation() {

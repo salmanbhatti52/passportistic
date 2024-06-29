@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:scanguard/AppDrawerButtons/heartwidget.dart';
+import 'package:scanguard/HomeButtons/Stamp%20Maker/stampPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../AppDrawerButtons/aboutUs.dart';
@@ -9,7 +8,6 @@ import '../AppDrawerButtons/contact.dart';
 import '../AppDrawerButtons/faq.dart';
 import '../AppDrawerButtons/privaacy.dart';
 import '../AppDrawerButtons/terms.dart';
-import '../AppDrawerButtons/tremiTest.dart';
 import '../auth/signIn.dart';
 import 'mainScreenHome.dart';
 
@@ -122,7 +120,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 //   onTap: () {
                 //     Navigator.push(context, MaterialPageRoute(
                 //       builder: (BuildContext context) {
-                //         return const HeartWidget();
+                //         return StampWidget();
                 //       },
                 //     ));
                 //     // Close the drawer using openEndDrawer()

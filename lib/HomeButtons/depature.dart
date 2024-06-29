@@ -3,7 +3,6 @@
 import 'dart:convert';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -11,9 +10,9 @@ import 'package:group_radio_button/group_radio_button.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:scanguard/HomeButtons/PassportSection/passport.dart';
+import 'package:scanguard/HomeButtons/Stamp%20Maker/custom.dart';
 import 'package:scanguard/Models/getProfileModels.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../Home/homePage.dart';
 import '../Home/shop.dart';
 import '../Models/departedDetailsModels.dart';
 import '../Models/getColorListModels.dart';
@@ -99,35 +98,6 @@ class _DepatureDetailsState extends State<DepatureDetails> {
     }
   }
 
-  GetCountryListModels getCountryListModels = GetCountryListModels();
-  getCountryList() async {
-    // try {
-    prefs = await SharedPreferences.getInstance();
-    userID = prefs?.getString('userID');
-    String apiUrl = "$baseUrl/get_passport_design";
-    print("api: $apiUrl");
-    setState(() {
-      isLoading = true;
-    });
-    final response = await http.post(Uri.parse(apiUrl), headers: {
-      'Accept': 'application/json',
-    }, body: {
-      "passport_holder_id": userID,
-    });
-    final responseString = response.body;
-    print("response getCountryListModels: $responseString");
-    print("status Code getCountryListModels: ${response.statusCode}");
-    print("in 200 getCountryListModels");
-    if (response.statusCode == 200) {
-      print("SuccessFull");
-      getCountryListModels = getCountryListModelsFromJson(responseString);
-      setState(() {
-        isLoading = false;
-      });
-      print('getCountryListModels status: ${getCountryListModels.status}');
-    }
-  }
-
   GetColorListModels getColorListModels = GetColorListModels();
   getColorList() async {
     // try {
@@ -154,6 +124,35 @@ class _DepatureDetailsState extends State<DepatureDetails> {
         isLoading = false;
       });
       print('getColorListModels status: ${getColorListModels.status}');
+    }
+  }
+
+  GetCountryListModels getCountryListModels = GetCountryListModels();
+  getCountryList() async {
+    // try {
+    prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
+    String apiUrl = "$baseUrl/get_passport_design";
+    print("api: $apiUrl");
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Accept': 'application/json',
+    }, body: {
+      "passport_holder_id": userID,
+    });
+    final responseString = response.body;
+    print("response getCountryListModels: $responseString");
+    print("status Code getCountryListModels: ${response.statusCode}");
+    print("in 200 getCountryListModels");
+    if (response.statusCode == 200) {
+      print("SuccessFull");
+      getCountryListModels = getCountryListModelsFromJson(responseString);
+      setState(() {
+        isLoading = false;
+      });
+      print('getCountryListModels status: ${getCountryListModels.status}');
     }
   }
 
@@ -289,9 +288,8 @@ class _DepatureDetailsState extends State<DepatureDetails> {
       print("in 200 getProfileModels");
       print("SuucessFull");
       getProfileModels = getProfileModelsFromJson(responseString);
-      if (getProfileModels.data!.passportStampsHeld == "0") {
-        checkStamps();
-      }
+      print("Stamps in Profile:  ${getProfileModels.data!.passportStampsHeld}");
+
       setState(() {
         isLoading = false;
       });
@@ -403,7 +401,12 @@ class _DepatureDetailsState extends State<DepatureDetails> {
 
     if (res.statusCode == 200) {
       validationModelApi = validationModelApiFromJson(resBody);
+      print(
+          "Stamps in Validation API: ${validationModelApi.data!.totalStamps}");
       print(resBody);
+      if (validationModelApi.data!.totalStamps == 0) {
+        checkStamps();
+      }
     } else {
       print(res.reasonPhrase);
       validationModelApi = validationModelApiFromJson(resBody);
@@ -1095,79 +1098,90 @@ class _DepatureDetailsState extends State<DepatureDetails> {
                         )
                       : const Text("No stamp image available"),
                 ),
-                const Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 12),
-                      child: Text(
-                        "Select Stamp Location",
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xFF141111)),
-                      ),
-                    )
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      RadioButton(
-                        description: "Randomly throughout passport",
-                        value: "1",
-                        groupValue: _singleValue,
-                        onChanged: (value) => setState(
-                          () => _singleValue = value ?? '',
-                        ),
-                        activeColor: const Color(0xFFFF8D74),
-                        textStyle: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xFF141111)),
-                      ),
-                      RadioButton(
-                        description: "Chronological order",
-                        value: "2",
-                        groupValue: _singleValue,
-                        onChanged: (value) => setState(
-                          () => _singleValue = value ?? '',
-                        ),
-                        activeColor: const Color(0xFFFF8D74),
-                        textStyle: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xFF141111)),
-                      ),
-                      RadioButton(
-                        description: "Position centrally",
-                        value: "3",
-                        groupValue: _singleValue,
-                        onChanged: (value) => setState(
-                          () => _singleValue = value ?? '',
-                        ),
-                        activeColor: const Color(0xFFFF8D74),
-                        textStyle: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xFF141111)),
-                      ),
-                      RadioButton(
-                        description: "Position randomly",
-                        value: "4",
-                        groupValue: _singleValue,
-                        onChanged: (value) => setState(
-                          () => _singleValue = value ?? '',
-                        ),
-                        activeColor: const Color(0xFFFF8D74),
-                        textStyle: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xFF141111)),
-                      ),
-                    ],
-                  ),
-                ),
+                // Center(
+                //   child: stampImageURL != null
+                //       ? SizedBox(
+                //           width: 250, // Set the desired width
+                //           height: 200, // Set the desired height
+                //           child: StampPainter(
+                //               imageUrl:
+                //                   "https://portal.passporttastic.com/public/$stampImageURL"),
+                //         )
+                //       : const Text("No stamp image available"),
+                // ),
+                // const Row(
+                //   children: [
+                //     Padding(
+                //       padding: EdgeInsets.only(left: 12),
+                //       child: Text(
+                //         "Select Stamp Location",
+                //         style: TextStyle(
+                //             fontSize: 16,
+                //             fontWeight: FontWeight.w400,
+                //             color: Color(0xFF141111)),
+                //       ),
+                //     )
+                //   ],
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Column(
+                //     children: [
+                //       RadioButton(
+                //         description: "Randomly throughout passport",
+                //         value: "1",
+                //         groupValue: _singleValue,
+                //         onChanged: (value) => setState(
+                //           () => _singleValue = value ?? '',
+                //         ),
+                //         activeColor: const Color(0xFFFF8D74),
+                //         textStyle: const TextStyle(
+                //             fontSize: 14,
+                //             fontWeight: FontWeight.w400,
+                //             color: Color(0xFF141111)),
+                //       ),
+                //       RadioButton(
+                //         description: "Chronological order",
+                //         value: "2",
+                //         groupValue: _singleValue,
+                //         onChanged: (value) => setState(
+                //           () => _singleValue = value ?? '',
+                //         ),
+                //         activeColor: const Color(0xFFFF8D74),
+                //         textStyle: const TextStyle(
+                //             fontSize: 14,
+                //             fontWeight: FontWeight.w400,
+                //             color: Color(0xFF141111)),
+                //       ),
+                //       RadioButton(
+                //         description: "Position centrally",
+                //         value: "3",
+                //         groupValue: _singleValue,
+                //         onChanged: (value) => setState(
+                //           () => _singleValue = value ?? '',
+                //         ),
+                //         activeColor: const Color(0xFFFF8D74),
+                //         textStyle: const TextStyle(
+                //             fontSize: 14,
+                //             fontWeight: FontWeight.w400,
+                //             color: Color(0xFF141111)),
+                //       ),
+                //       RadioButton(
+                //         description: "Position randomly",
+                //         value: "4",
+                //         groupValue: _singleValue,
+                //         onChanged: (value) => setState(
+                //           () => _singleValue = value ?? '',
+                //         ),
+                //         activeColor: const Color(0xFFFF8D74),
+                //         textStyle: const TextStyle(
+                //             fontSize: 14,
+                //             fontWeight: FontWeight.w400,
+                //             color: Color(0xFF141111)),
+                //       ),
+                //     ],
+                //   ),
+                // ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -1310,6 +1324,6 @@ class _DepatureDetailsState extends State<DepatureDetails> {
 
   String selectedHexColor = "";
   String selectedColor = "";
-  String _singleValue = "Text alignment right";
+  final String _singleValue = "Text alignment right";
   // String? _selectedCountry;
 }

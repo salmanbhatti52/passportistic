@@ -1,5 +1,3 @@
-import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 // import 'package:StandMan/Pages/Authentication/Customer/google_signin.dart';
 
@@ -14,7 +12,7 @@ Widget socialButtons(BuildContext context) {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(12),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                 color: Color.fromRGBO(0, 0, 0, 0.06),
                 spreadRadius: 2,
@@ -32,7 +30,7 @@ Widget socialButtons(BuildContext context) {
                   "assets/images/google.png",
                 ),
               ),
-              Text(
+              const Text(
                 "Google",
                 style: TextStyle(
                     fontFamily: "Rubik",
@@ -50,7 +48,7 @@ Widget socialButtons(BuildContext context) {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Color.fromRGBO(0, 0, 0, 0.06),
               spreadRadius: 2,
@@ -68,7 +66,7 @@ Widget socialButtons(BuildContext context) {
                 "assets/images/fb.png",
               ),
             ),
-            Text(
+            const Text(
               "Facebook",
               style: TextStyle(
                   fontFamily: "Rubik",

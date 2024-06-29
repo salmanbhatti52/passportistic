@@ -23,7 +23,7 @@ class AppBarr extends StatelessWidget {
           ),
           Text(
             text,
-            style: TextStyle(
+            style: const TextStyle(
               color: Color(0xffffffff),
               fontFamily: "Outfit",
               fontSize: 18,

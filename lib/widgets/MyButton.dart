@@ -14,7 +14,7 @@ Widget mainButton(
       decoration: BoxDecoration(
           color: appThemeColor,
           borderRadius: BorderRadius.circular(12),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               spreadRadius: 0,
               blurRadius: 15,
@@ -26,7 +26,7 @@ Widget mainButton(
       child: Center(
         child: Text(
           text,
-          style: TextStyle(
+          style: const TextStyle(
               fontFamily: "Outfit",
               fontSize: 14,
               color: Colors.white,
@@ -49,7 +49,7 @@ Widget smallButton(
     decoration: BoxDecoration(
       color: appThemeColor,
       borderRadius: BorderRadius.circular(12),
-      boxShadow: [
+      boxShadow: const [
         BoxShadow(
           spreadRadius: 0,
           blurRadius: 15,
@@ -61,7 +61,7 @@ Widget smallButton(
     child: Center(
       child: Text(
         text,
-        style: TextStyle(
+        style: const TextStyle(
             fontFamily: "Outfit",
             fontSize: 14,
             color: Colors.white,
@@ -83,7 +83,7 @@ Widget smallButton2(
     decoration: BoxDecoration(
       color: appThemeColor,
       borderRadius: BorderRadius.circular(6),
-      boxShadow: [
+      boxShadow: const [
         BoxShadow(
           spreadRadius: 0,
           blurRadius: 15,
@@ -95,7 +95,7 @@ Widget smallButton2(
     child: Center(
       child: Text(
         text,
-        style: TextStyle(
+        style: const TextStyle(
             fontFamily: "Outfit",
             fontSize: 12,
             color: Colors.white,
@@ -117,7 +117,7 @@ Widget smallButton3(
     decoration: BoxDecoration(
       color: appThemeColor,
       borderRadius: BorderRadius.circular(6),
-      boxShadow: [
+      boxShadow: const [
         BoxShadow(
           spreadRadius: 0,
           blurRadius: 15,
@@ -129,7 +129,7 @@ Widget smallButton3(
     child: Center(
       child: Text(
         text,
-        style: TextStyle(
+        style: const TextStyle(
             fontFamily: "Outfit",
             fontSize: 12,
             color: Colors.white,
@@ -151,7 +151,7 @@ Widget loadingBar(
       decoration: BoxDecoration(
         color: appThemeColor,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             spreadRadius: 0,
             blurRadius: 15,
@@ -160,7 +160,7 @@ Widget loadingBar(
           ),
         ],
       ),
-      child: Center(
+      child: const Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

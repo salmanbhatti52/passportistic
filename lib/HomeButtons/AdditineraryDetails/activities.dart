@@ -10,7 +10,6 @@ import '../../auth/signUpPage.dart';
 import '../../main.dart';
 import '../ItineraryDetails/getActivityDetails.dart';
 import '../addItinerary2.dart';
-import 'displayDiray.dart';
 
 class ActivitiesDetails extends StatefulWidget {
   final String? itinid;
@@ -569,7 +568,7 @@ class _ActivitiesDetailsState extends State<ActivitiesDetails> {
                   );
                   Navigator.pushReplacement(context, MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return ItineraryTwo(
+                      return const ItineraryTwo(
                           );
                     },
                   ));

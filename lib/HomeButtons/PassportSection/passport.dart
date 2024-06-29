@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,6 +10,7 @@ import 'package:scanguard/HomeButtons/PassportSection/bloc/leagalnoticsBloc.dart
 import 'package:scanguard/HomeButtons/PassportSection/passportFrontCover.dart';
 import 'package:scanguard/HomeButtons/PassportSection/passportLegalNoticePage.dart';
 import 'package:scanguard/HomeButtons/PassportSection/passportMainPage.dart';
+import 'package:scanguard/Models/validationModelAPI.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Models/getProfileModels.dart';
@@ -58,6 +61,10 @@ class _ViewPassportState extends State<ViewPassport> {
       print("in 200 getProfileModels");
       print("SuucessFull");
       getProfileModels = getProfileModelsFromJson(responseString);
+      print(
+          "getProfileModels: total Pages: ${getProfileModels.data!.numberOfPages}");
+
+      print("totalPages in Profile $totalPages");
       if (!mounted) {
         return; // Check once more if the widget is still mounted before updating the state
       }
@@ -66,12 +73,43 @@ class _ViewPassportState extends State<ViewPassport> {
       });
       print('getProfileModels status: ${getProfileModels.status}');
     }
-    setState(() {
-      totalPages =
-          int.tryParse(getProfileModels.data!.numberOfPages ?? "0") ?? 0;
+  }
 
-      print("totalPages $totalPages");
-      // If the parsing fails or the value is null, set totalPages to 0 as a default.
+  bool load = false;
+  ValidationModelApi validationModelApi = ValidationModelApi();
+  validation() async {
+    setState(() {
+      load = true;
+    });
+    prefs = await SharedPreferences.getInstance();
+    userID = prefs?.getString('userID');
+    var headersList = {
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+    var url =
+        Uri.parse('https://portal.passporttastic.com/api/getPackageDetails');
+
+    var body = {"passport_holder_id": "$userID"};
+
+    var req = http.Request('POST', url);
+    req.headers.addAll(headersList);
+    req.body = json.encode(body);
+
+    var res = await req.send();
+    final resBody = await res.stream.bytesToString();
+
+    if (res.statusCode == 200) {
+      validationModelApi = validationModelApiFromJson(resBody);
+      print(
+          "Stamps in Validation API: ${validationModelApi.data!.totalStamps}");
+      print(resBody);
+      totalPages = validationModelApi.data!.totalPages!;
+    } else {
+      print(res.reasonPhrase);
+      validationModelApi = validationModelApiFromJson(resBody);
+    }
+    setState(() {
+      load = false;
     });
   }
 
@@ -80,6 +118,7 @@ class _ViewPassportState extends State<ViewPassport> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    validation();
     getUserProfile();
     print("currentPageIndex $currentPageIndex");
   }

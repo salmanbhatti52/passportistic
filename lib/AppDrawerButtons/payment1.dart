@@ -16,7 +16,7 @@ class _CardPaymentState extends State<CardPayment> {
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Color(0xFF00AEFF),
             image: DecorationImage(
               image: AssetImage("assets/bg.png"),
@@ -26,7 +26,7 @@ class _CardPaymentState extends State<CardPayment> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Row(
@@ -43,7 +43,7 @@ class _CardPaymentState extends State<CardPayment> {
                       ),
                     ),
                   ),
-                  Text(
+                  const Text(
                     'Payment',
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -53,7 +53,7 @@ class _CardPaymentState extends State<CardPayment> {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  Text(
+                  const Text(
                     '       ',
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -65,10 +65,10 @@ class _CardPaymentState extends State<CardPayment> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
-              Text(
+              const Text(
                 'Make a Payment',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -78,10 +78,10 @@ class _CardPaymentState extends State<CardPayment> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
-              Text(
+              const Text(
                 '\$6.60',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -91,7 +91,7 @@ class _CardPaymentState extends State<CardPayment> {
                   fontWeight: FontWeight.w900,
                 ),
               ),
-              Text(
+              const Text(
                 'Total to pay',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -102,17 +102,17 @@ class _CardPaymentState extends State<CardPayment> {
                 ),
               ),
               //  Spacer(),
-              SizedBox(
+              const SizedBox(
                 height: 80,
               ),
               Expanded(
                 child: ClipRRect(
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(30),
                       topRight: Radius.circular(40)),
                   child: Container(
                     width: MediaQuery.of(context).size.width,
-                    decoration: ShapeDecoration(
+                    decoration: const ShapeDecoration(
                       color: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
@@ -123,13 +123,13 @@ class _CardPaymentState extends State<CardPayment> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
-                          Row(
+                          const Row(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(
+                                padding: EdgeInsets.only(
                                     top: 8, left: 12, bottom: 5),
                                 child: Text.rich(
                                   TextSpan(
@@ -165,9 +165,9 @@ class _CardPaymentState extends State<CardPayment> {
                               ),
                               Expanded(
                                 child: TextFormField(
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Color(0xFF000000), fontSize: 16),
-                                  cursorColor: Color(0xFF000000),
+                                  cursorColor: const Color(0xFF000000),
                                   keyboardType: TextInputType.name,
                                   decoration: InputDecoration(
                                     prefixIcon: Row(
@@ -183,18 +183,18 @@ class _CardPaymentState extends State<CardPayment> {
                                         ]),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide:
-                                          BorderSide(color: Color(0xFFF65734)),
+                                          const BorderSide(color: Color(0xFFF65734)),
                                       borderRadius: BorderRadius.circular(15.0),
                                     ),
                                     // labelText: 'Email',
                                     hintText: "Card Holder Name",
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(15),
-                                      borderSide: BorderSide(
+                                      borderSide: const BorderSide(
                                         color: Color(0xFFF3F3F3),
                                       ),
                                     ),
-                                    hintStyle: TextStyle(
+                                    hintStyle: const TextStyle(
                                       color: Color(0xFFA7A9B7),
                                       fontSize: 16,
                                       fontWeight: FontWeight.w300,
@@ -211,13 +211,13 @@ class _CardPaymentState extends State<CardPayment> {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
-                          Row(
+                          const Row(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(
+                                padding: EdgeInsets.only(
                                     top: 8, left: 12, bottom: 5),
                                 child: Text.rich(
                                   TextSpan(
@@ -253,9 +253,9 @@ class _CardPaymentState extends State<CardPayment> {
                               ),
                               Expanded(
                                 child: TextFormField(
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Color(0xFF000000), fontSize: 16),
-                                  cursorColor: Color(0xFF000000),
+                                  cursorColor: const Color(0xFF000000),
                                   keyboardType: TextInputType.number,
                                   decoration: InputDecoration(
                                     prefixIcon: Row(
@@ -267,24 +267,24 @@ class _CardPaymentState extends State<CardPayment> {
                                             padding: const EdgeInsets.all(8.0),
                                             child: SvgPicture.asset(
                                               "assets/payment.svg",
-                                              color: Color(0xFFF65734),
+                                              color: const Color(0xFFF65734),
                                             ),
                                           ),
                                         ]),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide:
-                                          BorderSide(color: Color(0xFFF65734)),
+                                          const BorderSide(color: Color(0xFFF65734)),
                                       borderRadius: BorderRadius.circular(15.0),
                                     ),
                                     // labelText: 'Email',
                                     hintText: "Card Number",
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(15),
-                                      borderSide: BorderSide(
+                                      borderSide: const BorderSide(
                                         color: Color(0xFFF3F3F3),
                                       ),
                                     ),
-                                    hintStyle: TextStyle(
+                                    hintStyle: const TextStyle(
                                       color: Color(0xFFA7A9B7),
                                       fontSize: 16,
                                       fontWeight: FontWeight.w300,
@@ -301,13 +301,13 @@ class _CardPaymentState extends State<CardPayment> {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
-                          Row(
+                          const Row(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(
+                                padding: EdgeInsets.only(
                                     top: 8, left: 12, bottom: 5),
                                 child: Text.rich(
                                   TextSpan(
@@ -343,9 +343,9 @@ class _CardPaymentState extends State<CardPayment> {
                               ),
                               Expanded(
                                 child: TextFormField(
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Color(0xFF000000), fontSize: 16),
-                                  cursorColor: Color(0xFF000000),
+                                  cursorColor: const Color(0xFF000000),
                                   keyboardType: TextInputType.name,
                                   decoration: InputDecoration(
                                     prefixIcon: Row(
@@ -357,24 +357,24 @@ class _CardPaymentState extends State<CardPayment> {
                                             padding: const EdgeInsets.all(8.0),
                                             child: SvgPicture.asset(
                                               "assets/calendar.svg",
-                                              color: Color(0xFFF65734),
+                                              color: const Color(0xFFF65734),
                                             ),
                                           ),
                                         ]),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide:
-                                          BorderSide(color: Color(0xFFF65734)),
+                                          const BorderSide(color: Color(0xFFF65734)),
                                       borderRadius: BorderRadius.circular(15.0),
                                     ),
                                     // labelText: 'Email',
                                     hintText: "MM/YYYY",
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(15),
-                                      borderSide: BorderSide(
+                                      borderSide: const BorderSide(
                                         color: Color(0xFFF3F3F3),
                                       ),
                                     ),
-                                    hintStyle: TextStyle(
+                                    hintStyle: const TextStyle(
                                       color: Color(0xFFA7A9B7),
                                       fontSize: 16,
                                       fontWeight: FontWeight.w300,
@@ -400,7 +400,7 @@ class _CardPaymentState extends State<CardPayment> {
                                 height: 48,
                                 clipBehavior: Clip.antiAlias,
                                 decoration: ShapeDecoration(
-                                  gradient: LinearGradient(
+                                  gradient: const LinearGradient(
                                     begin: Alignment(0.00, -1.00),
                                     end: Alignment(0, 1),
                                     colors: [
@@ -412,7 +412,7 @@ class _CardPaymentState extends State<CardPayment> {
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                 ),
-                                child: Row(
+                                child: const Row(
                                   mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,

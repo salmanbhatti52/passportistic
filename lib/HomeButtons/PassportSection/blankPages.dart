@@ -84,6 +84,7 @@ class _BlankPageState extends State<BlankPage> {
   void initState() {
     super.initState();
     getStampImage();
+    print("widget.total pages: ${widget.totalPages}");
   }
 
   @override

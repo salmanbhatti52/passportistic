@@ -5,7 +5,6 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:scanguard/Home/homePage.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,11 +13,9 @@ import 'package:http/http.dart' as http;
 import '../../Models/buyProductsModel.dart';
 import '../../Models/getPaymentModel.dart';
 import '../../Utils/colors.dart';
-import '../../Utils/keys.dart';
 import '../../main.dart';
 import '../../widgets/MyButton.dart';
 import '../../widgets/ToastMessage.dart';
-import '../../widgets/TopBar.dart';
 import '../navbar.dart';
 
 class SelectPaymentMethod extends StatefulWidget {

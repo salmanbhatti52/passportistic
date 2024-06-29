@@ -1039,12 +1039,6 @@ class _SignupDetailsState extends State<SignupDetails> {
                 iconDisabledColor: Colors.transparent,
                 iconEnabledColor: Colors.transparent,
                 value: _selectedcurrency,
-                onChanged: (newValue) {
-                  setState(() {
-                    _selectedcurrency = newValue;
-                    print("_selectedcurrency $_selectedcurrency");
-                  });
-                },
                 items: currencyModel.data?.map((currency) {
                       return DropdownMenuItem<String>(
                         value: currency.currencyId,
@@ -1052,6 +1046,12 @@ class _SignupDetailsState extends State<SignupDetails> {
                       );
                     }).toList() ??
                     [],
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedcurrency = newValue;
+                    print("_selectedcurrency $_selectedcurrency");
+                  });
+                },
                 decoration: InputDecoration(
                   suffixIcon: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -1122,7 +1122,6 @@ class _SignupDetailsState extends State<SignupDetails> {
 
                     print("Sign Up Button Pressed");
                     if (firstname.text.isNotEmpty &&
-                        middleName.text.isNotEmpty &&
                         lastname.text.isNotEmpty &&
                         dob.text.isNotEmpty &&
                         _selectedCountry != null &&
