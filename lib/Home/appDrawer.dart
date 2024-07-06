@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:passport_stamp/feature/stamp/presentation/stamp.dart';
 import 'package:scanguard/HomeButtons/Stamp%20Maker/stampPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -103,30 +104,30 @@ class _AppDrawerState extends State<AppDrawer> {
                     );
                   },
                 ),
-                // ListTile(
-                //   leading: SvgPicture.asset(
-                //     "assets/bn.svg",
-                //     color: Colors.black,
-                //   ),
-                //   title: const Text(
-                //     'Notifications',
-                //     style: TextStyle(
-                //       color: Colors.black,
-                //       fontSize: 18,
-                //       fontFamily: 'Satoshi',
-                //       fontWeight: FontWeight.w400,
-                //     ),
-                //   ),
-                //   onTap: () {
-                //     Navigator.push(context, MaterialPageRoute(
-                //       builder: (BuildContext context) {
-                //         return StampWidget();
-                //       },
-                //     ));
-                //     // Close the drawer using openEndDrawer()
-                //     // Do something
-                //   },
-                // ),
+                ListTile(
+                  leading: SvgPicture.asset(
+                    "assets/bn.svg",
+                    color: Colors.black,
+                  ),
+                  title: const Text(
+                    'Notifications',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontFamily: 'Satoshi',
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (BuildContext context) {
+                        return StampScreen();
+                      },
+                    ));
+                    // Close the drawer using openEndDrawer()
+                    // Do something
+                  },
+                ),
                 ListTile(
                   leading: SvgPicture.asset(
                     "assets/info.svg",

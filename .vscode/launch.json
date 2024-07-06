@@ -1,0 +1,46 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "passportistic",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "passportistic (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "passportistic (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "stamp_painting",
+            "cwd": "package_list\\stamp_painting",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "stamp_painting (profile mode)",
+            "cwd": "package_list\\stamp_painting",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "stamp_painting (release mode)",
+            "cwd": "package_list\\stamp_painting",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}
