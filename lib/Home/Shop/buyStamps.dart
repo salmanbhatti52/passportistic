@@ -101,6 +101,7 @@ class _BuyStampsState extends State<BuyStamps> {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
                       return SelectPaymentMethod(
+                          productType: "Stamps".toString(),
                         userId: userID.toString(),
                         productId: getStampShopModels.data![index].stampsPacksId
                             .toString(),
@@ -202,8 +203,8 @@ class _BuyStampsState extends State<BuyStamps> {
                           children: [
                             GestureDetector(
                               onTap: () async {
-                                   prefs = await SharedPreferences.getInstance();
-                  userID = prefs?.getString('userID');
+                                prefs = await SharedPreferences.getInstance();
+                                userID = prefs?.getString('userID');
                                 Navigator.push(context, MaterialPageRoute(
                                   builder: (BuildContext context) {
                                     return SelectPaymentMethod(
@@ -220,7 +221,7 @@ class _BuyStampsState extends State<BuyStamps> {
                                       productImage: getStampShopModels
                                           .data![index].stampsPacksImage
                                           .toString(),
-                                      productType: "Stamps",    
+                                      productType: "Stamps".toString(),
                                     );
                                   },
                                 ));

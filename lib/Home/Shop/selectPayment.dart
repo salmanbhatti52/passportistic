@@ -24,7 +24,7 @@ class SelectPaymentMethod extends StatefulWidget {
   final String? productName;
   final String? productPrice;
   final String? productImage;
-  final String? productType;
+  final String productType;
 
   const SelectPaymentMethod({
     super.key,
@@ -33,7 +33,7 @@ class SelectPaymentMethod extends StatefulWidget {
     this.productName,
     this.productPrice,
     this.productImage,
-    this.productType,
+    required this.productType,
   });
   @override
   State<SelectPaymentMethod> createState() => _SelectPaymentMethodState();
@@ -97,7 +97,7 @@ class _SelectPaymentMethodState extends State<SelectPaymentMethod> {
       "passport_holder_id": "${widget.userId}",
       "transiction_id": code.toString(),
       "product_id": "${widget.productId}",
-      "product_type": "${widget.productType}",
+      "product_type": widget.productType,
       "amount": "${widget.productPrice}"
     };
 
@@ -339,6 +339,7 @@ class _SelectPaymentMethodState extends State<SelectPaymentMethod> {
     // TODO: implement initState
     super.initState();
     getpaymentlist();
+    print("Product ID: ${widget.productType}");
     // print("Total Price: ${widget.totalPrice}");
     // print("discountedprice  init:  ${widget.discountedPrice}");
     // print("price in inti ${widget.price}");
