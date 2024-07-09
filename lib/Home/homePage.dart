@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:passport_stamp/feature/stamp/presentation/stamp.dart';
 import 'package:scanguard/Home/shop.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -72,7 +73,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-  
     if (isLoading) {
       return const Scaffold(
         body: Center(
@@ -189,7 +189,7 @@ class _HomePageState extends State<HomePage> {
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(
                       builder: (BuildContext context) {
-                        return const DepatureDetails();
+                        return StampScreen();
                       },
                     ));
                   },
@@ -245,11 +245,16 @@ class _HomePageState extends State<HomePage> {
                             onTap: () {
                               Navigator.push(context, MaterialPageRoute(
                                 builder: (BuildContext context) {
-                                  return DepatureDetails(
-                                    userId: userID,
-                                  );
+                                  return StampScreen();
                                 },
                               ));
+                              // Navigator.push(context, MaterialPageRoute(
+                              //   builder: (BuildContext context) {
+                              //     return DepatureDetails(
+                              //       userId: userID,
+                              //     );
+                              //   },
+                              // ));
                             },
                             child: SvgPicture.asset(
                               "assets/arrow.svg",
@@ -267,7 +272,7 @@ class _HomePageState extends State<HomePage> {
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(
                       builder: (BuildContext context) {
-                        return const ArrivalDetails();
+                        return StampScreen();
                       },
                     ));
                   },
@@ -323,7 +328,7 @@ class _HomePageState extends State<HomePage> {
                             onTap: () {
                               Navigator.push(context, MaterialPageRoute(
                                 builder: (BuildContext context) {
-                                  return const ArrivalDetails();
+                                  return StampScreen();
                                 },
                               ));
                             },
