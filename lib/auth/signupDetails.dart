@@ -72,6 +72,8 @@ class _SignupDetailsState extends State<SignupDetails> {
       print("SuucessFull");
       print("in 200 signup");
       signUpDetailsModel = signUpDetailsModelFromJson(responseString);
+      print("signUpDetailsModel: ${signUpDetailsModel.data}");
+
       setState(() {
         isLoading = false;
       });
@@ -1131,9 +1133,7 @@ class _SignupDetailsState extends State<SignupDetails> {
                         isLoading = true; // Show the progress indicator
                       });
                       await signUpUser();
-                      setState(() {
-                        isLoading = false; // Show the progress indicator
-                      });
+              
                       if (signUpDetailsModel.status == "success") {
                         prefs = await SharedPreferences.getInstance();
                         await prefs?.setString('userID',
@@ -1145,6 +1145,9 @@ class _SignupDetailsState extends State<SignupDetails> {
                             );
                           },
                         ));
+                                setState(() {
+                        isLoading = false; // Show the progress indicator
+                      });
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
