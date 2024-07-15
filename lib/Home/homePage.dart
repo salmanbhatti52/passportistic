@@ -120,6 +120,7 @@ class _HomePageState extends State<HomePage> {
           ),
           body: SingleChildScrollView(
             child: Container(
+              height: MediaQuery.of(context).size.height,
               clipBehavior: Clip.antiAlias,
               decoration: ShapeDecoration(
                 gradient: const LinearGradient(
@@ -229,7 +230,7 @@ class _HomePageState extends State<HomePage> {
                           left: 16,
                           top: 38,
                           child: Text(
-                            'Departure',
+                            'Departure/Arrival',
                             style: TextStyle(
                               color: Color(0xFFF65734),
                               fontSize: 16,
@@ -265,82 +266,82 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 8,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (BuildContext context) {
-                        return StampScreen();
-                      },
-                    ));
-                  },
-                  child: Container(
-                    width: 294,
-                    height: 72,
-                    decoration: ShapeDecoration(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      shadows: const [
-                        BoxShadow(
-                          color: Color(0x0F312E23),
-                          blurRadius: 16,
-                          offset: Offset(0, 8),
-                          spreadRadius: 0,
-                        )
-                      ],
-                    ),
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          left: 16,
-                          top: 12,
-                          child: Text(
-                            'Stamp Passport',
-                            style: TextStyle(
-                              color: Colors.black.withOpacity(0.5),
-                              fontSize: 16,
-                              fontFamily: 'Satoshi',
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ),
-                        const Positioned(
-                          left: 16,
-                          top: 38,
-                          child: Text(
-                            'Arrival ',
-                            style: TextStyle(
-                              color: Color(0xFFF65734),
-                              fontSize: 16,
-                              fontFamily: 'Satoshi',
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          left: 238,
-                          top: 16,
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(
-                                builder: (BuildContext context) {
-                                  return StampScreen();
-                                },
-                              ));
-                            },
-                            child: SvgPicture.asset(
-                              "assets/arrow.svg",
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                // const SizedBox(
+                //   height: 8,
+                // ),
+                // GestureDetector(
+                //   onTap: () {
+                //     Navigator.push(context, MaterialPageRoute(
+                //       builder: (BuildContext context) {
+                //         return StampScreen();
+                //       },
+                //     ));
+                //   },
+                //   child: Container(
+                //     width: 294,
+                //     height: 72,
+                //     decoration: ShapeDecoration(
+                //       color: Colors.white,
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(16),
+                //       ),
+                //       shadows: const [
+                //         BoxShadow(
+                //           color: Color(0x0F312E23),
+                //           blurRadius: 16,
+                //           offset: Offset(0, 8),
+                //           spreadRadius: 0,
+                //         )
+                //       ],
+                //     ),
+                //     child: Stack(
+                //       children: [
+                //         Positioned(
+                //           left: 16,
+                //           top: 12,
+                //           child: Text(
+                //             'Stamp Passport',
+                //             style: TextStyle(
+                //               color: Colors.black.withOpacity(0.5),
+                //               fontSize: 16,
+                //               fontFamily: 'Satoshi',
+                //               fontWeight: FontWeight.w400,
+                //             ),
+                //           ),
+                //         ),
+                //         const Positioned(
+                //           left: 16,
+                //           top: 38,
+                //           child: Text(
+                //             'Arrival ',
+                //             style: TextStyle(
+                //               color: Color(0xFFF65734),
+                //               fontSize: 16,
+                //               fontFamily: 'Satoshi',
+                //               fontWeight: FontWeight.w700,
+                //             ),
+                //           ),
+                //         ),
+                //         Positioned(
+                //           left: 238,
+                //           top: 16,
+                //           child: GestureDetector(
+                //             onTap: () {
+                //               Navigator.push(context, MaterialPageRoute(
+                //                 builder: (BuildContext context) {
+                //                   return StampScreen();
+                //                 },
+                //               ));
+                //             },
+                //             child: SvgPicture.asset(
+                //               "assets/arrow.svg",
+                //             ),
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
                 const SizedBox(
                   height: 8,
                 ),
@@ -535,6 +536,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 7,
                 ),
+                const Spacer()
               ]),
             ),
           ),

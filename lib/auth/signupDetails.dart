@@ -43,6 +43,20 @@ class _SignupDetailsState extends State<SignupDetails> {
   signUpUser() async {
     // try {
 
+    var map = {
+      "passport_holder_id": widget.userId,
+      "first_name": firstname.text,
+      "middle_name": middleName.text,
+      "last_name": lastname.text,
+      "nationality": _selectedCountry?.displayNameNoCountryCode.toString(),
+      "gender_id": _slectedGenderId.toString(),
+      "dob": apiDateFormat.toString(),
+      // "number_of_pages": selectedPageText,
+      "currency_id": _selectedcurrency.toString(),
+      "phone_number": phone.text.toString(),
+    };
+    print("$map");
+
     String apiUrl = "$baseUrl/detailed_signup";
     print("api: $apiUrl");
     print("email: ${email.text}");
@@ -60,7 +74,7 @@ class _SignupDetailsState extends State<SignupDetails> {
       "nationality": _selectedCountry?.displayNameNoCountryCode.toString(),
       "gender_id": _slectedGenderId.toString(),
       "dob": apiDateFormat.toString(),
-      "number_of_pages": selectedPageText,
+      // "number_of_pages": selectedPageText,
       "currency_id": _selectedcurrency.toString(),
       "phone_number": phone.text.toString(),
     });
@@ -843,193 +857,193 @@ class _SignupDetailsState extends State<SignupDetails> {
             const SizedBox(width: 10),
           ],
         ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.02,
-        ),
-        const Padding(
-          padding: EdgeInsets.only(left: 12),
-          child: Row(
-            children: [
-              Text(
-                "Number Of Pages",
-                style: TextStyle(
-                    fontFamily: "Satoshi",
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.02,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _isSelected1 = true;
-                        _isSelected2 = false;
-                        _isSelected3 = false;
-                        selectedPageText = "24";
-                      });
-                    },
-                    child: Container(
-                      height: 43,
-                      width: 98,
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: _isSelected1
-                                ? [
-                                    const Color(0xFFFF8D74),
-                                    const Color(0xFFF65734)
-                                  ]
-                                : [Colors.white, Colors.white],
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                          ),
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(
-                            color: _isSelected1
-                                ? const Color(0xFFF65734)
-                                : const Color(0xFFE0E0E5),
-                          )),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Pages 24",
-                            style: TextStyle(
-                              color: _isSelected1
-                                  ? const Color(0xFFFFFFFF)
-                                  : const Color(0xFFA7A9B7),
-                              fontFamily: "Satoshi",
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 3,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _isSelected1 = false;
-                        _isSelected2 = true;
-                        _isSelected3 = false;
-                        selectedPageText = "48";
-                      });
-                    },
-                    child: Container(
-                      height: 43,
-                      width: 98,
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: _isSelected2
-                                ? [
-                                    const Color(0xFFFF8D74),
-                                    const Color(0xFFF65734)
-                                  ]
-                                : [Colors.white, Colors.white],
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                          ),
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(
-                            color: _isSelected2
-                                ? const Color(0xFFF65734)
-                                : const Color(0xFFE0E0E5),
-                          )),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Pages 48",
-                            style: TextStyle(
-                                color: _isSelected2
-                                    ? const Color(0xFFFFFFFF)
-                                    : const Color(0xFFA7A9B7),
-                                fontFamily: "Satoshi",
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 3,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _isSelected1 = false;
-                        _isSelected2 = false;
-                        _isSelected3 = true;
-                        selectedPageText = "96";
-                      });
-                    },
-                    child: Container(
-                      height: 43,
-                      width: 98,
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: _isSelected3
-                                ? [
-                                    const Color(0xFFFF8D74),
-                                    const Color(0xFFF65734)
-                                  ]
-                                : [Colors.white, Colors.white],
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                          ),
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(
-                            color: _isSelected3
-                                ? const Color(0xFFF65734)
-                                : const Color(0xFFE0E0E5),
-                          )),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Pages 96",
-                            style: TextStyle(
-                                color: _isSelected3
-                                    ? const Color(0xFFFFFFFF)
-                                    : const Color(0xFFA7A9B7),
-                                fontFamily: "Satoshi",
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              if (selectedPageText.isNotEmpty)
-                Text(
-                  selectedPageText,
-                  style: const TextStyle(
-                    fontFamily: "Satoshi",
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    color: Color(0xFFA7A9B7),
-                  ),
-                ),
-            ],
-          ),
-        ),
+        // SizedBox(
+        //   height: MediaQuery.of(context).size.height * 0.02,
+        // ),
+        // const Padding(
+        //   padding: EdgeInsets.only(left: 12),
+        //   child: Row(
+        //     children: [
+        //       Text(
+        //         "Number Of Pages",
+        //         style: TextStyle(
+        //             fontFamily: "Satoshi",
+        //             fontWeight: FontWeight.w500,
+        //             fontSize: 16),
+        //       ),
+        //     ],
+        //   ),
+        // ),
+        // SizedBox(
+        //   height: MediaQuery.of(context).size.height * 0.02,
+        // ),
+        // Padding(
+        //   padding: const EdgeInsets.all(8.0),
+        //   child: Column(
+        //     children: [
+        //       Row(
+        //         children: [
+        //           GestureDetector(
+        //             onTap: () {
+        //               setState(() {
+        //                 _isSelected1 = true;
+        //                 _isSelected2 = false;
+        //                 _isSelected3 = false;
+        //                 selectedPageText = "24";
+        //               });
+        //             },
+        //             child: Container(
+        //               height: 43,
+        //               width: 98,
+        //               decoration: BoxDecoration(
+        //                   gradient: LinearGradient(
+        //                     colors: _isSelected1
+        //                         ? [
+        //                             const Color(0xFFFF8D74),
+        //                             const Color(0xFFF65734)
+        //                           ]
+        //                         : [Colors.white, Colors.white],
+        //                     begin: Alignment.bottomCenter,
+        //                     end: Alignment.topCenter,
+        //                   ),
+        //                   borderRadius: BorderRadius.circular(15),
+        //                   border: Border.all(
+        //                     color: _isSelected1
+        //                         ? const Color(0xFFF65734)
+        //                         : const Color(0xFFE0E0E5),
+        //                   )),
+        //               child: Row(
+        //                 mainAxisAlignment: MainAxisAlignment.center,
+        //                 children: [
+        //                   Text(
+        //                     "Pages 24",
+        //                     style: TextStyle(
+        //                       color: _isSelected1
+        //                           ? const Color(0xFFFFFFFF)
+        //                           : const Color(0xFFA7A9B7),
+        //                       fontFamily: "Satoshi",
+        //                       fontSize: 14,
+        //                       fontWeight: FontWeight.w400,
+        //                     ),
+        //                   ),
+        //                 ],
+        //               ),
+        //             ),
+        //           ),
+        //           const SizedBox(
+        //             width: 3,
+        //           ),
+        //           GestureDetector(
+        //             onTap: () {
+        //               setState(() {
+        //                 _isSelected1 = false;
+        //                 _isSelected2 = true;
+        //                 _isSelected3 = false;
+        //                 selectedPageText = "48";
+        //               });
+        //             },
+        //             child: Container(
+        //               height: 43,
+        //               width: 98,
+        //               decoration: BoxDecoration(
+        //                   gradient: LinearGradient(
+        //                     colors: _isSelected2
+        //                         ? [
+        //                             const Color(0xFFFF8D74),
+        //                             const Color(0xFFF65734)
+        //                           ]
+        //                         : [Colors.white, Colors.white],
+        //                     begin: Alignment.bottomCenter,
+        //                     end: Alignment.topCenter,
+        //                   ),
+        //                   borderRadius: BorderRadius.circular(15),
+        //                   border: Border.all(
+        //                     color: _isSelected2
+        //                         ? const Color(0xFFF65734)
+        //                         : const Color(0xFFE0E0E5),
+        //                   )),
+        //               child: Row(
+        //                 mainAxisAlignment: MainAxisAlignment.center,
+        //                 children: [
+        //                   Text(
+        //                     "Pages 48",
+        //                     style: TextStyle(
+        //                         color: _isSelected2
+        //                             ? const Color(0xFFFFFFFF)
+        //                             : const Color(0xFFA7A9B7),
+        //                         fontFamily: "Satoshi",
+        //                         fontSize: 14,
+        //                         fontWeight: FontWeight.w400),
+        //                   ),
+        //                 ],
+        //               ),
+        //             ),
+        //           ),
+        //           const SizedBox(
+        //             width: 3,
+        //           ),
+        //           GestureDetector(
+        //             onTap: () {
+        //               setState(() {
+        //                 _isSelected1 = false;
+        //                 _isSelected2 = false;
+        //                 _isSelected3 = true;
+        //                 selectedPageText = "96";
+        //               });
+        //             },
+        //             child: Container(
+        //               height: 43,
+        //               width: 98,
+        //               decoration: BoxDecoration(
+        //                   gradient: LinearGradient(
+        //                     colors: _isSelected3
+        //                         ? [
+        //                             const Color(0xFFFF8D74),
+        //                             const Color(0xFFF65734)
+        //                           ]
+        //                         : [Colors.white, Colors.white],
+        //                     begin: Alignment.bottomCenter,
+        //                     end: Alignment.topCenter,
+        //                   ),
+        //                   borderRadius: BorderRadius.circular(15),
+        //                   border: Border.all(
+        //                     color: _isSelected3
+        //                         ? const Color(0xFFF65734)
+        //                         : const Color(0xFFE0E0E5),
+        //                   )),
+        //               child: Row(
+        //                 mainAxisAlignment: MainAxisAlignment.center,
+        //                 children: [
+        //                   Text(
+        //                     "Pages 96",
+        //                     style: TextStyle(
+        //                         color: _isSelected3
+        //                             ? const Color(0xFFFFFFFF)
+        //                             : const Color(0xFFA7A9B7),
+        //                         fontFamily: "Satoshi",
+        //                         fontSize: 14,
+        //                         fontWeight: FontWeight.w400),
+        //                   ),
+        //                 ],
+        //               ),
+        //             ),
+        //           ),
+        //         ],
+        //       ),
+        //       const SizedBox(height: 16),
+        //       if (selectedPageText.isNotEmpty)
+        //         Text(
+        //           selectedPageText,
+        //           style: const TextStyle(
+        //             fontFamily: "Satoshi",
+        //             fontSize: 14,
+        //             fontWeight: FontWeight.w400,
+        //             color: Color(0xFFA7A9B7),
+        //           ),
+        //         ),
+        //     ],
+        //   ),
+        // ),
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.02,
         ),
@@ -1133,7 +1147,7 @@ class _SignupDetailsState extends State<SignupDetails> {
                         isLoading = true; // Show the progress indicator
                       });
                       await signUpUser();
-              
+
                       if (signUpDetailsModel.status == "success") {
                         prefs = await SharedPreferences.getInstance();
                         await prefs?.setString('userID',
@@ -1145,9 +1159,9 @@ class _SignupDetailsState extends State<SignupDetails> {
                             );
                           },
                         ));
-                                setState(() {
-                        isLoading = false; // Show the progress indicator
-                      });
+                        setState(() {
+                          isLoading = false; // Show the progress indicator
+                        });
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -1236,9 +1250,9 @@ class _SignupDetailsState extends State<SignupDetails> {
     return null; // Return null if the validation succeeds
   }
 
-  bool _isSelected1 = false;
-  bool _isSelected2 = false;
-  bool _isSelected3 = false;
+  final bool _isSelected1 = false;
+  final bool _isSelected2 = false;
+  final bool _isSelected3 = false;
   String selectedPageText = "";
 
   Country? _selectedCountry;

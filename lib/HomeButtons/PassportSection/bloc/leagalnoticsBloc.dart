@@ -20,7 +20,8 @@ class PassportLegalNoticePageCubit extends Cubit<PassportLegalNoticePageState> {
       final getProfileApiUrl = "$baseUrl/get_profile";
       final coverDesignApiUrl = "$baseUrl/get_cover_design";
 
-      final getProfileResponse = await http.post(Uri.parse(getProfileApiUrl), headers: {
+      final getProfileResponse =
+          await http.post(Uri.parse(getProfileApiUrl), headers: {
         'Accept': 'application/json',
       }, body: {
         "passport_holder_id": "$userID",
@@ -30,10 +31,11 @@ class PassportLegalNoticePageCubit extends Cubit<PassportLegalNoticePageState> {
       final getProfileStatus = getProfileResponse.statusCode;
 
       if (getProfileStatus == 200) {
-        final getProfileModels = getProfileModelsFromJson(getProfileResponseString);
+        final getProfileModels =
+            getProfileModelsFromJson(getProfileResponseString);
 
         await loadCoverDesign(userID, coverDesignApiUrl, getProfileModels);
-        
+
         emit(PassportLegalNoticePageState.loaded);
       } else {
         emit(PassportLegalNoticePageState.error);
@@ -46,7 +48,7 @@ class PassportLegalNoticePageCubit extends Cubit<PassportLegalNoticePageState> {
 
   String? legalnotice;
 
-    String? selectedOption;
+  String? selectedOption;
   CoverDesignDataModel coverDesignDataModel = CoverDesignDataModel();
 
   String selectedPassportCountry = "";

@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -33,7 +34,8 @@ class _EditProfileState extends State<EditProfile> {
   final TextEditingController _flag = TextEditingController();
   String? _slectedGenderId;
   String? selectedgenderId;
-
+  Country? _selectedCountry;
+  String? countryString;
   GetProfileModels getProfileModels = GetProfileModels();
   getUserProfile() async {
     prefs = await SharedPreferences.getInstance();
@@ -66,7 +68,7 @@ class _EditProfileState extends State<EditProfile> {
           _mobileNumberController.text =
               getProfileModels.data?.phoneNumber ?? '';
           _dob.text = getProfileModels.data?.dob ?? '';
-          _flag.text = getProfileModels.data?.nationality ?? '';
+          countryString = getProfileModels.data?.nationality ?? '';
           _slectedGenderId = getProfileModels.data?.genderId ?? "11";
           getProfileModels.data?.passportDesignId != null
               ? selectedOption = getProfileModels.data?.passportDesignId
@@ -74,7 +76,7 @@ class _EditProfileState extends State<EditProfile> {
 
           // Load the passport image when the page is initially loaded
         }
-        print("");
+        print("$countryString");
 
         setState(() {
           isLoading = false;
@@ -110,7 +112,7 @@ class _EditProfileState extends State<EditProfile> {
       "phone_number": _mobileNumberController.text,
       "gender_id": "$_slectedGenderId",
       "dob": _dob.text,
-      "nationality": _flag.text,
+      "nationality": countryString,
       "passport_design_id": selectedOption,
       "profile_picture": base64imgGallery ?? "",
     });
@@ -787,68 +789,72 @@ class _EditProfileState extends State<EditProfile> {
                         const SizedBox(width: 8.0),
                         Expanded(
                           child: TextFormField(
-                            controller: _flag,
+                            // controller: _flag,
 
-                            // readOnly: true,
-                            // onTap: () {
-                            //   showCountryPicker(
-                            //     context: context,
-                            //     countryListTheme: CountryListThemeData(
-                            //       flagSize: 25,
-                            //       backgroundColor: Colors.white,
-                            //       textStyle: const TextStyle(
-                            //           fontSize: 16, color: Colors.blueGrey),
-                            //       bottomSheetHeight: 500,
-                            //       borderRadius: const BorderRadius.only(
-                            //         topLeft: Radius.circular(20.0),
-                            //         topRight: Radius.circular(20.0),
-                            //       ),
-                            //       inputDecoration: InputDecoration(
-                            //         prefixIcon: Padding(
-                            //           padding: const EdgeInsets.all(8.0),
-                            //           child: SvgPicture.asset(
-                            //             'assets/flag.svg',
-                            //           ),
-                            //         ),
+                            readOnly: true,
+                            onTap: () {
+                              showCountryPicker(
+                                context: context,
+                                countryListTheme: CountryListThemeData(
+                                  flagSize: 25,
+                                  backgroundColor: Colors.white,
+                                  textStyle: const TextStyle(
+                                      fontSize: 16, color: Colors.blueGrey),
+                                  bottomSheetHeight: 500,
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(20.0),
+                                    topRight: Radius.circular(20.0),
+                                  ),
+                                  inputDecoration: InputDecoration(
+                                    prefixIcon: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: SvgPicture.asset(
+                                        'assets/flag.svg',
+                                      ),
+                                    ),
 
-                            //         focusedBorder: OutlineInputBorder(
-                            //           borderSide: const BorderSide(
-                            //               color: Color(0xFFF65734)),
-                            //           borderRadius: BorderRadius.circular(15.0),
-                            //         ),
-                            //         // labelText: 'Email',
-                            //         hintText: "Country Name",
-                            //         enabledBorder: OutlineInputBorder(
-                            //           borderRadius: BorderRadius.circular(15),
-                            //           borderSide: const BorderSide(
-                            //               color: Color(
-                            //                   0xFFF3F3F3)), // change border color
-                            //         ),
-                            //         labelStyle: const TextStyle(),
-                            //         hintStyle: const TextStyle(
-                            //             color: Color(0xFFA7A9B7),
-                            //             fontSize: 16,
-                            //             fontWeight: FontWeight.w300,
-                            //             fontFamily: "Satoshi"),
-                            //         border: OutlineInputBorder(
-                            //             borderRadius: BorderRadius.circular(15)),
-                            //       ),
-                            //     ),
-                            //     onSelect: (Country country) {
-                            //       setState(() {
-                            //         _selectedCountry = country;
-                            //         print(
-                            //             'Selected country: ${country.displayNameNoCountryCode}');
-                            //         print(_selectedCountry);
-                            //       });
-                            //     },
-                            //   );
-                            // },
-                            // controller: TextEditingController(
-                            //   text: _selectedCountry != null
-                            //       ? _selectedCountry?.displayNameNoCountryCode
-                            //       : '',
-                            // ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          color: Color(0xFFF65734)),
+                                      borderRadius: BorderRadius.circular(15.0),
+                                    ),
+                                    // labelText: 'Email',
+                                    hintText: "Country Name",
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderSide: const BorderSide(
+                                          color: Color(
+                                              0xFFF3F3F3)), // change border color
+                                    ),
+                                    labelStyle: const TextStyle(),
+                                    hintStyle: const TextStyle(
+                                        color: Color(0xFFA7A9B7),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w300,
+                                        fontFamily: "Satoshi"),
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                  ),
+                                ),
+                                onSelect: (Country country) {
+                                  setState(() {
+                                    _selectedCountry = country;
+                                    print(
+                                        'Selected country: ${country.displayNameNoCountryCode}');
+                                    countryString =
+                                        country.displayNameNoCountryCode;
+                                    print("countryString: $countryString");
+                                    print(_selectedCountry);
+                                  });
+                                },
+                              );
+                            },
+                            controller: TextEditingController(
+                              text: _selectedCountry != null
+                                  ? _selectedCountry?.displayNameNoCountryCode
+                                  : '$countryString',
+                            ),
 
                             decoration: const InputDecoration(
                               hintText: 'Nationality',

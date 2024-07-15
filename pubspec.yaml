@@ -60,6 +60,7 @@ dependencies:
   device_preview: ^1.1.0
   flutter_stripe: 9.5.0+1
   screenshot: ^2.5.0
+  get: ^4.6.6
 
   
 dev_dependencies:
