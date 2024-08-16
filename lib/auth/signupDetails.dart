@@ -791,9 +791,10 @@ class _SignupDetailsState extends State<SignupDetails> {
                       // Handle the selected date
                       setState(() {
                         apiDateFormat =
-                            DateFormat('yyyyMMdd').format(selectedDate);
+                            DateFormat('yyyy-MM-dd').format(selectedDate);
+                        print("apiDateFormat: $apiDateFormat");
                         dob.text =
-                            DateFormat('MM/dd/yyyy').format(selectedDate);
+                            DateFormat('dd-MMMM-yyyy').format(selectedDate);
                         // textFieldDateFormat = DateFormat('MM/dd/yyyy').format(selectedDate);
                         // Date.text = DateFormat.yMd().format(selectedDate);
                       });
@@ -832,9 +833,9 @@ class _SignupDetailsState extends State<SignupDetails> {
                           // Handle the selected date
                           setState(() {
                             apiDateFormat =
-                                DateFormat('yyyyMMdd').format(selectedDate);
+                                DateFormat('yyyy-MM-dd').format(selectedDate);
                             dob.text =
-                                DateFormat('MM/dd/yyyy').format(selectedDate);
+                                DateFormat('dd-MMMM-yyyy').format(selectedDate);
                             // textFieldDateFormat = DateFormat('MM/dd/yyyy').format(selectedDate);
                             // Date.text = DateFormat.yMd().format(selectedDate);
                           });

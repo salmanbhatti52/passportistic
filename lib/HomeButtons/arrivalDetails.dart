@@ -1307,7 +1307,9 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
                             Navigator.pushReplacement(context,
                                 MaterialPageRoute(
                               builder: (BuildContext context) {
-                                return const ViewPassport();
+                                return const ViewPassport(
+                                  
+                                );
                               },
                             ));
                           } else {

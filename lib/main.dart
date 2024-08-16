@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -47,13 +48,13 @@ void main() async {
   bool shownOnboarding = _prefs?.getBool('shownOnboarding') ?? false;
   Stripe.publishableKey = stripeTestKey;
   await Stripe.instance.applySettings();
-  runApp(MyApp(shownOnboarding: shownOnboarding));
-  // runApp(
-  //   DevicePreview(
-  //     enabled: true,
-  //     builder: (context) => MyApp(shownOnboarding: shownOnboarding),
-  //   ),
-  // );
+  // runApp(MyApp(shownOnboarding: shownOnboarding));
+  runApp(
+    DevicePreview(
+      enabled: true,
+      builder: (context) => MyApp(shownOnboarding: shownOnboarding),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {

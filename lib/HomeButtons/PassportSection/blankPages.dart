@@ -65,7 +65,7 @@ class _BlankPageState extends State<BlankPage> {
     }
   }
 
-  final PageController _pageController = PageController(initialPage: 0);
+   PageController _pageController = PageController(initialPage: 0);
   Alignment _getAlignment(int index) {
     if (index == 0) {
       return Alignment.topRight;
