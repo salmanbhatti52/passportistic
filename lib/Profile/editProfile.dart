@@ -294,13 +294,6 @@ class _EditProfileState extends State<EditProfile> {
   final TextEditingController _gender = TextEditingController();
 
   Future<void> _selectDate(BuildContext context) async {
-    // final DateTime? picked = await showDatePicker(
-    //   context: context,
-    //   initialDate: DateTime.now(),
-    //   firstDate: DateTime(1900),
-    //   lastDate: DateTime.now(),
-    //    // Set mode to only select the date
-    // );
     DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -311,7 +304,7 @@ class _EditProfileState extends State<EditProfile> {
         // Handle the selected date
         setState(() {
           // Date.text =
-          // DateFormat.yMd().format(selectedDate);
+          // ? DateFormat.yMd().format(selectedDate);
           _dob.text = DateFormat('yyyy-MM-dd').format(selectedDate);
         });
       }
