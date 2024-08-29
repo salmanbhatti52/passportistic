@@ -90,6 +90,7 @@ class _SelectPaymentMethodState extends State<SelectPaymentMethod> {
   BuyProductsModel buyProductsModel = BuyProductsModel();
   Future<void> buyStamps() async {
     String apiUrl = "https://portal.passporttastic.com/api/purchase_details";
+    print("api: $apiUrl");
     print("working");
 
     // Check for null values and log them

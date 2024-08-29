@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:logger/logger.dart';
+
 import 'package:passport_stamp/feature/stamp/presentation/stamp.dart';
 import 'package:scanguard/Home/shop.dart';
 import 'package:http/http.dart' as http;
@@ -26,6 +28,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  var logger = Logger();
   GetProfileModels getProfileModels = GetProfileModels();
   getUserProfile() async {
     String apiUrl = "$baseUrl/get_profile";
