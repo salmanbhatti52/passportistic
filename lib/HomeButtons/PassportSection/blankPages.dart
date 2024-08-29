@@ -28,7 +28,7 @@ class _BlankPageState extends State<BlankPage> {
   int imagesPerPage = 4;
   getStampImage() async {
     String apiUrl = "$baseUrl/get_travel_details";
-    print("api: $apiUrl");
+    debugPrint("api: $apiUrl");
     prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
     if (!mounted) {
@@ -46,12 +46,12 @@ class _BlankPageState extends State<BlankPage> {
       return; // Check again if the widget is still mounted after the HTTP request
     }
     final responseString = response.body;
-    print("getStampImagesOnPassportModels Response: $responseString");
-    print("status Code getStampImagesOnPassportModels: ${response.statusCode}");
+    debugPrint("getStampImagesOnPassportModels Response: $responseString");
+    debugPrint("status Code getStampImagesOnPassportModels: ${response.statusCode}");
 
     if (response.statusCode == 200) {
-      print("in 200 getStampImagesOnPassportModels");
-      print("SuucessFull");
+      debugPrint("in 200 getStampImagesOnPassportModels");
+      debugPrint("SuucessFull");
       getStampImagesOnPassportModels =
           getStampImagesOnPassportModelsFromJson(responseString);
       if (!mounted) {
@@ -60,7 +60,7 @@ class _BlankPageState extends State<BlankPage> {
       setState(() {
         isLoading = false;
       });
-      print(
+      debugPrint(
           'getStampImagesOnPassportModels status: ${getStampImagesOnPassportModels.status}');
     }
   }
@@ -84,7 +84,7 @@ class _BlankPageState extends State<BlankPage> {
   void initState() {
     super.initState();
     getStampImage();
-    print("widget.total pages: ${widget.totalPages}");
+    debugPrint("widget.total pages: ${widget.totalPages}");
   }
 
   @override
@@ -98,14 +98,14 @@ class _BlankPageState extends State<BlankPage> {
       onPageChanged: (index) {
         setState(() {
           currentPageIndex = index + 1; // Incrementing index by 1
-          print("currentPageIndex $currentPageIndex");
+          debugPrint("currentPageIndex $currentPageIndex");
         });
       },
       itemBuilder: (context, pageIndex) {
-        print("totalStamps $totalStamps");
-        print("totalPages $totalPages");
-        print("remainingStamps $remainingStamps");
-        // print("pageIndex $pageIndex");
+        debugPrint("totalStamps $totalStamps");
+        debugPrint("totalPages $totalPages");
+        debugPrint("remainingStamps $remainingStamps");
+        // debugPrint("pageIndex $pageIndex");
         return Container(
           height: 199,
           decoration: const ShapeDecoration(

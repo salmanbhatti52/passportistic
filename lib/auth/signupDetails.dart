@@ -1170,6 +1170,9 @@ class _SignupDetailsState extends State<SignupDetails> {
                             backgroundColor: Color(0xFFF65734),
                           ),
                         );
+                        setState(() {
+                          isLoading = false; // Show the progress indicator
+                        });
                       }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -1178,6 +1181,9 @@ class _SignupDetailsState extends State<SignupDetails> {
                           backgroundColor: Color(0xFFF65734),
                         ),
                       );
+                      setState(() {
+                        isLoading = false; // Show the progress indicator
+                      });
                     }
                   },
                   child: Container(

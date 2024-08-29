@@ -45,14 +45,14 @@ class _ProfilePageState extends State<ProfilePage> {
       } else {
         Uint8List imageByte = await xFile.readAsBytes();
         base64imgGallery = base64.encode(imageByte);
-        print("base64img $base64imgGallery");
+        debugPrint("base64img $base64imgGallery");
 
         final imageTemporary = File(xFile.path);
 
         setState(() {
           imagePathGallery = imageTemporary;
-          print("newImage $imagePathGallery");
-          print("newImage64 $base64imgGallery");
+          debugPrint("newImage $imagePathGallery");
+          debugPrint("newImage64 $base64imgGallery");
           // Navigator.push(
           //     context,
           //     MaterialPageRoute(
@@ -63,7 +63,7 @@ class _ProfilePageState extends State<ProfilePage> {
         });
       }
     } on PlatformException catch (e) {
-      print('Failed to pick image: ${e.toString()}');
+      debugPrint('Failed to pick image: ${e.toString()}');
     }
   }
 
@@ -72,7 +72,7 @@ class _ProfilePageState extends State<ProfilePage> {
     prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
     String apiUrl = "$baseUrl/get_profile";
-    print("api: $apiUrl");
+    debugPrint("api: $apiUrl");
     if (!mounted) {
       return; // Check if the widget is still mounted
     }
@@ -88,12 +88,12 @@ class _ProfilePageState extends State<ProfilePage> {
       return; // Check again if the widget is still mounted after the HTTP request
     }
     final responseString = response.body;
-    print("getProfileModels Response: $responseString");
-    print("status Code getProfileModels: ${response.statusCode}");
+    debugPrint("getProfileModels Response: $responseString");
+    debugPrint("status Code getProfileModels: ${response.statusCode}");
 
     if (response.statusCode == 200) {
-      print("in 200 getProfileModels");
-      print("SuucessFull");
+      debugPrint("in 200 getProfileModels");
+      debugPrint("SuucessFull");
       getProfileModels = getProfileModelsFromJson(responseString);
       if (!mounted) {
         return; // Check once more if the widget is still mounted before updating the state
@@ -101,7 +101,7 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {
         isLoading = false;
       });
-      print('getProfileModels status: ${getProfileModels.status}');
+      debugPrint('getProfileModels status: ${getProfileModels.status}');
     }
   }
 
@@ -110,7 +110,7 @@ class _ProfilePageState extends State<ProfilePage> {
     prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
     String apiUrl = "$baseUrl/change_password";
-    print("api: $apiUrl");
+    debugPrint("api: $apiUrl");
     if (!mounted) {
       return; // Check if the widget is still mounted
     }
@@ -129,12 +129,12 @@ class _ProfilePageState extends State<ProfilePage> {
       return; // Check again if the widget is still mounted after the HTTP request
     }
     final responseString = response.body;
-    print("updatePasswordModel Response: $responseString");
-    print("status Code updatePasswordModel: ${response.statusCode}");
+    debugPrint("updatePasswordModel Response: $responseString");
+    debugPrint("status Code updatePasswordModel: ${response.statusCode}");
 
     if (response.statusCode == 200) {
-      print("in 200 updatePasswordModel");
-      print("SuucessFull");
+      debugPrint("in 200 updatePasswordModel");
+      debugPrint("SuucessFull");
       updatePasswordModel = updatePasswordModelFromJson(responseString);
       if (!mounted) {
         return; // Check once more if the widget is still mounted before updating the state
@@ -142,7 +142,7 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {
         isLoading = false;
       });
-      print('updatePasswordModel status: ${updatePasswordModel.status}');
+      debugPrint('updatePasswordModel status: ${updatePasswordModel.status}');
     }
   }
 
@@ -786,9 +786,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             Builder(builder: (context) {
                               return GestureDetector(
                                 onTap: () async {
-                                  print(createPass.text);
-                                  print(currentPass.text);
-                                  print(confirmPass.text);
+                                  debugPrint(createPass.text);
+                                  debugPrint(currentPass.text);
+                                  debugPrint(confirmPass.text);
                                   // Close the bottom sheet first
                                   // Navigator.pop(context);
 
@@ -871,7 +871,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             16.0, // Font size of the toast message
                                       );
 
-                                      print("Hi Zain");
+                                      debugPrint("Hi Zain");
                                     }
                                   }
 

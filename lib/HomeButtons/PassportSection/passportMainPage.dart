@@ -27,7 +27,7 @@ class _passportPageState extends State<passportPage> {
   String? dobadded;
   getUserProfile() async {
     String apiUrl = "$baseUrl/get_profile";
-    print("api: $apiUrl");
+    debugPrint("api: $apiUrl");
     prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
     if (!mounted) {
@@ -45,18 +45,18 @@ class _passportPageState extends State<passportPage> {
       return; // Check again if the widget is still mounted after the HTTP request
     }
     final responseString = response.body;
-    print("getProfileModels Response: $responseString");
-    print("status Code getProfileModels: ${response.statusCode}");
+    debugPrint("getProfileModels Response: $responseString");
+    debugPrint("status Code getProfileModels: ${response.statusCode}");
 
     if (response.statusCode == 200) {
-      print("in 200 getProfileModels");
-      print("SuucessFull");
+      debugPrint("in 200 getProfileModels");
+      debugPrint("SuucessFull");
       getProfileModels = getProfileModelsFromJson(responseString);
       if (!mounted) {
         return; // Check once more if the widget is still mounted before updating the state
       }
 
-      print('getProfileModels status: ${getProfileModels.status}');
+      debugPrint('getProfileModels status: ${getProfileModels.status}');
       await getCurrency();
       await genderid();
       String mrzDate = getProfileModels.data!.dateAdded!;
@@ -74,8 +74,8 @@ class _passportPageState extends State<passportPage> {
       setState(() {
         isLoading = false;
       });
-      print(dobadded);
-      print(dateAdded);
+      debugPrint(dobadded);
+      debugPrint(dateAdded);
     }
   }
 
@@ -85,7 +85,7 @@ class _passportPageState extends State<passportPage> {
 
   Future<void> getCurrency() async {
     String apiUrl = "$baseUrl/get_currency_list";
-    print("api: $apiUrl");
+    debugPrint("api: $apiUrl");
     prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
 
@@ -98,23 +98,23 @@ class _passportPageState extends State<passportPage> {
       "passport_holder_id": "$userID"
     });
     final responseString = response.body;
-    print("responsecurrencyModelApi: $responseString");
-    print("status Code currencyModel : ${response.statusCode}");
+    debugPrint("responsecurrencyModelApi: $responseString");
+    debugPrint("status Code currencyModel : ${response.statusCode}");
 
     if (response.statusCode == 200) {
-      print("SuucessFull");
-      print("in 200 Currency list");
+      debugPrint("SuucessFull");
+      debugPrint("in 200 Currency list");
       currencyModel = currencyModelFromJson(response.body);
       if (currencyModel.data != null && getProfileModels.data != null) {
         if (currencyModel.data!.isNotEmpty) {
           for (int i = 0; i < currencyModel.data!.length; i++) {
-            print("Checking currencyId: ${currencyModel.data![i].currencyId}");
+            debugPrint("Checking currencyId: ${currencyModel.data![i].currencyId}");
             if (currencyModel.data![i].currencyId ==
                 getProfileModels.data!.currencyId) {
-              print(
+              debugPrint(
                   "Match found for currencyId: ${currencyModel.data![i].currencyId}");
               currencyName = currencyModel.data![i].currencyCode;
-              print("currencyName $currencyName");
+              debugPrint("currencyName $currencyName");
             }
           }
         } else {
@@ -124,9 +124,9 @@ class _passportPageState extends State<passportPage> {
         debugPrint("currencyModel.data or getProfileModels.data is null");
       }
 
-      print('currecnyModel status: ${currencyModel.status}');
+      debugPrint('currecnyModel status: ${currencyModel.status}');
     } else {
-      print('Failed to load currency data');
+      debugPrint('Failed to load currency data');
     }
     setState(() {
       isLoading = false;
@@ -138,7 +138,7 @@ class _passportPageState extends State<passportPage> {
     prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
     String apiUrl = "$baseUrl/get_gender_list";
-    print("api: $apiUrl");
+    debugPrint("api: $apiUrl");
 
     setState(() {
       isLoading = true;
@@ -151,13 +151,13 @@ class _passportPageState extends State<passportPage> {
     });
 
     final responseString = response.body;
-    print("responseCoverDesignApi: $responseString");
-    print("status Code CoverDesign: ${response.statusCode}");
-    print("in 200 signIn");
+    debugPrint("responseCoverDesignApi: $responseString");
+    debugPrint("status Code CoverDesign: ${response.statusCode}");
+    debugPrint("in 200 signIn");
 
     if (response.statusCode == 200) {
-      print("Successful");
-      print("Cover Design Data: $responseString");
+      debugPrint("Successful");
+      debugPrint("Cover Design Data: $responseString");
 
       setState(() {
         getGenderListModels = getGenderListModelsFromJson(responseString);
@@ -165,10 +165,10 @@ class _passportPageState extends State<passportPage> {
           for (int i = 0; i < getGenderListModels.data!.length; i++) {
             if (getGenderListModels.data![i].genderId ==
                 getProfileModels.data!.genderId) {
-              print("genderId: ${getGenderListModels.data![i].genderId}");
+              debugPrint("genderId: ${getGenderListModels.data![i].genderId}");
               setState(() {
                 genderName = getGenderListModels.data![i].gender;
-                print("selectedgender $genderName");
+                debugPrint("selectedgender $genderName");
               });
             }
           }

@@ -41,7 +41,7 @@ class _EditProfileState extends State<EditProfile> {
     prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
     String apiUrl = "$baseUrl/get_profile";
-    print("api: $apiUrl");
+    debugPrint("api: $apiUrl");
 
     setState(() {
       isLoading = true;
@@ -55,12 +55,12 @@ class _EditProfileState extends State<EditProfile> {
       });
 
       final responseString = response.body;
-      print("getProfileModels Response: $responseString");
-      print("status Code getProfileModels: ${response.statusCode}");
+      debugPrint("getProfileModels Response: $responseString");
+      debugPrint("status Code getProfileModels: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        print("in 200 getProfileModels");
-        print("SuccessFull");
+        debugPrint("in 200 getProfileModels");
+        debugPrint("SuccessFull");
         getProfileModels = getProfileModelsFromJson(responseString);
 
         if (getProfileModels.data != null) {
@@ -76,19 +76,19 @@ class _EditProfileState extends State<EditProfile> {
 
           // Load the passport image when the page is initially loaded
         }
-        print("$countryString");
+        debugPrint("$countryString");
 
         setState(() {
           isLoading = false;
         });
 
-        print('getProfileModels status: ${getProfileModels.status}');
+        debugPrint('getProfileModels status: ${getProfileModels.status}');
       } else {
-        print("Error: ${response.reasonPhrase}");
+        debugPrint("Error: ${response.reasonPhrase}");
         // Handle error cases if needed
       }
     } catch (e) {
-      print("Error during API request: $e");
+      debugPrint("Error during API request: $e");
       // Handle exception if needed
     }
   }
@@ -99,7 +99,7 @@ class _EditProfileState extends State<EditProfile> {
     // try {
 
     String apiUrl = "$baseUrl/update_profile";
-    print("api: $apiUrl");
+    debugPrint("api: $apiUrl");
 
     setState(() {
       isLoading = true;
@@ -117,17 +117,17 @@ class _EditProfileState extends State<EditProfile> {
       "profile_picture": base64imgGallery ?? "",
     });
     final responseString = response.body;
-    print("responseupdateProfileModelsAPI: $responseString");
-    print("status Code updateProfileModels: ${response.statusCode}");
+    debugPrint("responseupdateProfileModelsAPI: $responseString");
+    debugPrint("status Code updateProfileModels: ${response.statusCode}");
 
     if (response.statusCode == 200) {
-      print("in 200 updateProfileModels");
-      print("SuucessFull");
+      debugPrint("in 200 updateProfileModels");
+      debugPrint("SuucessFull");
       updateProfileModels = updateProfileModelsFromJson(responseString);
       setState(() {
         isLoading = false;
       });
-      print('updateProfileModels status: ${updateProfileModels.status}');
+      debugPrint('updateProfileModels status: ${updateProfileModels.status}');
     }
   }
 
@@ -136,7 +136,7 @@ class _EditProfileState extends State<EditProfile> {
   getGenderList() async {
     // try {
     String apiUrl = "$baseUrl/get_gender_list";
-    print("api: $apiUrl");
+    debugPrint("api: $apiUrl");
 
     setState(() {
       isLoading = true;
@@ -147,24 +147,24 @@ class _EditProfileState extends State<EditProfile> {
       "passport_holder_id": widget.userId,
     });
     final responseString = response.body;
-    print("getGenderListModels: $responseString");
-    print("status Code getGenderListModels : ${response.statusCode}");
+    debugPrint("getGenderListModels: $responseString");
+    debugPrint("status Code getGenderListModels : ${response.statusCode}");
 
     if (response.statusCode == 200) {
-      print("SuucessFull");
-      print("in 200 getGenderListModels list");
+      debugPrint("SuucessFull");
+      debugPrint("in 200 getGenderListModels list");
       getGenderListModels = getGenderListModelsFromJson(responseString);
       if (!mounted) {
         setState(() {
           isLoading = false;
         });
       }
-      print('getGenderListModels status: ${getGenderListModels.status}');
+      debugPrint('getGenderListModels status: ${getGenderListModels.status}');
     }
   }
   // genderid() async {
   //   String apiUrl = "$baseUrl/get_gender_list";
-  //   print("api: $apiUrl");
+  //   debugPrint("api: $apiUrl");
 
   //   setState(() {
   //     isLoading = true;
@@ -177,27 +177,27 @@ class _EditProfileState extends State<EditProfile> {
   //   });
 
   //   final responseString = response.body;
-  //   print("responseCoverDesignApi: $responseString");
-  //   print("status Code CoverDesign: ${response.statusCode}");
-  //   print("in 200 signIn");
+  //   debugPrint("responseCoverDesignApi: $responseString");
+  //   debugPrint("status Code CoverDesign: ${response.statusCode}");
+  //   debugPrint("in 200 signIn");
 
   //   if (response.statusCode == 200) {
-  //     print("Successful");
-  //     print("Cover Design Data: $responseString");
+  //     debugPrint("Successful");
+  //     debugPrint("Cover Design Data: $responseString");
   //     setState(() {
   //       getGenderListModels = getGenderListModelsFromJson(responseString);
-  //       // if (getGenderListModels.data != null) {
-  //       //   for (int i = 0; i < getGenderListModels.data!.length; i++) {
-  //       //     if (getGenderListModels.data![i].genderId ==
-  //       //         getProfileModels.data!.genderId) {
-  //       //       print("genderId: ${getGenderListModels.data![i].genderId}");
-  //       //       setState(() {
-  //       //         selectedgenderId = getGenderListModels.data![i].gender;
-  //       //         print("selectedgender $selectedgenderId");
-  //       //       });
-  //       //     }
-  //       //   }
-  //       // }
+  // if (getGenderListModels.data != null) {
+  //   for (int i = 0; i < getGenderListModels.data!.length; i++) {
+  //     if (getGenderListModels.data![i].genderId ==
+  //         getProfileModels.data!.genderId) {
+  //       debugPrint("genderId: ${getGenderListModels.data![i].genderId}");
+  //       setState(() {
+  //         selectedgenderId = getGenderListModels.data![i].gender;
+  //         debugPrint("selectedgender $selectedgenderId");
+  //       });
+  //     }
+  //   }
+  // }
   //       isLoading = false;
   //     });
   //   }
@@ -208,7 +208,7 @@ class _EditProfileState extends State<EditProfile> {
 
   Future<void> coverDesign() async {
     String apiUrl = "$baseUrl/get_cover_design";
-    print("api: $apiUrl");
+    debugPrint("api: $apiUrl");
 
     setState(() {
       isLoading = true;
@@ -221,20 +221,21 @@ class _EditProfileState extends State<EditProfile> {
     });
 
     final responseString = response.body;
-    print("responseCoverDesignApi: $responseString");
-    print("status Code CoverDesign: ${response.statusCode}");
-    print("in 200 signIn");
+    debugPrint("responseCoverDesignApi: $responseString");
+    debugPrint("status Code CoverDesign: ${response.statusCode}");
+    debugPrint("in 200 signIn");
 
     if (response.statusCode == 200) {
-      print("Successful");
-      print("Cover Design Data: $responseString");
+      debugPrint("Successful");
+      debugPrint("Cover Design Data: $responseString");
 
       setState(() {
         coverDesignDataModel = coverDesignDataModelFromJson(responseString);
         isLoading = false;
       });
 
-      print("Cover Design Data Length: ${coverDesignDataModel.data?.length}");
+      debugPrint(
+          "Cover Design Data Length: ${coverDesignDataModel.data?.length}");
 
       // Now, set the selectedCoverImage based on the initial data
       if (coverDesignDataModel.data != null && selectedOption != null) {
@@ -249,7 +250,7 @@ class _EditProfileState extends State<EditProfile> {
 
   selectedDesign() async {
     String apiUrl = "$baseUrl/customer_design";
-    print("api: $apiUrl");
+    debugPrint("api: $apiUrl");
 
     setState(() {
       isLoading = true;
@@ -263,12 +264,12 @@ class _EditProfileState extends State<EditProfile> {
     });
 
     final responseString = response.body;
-    print("responseSelectedDesignApi: $responseString");
-    print("status Code SelectedDesign: ${response.statusCode}");
-    print("in 200 signIn");
+    debugPrint("responseSelectedDesignApi: $responseString");
+    debugPrint("status Code SelectedDesign: ${response.statusCode}");
+    debugPrint("in 200 signIn");
 
     if (response.statusCode == 200) {
-      print("Successful");
+      debugPrint("Successful");
       setState(() {
         selectedCoverDesign = selectedCoverDesignFromJson(responseString);
         isLoading = false;
@@ -328,14 +329,14 @@ class _EditProfileState extends State<EditProfile> {
       } else {
         Uint8List imageByte = await xFile.readAsBytes();
         base64imgGallery = base64.encode(imageByte);
-        print("base64img $base64imgGallery");
+        debugPrint("base64img $base64imgGallery");
 
         final imageTemporary = File(xFile.path);
 
         setState(() {
           imagePathGallery = imageTemporary;
-          print("newImage $imagePathGallery");
-          print("newImage64 $base64imgGallery");
+          debugPrint("newImage $imagePathGallery");
+          debugPrint("newImage64 $base64imgGallery");
           // Navigator.push(
           //     context,
           //     MaterialPageRoute(
@@ -346,7 +347,7 @@ class _EditProfileState extends State<EditProfile> {
         });
       }
     } on PlatformException catch (e) {
-      print('Failed to pick image: ${e.toString()}');
+      debugPrint('Failed to pick image: ${e.toString()}');
     }
   }
 
@@ -635,7 +636,8 @@ class _EditProfileState extends State<EditProfile> {
                             onChanged: (newValue) {
                               setState(() {
                                 _slectedGenderId = newValue;
-                                print(" _slectedGenderId $_slectedGenderId");
+                                debugPrint(
+                                    " _slectedGenderId $_slectedGenderId");
                               });
                             },
                             items: (getGenderListModels.data ?? []).isEmpty
@@ -833,12 +835,12 @@ class _EditProfileState extends State<EditProfile> {
                                 onSelect: (Country country) {
                                   setState(() {
                                     _selectedCountry = country;
-                                    print(
+                                    debugPrint(
                                         'Selected country: ${country.displayNameNoCountryCode}');
                                     countryString =
                                         country.displayNameNoCountryCode;
-                                    print("countryString: $countryString");
-                                    print(_selectedCountry);
+                                    debugPrint("countryString: $countryString");
+                                    debugPrint(_selectedCountry.toString());
                                   });
                                 },
                               );
@@ -930,8 +932,8 @@ class _EditProfileState extends State<EditProfile> {
                                       (data) => data.passportDesignId == value,
                                     )
                                     ?.passportFrontCover;
-                                print("Selected Option: $selectedOption");
-                                print(
+                                debugPrint("Selected Option: $selectedOption");
+                                debugPrint(
                                     "Selected Cover Image: $selectedCoverImage");
                               });
                             },

@@ -84,7 +84,7 @@
 //           if (state is UserProfileLoadingState) {
 //             return const CircularProgressIndicator(); // Show loading indicator
 //           } else if (state is UserProfileLoadedState) {
-//             // Access the user profile data from state.profileData
+             // !Access the user profile data from state.profileData
 //             final profileData = state.profileData;
 //             return ProfilePage(profileData: profileData);
 //           } else if (state is UserProfileErrorState) {

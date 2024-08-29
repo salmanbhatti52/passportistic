@@ -21,13 +21,13 @@ class _FrontCoverState extends State<FrontCover> {
     prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
     String apiUrl = "$baseUrl/get_profile";
-    print("api: $apiUrl");
+    debugPrint("api: $apiUrl");
     if (!mounted) {
       return; // Check if the widget is still mounted
     }
     setState(() {
       isLoading = true;
-      print("SharedPred UserId $userID");
+      debugPrint("SharedPred UserId $userID");
     });
     final response = await http.post(Uri.parse(apiUrl), headers: {
       'Accept': 'application/json',
@@ -38,13 +38,13 @@ class _FrontCoverState extends State<FrontCover> {
       return; // Check again if the widget is still mounted after the HTTP request
     }
     final responseString = response.body;
-    print("getProfileModels Response: $responseString");
-    print("status Code getProfileModels: ${response.statusCode}");
+    debugPrint("getProfileModels Response: $responseString");
+    debugPrint("status Code getProfileModels: ${response.statusCode}");
 
     if (response.statusCode == 200) {
       // After getting the user's profile data
-      print("in 200 getProfileModels");
-      print("SuucessFull");
+      debugPrint("in 200 getProfileModels");
+      debugPrint("Successful");
       getProfileModels = getProfileModelsFromJson(responseString);
       if (getProfileModels.data != null) {
         await coverDesign();
@@ -56,7 +56,7 @@ class _FrontCoverState extends State<FrontCover> {
         }
       } else {
         // Handle the case when user profile data is null
-        print("User profile data is null");
+        debugPrint("User profile data is null");
       }
       if (!mounted) {
         return; // Check once more if the widget is still mounted before updating the state
@@ -64,7 +64,7 @@ class _FrontCoverState extends State<FrontCover> {
       setState(() {
         isLoading = false;
       });
-      print('getProfileModels status: ${getProfileModels.status}');
+      debugPrint('getProfileModels status: ${getProfileModels.status}');
     }
   }
 
@@ -76,7 +76,7 @@ class _FrontCoverState extends State<FrontCover> {
     prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
     String apiUrl = "$baseUrl/get_cover_design";
-    print("api: $apiUrl");
+    debugPrint("api: $apiUrl");
 
     setState(() {
       isLoading = true;
@@ -89,13 +89,13 @@ class _FrontCoverState extends State<FrontCover> {
     });
 
     final responseString = response.body;
-    print("responseCoverDesignApi: $responseString");
-    print("status Code CoverDesign: ${response.statusCode}");
-    print("in 200 signIn");
+    debugPrint("responseCoverDesignApi: $responseString");
+    debugPrint("status Code CoverDesign: ${response.statusCode}");
+    debugPrint("in 200 signIn");
 
     if (response.statusCode == 200) {
-      print("Successful");
-      print("Cover Design Data: $responseString");
+      debugPrint("Successful");
+      debugPrint("Cover Design Data: $responseString");
 
       setState(() {
         coverDesignDataModel = coverDesignDataModelFromJson(responseString);
@@ -106,18 +106,18 @@ class _FrontCoverState extends State<FrontCover> {
             for (int i = 0; i < coverDesignDataModel.data!.length; i++) {
               if (coverDesignDataModel.data![i].passportDesignId ==
                   selectedPassportDesignId) {
-                print(
+                debugPrint(
                     "cover image ID: ${coverDesignDataModel.data![i].passportFrontCover}");
                 setState(() {
                   selectedOption =
                       coverDesignDataModel.data![i].passportFrontCover;
-                  print("selectedOptionCoverDesign $selectedOption");
+                  debugPrint("selectedOptionCoverDesign $selectedOption");
                 });
               }
             }
           } else {
             // Handle the case where passportDesignId is null in getProfileModels.data
-            print("Passport Design ID is null in getProfileModels.data");
+            debugPrint("Passport Design ID is null in getProfileModels.data");
             // You can add specific error handling or set a default value here if needed
           }
         }
@@ -125,7 +125,7 @@ class _FrontCoverState extends State<FrontCover> {
         isLoading = false;
       });
 
-      print("Cover Design Data Length: ${coverDesignDataModel.data?.length}");
+      debugPrint("Cover Design Data Length: ${coverDesignDataModel.data?.length}");
     }
   }
 
