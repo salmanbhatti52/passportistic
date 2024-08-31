@@ -255,6 +255,7 @@ class _SelectPaymentMethodState extends State<SelectPaymentMethod> {
                               ),
                               const Text(
                                 "Stamp Purchased\nSuccessfully!",
+                                
                                 style: TextStyle(
                                   color: Color.fromRGBO(0, 0, 0, 1),
                                   fontFamily: "Outfit",
