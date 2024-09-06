@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:scanguard/Utils/keys.dart';
 import 'package:scanguard/auth/signIn.dart';
 import 'package:scanguard/auth/verifyAccrount.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,8 +33,23 @@ class _SignUpPageState extends State<SignUpPage> {
     });
   }
 
+  String? token;
+  one() async {
+    OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+
+    OneSignal.initialize(appId);
+
+// The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
+    OneSignal.Notifications.requestPermission(true);
+
+    token = OneSignal.User.pushSubscription.id ?? "123";
+    print('token Response: $token');
+    setState(() {});
+  }
+
   signUpUser() async {
     // try {
+    await one();
 
     String apiUrl = "$baseUrl/signup";
     print("api: $apiUrl");
@@ -49,7 +66,7 @@ class _SignUpPageState extends State<SignUpPage> {
       "password": password.text,
       "confirm_password": confirmPassword.text,
       "account_type": "SignupWithApp",
-      "one_signal_id": "onesignal_id"
+      "one_signal_id": "$token"
     });
     final responseString = response.body;
     print("responseSignInApi: $responseString");

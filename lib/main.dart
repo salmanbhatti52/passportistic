@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:scanguard/Home/mainScreenHome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Utils/keys.dart';
@@ -43,6 +44,17 @@ String? userID;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+    OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+
+  OneSignal.initialize(appId);
+  String? token;
+  var ID4 = OneSignal.User.pushSubscription.id;
+  print("$ID4");
+
+  token = OneSignal.User.pushSubscription.id;
+  print("token: $token");
+// The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
+  OneSignal.Notifications.requestPermission(true);
   _prefs = await SharedPreferences.getInstance();
   bool shownOnboarding = _prefs?.getBool('shownOnboarding') ?? false;
   Stripe.publishableKey = stripeTestKey;

@@ -7,3 +7,4 @@ String stripeTestKey =
     "pk_test_51OEcOiC2zni1dAD5QxvFT8Jy43eyd11ZxnfLBfuHALGxneQtE0tRAMq9XEzECpoj41KWGAcqdUgEuubJyEt2PU3c005ls4GUhw";
 String stripeTestSecretKey =
     "sk_test_51OEcOiC2zni1dAD5stQ8OroUN92VtjegmFLQqlf5i50Mb6ClxUD7BbyRByB56xmjShDeG2LlZBS5CKwjwi9TZA2h00dguAb7JF";
+String appId = "02953867-f80f-4408-9585-3308de6ed008";
