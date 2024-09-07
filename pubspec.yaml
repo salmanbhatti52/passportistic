@@ -61,7 +61,6 @@ dependencies:
   screenshot: ^2.5.0
   get: ^4.6.6
   logger: ^2.4.0
-  # onesignal_flutter: ^5.1.6
 
 dev_dependencies:
   flutter_test:
