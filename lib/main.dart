@@ -44,12 +44,12 @@ String? userID;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-    OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+  OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
 
   OneSignal.initialize(appId);
   String? token;
   var ID4 = OneSignal.User.pushSubscription.id;
-  print("$ID4");
+  print("ID4 $ID4");
 
   token = OneSignal.User.pushSubscription.id;
   print("token: $token");
