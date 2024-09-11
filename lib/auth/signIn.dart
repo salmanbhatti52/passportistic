@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
-
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:scanguard/Utils/keys.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -30,9 +31,19 @@ class _SignInPageState extends State<SignInPage> {
     });
   }
 
+  String? token;
+  one() async {
+    OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+    OneSignal.initialize(appId);
+    OneSignal.Notifications.requestPermission(true);
+    token = OneSignal.User.pushSubscription.id ?? "123";
+    print('token Response: $token');
+    setState(() {});
+  }
+
   signinUser() async {
     // try {
-
+    await one();
     String apiUrl = "$baseUrl/login";
     print("api: $apiUrl");
     print("email: ${email.text}");
@@ -43,6 +54,7 @@ class _SignInPageState extends State<SignInPage> {
     final response = await http.post(Uri.parse(apiUrl), headers: {
       'Accept': 'application/json',
     }, body: {
+      "one_signal_id": "$token",
       "email": email.text,
       "password": password.text,
     });
