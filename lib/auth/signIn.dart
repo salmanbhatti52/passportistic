@@ -473,5 +473,4 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   LoginUserModels loginUserModels = LoginUserModels();
-  // SharedPreferences? prefs;
 }
