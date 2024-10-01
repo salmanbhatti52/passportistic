@@ -5,6 +5,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:scanguard/Home/mainScreenHome.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Utils/keys.dart';
 import 'onbaording/onboarding.dart';
@@ -97,33 +98,36 @@ class _MyAppState extends State<MyApp> {
       minTextAdapt: true,
       splitScreenMode: _splitScreenMode,
       child: Builder(builder: (BuildContext context) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            colorScheme:
-                ColorScheme.fromSeed(seedColor: const Color(0xFF00AEFF)),
-            useMaterial3: true,
-          ),
-          home: StreamBuilder<bool>(
-            stream: appBloc.onboardingStream,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                if (snapshot.data == true) {
-                  return const MainScreen();
+        return Screenshot(
+          controller: screenshotController,
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              colorScheme:
+                  ColorScheme.fromSeed(seedColor: const Color(0xFF00AEFF)),
+              useMaterial3: true,
+            ),
+            home: StreamBuilder<bool>(
+              stream: appBloc.onboardingStream,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data == true) {
+                    return const MainScreen();
+                  } else {
+                    return const Onboard();
+                  }
                 } else {
-                  return const Onboard();
+                  return const SplashScreen();
                 }
-              } else {
-                return const SplashScreen();
-              }
-            },
+              },
+            ),
           ),
         );
       }),
     );
   }
 }
-
+ScreenshotController screenshotController = ScreenshotController();
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -191,3 +195,4 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
+

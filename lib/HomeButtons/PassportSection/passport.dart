@@ -1,18 +1,25 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 import 'package:scanguard/HomeButtons/PassportSection/bloc/frontCoverBloc.dart';
 import 'package:scanguard/HomeButtons/PassportSection/bloc/leagalnoticsBloc.dart';
 import 'package:scanguard/HomeButtons/PassportSection/passportFrontCover.dart';
 import 'package:scanguard/HomeButtons/PassportSection/passportLegalNoticePage.dart';
 import 'package:scanguard/HomeButtons/PassportSection/passportMainPage.dart';
 import 'package:scanguard/Models/validationModelAPI.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:scanguard/Utils/screenshot_services.dart';
 
+import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:pdf/widgets.dart' as pw;
 import '../../Models/getProfileModels.dart';
 import '../../auth/signUpNextPage.dart';
 import '../../auth/signUpPage.dart';
@@ -34,6 +41,73 @@ class _ViewPassportState extends State<ViewPassport> {
   // Create a PageController
   final PageController _pageController = PageController();
   GetProfileModels getProfileModels = GetProfileModels();
+  Future<void> _generatePdfAndShare(BuildContext context) async {
+    final pdf = pw.Document();
+
+    // Add pages to the PDF
+    pdf.addPage(
+      pw.Page(
+        build: (pw.Context context) {
+          return pw.Column(
+            children: [
+              pw.Text('Front Cover'),
+              // Add more widgets to represent the front cover
+            ],
+          );
+        },
+      ),
+    );
+
+    pdf.addPage(
+      pw.Page(
+        build: (pw.Context context) {
+          return pw.Column(
+            children: [
+              pw.Text('Passport Page'),
+              // Add more widgets to represent the passport page
+            ],
+          );
+        },
+      ),
+    );
+
+    pdf.addPage(
+      pw.Page(
+        build: (pw.Context context) {
+          return pw.Column(
+            children: [
+              pw.Text('Legal Notice Page'),
+              // Add more widgets to represent the legal notice page
+            ],
+          );
+        },
+      ),
+    );
+
+    pdf.addPage(
+      pw.Page(
+        build: (pw.Context context) {
+          return pw.Column(
+            children: [
+              pw.Text('Blank Page'),
+              // Add more widgets to represent the blank page
+            ],
+          );
+        },
+      ),
+    );
+
+    // Save the PDF to a file
+    final output = await getTemporaryDirectory();
+    final file = File("${output.path}/passport.pdf");
+    await file.writeAsBytes(await pdf.save());
+
+    // Share the PDF
+    final XFile imageFile = XFile(file.toString()); // path to the image file
+    await Share.shareXFiles([imageFile], text: "text");
+    // await Share.shareXFiles([file.path], text: 'Here is your passport PDF');
+  }
+
   getUserProfile() async {
     String apiUrl = "$baseUrl/get_profile";
     print("api: $apiUrl");
@@ -258,34 +332,46 @@ class _ViewPassportState extends State<ViewPassport> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    width: 72,
-                    height: 72,
-                    decoration: const ShapeDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment(0.00, -1.00),
-                        end: Alignment(0, 1),
-                        colors: [Color(0xFFFF8D74), Color(0xFFF65634)],
+                  GestureDetector(
+                    onTap: () async {
+                      await ScreenshotService.captureAndShareScreenshot();
+                    },
+                    child: Container(
+                      width: 72,
+                      height: 72,
+                      decoration: const ShapeDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment(0.00, -1.00),
+                          end: Alignment(0, 1),
+                          colors: [Color(0xFFFF8D74), Color(0xFFF65634)],
+                        ),
+                        shape: OvalBorder(),
                       ),
-                      shape: OvalBorder(),
+                      child:
+                          Center(child: SvgPicture.asset("assets/share1.svg")),
                     ),
-                    child: Center(child: SvgPicture.asset("assets/share1.svg")),
                   ),
                   const SizedBox(
                     width: 40,
                   ),
-                  Container(
-                    width: 72,
-                    height: 72,
-                    decoration: const ShapeDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment(0.00, -1.00),
-                        end: Alignment(0, 1),
-                        colors: [Color(0xFFFF8D74), Color(0xFFF65634)],
+                  GestureDetector(
+                    onTap: () async {
+                      await ScreenshotService.captureAndSaveAsPDF();
+                    },
+                    child: Container(
+                      width: 72,
+                      height: 72,
+                      decoration: const ShapeDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment(0.00, -1.00),
+                          end: Alignment(0, 1),
+                          colors: [Color(0xFFFF8D74), Color(0xFFF65634)],
+                        ),
+                        shape: OvalBorder(),
                       ),
-                      shape: OvalBorder(),
+                      child:
+                          Center(child: SvgPicture.asset("assets/print1.svg")),
                     ),
-                    child: Center(child: SvgPicture.asset("assets/print1.svg")),
                   ),
                 ],
               ),
