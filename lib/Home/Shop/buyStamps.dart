@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:scanguard/Home/Shop/selectPayment.dart';
 
 import '../../Models/getStampShopModels.dart';
@@ -73,6 +74,9 @@ class _BuyStampsState extends State<BuyStamps> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+    final isTablet = ResponsiveBreakpoints.of(context).isTablet;
+    final isDesktop = ResponsiveBreakpoints.of(context).isDesktop;
     if (isLoading) {
       return const Center(
         child: CircularProgressIndicator(
@@ -80,173 +84,349 @@ class _BuyStampsState extends State<BuyStamps> {
         ),
       );
     } else {
-      return Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: GridView.builder(
-            shrinkWrap: true,
-            //          physics: NeverScrollableScrollPhysics(),
-            itemCount: getStampShopModels.data?.length ?? 0,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 6,
-              mainAxisSpacing: 6,
-              childAspectRatio: 1 / 1.5,
-            ),
-            itemBuilder: (BuildContext context, int index) {
-              return GestureDetector(
-                onTap: () async {
-                  prefs = await SharedPreferences.getInstance();
-                  userID = prefs?.getString('userID');
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (BuildContext context) {
-                      return SelectPaymentMethod(
-                          productType: "Stamps".toString(),
-                        userId: userID.toString(),
-                        productId: getStampShopModels.data![index].stampsPacksId
-                            .toString(),
-                        productName: getStampShopModels
-                            .data![index].stampsPacksName
-                            .toString(),
-                        productPrice: getStampShopModels
-                            .data![index].stampsPacksPrice
-                            .toString(),
-                        productImage: getStampShopModels
-                            .data![index].stampsPacksImage
-                            .toString(),
-                      );
-                    },
-                  ));
-                },
-                child: Container(
-                  width: 171,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 2,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
+      return isMobile
+          ? Scaffold(
+              body: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  //          physics: NeverScrollableScrollPhysics(),
+                  itemCount: getStampShopModels.data?.length ?? 0,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 6,
+                    mainAxisSpacing: 6,
+                    childAspectRatio: 1 / 1.5,
                   ),
-                  child: Column(
-                    children: [
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      ClipRRect(
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          topRight: Radius.circular(15),
-                        ),
-                        child: Container(
-                          width: 171,
-                          height: 151,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(15),
-                              topRight: Radius.circular(15),
+                  itemBuilder: (BuildContext context, int index) {
+                    return GestureDetector(
+                      onTap: () async {
+                        prefs = await SharedPreferences.getInstance();
+                        userID = prefs?.getString('userID');
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (BuildContext context) {
+                            return SelectPaymentMethod(
+                              productType: "Stamps".toString(),
+                              userId: userID.toString(),
+                              productId: getStampShopModels
+                                  .data![index].stampsPacksId
+                                  .toString(),
+                              productName: getStampShopModels
+                                  .data![index].stampsPacksName
+                                  .toString(),
+                              productPrice: getStampShopModels
+                                  .data![index].stampsPacksPrice
+                                  .toString(),
+                              productImage: getStampShopModels
+                                  .data![index].stampsPacksImage
+                                  .toString(),
+                            );
+                          },
+                        ));
+                      },
+                      child: Container(
+                        width: 171,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.2),
+                              spreadRadius: 2,
+                              blurRadius: 2,
+                              offset: const Offset(
+                                  0, 3), // changes position of shadow
                             ),
-                          ),
-                          child: getStampShopModels.data != null
-                              ? Image.network(
-                                  "https://portal.passporttastic.com/public/${getStampShopModels.data?[index].stampsPacksImage}",
-                                  fit: BoxFit.fill,
-                                )
-                              : Image.asset(
-                                  "assets/logo.png",
-                                  fit: BoxFit.fill,
-                                ),
+                          ],
                         ),
-                      ),
-                      Text(
-                        "${getStampShopModels.data?[index].stampsPacksName}",
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 12,
-                          fontFamily: 'Satoshi',
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      Text(
-                        '\$${getStampShopModels.data?[index].stampsPacksPrice}',
-                        style: const TextStyle(
-                          color: Color(0xFFF65734),
-                          fontSize: 20,
-                          fontFamily: 'Satoshi',
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                      Container(
-                        width: 104,
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        clipBehavior: Clip.antiAlias,
-                        decoration: ShapeDecoration(
-                          gradient: const LinearGradient(
-                            begin: Alignment(0.00, -1.00),
-                            end: Alignment(0, 1),
-                            colors: [Color(0xFFFF8D74), Color(0xFFF65634)],
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                        child: Column(
                           children: [
-                            GestureDetector(
-                              onTap: () async {
-                                prefs = await SharedPreferences.getInstance();
-                                userID = prefs?.getString('userID');
-                                Navigator.push(context, MaterialPageRoute(
-                                  builder: (BuildContext context) {
-                                    return SelectPaymentMethod(
-                                      userId: userID.toString(),
-                                      productId: getStampShopModels
-                                          .data![index].stampsPacksId
-                                          .toString(),
-                                      productName: getStampShopModels
-                                          .data![index].stampsPacksName
-                                          .toString(),
-                                      productPrice: getStampShopModels
-                                          .data![index].stampsPacksPrice
-                                          .toString(),
-                                      productImage: getStampShopModels
-                                          .data![index].stampsPacksImage
-                                          .toString(),
-                                      productType: "Stamps".toString(),
-                                    );
-                                  },
-                                ));
-                              },
-                              child: const Text(
-                                'Buy',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                  fontFamily: 'Satoshi',
-                                  fontWeight: FontWeight.w700,
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(15),
+                                topRight: Radius.circular(15),
+                              ),
+                              child: Container(
+                                width: 171,
+                                height: 151,
+                                decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(15),
+                                    topRight: Radius.circular(15),
+                                  ),
                                 ),
+                                child: getStampShopModels.data != null
+                                    ? Image.network(
+                                        "https://portal.passporttastic.com/public/${getStampShopModels.data?[index].stampsPacksImage}",
+                                        fit: BoxFit.fill,
+                                      )
+                                    : Image.asset(
+                                        "assets/logo.png",
+                                        fit: BoxFit.fill,
+                                      ),
+                              ),
+                            ),
+                            Text(
+                              "${getStampShopModels.data?[index].stampsPacksName}",
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 12,
+                                fontFamily: 'Satoshi',
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            Text(
+                              '\$${getStampShopModels.data?[index].stampsPacksPrice}',
+                              style: const TextStyle(
+                                color: Color(0xFFF65734),
+                                fontSize: 20,
+                                fontFamily: 'Satoshi',
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                            Container(
+                              width: 104,
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              clipBehavior: Clip.antiAlias,
+                              decoration: ShapeDecoration(
+                                gradient: const LinearGradient(
+                                  begin: Alignment(0.00, -1.00),
+                                  end: Alignment(0, 1),
+                                  colors: [
+                                    Color(0xFFFF8D74),
+                                    Color(0xFFF65634)
+                                  ],
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () async {
+                                      prefs =
+                                          await SharedPreferences.getInstance();
+                                      userID = prefs?.getString('userID');
+                                      Navigator.push(context, MaterialPageRoute(
+                                        builder: (BuildContext context) {
+                                          return SelectPaymentMethod(
+                                            userId: userID.toString(),
+                                            productId: getStampShopModels
+                                                .data![index].stampsPacksId
+                                                .toString(),
+                                            productName: getStampShopModels
+                                                .data![index].stampsPacksName
+                                                .toString(),
+                                            productPrice: getStampShopModels
+                                                .data![index].stampsPacksPrice
+                                                .toString(),
+                                            productImage: getStampShopModels
+                                                .data![index].stampsPacksImage
+                                                .toString(),
+                                            productType: "Stamps".toString(),
+                                          );
+                                        },
+                                      ));
+                                    },
+                                    child: const Text(
+                                      'Buy',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontFamily: 'Satoshi',
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
-        ),
-      );
+              ),
+            )
+          : Scaffold(
+              body: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  //          physics: NeverScrollableScrollPhysics(),
+                  itemCount: getStampShopModels.data?.length ?? 0,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    // childAspectRatio: 1 / 1.5,
+                  ),
+                  itemBuilder: (BuildContext context, int index) {
+                    return GestureDetector(
+                      onTap: () async {
+                        prefs = await SharedPreferences.getInstance();
+                        userID = prefs?.getString('userID');
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (BuildContext context) {
+                            return SelectPaymentMethod(
+                              productType: "Stamps".toString(),
+                              userId: userID.toString(),
+                              productId: getStampShopModels
+                                  .data![index].stampsPacksId
+                                  .toString(),
+                              productName: getStampShopModels
+                                  .data![index].stampsPacksName
+                                  .toString(),
+                              productPrice: getStampShopModels
+                                  .data![index].stampsPacksPrice
+                                  .toString(),
+                              productImage: getStampShopModels
+                                  .data![index].stampsPacksImage
+                                  .toString(),
+                            );
+                          },
+                        ));
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.2),
+                              spreadRadius: 2,
+                              blurRadius: 2,
+                              offset: const Offset(
+                                  0, 3), // changes position of shadow
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(15),
+                                topRight: Radius.circular(15),
+                              ),
+                              child: Container(
+                                width: 171,
+                                height: 151,
+                                decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(15),
+                                    topRight: Radius.circular(15),
+                                  ),
+                                ),
+                                child: getStampShopModels.data != null
+                                    ? Image.network(
+                                        "https://portal.passporttastic.com/public/${getStampShopModels.data?[index].stampsPacksImage}",
+                                        fit: BoxFit.fill,
+                                      )
+                                    : Image.asset(
+                                        "assets/logo.png",
+                                        fit: BoxFit.fill,
+                                      ),
+                              ),
+                            ),
+                            Text(
+                              "${getStampShopModels.data?[index].stampsPacksName}",
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 12,
+                                fontFamily: 'Satoshi',
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            Text(
+                              '\$${getStampShopModels.data?[index].stampsPacksPrice}',
+                              style: const TextStyle(
+                                color: Color(0xFFF65734),
+                                fontSize: 20,
+                                fontFamily: 'Satoshi',
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                            Container(
+                              width: 104,
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              clipBehavior: Clip.antiAlias,
+                              decoration: ShapeDecoration(
+                                gradient: const LinearGradient(
+                                  begin: Alignment(0.00, -1.00),
+                                  end: Alignment(0, 1),
+                                  colors: [
+                                    Color(0xFFFF8D74),
+                                    Color(0xFFF65634)
+                                  ],
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () async {
+                                      prefs =
+                                          await SharedPreferences.getInstance();
+                                      userID = prefs?.getString('userID');
+                                      Navigator.push(context, MaterialPageRoute(
+                                        builder: (BuildContext context) {
+                                          return SelectPaymentMethod(
+                                            userId: userID.toString(),
+                                            productId: getStampShopModels
+                                                .data![index].stampsPacksId
+                                                .toString(),
+                                            productName: getStampShopModels
+                                                .data![index].stampsPacksName
+                                                .toString(),
+                                            productPrice: getStampShopModels
+                                                .data![index].stampsPacksPrice
+                                                .toString(),
+                                            productImage: getStampShopModels
+                                                .data![index].stampsPacksImage
+                                                .toString(),
+                                            productType: "Stamps".toString(),
+                                          );
+                                        },
+                                      ));
+                                    },
+                                    child: const Text(
+                                      'Buy',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontFamily: 'Satoshi',
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            );
     }
   }
 }

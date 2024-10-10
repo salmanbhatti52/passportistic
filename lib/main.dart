@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:scanguard/Home/mainScreenHome.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -60,13 +62,13 @@ void main() async {
   bool shownOnboarding = _prefs?.getBool('shownOnboarding') ?? false;
   Stripe.publishableKey = stripeTestKey;
   await Stripe.instance.applySettings();
-  runApp(MyApp(shownOnboarding: shownOnboarding));
-  // runApp(
-  //   DevicePreview(
-  //     enabled: true,
-  //     builder: (context) => MyApp(shownOnboarding: shownOnboarding),
-  //   ),
-  // );
+  // runApp(MyApp(shownOnboarding: shownOnboarding));
+  runApp(
+    DevicePreview(
+      enabled: true,
+      builder: (context) => MyApp(shownOnboarding: shownOnboarding),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -96,38 +98,47 @@ class _MyAppState extends State<MyApp> {
     return ScreenUtilInit(
       designSize: const Size(360, 690),
       minTextAdapt: true,
-      splitScreenMode: _splitScreenMode,
-      child: Builder(builder: (BuildContext context) {
-        return Screenshot(
-          controller: screenshotController,
-          child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              colorScheme:
-                  ColorScheme.fromSeed(seedColor: const Color(0xFF00AEFF)),
-              useMaterial3: true,
+      builder: (context, child) => Screenshot(
+        controller: screenshotController,
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color(0xFF00AEFF),
             ),
-            home: StreamBuilder<bool>(
-              stream: appBloc.onboardingStream,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  if (snapshot.data == true) {
-                    return const MainScreen();
-                  } else {
-                    return const Onboard();
-                  }
-                } else {
-                  return const SplashScreen();
-                }
-              },
-            ),
+            useMaterial3: true,
           ),
-        );
-      }),
+          builder: (context, child) => ResponsiveBreakpoints.builder(
+            breakpoints: [
+              const Breakpoint(start: 0, end: 450, name: MOBILE),
+              const Breakpoint(start: 451, end: 800, name: TABLET),
+              const Breakpoint(start: 801, end: 1920, name: DESKTOP),
+              const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
+            ],
+            child: child!,
+          ),
+          home: StreamBuilder<bool>(
+            stream: appBloc.onboardingStream,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data == true) {
+                  return const MainScreen();
+                } else {
+                  return const Onboard();
+                }
+              } else {
+                return const SplashScreen();
+              }
+            },
+          ),
+        ),
+      ),
     );
   }
 }
+
 ScreenshotController screenshotController = ScreenshotController();
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -152,7 +163,12 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+    final isTablet = ResponsiveBreakpoints.of(context).isTablet;
+    final isDesktop = ResponsiveBreakpoints.of(context).isDesktop;
+
     return Scaffold(
       body: Column(
         children: [
@@ -173,8 +189,8 @@ class _SplashScreenState extends State<SplashScreen> {
                 Center(
                   child: SvgPicture.asset(
                     "assets/log1.svg",
-                    height: 55.h,
-                    width: 219.w,
+                    height: isMobile ? 55 : (isTablet ? 65 : 75),
+                    width: isMobile ? 219 : (isTablet ? 250 : 300),
                   ),
                 ),
                 Text(
@@ -182,7 +198,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 40.sp,
+                    fontSize: isMobile ? 40 : (isTablet ? 50 : 60),
                     fontFamily: 'Satoshi',
                     fontWeight: FontWeight.w800,
                   ),
@@ -195,4 +211,3 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
-

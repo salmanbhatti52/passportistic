@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'dirayPage.dart';
 import 'homePage.dart';
 import '../Profile/profilePage.dart';
@@ -44,6 +45,9 @@ class _NavBarState extends State<NavBar> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+    final isTablet = ResponsiveBreakpoints.of(context).isTablet;
+    final isDesktop = ResponsiveBreakpoints.of(context).isDesktop;
     if (index == 0) {
       SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         statusBarColor: Color(0xFFC6FFE7), // Set status bar color
@@ -63,54 +67,135 @@ class _NavBarState extends State<NavBar> {
 
         return false;
       },
-      child: Padding(
-        padding: const EdgeInsets.only(top: 28),
-        child: Scaffold(
-          backgroundColor: scaffoldColor,
-          bottomNavigationBar: ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
+      child: isMobile
+          ? Padding(
+              padding: const EdgeInsets.only(top: 28),
+              child: Scaffold(
+                backgroundColor: scaffoldColor,
+                bottomNavigationBar: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                  child: BottomNavigationBar(
+                    selectedItemColor: Colors.black,
+                    unselectedItemColor: Colors.black.withOpacity(0.5),
+                    type: BottomNavigationBarType.fixed,
+                    selectedFontSize: 10,
+                    unselectedFontSize: 10,
+                    currentIndex: index,
+                    onTap: (int newIndex) {
+                      setState(() {
+                        index = newIndex;
+                      });
+                    },
+                    items: [
+                      BottomNavigationBarItem(
+                        icon: SvgPicture.asset('assets/home1.svg'),
+                        activeIcon: SvgPicture.asset('assets/home2.svg'),
+                        label: 'Home',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: SvgPicture.asset('assets/notes1.svg'),
+                        activeIcon: SvgPicture.asset('assets/note2.svg'),
+                        label: ' Itinerary &\nTravel Diary',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: SvgPicture.asset('assets/stamp1.svg'),
+                        activeIcon: SvgPicture.asset('assets/stamp2.svg'),
+                        label: 'Shop',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: SvgPicture.asset('assets/account1.svg'),
+                        activeIcon: SvgPicture.asset('assets/account2.svg'),
+                        label: 'Profile',
+                      ),
+                    ],
+                  ),
+                ),
+                body: screens[index],
+              ),
+            )
+          : Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Scaffold(
+                backgroundColor: scaffoldColor,
+                bottomNavigationBar: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                  child: BottomNavigationBar(
+                    selectedItemColor: Colors.black,
+                    unselectedItemColor: Colors.black.withOpacity(0.5),
+                    type: BottomNavigationBarType.fixed,
+                    selectedFontSize: 18,
+                    unselectedFontSize: 18,
+                    currentIndex: index,
+                    onTap: (int newIndex) {
+                      setState(() {
+                        index = newIndex;
+                      });
+                    },
+                    items: [
+                      BottomNavigationBarItem(
+                        icon: SvgPicture.asset(
+                          'assets/home1.svg',
+                          height: 50,
+                          width: 50,
+                        ),
+                        activeIcon: SvgPicture.asset(
+                          'assets/home2.svg',
+                          height: 50,
+                          width: 50,
+                        ),
+                        label: 'Home',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: SvgPicture.asset(
+                          'assets/notes1.svg',
+                          height: 50,
+                          width: 50,
+                        ),
+                        activeIcon: SvgPicture.asset(
+                          'assets/note2.svg',
+                          height: 50,
+                          width: 50,
+                        ),
+                        label: ' Itinerary & Travel Diary',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: SvgPicture.asset(
+                          'assets/stamp1.svg',
+                          height: 50,
+                          width: 50,
+                        ),
+                        activeIcon: SvgPicture.asset(
+                          'assets/stamp2.svg',
+                          height: 50,
+                          width: 50,
+                        ),
+                        label: 'Shop',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: SvgPicture.asset(
+                          'assets/account1.svg',
+                          height: 50,
+                          width: 50,
+                        ),
+                        activeIcon: SvgPicture.asset(
+                          'assets/account2.svg',
+                          height: 50,
+                          width: 50,
+                        ),
+                        label: 'Profile',
+                      ),
+                    ],
+                  ),
+                ),
+                body: screens[index],
+              ),
             ),
-            child: BottomNavigationBar(
-              selectedItemColor: Colors.black,
-              unselectedItemColor: Colors.black.withOpacity(0.5),
-              type: BottomNavigationBarType.fixed,
-              selectedFontSize: 10,
-              unselectedFontSize: 10,
-              currentIndex: index,
-              onTap: (int newIndex) {
-                setState(() {
-                  index = newIndex;
-                });
-              },
-              items: [
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/home1.svg'),
-                  activeIcon: SvgPicture.asset('assets/home2.svg'),
-                  label: 'Home',
-                ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/notes1.svg'),
-                  activeIcon: SvgPicture.asset('assets/note2.svg'),
-                  label: ' Itinerary &\nTravel Diary',
-                ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/stamp1.svg'),
-                  activeIcon: SvgPicture.asset('assets/stamp2.svg'),
-                  label: 'Shop',
-                ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/account1.svg'),
-                  activeIcon: SvgPicture.asset('assets/account2.svg'),
-                  label: 'Profile',
-                ),
-              ],
-            ),
-          ),
-          body: screens[index],
-        ),
-      ),
     );
   }
 

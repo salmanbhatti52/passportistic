@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:scanguard/Profile/viewProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -224,6 +225,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+    final isTablet = ResponsiveBreakpoints.of(context).isTablet;
+    final isDesktop = ResponsiveBreakpoints.of(context).isDesktop;
     bool isFocused1 = _focusNode1.hasFocus;
     bool isFocused2 = _focusNode2.hasFocus;
     bool isFocused3 = _focusNode3.hasFocus;
@@ -236,318 +240,638 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       );
     } else {
-      return Scaffold(
-        drawer: const AppDrawer(),
-        appBar: AppBar(
-          // backgroundColor: Colors.black,
-          leading: Builder(builder: (context) {
-            return GestureDetector(
-              onTap: () {
-                Scaffold.of(context).openDrawer();
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SvgPicture.asset(
-                  "assets/menu.svg",
-                ),
-              ),
-            );
-          }),
-        ),
-        body: Builder(builder: (context) {
-          return SingleChildScrollView(
-            child: Column(children: [
-              const SizedBox(
-                height: 10,
-              ),
-              Center(
-                child: Stack(children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(64),
-                    child: SizedBox(
-                      height: 120,
-                      width: 120,
-                      child: imagePathGallery != null
-                          ? Image.file(imagePathGallery!, fit: BoxFit.cover)
-                          : getProfileModels.data?.profilePicture != null
-                              ? Image.network(
-                                  "https://portal.passporttastic.com/public/${getProfileModels.data!.profilePicture}",
-                                  fit: BoxFit.cover,
-                                )
-                              : Container(), // Empty container as a fallback
-                    ),
-                  ),
-                  GestureDetector(
+      return isMobile
+          ? Scaffold(
+              drawer: const AppDrawer(),
+              appBar: AppBar(
+                // backgroundColor: Colors.black,
+                leading: Builder(builder: (context) {
+                  return GestureDetector(
                     onTap: () {
-                      pickImageGallery();
+                      Scaffold.of(context).openDrawer();
                     },
-                    child: Container(
-                      margin: const EdgeInsets.only(
-                        top: 80,
-                        left: 90,
-                      ),
-                      height: 32,
-                      width: 32,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFF8D74),
-                        border: Border.all(width: 4, color: Colors.transparent),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: SvgPicture.asset(
-                        'assets/cam2.svg',
-                        width: 10,
-                        height: 10,
+                        "assets/menu.svg",
                       ),
                     ),
-                  ),
-                ]),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(
-                "${getProfileModels.data?.firstName ?? ''} ${getProfileModels.data?.lastName ?? ''}",
-                style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    "assets/sms.svg",
-                    color: const Color(0xFFFF8D74),
-                    width: 15,
-                    height: 15,
-                  ),
-                  const SizedBox(
-                    width: 4,
-                  ),
-                  Text(
-                    getProfileModels.data?.email ?? '', // Use ?. instead of !
-                    style: const TextStyle(
-                      fontFamily: "Satoshi",
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xFF9C9999),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    "assets/phone.svg",
-                    color: const Color(0xFFFF8D74),
-                    width: 15,
-                    height: 15,
-                  ),
-                  const SizedBox(
-                    width: 3,
-                  ),
-                  Text(
-                    getProfileModels.data?.phoneNumber ?? '',
-                    style: const TextStyle(
-                        fontFamily: "Satoshi",
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xFF9C9999)),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (BuildContext context) {
-                      return ViewProfile(
-                        userId: "${widget.userId}",
-                      );
-                    },
-                  ));
-                },
-                child: Container(
-                  width: 294,
-                  height: 72,
-                  decoration: ShapeDecoration(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    shadows: const [
-                      BoxShadow(
-                        color: Color(0x0F312E23),
-                        blurRadius: 16,
-                        offset: Offset(0, 8),
-                        spreadRadius: 0,
-                      )
-                    ],
-                  ),
-                  child: Stack(
-                    children: [
-                      const Positioned(
-                        left: 16,
-                        top: 25,
-                        child: Text(
-                          'View Profile',
-                          style: TextStyle(
-                            color: Color(0xFF525252),
-                            fontSize: 16,
-                            fontFamily: 'Satoshi',
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        left: 238,
-                        top: 16,
-                        child: SvgPicture.asset(
-                          "assets/arrow.svg",
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              GestureDetector(
-                onTap: () {
-                  updatePasswordBottomSheet(
-                      context, isFocused1, isFocused2, isFocused3);
-                },
-                child: Container(
-                  width: 294,
-                  height: 72,
-                  decoration: ShapeDecoration(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    shadows: const [
-                      BoxShadow(
-                        color: Color(0x0F312E23),
-                        blurRadius: 16,
-                        offset: Offset(0, 8),
-                        spreadRadius: 0,
-                      )
-                    ],
-                  ),
-                  child: Stack(
-                    children: [
-                      const Positioned(
-                        left: 16,
-                        top: 25,
-                        child: Text(
-                          'Change Password',
-                          style: TextStyle(
-                            color: Color(0xFF525252),
-                            fontSize: 16,
-                            fontFamily: 'Satoshi',
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        left: 238,
-                        top: 16,
-                        child: SvgPicture.asset(
-                          "assets/arrow.svg",
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              GestureDetector(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('Logout'),
-                        content: const Text('Are you sure you want to logout?'),
-                        actions: <Widget>[
-                          TextButton(
-                            child: const Text('No'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          TextButton(
-                            child: const Text('Yes'),
-                            onPressed: () {
-                              removeDataFormSharedPreferences();
-                              Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (context) => const SignInPage()),
-                                (Route<dynamic> route) => false,
-                              );
-                            },
-                          ),
-                        ],
-                      );
-                    },
                   );
-                },
-                child: Container(
-                  width: 294,
-                  height: 72,
-                  decoration: ShapeDecoration(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                }),
+              ),
+              body: Builder(builder: (context) {
+                return SingleChildScrollView(
+                  child: Column(children: [
+                    const SizedBox(
+                      height: 10,
                     ),
-                    shadows: const [
-                      BoxShadow(
-                        color: Color(0x0F312E23),
-                        blurRadius: 16,
-                        offset: Offset(0, 8),
-                        spreadRadius: 0,
-                      )
-                    ],
-                  ),
-                  child: Stack(
-                    children: [
-                      const Positioned(
-                        left: 16,
-                        top: 25,
-                        child: Text(
-                          'Log Out',
-                          style: TextStyle(
-                            color: Color(0xFF525252),
-                            fontSize: 16,
-                            fontFamily: 'Satoshi',
-                            fontWeight: FontWeight.w700,
+                    Center(
+                      child: Stack(children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(64),
+                          child: SizedBox(
+                            height: 120,
+                            width: 120,
+                            child: imagePathGallery != null
+                                ? Image.file(imagePathGallery!,
+                                    fit: BoxFit.cover)
+                                : getProfileModels.data?.profilePicture != null
+                                    ? Image.network(
+                                        "https://portal.passporttastic.com/public/${getProfileModels.data!.profilePicture}",
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Container(), // Empty container as a fallback
                           ),
                         ),
-                      ),
-                      Positioned(
-                        left: 238,
-                        top: 16,
-                        child: SvgPicture.asset(
-                          "assets/arrow.svg",
+                        GestureDetector(
+                          onTap: () {
+                            pickImageGallery();
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(
+                              top: 80,
+                              left: 90,
+                            ),
+                            height: 32,
+                            width: 32,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFF8D74),
+                              border: Border.all(
+                                  width: 4, color: Colors.transparent),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: SvgPicture.asset(
+                              'assets/cam2.svg',
+                              width: 10,
+                              height: 10,
+                            ),
+                          ),
+                        ),
+                      ]),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "${getProfileModels.data?.firstName ?? ''} ${getProfileModels.data?.lastName ?? ''}",
+                      style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          "assets/sms.svg",
+                          color: const Color(0xFFFF8D74),
+                          width: 15,
+                          height: 15,
+                        ),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        Text(
+                          getProfileModels.data?.email ??
+                              '', // Use ?. instead of !
+                          style: const TextStyle(
+                            fontFamily: "Satoshi",
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xFF9C9999),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          "assets/phone.svg",
+                          color: const Color(0xFFFF8D74),
+                          width: 15,
+                          height: 15,
+                        ),
+                        const SizedBox(
+                          width: 3,
+                        ),
+                        Text(
+                          getProfileModels.data?.phoneNumber ?? '',
+                          style: const TextStyle(
+                              fontFamily: "Satoshi",
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: Color(0xFF9C9999)),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (BuildContext context) {
+                            return ViewProfile(
+                              userId: "${widget.userId}",
+                            );
+                          },
+                        ));
+                      },
+                      child: Container(
+                        width: 294,
+                        height: 72,
+                        decoration: ShapeDecoration(
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          shadows: const [
+                            BoxShadow(
+                              color: Color(0x0F312E23),
+                              blurRadius: 16,
+                              offset: Offset(0, 8),
+                              spreadRadius: 0,
+                            )
+                          ],
+                        ),
+                        child: Stack(
+                          children: [
+                            const Positioned(
+                              left: 16,
+                              top: 25,
+                              child: Text(
+                                'View Profile',
+                                style: TextStyle(
+                                  color: Color(0xFF525252),
+                                  fontSize: 16,
+                                  fontFamily: 'Satoshi',
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              left: 238,
+                              top: 16,
+                              child: SvgPicture.asset(
+                                "assets/arrow.svg",
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        updatePasswordBottomSheet(
+                            context, isFocused1, isFocused2, isFocused3);
+                      },
+                      child: Container(
+                        width: 294,
+                        height: 72,
+                        decoration: ShapeDecoration(
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          shadows: const [
+                            BoxShadow(
+                              color: Color(0x0F312E23),
+                              blurRadius: 16,
+                              offset: Offset(0, 8),
+                              spreadRadius: 0,
+                            )
+                          ],
+                        ),
+                        child: Stack(
+                          children: [
+                            const Positioned(
+                              left: 16,
+                              top: 25,
+                              child: Text(
+                                'Change Password',
+                                style: TextStyle(
+                                  color: Color(0xFF525252),
+                                  fontSize: 16,
+                                  fontFamily: 'Satoshi',
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              left: 238,
+                              top: 16,
+                              child: SvgPicture.asset(
+                                "assets/arrow.svg",
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Logout'),
+                              content: const Text(
+                                  'Are you sure you want to logout?'),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text('No'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                TextButton(
+                                  child: const Text('Yes'),
+                                  onPressed: () {
+                                    removeDataFormSharedPreferences();
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const SignInPage()),
+                                      (Route<dynamic> route) => false,
+                                    );
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Container(
+                        width: 294,
+                        height: 72,
+                        decoration: ShapeDecoration(
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          shadows: const [
+                            BoxShadow(
+                              color: Color(0x0F312E23),
+                              blurRadius: 16,
+                              offset: Offset(0, 8),
+                              spreadRadius: 0,
+                            )
+                          ],
+                        ),
+                        child: Stack(
+                          children: [
+                            const Positioned(
+                              left: 16,
+                              top: 25,
+                              child: Text(
+                                'Log Out',
+                                style: TextStyle(
+                                  color: Color(0xFF525252),
+                                  fontSize: 16,
+                                  fontFamily: 'Satoshi',
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              left: 238,
+                              top: 16,
+                              child: SvgPicture.asset(
+                                "assets/arrow.svg",
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ]),
+                );
+              }),
+            )
+          : Scaffold(
+              drawer: const AppDrawer(),
+              appBar: AppBar(
+                // backgroundColor: Colors.black,
+                leading: Builder(builder: (context) {
+                  return GestureDetector(
+                    onTap: () {
+                      Scaffold.of(context).openDrawer();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SvgPicture.asset(
+                        "assets/menu.svg",
+                      ),
+                    ),
+                  );
+                }),
               ),
-            ]),
-          );
-        }),
-      );
+              body: Builder(builder: (context) {
+                return SingleChildScrollView(
+                  child: Column(children: [
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Center(
+                      child: Stack(children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(220),
+                          child: SizedBox(
+                            height: 180,
+                            width: 180,
+                            child: imagePathGallery != null
+                                ? Image.file(imagePathGallery!,
+                                    fit: BoxFit.cover)
+                                : getProfileModels.data?.profilePicture != null
+                                    ? Image.network(
+                                        "https://portal.passporttastic.com/public/${getProfileModels.data!.profilePicture}",
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Container(), // Empty container as a fallback
+                          ),
+                        ),
+                      ]),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Text(
+                      "${getProfileModels.data?.firstName ?? ''} ${getProfileModels.data?.lastName ?? ''}",
+                      style: const TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          "assets/sms.svg",
+                          color: const Color(0xFFFF8D74),
+                          width: 25,
+                          height: 25,
+                        ),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        Text(
+                          getProfileModels.data?.email ??
+                              '', // Use ?. instead of !
+                          style: const TextStyle(
+                            fontFamily: "Satoshi",
+                            fontSize: 20,
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xFF9C9999),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          "assets/phone.svg",
+                          color: const Color(0xFFFF8D74),
+                          width: 25,
+                          height: 25,
+                        ),
+                        const SizedBox(
+                          width: 3,
+                        ),
+                        Text(
+                          getProfileModels.data?.phoneNumber ?? '',
+                          style: const TextStyle(
+                              fontFamily: "Satoshi",
+                              fontSize: 20,
+                              fontWeight: FontWeight.w400,
+                              color: Color(0xFF9C9999)),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (BuildContext context) {
+                            return ViewProfile(
+                              userId: "${widget.userId}",
+                            );
+                          },
+                        ));
+                      },
+                      child: Container(
+                        width: isMobile
+                            ? 294
+                            : (isTablet
+                                ? 400
+                                : 500), // Adjust width for tablet and desktop
+                        height: isMobile ? 60 : (isTablet ? 80 : 100),
+                        decoration: ShapeDecoration(
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          shadows: const [
+                            BoxShadow(
+                              color: Color(0x0F312E23),
+                              blurRadius: 16,
+                              offset: Offset(0, 8),
+                              spreadRadius: 0,
+                            )
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: isMobile ? 20 : (isTablet ? 28 : 28)),
+                              child: Text(
+                                'View Profile',
+                                style: TextStyle(
+                                  color: const Color(0xFF525252),
+                                  fontSize:
+                                      isMobile ? 16 : (isTablet ? 20 : 24),
+                                  fontFamily: 'Satoshi',
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                right: isMobile ? 16 : (isTablet ? 28 : 28),
+                              ),
+                              child: SvgPicture.asset(
+                                "assets/arrow.svg",
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        updatePasswordBottomSheet(
+                            context, isFocused1, isFocused2, isFocused3);
+                      },
+                      child: Container(
+                        width: isMobile
+                            ? 294
+                            : (isTablet
+                                ? 400
+                                : 500), // Adjust width for tablet and desktop
+                        height: isMobile ? 60 : (isTablet ? 80 : 100),
+                        decoration: ShapeDecoration(
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          shadows: const [
+                            BoxShadow(
+                              color: Color(0x0F312E23),
+                              blurRadius: 16,
+                              offset: Offset(0, 8),
+                              spreadRadius: 0,
+                            )
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: isMobile ? 20 : (isTablet ? 28 : 28)),
+                              child: Text(
+                                'Change Password',
+                                style: TextStyle(
+                                  color: const Color(0xFF525252),
+                                  fontSize:
+                                      isMobile ? 16 : (isTablet ? 20 : 24),
+                                  fontFamily: 'Satoshi',
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                right: isMobile ? 16 : (isTablet ? 28 : 28),
+                              ),
+                              child: SvgPicture.asset(
+                                "assets/arrow.svg",
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Logout'),
+                              content: const Text(
+                                  'Are you sure you want to logout?'),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text('No'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                TextButton(
+                                  child: const Text('Yes'),
+                                  onPressed: () {
+                                    removeDataFormSharedPreferences();
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const SignInPage()),
+                                      (Route<dynamic> route) => false,
+                                    );
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Container(
+                        width: isMobile
+                            ? 294
+                            : (isTablet
+                                ? 400
+                                : 500), // Adjust width for tablet and desktop
+                        height: isMobile ? 60 : (isTablet ? 80 : 100),
+                        decoration: ShapeDecoration(
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          shadows: const [
+                            BoxShadow(
+                              color: Color(0x0F312E23),
+                              blurRadius: 16,
+                              offset: Offset(0, 8),
+                              spreadRadius: 0,
+                            )
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: isMobile ? 20 : (isTablet ? 28 : 28)),
+                              child: Text(
+                                'Log Out',
+                                style: TextStyle(
+                                  color: const Color(0xFF525252),
+                                  fontSize:
+                                      isMobile ? 16 : (isTablet ? 20 : 24),
+                                  fontFamily: 'Satoshi',
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                right: isMobile ? 16 : (isTablet ? 28 : 28),
+                              ),
+                              child: SvgPicture.asset(
+                                "assets/arrow.svg",
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ]),
+                );
+              }),
+            );
     }
   }
 

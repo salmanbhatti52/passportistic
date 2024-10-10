@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Models/coverDesignModels.dart';
@@ -125,7 +126,8 @@ class _FrontCoverState extends State<FrontCover> {
         isLoading = false;
       });
 
-      debugPrint("Cover Design Data Length: ${coverDesignDataModel.data?.length}");
+      debugPrint(
+          "Cover Design Data Length: ${coverDesignDataModel.data?.length}");
     }
   }
 
@@ -138,6 +140,8 @@ class _FrontCoverState extends State<FrontCover> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+
     if (isLoading) {
       return const Center(
         child: CircularProgressIndicator(
@@ -152,11 +156,23 @@ class _FrontCoverState extends State<FrontCover> {
           ? Center(
               child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Image.network(
-                "https://portal.passporttastic.com/public/$selectedOption",
-                width: MediaQuery.of(context).size.width,
-                height: 488,
-              ),
+              child: isMobile
+                  ? Image.network(
+                      "https://portal.passporttastic.com/public/$selectedOption",
+                      width: MediaQuery.of(context).size.width,
+                      height: 488,
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Container(
+                        color: Colors.red,
+                        width: MediaQuery.of(context).size.width * 0.79,
+                        height: 900,
+                        child: Image.network(
+                            "https://portal.passporttastic.com/public/$selectedOption",
+                            fit: BoxFit.cover),
+                      ),
+                    ),
             ))
           : const SizedBox();
     }

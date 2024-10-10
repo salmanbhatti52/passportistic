@@ -4,13 +4,12 @@ import 'package:logger/logger.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import 'package:passport_stamp/feature/stamp/presentation/stamp.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:scanguard/Home/shop.dart';
 import 'package:http/http.dart' as http;
 import 'package:scanguard/Utils/keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../HomeButtons/addItinerary.dart';
-import '../HomeButtons/arrivalDetails.dart';
-import '../HomeButtons/depature.dart';
 import '../HomeButtons/PassportSection/passport.dart';
 import '../Models/getProfileModels.dart';
 import '../auth/signUpNextPage.dart';
@@ -94,6 +93,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+    final isTablet = ResponsiveBreakpoints.of(context).isTablet;
     if (isLoading) {
       return const Scaffold(
         body: Center(
@@ -116,28 +117,59 @@ class _HomePageState extends State<HomePage> {
             forceMaterialTransparency: true,
             elevation: 0,
             centerTitle: true,
-            title: SvgPicture.asset(
-              "assets/log1.svg",
-              width: 30,
-              height: 30,
-              fit: BoxFit.scaleDown,
+            title: Padding(
+              padding: EdgeInsets.only(
+                top: isMobile
+                    ? 6.0
+                    : (isTablet
+                        ? 8.0
+                        : 10.0), // Adjust padding for responsiveness
+                // Adjust padding for responsiveness
+              ),
+              child: SvgPicture.asset(
+                "assets/log1.svg",
+                width: isMobile
+                    ? 25
+                    : (isTablet ? 35 : 40), // Adjust size based on screen type
+                height: isMobile
+                    ? 25
+                    : (isTablet ? 35 : 40), // Adjust size based on screen type
+                fit: BoxFit.scaleDown,
+              ),
             ),
-            leading: Builder(builder: (context) {
-              return GestureDetector(
-                onTap: () {
-                  Scaffold.of(context).openDrawer();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 6.0, left: 8),
-                  child: SvgPicture.asset(
-                    "assets/menu.svg",
-                    width: 40,
-                    height: 40,
-                    fit: BoxFit.scaleDown,
+            leading: Builder(
+              builder: (context) {
+                return GestureDetector(
+                  onTap: () {
+                    Scaffold.of(context).openDrawer();
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      top: isMobile
+                          ? 6.0
+                          : (isTablet
+                              ? 8.0
+                              : 10.0), // Adjust padding for responsiveness
+                      left: isMobile
+                          ? 8.0
+                          : (isTablet
+                              ? 10.0
+                              : 12.0), // Adjust padding for responsiveness
+                    ),
+                    child: SvgPicture.asset(
+                      "assets/menu.svg",
+                      width: isMobile
+                          ? 30
+                          : (isTablet ? 35 : 40), // Adjust icon size
+                      height: isMobile
+                          ? 30
+                          : (isTablet ? 35 : 40), // Adjust icon size
+                      fit: BoxFit.scaleDown,
+                    ),
                   ),
-                ),
-              );
-            }),
+                );
+              },
+            ),
           ),
           body: SingleChildScrollView(
             child: Container(
@@ -157,43 +189,57 @@ class _HomePageState extends State<HomePage> {
                 Row(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(top: 10, left: 15),
+                      padding: EdgeInsets.only(
+                        top: isMobile ? 10 : (isTablet ? 12 : 15),
+                        left: isMobile ? 15 : (isTablet ? 18 : 20),
+                      ), // Adjust padding based on the screen size
                       child: getProfileModels.data?.profilePicture != null
-                          ? Container(
-                              child: CircleAvatar(
-                                radius: 25,
-                                backgroundImage: NetworkImage(
-                                    "https://portal.passporttastic.com/public/${getProfileModels.data!.profilePicture}"),
+                          ? CircleAvatar(
+                              radius: isMobile
+                                  ? 25
+                                  : (isTablet ? 30 : 35), // Adjust avatar size
+                              backgroundImage: NetworkImage(
+                                "https://portal.passporttastic.com/public/${getProfileModels.data!.profilePicture}",
                               ),
                             )
                           : const SizedBox(
                               child: CircularProgressIndicator(
                                 color: Color(0xFFF65734),
                               ),
-                            ), // Don't render anything if profilePicture is null
+                            ), // CircularProgressIndicator when profilePicture is null
                     ),
-                    const SizedBox(
-                      width: 10,
+                    SizedBox(
+                      width: isMobile
+                          ? 10
+                          : (isTablet
+                              ? 15
+                              : 20), // Adjust space between avatar and text
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 20),
+                      padding: EdgeInsets.only(
+                        top: isMobile ? 20 : (isTablet ? 22 : 25),
+                      ), // Adjust padding for text block
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             "Welcome Home",
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: isMobile ? 12 : (isTablet ? 15 : 18),
                               fontWeight: FontWeight.w400,
-                              color: Color(0xFF73848C),
+                              color: const Color(0xFF73848C),
                             ),
                           ),
                           Text(
                             "${getProfileModels.data?.firstName ?? ''} ${getProfileModels.data?.lastName ?? ''}",
-                            style: const TextStyle(
-                              fontSize: 24,
+                            style: TextStyle(
+                              fontSize: isMobile
+                                  ? 20
+                                  : (isTablet
+                                      ? 22
+                                      : 24), // Adjust name text size
                               fontWeight: FontWeight.w500,
-                              color: Color(0xFF452933),
+                              color: const Color(0xFF452933),
                             ),
                           ),
                         ],
@@ -204,8 +250,7 @@ class _HomePageState extends State<HomePage> {
                 SvgPicture.asset(
                   "assets/Zain.svg",
                   fit: BoxFit.cover,
-                  // height:
-                  //     207, // Adjust the fit as per your requirement
+                  height: isMobile ? 150 : (isTablet ? 300 : 300),
                 ),
                 GestureDetector(
                   onTap: () {
@@ -216,8 +261,12 @@ class _HomePageState extends State<HomePage> {
                     ));
                   },
                   child: Container(
-                    width: 294,
-                    height: 72,
+                    width: isMobile
+                        ? 294
+                        : (isTablet
+                            ? 400
+                            : 500), // Adjust width for tablet and desktop
+                    height: isMobile ? 60 : (isTablet ? 80 : 100),
                     decoration: ShapeDecoration(
                       color: Colors.white,
                       shape: RoundedRectangleBorder(
@@ -232,57 +281,69 @@ class _HomePageState extends State<HomePage> {
                         )
                       ],
                     ),
-                    child: Stack(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Positioned(
-                          left: 16,
-                          top: 12,
-                          child: Text(
-                            'Stamp Passport',
-                            style: TextStyle(
-                              color: Colors.black.withOpacity(0.5),
-                              fontSize: 16,
-                              fontFamily: 'Satoshi',
-                              fontWeight: FontWeight.w400,
-                            ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            left: 10,
+                            top: isMobile ? 10 : (isTablet ? 20 : 20),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Stamp Passport',
+                                style: TextStyle(
+                                  color: Colors.black.withOpacity(0.5),
+                                  fontSize:
+                                      isMobile ? 16 : (isTablet ? 20 : 20),
+                                  fontFamily: 'Satoshi',
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              Text(
+                                '   Departure/Arrival',
+                                style: TextStyle(
+                                  color: const Color(0xFFF65734),
+                                  fontSize:
+                                      isMobile ? 16 : (isTablet ? 20 : 20),
+                                  fontFamily: 'Satoshi',
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        const Positioned(
-                          left: 16,
-                          top: 38,
-                          child: Text(
-                            'Departure/Arrival',
-                            style: TextStyle(
-                              color: Color(0xFFF65734),
-                              fontSize: 16,
-                              fontFamily: 'Satoshi',
-                              fontWeight: FontWeight.w700,
-                            ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            right: 16,
+                            top: isMobile ? 0 : (isTablet ? 6 : 6),
                           ),
-                        ),
-                        Positioned(
-                          left: 238,
-                          top: 16,
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(
-                                builder: (BuildContext context) {
-                                  return StampScreen();
+                          child: Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(context, MaterialPageRoute(
+                                    builder: (BuildContext context) {
+                                      return StampScreen();
+                                    },
+                                  ));
+                                  // Navigator.push(context, MaterialPageRoute(
+                                  //   builder: (BuildContext context) {
+                                  //     return DepatureDetails(
+                                  //       userId: userID,
+                                  //     );
+                                  //   },
+                                  // ));
                                 },
-                              ));
-                              // Navigator.push(context, MaterialPageRoute(
-                              //   builder: (BuildContext context) {
-                              //     return DepatureDetails(
-                              //       userId: userID,
-                              //     );
-                              //   },
-                              // ));
-                            },
-                            child: SvgPicture.asset(
-                              "assets/arrow.svg",
-                            ),
+                                child: SvgPicture.asset(
+                                  "assets/arrow.svg",
+                                ),
+                              )
+                            ],
                           ),
-                        ),
+                        )
                       ],
                     ),
                   ),
@@ -375,8 +436,12 @@ class _HomePageState extends State<HomePage> {
                     ));
                   },
                   child: Container(
-                    width: 294,
-                    height: 72,
+                    width: isMobile
+                        ? 294
+                        : (isTablet
+                            ? 400
+                            : 500), // Adjust width for tablet and desktop
+                    height: isMobile ? 60 : (isTablet ? 80 : 100),
                     decoration: ShapeDecoration(
                       color: Colors.white,
                       shape: RoundedRectangleBorder(
@@ -391,32 +456,34 @@ class _HomePageState extends State<HomePage> {
                         )
                       ],
                     ),
-                    child: Stack(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Positioned(
-                          left: 16,
-                          top: 25,
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: isMobile ? 20 : (isTablet ? 28 : 28)),
                           child: Text(
                             'View Passport',
                             style: TextStyle(
-                              color: Color(0xFFF65734),
-                              fontSize: 16,
+                              color: const Color(0xFFF65734),
+                              fontSize: isMobile ? 16 : (isTablet ? 20 : 20),
                               fontFamily: 'Satoshi',
                               fontWeight: FontWeight.w700,
                             ),
                           ),
                         ),
-                        Positioned(
-                          left: 238,
-                          top: 16,
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(
-                                builder: (BuildContext context) {
-                                  return const ViewPassport();
-                                },
-                              ));
-                            },
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (BuildContext context) {
+                                return const ViewPassport();
+                              },
+                            ));
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                              right: isMobile ? 16 : (isTablet ? 28 : 28),
+                            ),
                             child: SvgPicture.asset(
                               "assets/arrow.svg",
                             ),
@@ -438,8 +505,12 @@ class _HomePageState extends State<HomePage> {
                     ));
                   },
                   child: Container(
-                    width: 294,
-                    height: 72,
+                    width: isMobile
+                        ? 294
+                        : (isTablet
+                            ? 400
+                            : 500), // Adjust width for tablet and desktop
+                    height: isMobile ? 60 : (isTablet ? 80 : 100),
                     decoration: ShapeDecoration(
                       color: Colors.white,
                       shape: RoundedRectangleBorder(
@@ -454,24 +525,26 @@ class _HomePageState extends State<HomePage> {
                         )
                       ],
                     ),
-                    child: Stack(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Positioned(
-                          left: 16,
-                          top: 25,
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: isMobile ? 20 : (isTablet ? 28 : 28)),
                           child: Text(
                             'Shop',
                             style: TextStyle(
-                              color: Color(0xFFF65734),
-                              fontSize: 16,
+                              color: const Color(0xFFF65734),
+                              fontSize: isMobile ? 16 : (isTablet ? 20 : 20),
                               fontFamily: 'Satoshi',
                               fontWeight: FontWeight.w700,
                             ),
                           ),
                         ),
-                        Positioned(
-                          left: 238,
-                          top: 16,
+                        Padding(
+                          padding: EdgeInsets.only(
+                            right: isMobile ? 16 : (isTablet ? 28 : 28),
+                          ),
                           child: GestureDetector(
                             onTap: () {
                               Navigator.push(context, MaterialPageRoute(
@@ -501,8 +574,12 @@ class _HomePageState extends State<HomePage> {
                     ));
                   },
                   child: Container(
-                    width: 294,
-                    height: 72,
+                    width: isMobile
+                        ? 294
+                        : (isTablet
+                            ? 400
+                            : 500), // Adjust width for tablet and desktop
+                    height: isMobile ? 60 : (isTablet ? 80 : 100),
                     decoration: ShapeDecoration(
                       color: Colors.white,
                       shape: RoundedRectangleBorder(
@@ -517,34 +594,36 @@ class _HomePageState extends State<HomePage> {
                         )
                       ],
                     ),
-                    child: Stack(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Positioned(
-                          left: 16,
-                          top: 14,
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: isMobile ? 20 : (isTablet ? 28 : 28)),
                           child: Text(
                             'Add/Edit itinerary or \nTravel Diary ',
                             style: TextStyle(
-                              color: Color(0xFFF65734),
-                              fontSize: 16,
+                              color: const Color(0xFFF65734),
+                              fontSize: isMobile ? 16 : (isTablet ? 20 : 20),
                               fontFamily: 'Satoshi',
                               fontWeight: FontWeight.w700,
                             ),
                           ),
                         ),
-                        Positioned(
-                          left: 238,
-                          top: 16,
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(
-                                builder: (BuildContext context) {
-                                  return AddItineray(
-                                    userId: userID,
-                                  );
-                                },
-                              ));
-                            },
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (BuildContext context) {
+                                return AddItineray(
+                                  userId: userID,
+                                );
+                              },
+                            ));
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                              right: isMobile ? 16 : (isTablet ? 28 : 28),
+                            ),
                             child: SvgPicture.asset(
                               "assets/arrow.svg",
                             ),

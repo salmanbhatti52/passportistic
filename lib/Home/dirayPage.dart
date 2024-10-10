@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:scanguard/Home/appDrawer.dart';
 import 'package:scanguard/Home/shop.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -86,6 +87,9 @@ class _DirayPageState extends State<DirayPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+    final isTablet = ResponsiveBreakpoints.of(context).isTablet;
+    final isDesktop = ResponsiveBreakpoints.of(context).isDesktop;
     if (load == true) {
       return const Scaffold(
         body: Center(
@@ -120,27 +124,36 @@ class _DirayPageState extends State<DirayPage> {
             const SizedBox(
               height: 10,
             ),
-            const Row(
+            Row(
               children: [
                 Padding(
-                  padding: EdgeInsets.only(top: 10, left: 20),
+                  padding: const EdgeInsets.only(top: 10, left: 20),
                   child: Text(
                     "Itinerary & Travel Diary",
                     style: TextStyle(
                         fontFamily: "Satoshi",
-                        fontSize: 24,
+                        fontSize: isMobile ? 16 : (isTablet ? 20 : 24),
                         fontWeight: FontWeight.w700,
-                        color: Color(0xFF525252)),
+                        color: const Color(0xFF525252)),
                   ),
                 ),
               ],
             ),
             Center(
-                child: Image.asset(
-              "assets/art.png",
-              width: 190,
-              height: 200,
-            )),
+              child: Image.asset(
+                "assets/art.png",
+                width: isMobile
+                    ? 190
+                    : (isTablet
+                        ? 300
+                        : 400), // Adjust width for tablet and desktop
+                height: isMobile
+                    ? 200
+                    : (isTablet
+                        ? 320
+                        : 450), // Adjust height for tablet and desktop
+              ),
+            ),
             const SizedBox(
               height: 10,
             ),
@@ -149,11 +162,7 @@ class _DirayPageState extends State<DirayPage> {
                 if (validationModelApi.data!.itineraryAccess == true) {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return const itineraryview(
-                          //userId: widget.userId,
-                          // itinid: desiredItineraryId,
-                          // additinerarywidget: addItineray.text,
-                          );
+                      return const itineraryview();
                     },
                   ));
                 } else {
@@ -161,8 +170,16 @@ class _DirayPageState extends State<DirayPage> {
                 }
               },
               child: Container(
-                width: 294,
-                height: 60,
+                width: isMobile
+                    ? 294
+                    : (isTablet
+                        ? 400
+                        : 500), // Adjust width for tablet and desktop
+                height: isMobile
+                    ? 60
+                    : (isTablet
+                        ? 80
+                        : 100), // Adjust height for tablet and desktop
                 decoration: ShapeDecoration(
                   color: Colors.white,
                   shape: RoundedRectangleBorder(
@@ -178,27 +195,30 @@ class _DirayPageState extends State<DirayPage> {
                   ],
                 ),
                 child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Itinerary',
-                      style: TextStyle(
-                        color: Color(0xFF525252),
-                        fontSize: 16,
-                        fontFamily: 'Satoshi',
-                        fontWeight: FontWeight.w700,
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: isMobile ? 20 : (isTablet ? 28 : 28)),
+                      child: Text(
+                        'Itinerary',
+                        style: TextStyle(
+                          color: const Color(0xFF525252),
+                          fontSize: isMobile
+                              ? 16
+                              : (isTablet ? 20 : 24), // Adjust font size
+                          fontFamily: 'Satoshi',
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
-                    const SizedBox(width: 159),
-                    SizedBox(
-                      width: 40,
-                      height: 41,
-                      child: Stack(
-                        children: [
-                          SvgPicture.asset("assets/blueArrow.svg"),
-                        ],
+                    Padding(
+                      padding: EdgeInsets.only(
+                        right: isMobile ? 16 : (isTablet ? 28 : 28),
+                      ),
+                      child: SvgPicture.asset(
+                        "assets/blueArrow.svg",
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ],
@@ -225,8 +245,12 @@ class _DirayPageState extends State<DirayPage> {
                 }
               },
               child: Container(
-                width: 294,
-                height: 60,
+                width: isMobile
+                    ? 294
+                    : (isTablet
+                        ? 400
+                        : 500), // Adjust width for tablet and desktop
+                height: isMobile ? 60 : (isTablet ? 80 : 100),
                 decoration: ShapeDecoration(
                   color: Colors.white,
                   shape: RoundedRectangleBorder(
@@ -242,28 +266,26 @@ class _DirayPageState extends State<DirayPage> {
                   ],
                 ),
                 child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Travel Diary',
-                      style: TextStyle(
-                        color: Color(0xFF525252),
-                        fontSize: 16,
-                        fontFamily: 'Satoshi',
-                        fontWeight: FontWeight.w700,
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: isMobile ? 20 : (isTablet ? 28 : 28)),
+                      child: Text(
+                        'Travel Diary',
+                        style: TextStyle(
+                          color: const Color(0xFF525252),
+                          fontSize: isMobile ? 16 : (isTablet ? 20 : 24),
+                          fontFamily: 'Satoshi',
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
-                    const SizedBox(width: 134),
-                    SizedBox(
-                      width: 40,
-                      height: 41,
-                      child: Stack(
-                        children: [
-                          SvgPicture.asset("assets/blueArrow.svg"),
-                        ],
+                    Padding(
+                      padding: EdgeInsets.only(
+                        right: isMobile ? 16 : (isTablet ? 28 : 28),
                       ),
+                      child: SvgPicture.asset("assets/blueArrow.svg"),
                     ),
                   ],
                 ),
