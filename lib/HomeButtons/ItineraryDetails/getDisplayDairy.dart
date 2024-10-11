@@ -148,12 +148,7 @@ class _DisplayDairyDetailsPageState extends State<DisplayDairyDetailsPage> {
             ),
           ),
           centerTitle: true,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SvgPicture.asset("assets/notification.svg"),
-            )
-          ],
+       
         ),
         body: Column(
           children: [

@@ -186,16 +186,7 @@ class _AdditeneraryNextState extends State<AdditeneraryNext> {
             ),
           ),
         ),
-        actions: [
-          GestureDetector(
-            onTap: () {
-              // Navigator.pushNamed(context, '/notification');
-            },
-            child: SvgPicture.asset(
-              "assets/notification.svg",
-            ),
-          ),
-        ],
+     
       ),
       body: SingleChildScrollView(
         child: Column(children: [

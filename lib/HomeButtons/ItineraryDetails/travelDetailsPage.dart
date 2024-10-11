@@ -310,12 +310,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
             ),
           ),
           centerTitle: true,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SvgPicture.asset("assets/notification.svg"),
-            )
-          ],
+        
         ),
         body: Column(
           children: [

@@ -547,19 +547,7 @@ class _ArrivalDetailsState extends State<ArrivalDetails> {
               ),
             ),
           ]),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(top: 1, right: 10),
-              child: GestureDetector(
-                onTap: () {
-                  // Navigator.pushNamed(context, '/notification');
-                },
-                child: SvgPicture.asset(
-                  "assets/notification.svg",
-                ),
-              ),
-            ),
-          ],
+       
         ),
         body: SingleChildScrollView(
           child: Column(children: [

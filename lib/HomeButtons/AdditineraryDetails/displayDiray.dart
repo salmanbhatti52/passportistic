@@ -413,12 +413,7 @@ class _DisplayDiaryState extends State<DisplayDiary> {
             ),
           ),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SvgPicture.asset("assets/notification.svg"),
-          )
-        ],
+       
       ),
       body: SingleChildScrollView(
         child: Column(

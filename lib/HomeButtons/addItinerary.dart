@@ -128,14 +128,7 @@ class _AddItinerayState extends State<AddItineray> {
           ),
         ),
         actions: [
-          GestureDetector(
-            onTap: () {
-              // Navigator.pushNamed(context, '/notification');
-            },
-            child: SvgPicture.asset(
-              "assets/notification.svg",
-            ),
-          ),
+   
         ],
       ),
       body: SingleChildScrollView(

@@ -115,12 +115,7 @@ class _ActivitiesDetailsState extends State<ActivitiesDetails> {
             ),
           ),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SvgPicture.asset("assets/notification.svg"),
-          )
-        ],
+     
       ),
       body: SingleChildScrollView(
         child: Column(children: [
