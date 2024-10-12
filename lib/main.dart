@@ -53,7 +53,7 @@ void main() async {
   String? token;
   var ID4 = OneSignal.User.pushSubscription.id;
   print("ID4 $ID4");
-
+  
   token = OneSignal.User.pushSubscription.id;
   print("token: $token");
 // The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
