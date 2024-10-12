@@ -62,13 +62,13 @@ void main() async {
   bool shownOnboarding = _prefs?.getBool('shownOnboarding') ?? false;
   Stripe.publishableKey = stripeTestKey;
   await Stripe.instance.applySettings();
-  // runApp(MyApp(shownOnboarding: shownOnboarding));
-  runApp(
-    DevicePreview(
-      enabled: true,
-      builder: (context) => MyApp(shownOnboarding: shownOnboarding),
-    ),
-  );
+  runApp(MyApp(shownOnboarding: shownOnboarding));
+  // runApp(
+  //   DevicePreview(
+  //     enabled: true,
+  //     builder: (context) => MyApp(shownOnboarding: shownOnboarding),
+  //   ),
+  // );
 }
 
 class MyApp extends StatefulWidget {
