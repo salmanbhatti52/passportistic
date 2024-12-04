@@ -25,6 +25,7 @@ class _SignInPageState extends State<SignInPage> {
   TextEditingController password = TextEditingController();
 
   bool _obscureText = true;
+  bool checkBoxValue = false;
   void _toggle() {
     setState(() {
       _obscureText = !_obscureText;
@@ -300,11 +301,38 @@ class _SignInPageState extends State<SignInPage> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                Row(
+                  children: [
+                    Theme(
+                      data: ThemeData(unselectedWidgetColor: Colors.black),
+                      child: Transform.scale(
+                        scale: 0.9,
+                        child: Checkbox(
+                          activeColor: const Color(0xFFF65734),
+                          checkColor: Colors.white,
+                          value: checkBoxValue,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              checkBoxValue = value!;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                    const Text(
+                        'Remember me',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w300,
+                          color: Color(0xFFF65734),
+                          fontFamily: "Satoshi",
+                        ),
+                      ),
+                  ], //<Widget>[]
+                ),
                 Container(
-                  padding: const EdgeInsets.only(
-                      bottom: 2.0), // Add some spacing below the text
                   child: TextButton(
                     onPressed: () {
                       Navigator.push(context, MaterialPageRoute(
@@ -358,14 +386,15 @@ class _SignInPageState extends State<SignInPage> {
                     if (loginUserModels.status == "success") {
                       print("successful");
 
-                      prefs = await SharedPreferences.getInstance();
-                      // await prefs?.setString('userID',
-                      //     "${loginUserModels.data?.passportHolderId}");
-                      String userID =
-                          loginUserModels.data?.passportHolderId ?? "";
-                      await prefs?.setString('userID', userID);
+                      if(checkBoxValue){
+                        prefs = await SharedPreferences.getInstance();
+                        // await prefs?.setString('userID',
+                        //     "${loginUserModels.data?.passportHolderId}");
+                        String userID = loginUserModels.data?.passportHolderId ?? "";
+                        await prefs?.setString('userID', userID);
 
-                      print("Sign in userID$userID");
+                        print("Sign in userID$userID");
+                      }
                       Navigator.push(
                         context,
                         MaterialPageRoute(

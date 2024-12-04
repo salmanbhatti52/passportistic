@@ -12,16 +12,19 @@ String itinerayAddModelsToJson(ItinerayAddModels data) =>
 
 class ItinerayAddModels {
   String? status;
+  String? message;
   List<Datum>? data;
 
   ItinerayAddModels({
     this.status,
+    this.message,
     this.data,
   });
 
   factory ItinerayAddModels.fromJson(Map<String, dynamic> json) =>
       ItinerayAddModels(
         status: json["status"],
+        message: json["message"],
         data: json["data"] != null
             ? List<Datum>.from(json["data"].map((x) => Datum.fromJson(x)))
             : null,
@@ -29,6 +32,7 @@ class ItinerayAddModels {
 
   Map<String, dynamic> toJson() => {
         "status": status,
+    "message": message,
         "data": List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }

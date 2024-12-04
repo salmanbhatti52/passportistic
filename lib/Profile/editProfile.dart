@@ -31,6 +31,9 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   final TextEditingController _mobileNumberController = TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _middleNameController = TextEditingController();
   final TextEditingController _dob = TextEditingController();
   final TextEditingController _flag = TextEditingController();
   String? _slectedGenderId;
@@ -68,6 +71,9 @@ class _EditProfileState extends State<EditProfile> {
           _email.text = getProfileModels.data?.email ?? '';
           _mobileNumberController.text =
               getProfileModels.data?.phoneNumber ?? '';
+          _firstNameController.text = getProfileModels.data?.firstName ?? '';
+          _lastNameController.text = getProfileModels.data?.lastName ?? '';
+          _middleNameController.text = getProfileModels.data?.middleName ?? '';
           _dob.text = getProfileModels.data?.dob ?? '';
           countryString = getProfileModels.data?.nationality ?? '';
           _slectedGenderId = getProfileModels.data?.genderId ?? "11";
@@ -111,6 +117,9 @@ class _EditProfileState extends State<EditProfile> {
       "passport_holder_id": "$userID",
       "email": _email.text,
       "phone_number": _mobileNumberController.text,
+      "first_name": _firstNameController.text,
+      "middle_name": _middleNameController.text,
+      "last_name": _lastNameController.text,
       "gender_id": "$_slectedGenderId",
       "dob": _dob.text,
       "nationality": countryString,
@@ -397,6 +406,9 @@ class _EditProfileState extends State<EditProfile> {
                 onTap: () async {
                   if (_email.text.isEmpty &&
                       _mobileNumberController.text.isEmpty &&
+                      _firstNameController.text.isEmpty &&
+                      _middleNameController.text.isEmpty &&
+                      _lastNameController.text.isEmpty &&
                       _dob.text.isEmpty &&
                       _flag.text.isEmpty &&
                       selectedOption == null) {
@@ -458,7 +470,7 @@ class _EditProfileState extends State<EditProfile> {
             ? SingleChildScrollView(
                 child: Center(
                   child: Container(
-                    height: MediaQuery.of(context).size.height,
+                    // height: MediaQuery.of(context).size.height,
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
@@ -469,7 +481,8 @@ class _EditProfileState extends State<EditProfile> {
                         end: Alignment.bottomCenter,
                       ),
                     ),
-                    child: Column(children: [
+                    child: Column(
+                        children: [
                       Center(
                         child: Stack(children: [
                           ClipRRect(
@@ -514,6 +527,174 @@ class _EditProfileState extends State<EditProfile> {
                             ),
                           ),
                         ]),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 10,
+                          right: 10,
+                        ),
+                        child: Container(
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          padding: const EdgeInsets.all(5.0),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/person.svg',
+                                  color: const Color(0xFFFF8D74),
+                                ),
+                                const SizedBox(width: 8.0),
+                                Expanded(
+                                  child: TextFormField(
+                                    controller: _firstNameController,
+                                    decoration: InputDecoration(
+                                      hintText: 'First Name',
+                                      hintStyle: TextStyle(
+                                        fontSize: isMobile
+                                            ? 16
+                                            : (isTablet ? 20 : 20),
+                                        fontWeight: FontWeight.w500,
+                                        color: const Color(0xFF525252),
+                                      ),
+                                      border: InputBorder.none,
+                                    ),
+                                    style: TextStyle(
+                                      fontSize:
+                                          isMobile ? 16 : (isTablet ? 20 : 20),
+                                      fontWeight: FontWeight.w500,
+                                      color: const Color(0xFF525252),
+                                    ),
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(
+                                          12), // Limit to 11 characters
+                                      // You can also add other formatters if needed
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                          Padding(
+                        padding: const EdgeInsets.only(
+                          left: 10,
+                          right: 10,
+                        ),
+                        child: Container(
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          padding: const EdgeInsets.all(5.0),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/person.svg',
+                                  color: const Color(0xFFFF8D74),
+                                ),
+                                const SizedBox(width: 8.0),
+                                Expanded(
+                                  child: TextFormField(
+                                    controller: _middleNameController,
+                                    decoration: InputDecoration(
+                                      hintText: 'Middle Name',
+                                      hintStyle: TextStyle(
+                                        fontSize: isMobile
+                                            ? 16
+                                            : (isTablet ? 20 : 20),
+                                        fontWeight: FontWeight.w500,
+                                        color: const Color(0xFF525252),
+                                      ),
+                                      border: InputBorder.none,
+                                    ),
+                                    style: TextStyle(
+                                      fontSize:
+                                          isMobile ? 16 : (isTablet ? 20 : 20),
+                                      fontWeight: FontWeight.w500,
+                                      color: const Color(0xFF525252),
+                                    ),
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(
+                                          12), // Limit to 11 characters
+                                      // You can also add other formatters if needed
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 10,
+                          right: 10,
+                        ),
+                        child: Container(
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          padding: const EdgeInsets.all(5.0),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/person.svg',
+                                  color: const Color(0xFFFF8D74),
+                                ),
+                                const SizedBox(width: 8.0),
+                                Expanded(
+                                  child: TextFormField(
+                                    controller: _lastNameController,
+                                    decoration: InputDecoration(
+                                      hintText: 'Last Name',
+                                      hintStyle: TextStyle(
+                                        fontSize: isMobile
+                                            ? 16
+                                            : (isTablet ? 20 : 20),
+                                        fontWeight: FontWeight.w500,
+                                        color: const Color(0xFF525252),
+                                      ),
+                                      border: InputBorder.none,
+                                    ),
+                                    style: TextStyle(
+                                      fontSize:
+                                          isMobile ? 16 : (isTablet ? 20 : 20),
+                                      fontWeight: FontWeight.w500,
+                                      color: const Color(0xFF525252),
+                                    ),
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(
+                                          12), // Limit to 11 characters
+                                      // You can also add other formatters if needed
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
                       const SizedBox(
                         height: 10,
@@ -1020,7 +1201,7 @@ class _EditProfileState extends State<EditProfile> {
             : SingleChildScrollView(
                 child: Center(
                   child: Container(
-                    height: MediaQuery.of(context).size.height,
+                    // height: MediaQuery.of(context).size.height,
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
@@ -1076,6 +1257,173 @@ class _EditProfileState extends State<EditProfile> {
                             ),
                           ),
                         ]),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 10,
+                          right: 10,
+                        ),
+                        child: Container(
+                          height: 72,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          padding: const EdgeInsets.all(5.0),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/person.svg',
+                                  color: const Color(0xFFFF8D74),
+                                ),
+                                const SizedBox(width: 8.0),
+                                Expanded(
+                                  child: TextFormField(
+                                    controller: _firstNameController,
+                                    decoration: InputDecoration(
+                                      hintText: 'First Name',
+                                      hintStyle: TextStyle(
+                                        fontSize: isMobile
+                                            ? 16
+                                            : (isTablet ? 20 : 20),
+                                        fontWeight: FontWeight.w500,
+                                        color: const Color(0xFF525252),
+                                      ),
+                                      border: InputBorder.none,
+                                    ),
+                                    style: TextStyle(
+                                      fontSize:
+                                          isMobile ? 16 : (isTablet ? 20 : 20),
+                                      fontWeight: FontWeight.w500,
+                                      color: const Color(0xFF525252),
+                                    ),
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(
+                                          12), // Limit to 11 characters
+                                      // You can also add other formatters if needed
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),Padding(
+                        padding: const EdgeInsets.only(
+                          left: 10,
+                          right: 10,
+                        ),
+                        child: Container(
+                          height: 72,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          padding: const EdgeInsets.all(5.0),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/person.svg',
+                                  color: const Color(0xFFFF8D74),
+                                ),
+                                const SizedBox(width: 8.0),
+                                Expanded(
+                                  child: TextFormField(
+                                    controller: _middleNameController,
+                                    decoration: InputDecoration(
+                                      hintText: 'Middle Name',
+                                      hintStyle: TextStyle(
+                                        fontSize: isMobile
+                                            ? 16
+                                            : (isTablet ? 20 : 20),
+                                        fontWeight: FontWeight.w500,
+                                        color: const Color(0xFF525252),
+                                      ),
+                                      border: InputBorder.none,
+                                    ),
+                                    style: TextStyle(
+                                      fontSize:
+                                          isMobile ? 16 : (isTablet ? 20 : 20),
+                                      fontWeight: FontWeight.w500,
+                                      color: const Color(0xFF525252),
+                                    ),
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(
+                                          12), // Limit to 11 characters
+                                      // You can also add other formatters if needed
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 10,
+                          right: 10,
+                        ),
+                        child: Container(
+                          height: 72,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          padding: const EdgeInsets.all(5.0),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/person.svg',
+                                  color: const Color(0xFFFF8D74),
+                                ),
+                                const SizedBox(width: 8.0),
+                                Expanded(
+                                  child: TextFormField(
+                                    controller: _lastNameController,
+                                    decoration: InputDecoration(
+                                      hintText: 'Last Name',
+                                      hintStyle: TextStyle(
+                                        fontSize: isMobile
+                                            ? 16
+                                            : (isTablet ? 20 : 20),
+                                        fontWeight: FontWeight.w500,
+                                        color: const Color(0xFF525252),
+                                      ),
+                                      border: InputBorder.none,
+                                    ),
+                                    style: TextStyle(
+                                      fontSize:
+                                          isMobile ? 16 : (isTablet ? 20 : 20),
+                                      fontWeight: FontWeight.w500,
+                                      color: const Color(0xFF525252),
+                                    ),
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(
+                                          12), // Limit to 11 characters
+                                      // You can also add other formatters if needed
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
                       const SizedBox(
                         height: 10,

@@ -461,8 +461,8 @@ class _AddItinerayState extends State<AddItineray> {
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Something went wrong'),
+                       SnackBar(
+                        content: Text(itineraryAddModels.message.toString()),
                       ),
                     );
                   }
@@ -526,18 +526,18 @@ class _AddItinerayState extends State<AddItineray> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.03,
           ),
-          const Padding(
-            padding: EdgeInsets.only(left: 15, right: 10, top: 20),
-            child: Text(
-              "Or select an existing Itinerary or Travel Diary",
-              style: TextStyle(
-                color: Color(0xFFF65734),
-                fontSize: 20,
-                fontFamily: 'Satoshi',
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
+          // const Padding(
+          //   padding: EdgeInsets.only(left: 15, right: 10, top: 20),
+          //   child: Text(
+          //     "Or select an existing Itinerary or Travel Diary",
+          //     style: TextStyle(
+          //       color: Color(0xFFF65734),
+          //       fontSize: 20,
+          //       fontFamily: 'Satoshi',
+          //       fontWeight: FontWeight.w600,
+          //     ),
+          //   ),
+          // ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
@@ -554,7 +554,7 @@ class _AddItinerayState extends State<AddItineray> {
               },
               child: Container(
                 width: 350,
-                height: 51,
+                height: 65,
                 clipBehavior: Clip.antiAlias,
                 decoration: ShapeDecoration(
                   gradient: const LinearGradient(
@@ -572,7 +572,7 @@ class _AddItinerayState extends State<AddItineray> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'Travel Diary',
+                      'Select and Existing Itinerary \nor Travel Diary',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
