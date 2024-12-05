@@ -260,6 +260,7 @@ class _ViewPassportState extends State<ViewPassport> {
                     },
                   ),
                 ),
+                if (currentPage == 0 || currentPage == 1 || currentPage == 2)
                 Container(
                   width: MediaQuery.of(context).size.width,
                   height: 188,
@@ -433,6 +434,7 @@ class _ViewPassportState extends State<ViewPassport> {
                     },
                   ),
                 ),
+                if (currentPage == 0 || currentPage == 1 || currentPage == 2)
                 Container(
                   width: MediaQuery.of(context).size.width,
                   height: 188,
