@@ -245,7 +245,7 @@ class _passportPageState extends State<passportPage> {
                           top: 222.03,
                           child: SizedBox(
                             width: 416.07,
-                            height: 50.98,
+                            height: 55.98,
                             child: SizedBox(
                               width: 416.07,
                               child: getProfileModels.data != null
@@ -329,7 +329,7 @@ class _passportPageState extends State<passportPage> {
                                         left: -0,
                                         top: 13.02,
                                         child: Text(
-                                          '$currencyName',
+                                          currencyName != null ?  '$currencyName' : "",
                                           style: const TextStyle(
                                             color: Color(0xFF141010),
                                             fontSize: 13.87,
@@ -390,7 +390,7 @@ class _passportPageState extends State<passportPage> {
                                           child: Stack(
                                             children: [
                                               Positioned(
-                                                left: -0,
+                                                left: -1,
                                                 top: 11.02,
                                                 child: getProfileModels.data !=
                                                         null
@@ -399,7 +399,7 @@ class _passportPageState extends State<passportPage> {
                                                         style: const TextStyle(
                                                           color:
                                                               Color(0xFF141010),
-                                                          fontSize: 13.87,
+                                                          fontSize: 13.55,
                                                           fontFamily:
                                                               'OCR-B 10 BT',
                                                           fontWeight:
@@ -634,7 +634,7 @@ class _passportPageState extends State<passportPage> {
                                                 left: -0,
                                                 top: 11.02,
                                                 child: Text(
-                                                  '$genderName' ?? "",
+                                                  genderName != null ? '$genderName' : "",
                                                   style: const TextStyle(
                                                     color: Color(0xFF141010),
                                                     fontSize: 13.87,
